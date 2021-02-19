@@ -19,6 +19,7 @@ class StreetEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     fun toStreet() = GetStreet(
         uuid = uuid,
         name = name,
+        cityUuid = cafe.city.uuid,
         cafeUuid = cafe.uuid,
         isVisible = isVisible,
     )

@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 data class GetStreet(
     val uuid: String,
     val name: String,
+    val cityUuid: String,
     val cafeUuid: String,
     val isVisible: Boolean,
 )
