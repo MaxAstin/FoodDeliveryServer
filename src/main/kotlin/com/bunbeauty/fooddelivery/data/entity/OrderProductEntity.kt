@@ -38,6 +38,7 @@ class OrderProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         comboDescription = comboDescription,
         photoLink = photoLink,
         barcode = barcode,
-        menuProduct = menuProduct.toMenuProduct()
+        menuProduct = menuProduct.toMenuProduct(),
+        orderUuid = order.uuid
     )
 }

@@ -17,4 +17,5 @@ data class GetOrderProduct(
     val photoLink: String,
     val barcode: Int,
     val menuProduct: GetMenuProduct,
+    val orderUuid: String,
 )
