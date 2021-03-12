@@ -48,6 +48,7 @@ fun main() {
                 addressModule,
                 statisticModule,
                 dateTimeModule,
+                versionModule,
             )
         }
         install(Authentication) {

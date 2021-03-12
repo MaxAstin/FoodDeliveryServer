@@ -8,4 +8,5 @@ data class GetCompany(
     val uuid: String,
     val name: String,
     val delivery: GetDelivery,
+    val forceUpdateVersion: GetForceUpdateVersion,
 )

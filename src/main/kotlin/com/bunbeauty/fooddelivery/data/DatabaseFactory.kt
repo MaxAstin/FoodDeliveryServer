@@ -21,17 +21,40 @@ object DatabaseFactory {
 
         transaction {
             SchemaUtils.create(CompanyTable)
+            SchemaUtils.createMissingTablesAndColumns(CompanyTable)
+
             SchemaUtils.create(UserTable)
+            SchemaUtils.createMissingTablesAndColumns(UserTable)
+
             SchemaUtils.create(ClientUserTable)
+            SchemaUtils.createMissingTablesAndColumns(ClientUserTable)
+
             SchemaUtils.create(CityTable)
+            SchemaUtils.createMissingTablesAndColumns(CityTable)
+
             SchemaUtils.create(CafeTable)
+            SchemaUtils.createMissingTablesAndColumns(CafeTable)
+
             SchemaUtils.create(StreetTable)
+            SchemaUtils.createMissingTablesAndColumns(StreetTable)
+
             SchemaUtils.create(CategoryTable)
+            SchemaUtils.createMissingTablesAndColumns(CategoryTable)
+
             SchemaUtils.create(MenuProductTable)
+            SchemaUtils.createMissingTablesAndColumns(MenuProductTable)
+
             SchemaUtils.create(MenuProductCategoryTable)
+            SchemaUtils.createMissingTablesAndColumns(MenuProductCategoryTable)
+
             SchemaUtils.create(AddressTable)
+            SchemaUtils.createMissingTablesAndColumns(AddressTable)
+
             SchemaUtils.create(OrderTable)
+            SchemaUtils.createMissingTablesAndColumns(OrderTable)
+
             SchemaUtils.create(OrderProductTable)
+            SchemaUtils.createMissingTablesAndColumns(OrderProductTable)
         }
     }
 

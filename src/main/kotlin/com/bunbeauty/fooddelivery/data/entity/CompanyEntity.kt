@@ -1,6 +1,7 @@
 package com.bunbeauty.fooddelivery.data.entity
 
 import com.bunbeauty.fooddelivery.data.model.company.GetCompany
+import com.bunbeauty.fooddelivery.data.model.company.GetForceUpdateVersion
 import com.bunbeauty.fooddelivery.data.model.delivery.GetDelivery
 import com.bunbeauty.fooddelivery.data.table.CityTable
 import com.bunbeauty.fooddelivery.data.table.CompanyTable
@@ -16,6 +17,7 @@ class CompanyEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var name: String by CompanyTable.name
     var forFreeDelivery: Int by CompanyTable.forFreeDelivery
     var deliveryCost: Int by CompanyTable.deliveryCost
+    var forceUpdateVersion: Int by CompanyTable.forceUpdateVersion
 
     val cities: SizedIterable<CityEntity> by CityEntity referrersOn CityTable.company
 
@@ -27,6 +29,9 @@ class CompanyEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         delivery = GetDelivery(
             forFree = forFreeDelivery,
             cost = deliveryCost
+        ),
+        forceUpdateVersion = GetForceUpdateVersion(
+            version = forceUpdateVersion
         )
     )
 }
