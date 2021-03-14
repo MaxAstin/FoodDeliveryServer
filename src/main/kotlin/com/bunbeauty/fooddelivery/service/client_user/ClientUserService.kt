@@ -2,7 +2,8 @@ package com.bunbeauty.fooddelivery.service.client_user
 
 import com.bunbeauty.fooddelivery.auth.IJwtService
 import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.Token
+import com.bunbeauty.fooddelivery.data.model.ClientAuthResponse
+import com.bunbeauty.fooddelivery.data.model.UserAuthResponse
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.InsertClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.PostClientUserAuth
@@ -15,7 +16,7 @@ class ClientUserService(
     private val jwtService: IJwtService,
 ) : IClientUserService {
 
-    override suspend fun getToken(clientUserAuth: PostClientUserAuth): Token? {
+    override suspend fun login(clientUserAuth: PostClientUserAuth): ClientAuthResponse? {
         val firebaseUser = firebaseAuth.getUser(clientUserAuth.firebaseUuid)
         return if (firebaseUser.phoneNumber == clientUserAuth.phoneNumber) {
             var getClientUser = clientUserRepository.getClientUserByPhoneNumber(clientUserAuth.phoneNumber)
@@ -28,7 +29,8 @@ class ClientUserService(
                 getClientUser = clientUserRepository.insertClientUser(insertClientUser)
             }
 
-            jwtService.generateToken(getClientUser)
+            val token = jwtService.generateToken(getClientUser)
+            ClientAuthResponse(token = token)
         } else {
             null
         }

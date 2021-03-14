@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import com.bunbeauty.fooddelivery.data.Constants.JWT_SECRET
 import com.bunbeauty.fooddelivery.data.enums.UserRole
-import com.bunbeauty.fooddelivery.data.model.Token
+import com.bunbeauty.fooddelivery.data.model.UserAuthResponse
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.data.model.user.GetUser
 import io.ktor.auth.jwt.*
@@ -19,24 +19,22 @@ class JwtService : IJwtService {
         .withIssuer(JWT_ISSUER)
         .build()
 
-    override fun generateToken(clientUser: GetClientUser): Token {
-        val token = JWT.create()
+    override fun generateToken(clientUser: GetClientUser): String {
+        return JWT.create()
             .withSubject(JWT_SUBJECT)
             .withIssuer(JWT_ISSUER)
             .withClaim(USER_UUID, clientUser.uuid)
             .withClaim(USER_ROLE, UserRole.CLIENT.roleName)
             .sign(algorithm)
-        return Token(token)
     }
 
-    override fun generateToken(user: GetUser): Token {
-        val token = JWT.create()
+    override fun generateToken(user: GetUser): String {
+        return JWT.create()
             .withSubject(JWT_SUBJECT)
             .withIssuer(JWT_ISSUER)
             .withClaim(USER_UUID, user.uuid)
             .withClaim(USER_ROLE, user.role)
             .sign(algorithm)
-        return Token(token)
     }
 
     override fun configureAuth(config: JWTAuthenticationProvider.Configuration) = config.run {

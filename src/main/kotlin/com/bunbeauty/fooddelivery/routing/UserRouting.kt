@@ -18,8 +18,8 @@ import org.koin.ktor.ext.inject
 fun Application.configureUserRouting() {
 
     routing {
-        loginAdmin()
-        loginClient()
+        userLogin()
+        clientLogin()
 
         //createUserWithoutAuth()
         authenticate {
@@ -29,35 +29,35 @@ fun Application.configureUserRouting() {
     }
 }
 
-fun Routing.loginAdmin() {
+fun Routing.userLogin() {
 
     val userService: IUserService by inject()
 
     post("/user/login") {
         safely {
             val postUserAuth: PostUserAuth = call.receive()
-            val token = userService.getToken(postUserAuth)
-            if (token == null) {
+            val userAuthResponse = userService.login(postUserAuth)
+            if (userAuthResponse == null) {
                 call.respondBad("Unable to log in with provided credentials")
             } else {
-                call.respondOk(token)
+                call.respondOk(userAuthResponse)
             }
         }
     }
 }
 
-fun Routing.loginClient() {
+fun Routing.clientLogin() {
 
     val clientUserService: IClientUserService by inject()
 
     post("/client/login") {
         safely {
             val postClientUserAuth: PostClientUserAuth = call.receive()
-            val token = clientUserService.getToken(postClientUserAuth)
-            if (token == null) {
+            val clientAuthResponse = clientUserService.login(postClientUserAuth)
+            if (clientAuthResponse == null) {
                 call.respondBad("Unable to log in with provided credentials")
             } else {
-                call.respondOk(token)
+                call.respondOk(clientAuthResponse)
             }
         }
     }
