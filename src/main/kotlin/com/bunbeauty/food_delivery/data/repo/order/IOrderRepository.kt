@@ -11,5 +11,6 @@ interface IOrderRepository {
     suspend fun insertOrder(insertOrder: InsertOrder): GetClientOrder
     suspend fun getOrderListByCafeUuid(cafeUuid: UUID, limitTime: Long): List<GetCafeOrder>
     suspend fun updateOrderStatusByUuid(orderUuid: UUID, status:String): GetCafeOrder?
+    suspend fun observeActiveOrderList(clientUserUuid: UUID): List<GetClientOrder>
 
 }

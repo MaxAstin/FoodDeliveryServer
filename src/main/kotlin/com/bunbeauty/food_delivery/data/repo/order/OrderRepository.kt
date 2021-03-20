@@ -2,6 +2,7 @@ package com.bunbeauty.food_delivery.data.repo.order
 
 import com.bunbeauty.food_delivery.data.DatabaseFactory.query
 import com.bunbeauty.food_delivery.data.entity.*
+import com.bunbeauty.food_delivery.data.enums.OrderStatus
 import com.bunbeauty.food_delivery.data.model.order.GetCafeOrder
 import com.bunbeauty.food_delivery.data.model.order.GetClientOrder
 import com.bunbeauty.food_delivery.data.model.order.InsertOrder
@@ -49,5 +50,15 @@ class OrderRepository : IOrderRepository {
         val orderEntity =  OrderEntity.findById(orderUuid)
         orderEntity?.status = status
         orderEntity?.toCafeOrder()
+    }
+
+    override suspend fun observeActiveOrderList(clientUserUuid: UUID): List<GetClientOrder> = query {
+        OrderEntity.find {
+            (OrderTable.clientUser eq clientUserUuid) and
+                    (OrderTable.status neq OrderStatus.DELIVERED.name) and
+                    (OrderTable.status neq OrderStatus.CANCELED.name)
+        }.map { orderEntity ->
+            orderEntity.toClientOrder()
+        }
     }
 }

@@ -9,6 +9,8 @@ import com.bunbeauty.food_delivery.data.ext.toUuid
 import com.bunbeauty.food_delivery.data.model.order.*
 import com.bunbeauty.food_delivery.data.repo.order.IOrderRepository
 import com.bunbeauty.food_delivery.data.repo.street.IStreetRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import org.joda.time.DateTime
 
 class OrderService(private val orderRepository: IOrderRepository, private val streetRepository: IStreetRepository) :
@@ -54,6 +56,12 @@ class OrderService(private val orderRepository: IOrderRepository, private val st
 
     override suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder? {
         return orderRepository.updateOrderStatusByUuid(orderUuid.toUuid(), patchOrder.status)
+    }
+
+    override suspend fun observeActiveOrderList(clientUserUuid: String): Flow<List<GetClientOrder>> {
+        return flow {
+            emit(orderRepository.observeActiveOrderList(clientUserUuid.toUuid()))
+        }
     }
 
     fun generateCode(currentMillis: Long): String {
