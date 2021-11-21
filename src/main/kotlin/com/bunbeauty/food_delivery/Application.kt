@@ -1,16 +1,14 @@
 package com.bunbeauty.food_delivery
 
 import com.bunbeauty.food_delivery.data.DatabaseFactory
-import com.bunbeauty.food_delivery.di.orderModule
-import com.bunbeauty.food_delivery.plugins.configureRouting
+import com.bunbeauty.food_delivery.di.*
 import com.bunbeauty.food_delivery.plugins.configureSerialization
 import com.bunbeauty.food_delivery.plugins.configureSockets
-import com.example.plugins.*
+import com.bunbeauty.food_delivery.routing.configureRouting
 import io.ktor.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import org.koin.ktor.ext.Koin
-import org.koin.ktor.ext.modules
 
 fun main() {
     DatabaseFactory.init()
@@ -19,7 +17,7 @@ fun main() {
         configureSockets()
         configureSerialization()
         install(Koin) {
-            modules(orderModule)
+            modules(orderModule, cityModule, cafeModule, categoryModule, menuProductModule)
         }
     }.start(wait = true)
 }

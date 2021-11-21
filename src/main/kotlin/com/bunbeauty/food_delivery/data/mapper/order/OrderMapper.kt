@@ -1,4 +1,4 @@
-package com.bunbeauty.food_delivery.data.mapper
+package com.bunbeauty.food_delivery.data.mapper.order
 
 import com.bunbeauty.food_delivery.data.model.order.GetOrder
 import com.bunbeauty.food_delivery.data.table.OrderTable

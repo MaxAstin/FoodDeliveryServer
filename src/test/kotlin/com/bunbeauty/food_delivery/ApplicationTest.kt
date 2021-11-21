@@ -1,21 +1,13 @@
 package com.bunbeauty.food_delivery
 
-import com.bunbeauty.food_delivery.plugins.configureRouting
-import io.ktor.routing.*
+import com.bunbeauty.food_delivery.routing.configureRouting
 import io.ktor.http.*
-import io.ktor.http.cio.websocket.*
-import io.ktor.websocket.*
-import java.time.*
-import io.ktor.serialization.*
-import io.ktor.features.*
-import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.request.*
-import kotlin.test.*
 import io.ktor.server.testing.*
-import com.example.plugins.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class ApplicationTest {
+
     @Test
     fun testRoot() {
         withTestApplication({ configureRouting() }) {

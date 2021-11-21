@@ -1,6 +1,6 @@
 package com.bunbeauty.food_delivery.data
 
-import com.bunbeauty.food_delivery.data.table.OrderTable
+import com.bunbeauty.food_delivery.data.table.*
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers.IO
@@ -17,6 +17,10 @@ object DatabaseFactory {
 
         transaction {
             SchemaUtils.create(OrderTable)
+            SchemaUtils.create(CityTable)
+            SchemaUtils.create(CafeTable)
+            SchemaUtils.create(CategoryTable)
+            SchemaUtils.create(MenuProductTable)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.bunbeauty.food_delivery.plugins
+package com.bunbeauty.food_delivery.routing
 
 import com.bunbeauty.food_delivery.data.model.order.PostOrder
 import com.bunbeauty.food_delivery.service.order.IOrderService
@@ -9,13 +9,19 @@ import io.ktor.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureRouting() {
+    configureDefaultRouting()
+    configureCityRouting()
+    configureCafeRouting()
+    configureCategoryRouting()
+    configureMenuProductRouting()
+
+
+
+
 
     val orderService: IOrderService by inject()
 
     routing {
-        get("/") {
-            call.respondText("Hello World!")
-        }
         get("/order/create") {
             val getOrder = orderService.createOrder(
                 PostOrder(
