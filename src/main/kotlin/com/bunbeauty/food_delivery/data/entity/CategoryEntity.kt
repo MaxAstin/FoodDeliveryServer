@@ -7,14 +7,16 @@ import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 
 data class CategoryEntity(
-    val uuid: EntityID<String>,
-) : Entity<String>(uuid) {
+    val entityId: EntityID<String>,
+) : Entity<String>(entityId) {
+
+    val uuid: String by CategoryTable.uuid
     val name: String by CategoryTable.name
 
     companion object : EntityClass<String, CategoryEntity>(CategoryTable)
 
     fun toCategory() = GetCategory(
-        uuid = uuid.value,
+        uuid = uuid,
         name = name
     )
 }

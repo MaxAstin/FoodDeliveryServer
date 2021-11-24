@@ -16,11 +16,13 @@ object DatabaseFactory {
         Database.connect(dataSource)
 
         transaction {
-            SchemaUtils.create(OrderTable)
+            SchemaUtils.create(UserTable)
+            SchemaUtils.create(CompanyTable)
             SchemaUtils.create(CityTable)
             SchemaUtils.create(CafeTable)
             SchemaUtils.create(CategoryTable)
             SchemaUtils.create(MenuProductTable)
+            SchemaUtils.create(OrderTable)
         }
     }
 

@@ -9,6 +9,8 @@ import io.ktor.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureRouting() {
+    configureUserRouting()
+    configureCompanyRouting()
     configureDefaultRouting()
     configureCityRouting()
     configureCafeRouting()
