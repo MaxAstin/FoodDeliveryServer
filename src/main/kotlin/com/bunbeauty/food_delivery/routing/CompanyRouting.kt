@@ -13,9 +13,9 @@ import org.koin.ktor.ext.inject
 fun Application.configureCompanyRouting() {
 
     routing {
-        createCompanyWithoutAuth()
+        //createCompanyWithoutAuth()
         authenticate {
-            //createCompany()
+            createCompany()
         }
     }
 }
@@ -25,13 +25,13 @@ fun Route.createCompany() {
     val companyService: ICompanyService by inject()
 
     post("/company") {
-        safelyWithAuth { userUuid ->
-            val postCompany: PostCompany = call.receive()
-            val company = companyService.createCompany(userUuid, postCompany)
-            if (company == null) {
-                call.respond(HttpStatusCode.Forbidden)
-            } else {
+        safelyWithAuth { jwtUser ->
+            if (jwtUser.isAdmin()) {
+                val postCompany: PostCompany = call.receive()
+                val company = companyService.createCompany(postCompany)
                 call.respond(HttpStatusCode.Created, company)
+            } else {
+                call.respond(HttpStatusCode.Forbidden)
             }
         }
     }

@@ -4,19 +4,22 @@ import com.bunbeauty.food_delivery.data.model.city.GetCity
 import com.bunbeauty.food_delivery.data.table.CityTable
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
+import org.jetbrains.exposed.dao.UUIDEntity
+import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import java.util.*
 
-data class CityEntity(
-    val uuid: EntityID<String>,
-) : Entity<String>(uuid) {
-    val name: String by CityTable.name
-    val offset: Int by CityTable.offset
-    val isVisible: Boolean by CityTable.isVisible
+class CityEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
-    companion object : EntityClass<String, CityEntity>(CityTable)
+    val uuid: String = uuid.value.toString()
+    var name: String by CityTable.name
+    var offset: Int by CityTable.offset
+    var isVisible: Boolean by CityTable.isVisible
+
+    companion object : UUIDEntityClass<CityEntity>(CityTable)
 
     fun toCity() = GetCity(
-        uuid = uuid.value,
+        uuid = uuid,
         name = name,
         offset = offset,
         isVisible = isVisible,

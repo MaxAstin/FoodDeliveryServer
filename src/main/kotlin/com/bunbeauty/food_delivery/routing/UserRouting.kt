@@ -16,9 +16,9 @@ fun Application.configureUserRouting() {
 
     routing {
         login()
-        createUserWithoutAuth()
+        //createUserWithoutAuth()
         authenticate {
-            //createUser()
+            createUser()
         }
     }
 }
@@ -45,13 +45,13 @@ fun Route.createUser() {
     val userService: IUserService by inject()
 
     post("/user") {
-        safelyWithAuth { userUuid ->
-            val postUser: PostUser = call.receive()
-            val user = userService.createUser(userUuid, postUser)
-            if (user == null) {
-                call.respond(HttpStatusCode.Forbidden)
-            } else {
+        safelyWithAuth { jwtUser ->
+            if (jwtUser.isAdmin()) {
+                val postUser: PostUser = call.receive()
+                val user = userService.createUser(postUser)
                 call.respond(HttpStatusCode.Created, user)
+            } else {
+                call.respond(HttpStatusCode.Forbidden)
             }
         }
     }

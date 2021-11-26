@@ -1,12 +1,9 @@
 package com.bunbeauty.food_delivery.data.table
 
-import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.dao.id.UUIDTable
 
-object CafeTable : IdTable<String>() {
+object CafeTable : UUIDTable() {
 
-    val uuid = varchar("uuid", 512)
     val fromTime = integer("fromTime")
     val toTime = integer("toTime")
     val phone = varchar("phone", 512)
@@ -16,5 +13,4 @@ object CafeTable : IdTable<String>() {
     val city = reference("city", CityTable)
     val isVisible = bool("isVisible")
 
-    override val id: Column<EntityID<String>> = uuid.entityId()
 }

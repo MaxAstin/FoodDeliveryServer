@@ -16,8 +16,8 @@ object DatabaseFactory {
         Database.connect(dataSource)
 
         transaction {
-            SchemaUtils.create(UserTable)
             SchemaUtils.create(CompanyTable)
+            SchemaUtils.create(UserTable)
             SchemaUtils.create(CityTable)
             SchemaUtils.create(CafeTable)
             SchemaUtils.create(CategoryTable)

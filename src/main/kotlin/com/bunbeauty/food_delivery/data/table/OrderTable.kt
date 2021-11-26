@@ -1,10 +1,9 @@
 package com.bunbeauty.food_delivery.data.table
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.id.UUIDTable
 
-object OrderTable : Table() {
+object OrderTable : UUIDTable() {
 
-    val uuid = varchar("uuid", 512)
     val isDelivery = bool("isDelivery")
     val code = varchar("code", 512)
     val address = varchar("address", 512)
@@ -15,5 +14,4 @@ object OrderTable : Table() {
     val cafeUuid = varchar("cafeUuid", 512)
     val userUuid = varchar("userUuid", 512)
 
-    override val primaryKey = PrimaryKey(uuid)
 }

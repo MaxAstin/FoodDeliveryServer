@@ -1,28 +1,32 @@
 package com.bunbeauty.food_delivery.data.repo.user
 
 import com.bunbeauty.food_delivery.data.DatabaseFactory.query
+import com.bunbeauty.food_delivery.data.entity.CompanyEntity
 import com.bunbeauty.food_delivery.data.entity.UserEntity
+import com.bunbeauty.food_delivery.data.model.user.GetUser
+import com.bunbeauty.food_delivery.data.model.user.InsertUser
 import com.bunbeauty.food_delivery.data.table.UserTable
+import java.util.*
 
 class UserRepository : IUserRepository {
 
-    override suspend fun getUserByUuid(uuid: String): UserEntity? = query {
-        UserEntity.findById(uuid)
+    override suspend fun getUserByUuid(uuid: UUID): GetUser? = query {
+        UserEntity.findById(uuid)?.toUser()
     }
 
-    override suspend fun getUserByUsername(username: String): UserEntity? = query {
+    override suspend fun getUserByUsername(username: String): GetUser? = query {
         UserEntity.find {
             UserTable.username eq username
         }.firstOrNull()
+            ?.toUser()
     }
 
-    override suspend fun insertUser(userEntity: UserEntity): UserEntity = query {
+    override suspend fun insertUser(insertUser: InsertUser): GetUser = query {
         UserEntity.new {
-            uuid = userEntity.uuid
-            username = userEntity.username
-            passwordHash = userEntity.passwordHash
-            company = userEntity.company
-            role = userEntity.role
-        }
+            username = insertUser.username
+            passwordHash = insertUser.passwordHash
+            company = CompanyEntity[insertUser.companyUuid]  //CompanyEntity[insertUser.companyUuid]
+            role = insertUser.role
+        }.toUser()
     }
 }

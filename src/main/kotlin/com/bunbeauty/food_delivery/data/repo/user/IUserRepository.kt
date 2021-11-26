@@ -1,10 +1,12 @@
 package com.bunbeauty.food_delivery.data.repo.user
 
-import com.bunbeauty.food_delivery.data.entity.UserEntity
+import com.bunbeauty.food_delivery.data.model.user.GetUser
+import com.bunbeauty.food_delivery.data.model.user.InsertUser
+import java.util.*
 
 interface IUserRepository {
 
-    suspend fun getUserByUuid(uuid: String): UserEntity?
-    suspend fun getUserByUsername(username: String): UserEntity?
-    suspend fun insertUser(userEntity: UserEntity): UserEntity
+    suspend fun getUserByUuid(uuid: UUID): GetUser?
+    suspend fun getUserByUsername(username: String): GetUser?
+    suspend fun insertUser(insertUser: InsertUser): GetUser
 }

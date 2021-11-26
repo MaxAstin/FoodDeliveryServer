@@ -4,16 +4,17 @@ import com.bunbeauty.food_delivery.data.model.category.GetCategory
 import com.bunbeauty.food_delivery.data.table.CategoryTable
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
+import org.jetbrains.exposed.dao.UUIDEntity
+import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import java.util.*
 
-data class CategoryEntity(
-    val entityId: EntityID<String>,
-) : Entity<String>(entityId) {
+class CategoryEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
-    val uuid: String by CategoryTable.uuid
-    val name: String by CategoryTable.name
+    val uuid: String = uuid.value.toString()
+    var name: String by CategoryTable.name
 
-    companion object : EntityClass<String, CategoryEntity>(CategoryTable)
+    companion object : UUIDEntityClass<CategoryEntity>(CategoryTable)
 
     fun toCategory() = GetCategory(
         uuid = uuid,

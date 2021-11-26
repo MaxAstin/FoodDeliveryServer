@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 data class GetUser(
     val uuid: String,
     val username: String,
+    val passwordHash: String,
     val company: GetCompany,
     val role: String,
 )

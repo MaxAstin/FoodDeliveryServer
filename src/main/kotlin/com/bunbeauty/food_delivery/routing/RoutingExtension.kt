@@ -19,13 +19,13 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(block: () -> Un
     }
 }
 
-suspend inline fun PipelineContext<Unit, ApplicationCall>.safelyWithAuth(block: (String) -> Unit) {
+suspend inline fun PipelineContext<Unit, ApplicationCall>.safelyWithAuth(block: (JwtUser) -> Unit) {
     safely {
         val jwtUser = call.authentication.principal as? JwtUser
         if (jwtUser == null) {
             call.respond(HttpStatusCode.Unauthorized)
         } else {
-            block(jwtUser.userUuid)
+            block(jwtUser)
         }
     }
 }

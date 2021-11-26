@@ -5,5 +5,5 @@ import com.bunbeauty.food_delivery.data.model.order.PostOrder
 
 interface IOrderService {
 
-    suspend fun createOrder(postOrder: PostOrder): GetOrder?
+    suspend fun createOrder(postOrder: PostOrder): GetOrder
 }

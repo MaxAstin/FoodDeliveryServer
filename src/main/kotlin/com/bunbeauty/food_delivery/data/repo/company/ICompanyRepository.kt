@@ -1,9 +1,10 @@
 package com.bunbeauty.food_delivery.data.repo.company
 
-import com.bunbeauty.food_delivery.data.entity.conpany.CompanyEntity
-import com.bunbeauty.food_delivery.data.entity.conpany.InsertCompany
+import com.bunbeauty.food_delivery.data.entity.CompanyEntity
+import com.bunbeauty.food_delivery.data.model.company.GetCompany
+import com.bunbeauty.food_delivery.data.model.company.InsertCompany
 
 interface ICompanyRepository {
 
-    suspend fun insertCompany(insertCompany: InsertCompany): CompanyEntity
+    suspend fun insertCompany(insertCompany: InsertCompany): GetCompany
 }

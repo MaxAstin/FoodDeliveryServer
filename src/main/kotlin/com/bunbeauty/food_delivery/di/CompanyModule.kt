@@ -7,6 +7,6 @@ import com.bunbeauty.food_delivery.service.company.ICompanyService
 import org.koin.dsl.module
 
 val companyModule = module(createdAtStart = true) {
-    single<ICompanyService> { CompanyService(get(), get()) }
+    single<ICompanyService> { CompanyService(get()) }
     single<ICompanyRepository> { CompanyRepository() }
 }

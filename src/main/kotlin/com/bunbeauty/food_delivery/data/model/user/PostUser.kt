@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 data class PostUser(
     val username: String,
     val password: String,
-    val companyUuid: String,
     val role: String,
+    val companyUuid: String,
 )
