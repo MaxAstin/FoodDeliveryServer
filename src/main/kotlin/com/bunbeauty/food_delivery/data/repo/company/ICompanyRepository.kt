@@ -1,6 +1,5 @@
 package com.bunbeauty.food_delivery.data.repo.company
 
-import com.bunbeauty.food_delivery.data.entity.CompanyEntity
 import com.bunbeauty.food_delivery.data.model.company.GetCompany
 import com.bunbeauty.food_delivery.data.model.company.InsertCompany
 

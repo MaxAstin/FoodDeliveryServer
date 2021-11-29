@@ -10,6 +10,10 @@ import java.util.*
 
 class UserRepository : IUserRepository {
 
+    override suspend fun getCompanyUuidByUserUuid(uuid: UUID): String? = query {
+        UserEntity.findById(uuid)?.company?.uuid
+    }
+
     override suspend fun getUserByUuid(uuid: UUID): GetUser? = query {
         UserEntity.findById(uuid)?.toUser()
     }

@@ -1,11 +1,8 @@
 package com.bunbeauty.food_delivery.data.model.menu_product
 
-import com.bunbeauty.food_delivery.data.model.category.GetCategory
-import kotlinx.serialization.Serializable
+import java.util.*
 
-@Serializable
-data class GetMenuProduct(
-    val uuid: String,
+data class InsertMenuProduct(
     val name: String,
     val newPrice: Int,
     val oldPrice: Int?,
@@ -15,6 +12,7 @@ data class GetMenuProduct(
     val comboDescription: String?,
     val photoLink: String,
     val barcode: Int,
-    val categories: List<GetCategory>,
+    val companyUUID: UUID,
+    val categoryUuids: List<UUID>,
     val isVisible: Boolean,
 )

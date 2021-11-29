@@ -7,6 +7,6 @@ import com.bunbeauty.food_delivery.service.category.ICategoryService
 import org.koin.dsl.module
 
 val categoryModule = module(createdAtStart = true) {
-    single<ICategoryService> { CategoryService(get()) }
+    single<ICategoryService> { CategoryService(get(), get()) }
     single<ICategoryRepository> { CategoryRepository() }
 }

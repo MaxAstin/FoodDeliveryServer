@@ -20,8 +20,9 @@ object DatabaseFactory {
             SchemaUtils.create(UserTable)
             SchemaUtils.create(CityTable)
             SchemaUtils.create(CafeTable)
-            SchemaUtils.create(CategoryTable)
+            SchemaUtils.create(CategoryTable)   
             SchemaUtils.create(MenuProductTable)
+            SchemaUtils.create(MenuProductCategoryTable)
             SchemaUtils.create(OrderTable)
         }
     }

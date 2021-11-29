@@ -14,6 +14,7 @@ class CityEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     val uuid: String = uuid.value.toString()
     var name: String by CityTable.name
     var offset: Int by CityTable.offset
+    var company: CompanyEntity by CompanyEntity referencedOn CityTable.company
     var isVisible: Boolean by CityTable.isVisible
 
     companion object : UUIDEntityClass<CityEntity>(CityTable)
