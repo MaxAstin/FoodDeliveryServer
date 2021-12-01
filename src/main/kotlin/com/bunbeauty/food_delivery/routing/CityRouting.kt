@@ -1,5 +1,6 @@
 package com.bunbeauty.food_delivery.routing
 
+import com.bunbeauty.food_delivery.data.Constants.COMPANY_UUID_PARAMETER
 import com.bunbeauty.food_delivery.data.ext.toListWrapper
 import com.bunbeauty.food_delivery.data.model.city.GetCity
 import com.bunbeauty.food_delivery.data.model.city.PostCity
@@ -26,15 +27,10 @@ fun Routing.getAllCities() {
     val cityService: ICityService by inject()
 
     get("/city") {
-        safely {
-            val companyUuid = call.parameters["companyUuid"]
-            if (companyUuid == null) {
-                call.respond(HttpStatusCode.BadRequest, "Parameter companyUuid = null")
-            } else {
-                val cityList = cityService.getCityListByCompanyUuid(companyUuid)
-                call.respond(HttpStatusCode.OK, cityList.toListWrapper())
-            }
-
+        safely(COMPANY_UUID_PARAMETER) { parameterList ->
+            val companyUuid = parameterList[0]
+            val cityList = cityService.getCityListByCompanyUuid(companyUuid)
+            call.respondOk(cityList)
         }
     }
 }

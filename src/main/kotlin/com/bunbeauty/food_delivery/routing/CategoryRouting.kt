@@ -1,5 +1,6 @@
 package com.bunbeauty.food_delivery.routing
 
+import com.bunbeauty.food_delivery.data.Constants.COMPANY_UUID_PARAMETER
 import com.bunbeauty.food_delivery.data.ext.toListWrapper
 import com.bunbeauty.food_delivery.data.model.category.GetCategory
 import com.bunbeauty.food_delivery.data.model.category.PostCategory
@@ -26,14 +27,10 @@ fun Routing.getCategories() {
     val categoryService: ICategoryService by inject()
 
     get("/category") {
-        safely {
-            val companyUuid = call.parameters["companyUuid"]
-            if (companyUuid == null) {
-                call.respond(HttpStatusCode.BadRequest, "Parameter companyUuid = null")
-            } else {
-                val categoryList = categoryService.getCategoryListByCompanyUuid(companyUuid)
-                call.respond(HttpStatusCode.OK, categoryList.toListWrapper())
-            }
+        safely(COMPANY_UUID_PARAMETER) { parameterList ->
+            val companyUuid = parameterList[0]
+            val categoryList = categoryService.getCategoryListByCompanyUuid(companyUuid)
+            call.respondOk(categoryList)
         }
     }
 }

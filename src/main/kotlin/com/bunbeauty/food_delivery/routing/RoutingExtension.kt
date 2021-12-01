@@ -1,30 +1,34 @@
 package com.bunbeauty.food_delivery.routing
 
+import com.bunbeauty.food_delivery.data.ext.toListWrapper
 import com.bunbeauty.food_delivery.data.model.user.JwtUser
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
+import io.ktor.routing.*
 import io.ktor.util.pipeline.*
 
-suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(block: () -> Unit) {
+suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(
+    vararg parameterNameList: String,
+    block: (List<String>) -> Unit,
+) {
     try {
-        block()
+        val parameterList = parameterNameList.mapNotNull { parameterName ->
+            call.parameters[parameterName]
+        }
+        if (parameterList.size == parameterNameList.size) {
+            block(parameterList)
+        } else {
+            val nullParameterName = parameterNameList.find { parameterName ->
+                call.parameters[parameterName] == null
+            }
+            call.respond(HttpStatusCode.BadRequest, "Parameter $nullParameterName is required")
+        }
     } catch (exception: Exception) {
         call.respond(HttpStatusCode.BadRequest, "Exception: ${exception.message}")
         exception.printStackTrace()
-    }
-}
-
-suspend inline fun PipelineContext<Unit, ApplicationCall>.safelyWithAuth(block: (JwtUser) -> Unit) {
-    safely {
-        val jwtUser = call.authentication.principal as? JwtUser
-        if (jwtUser == null) {
-            call.respond(HttpStatusCode.Unauthorized)
-        } else {
-            block(jwtUser)
-        }
     }
 }
 
@@ -44,11 +48,16 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.checkRights(
     block: (JwtUser) -> Unit,
     checkBlock: (JwtUser) -> Boolean,
 ) {
-    safelyWithAuth { jwtUser ->
-        if (checkBlock(jwtUser)) {
-            block(jwtUser)
+    safely {
+        val jwtUser = call.authentication.principal as? JwtUser
+        if (jwtUser == null) {
+            call.respond(HttpStatusCode.Unauthorized)
         } else {
-            call.respond(HttpStatusCode.Forbidden)
+            if (checkBlock(jwtUser)) {
+                block(jwtUser)
+            } else {
+                call.respond(HttpStatusCode.Forbidden)
+            }
         }
     }
 }
@@ -76,4 +85,12 @@ suspend inline fun <reified P, reified G> PipelineContext<Unit, ApplicationCall>
     } else {
         call.respond(HttpStatusCode.Created, getModel)
     }
+}
+
+suspend inline fun <reified T: Any> ApplicationCall.respondOk(model: T) {
+    respond(HttpStatusCode.OK, model)
+}
+
+suspend inline fun <reified T: Any> ApplicationCall.respondOk(list: List<T>) {
+    respond(HttpStatusCode.OK, list.toListWrapper())
 }

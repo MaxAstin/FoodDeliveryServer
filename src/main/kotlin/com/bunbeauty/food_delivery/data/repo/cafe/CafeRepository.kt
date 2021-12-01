@@ -6,6 +6,8 @@ import com.bunbeauty.food_delivery.data.entity.CityEntity
 import com.bunbeauty.food_delivery.data.model.cafe.GetCafe
 import com.bunbeauty.food_delivery.data.model.cafe.InsertCafe
 import com.bunbeauty.food_delivery.data.table.CafeTable
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.booleanLiteral
 import java.util.*
 
 class CafeRepository : ICafeRepository {
@@ -25,7 +27,8 @@ class CafeRepository : ICafeRepository {
 
     override suspend fun getCafeListByCityUuid(cityUuid: UUID): List<GetCafe> = query {
         CafeEntity.find {
-            CafeTable.city eq cityUuid
+            CafeTable.city eq cityUuid and
+                    CafeTable.isVisible eq booleanLiteral(true)
         }.map { cafeEntity ->
             cafeEntity.toCafe()
         }.toList()

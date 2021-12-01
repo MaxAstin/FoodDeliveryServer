@@ -8,6 +8,8 @@ import com.bunbeauty.food_delivery.data.model.menu_product.GetMenuProduct
 import com.bunbeauty.food_delivery.data.model.menu_product.InsertMenuProduct
 import com.bunbeauty.food_delivery.data.table.MenuProductTable
 import org.jetbrains.exposed.sql.SizedCollection
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.booleanLiteral
 import java.util.*
 
 class MenuProductRepository : IMenuProductRepository {
@@ -33,7 +35,8 @@ class MenuProductRepository : IMenuProductRepository {
 
     override suspend fun getMenuProductListByCompanyUuid(companyUuid: UUID): List<GetMenuProduct> = query {
         MenuProductEntity.find {
-            MenuProductTable.company eq companyUuid
+            MenuProductTable.company eq companyUuid and
+                    MenuProductTable.isVisible eq booleanLiteral(true)
         }.map { menuProductEntity ->
             menuProductEntity.toMenuProduct()
         }.toList()

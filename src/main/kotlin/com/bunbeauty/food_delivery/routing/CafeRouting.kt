@@ -1,5 +1,6 @@
 package com.bunbeauty.food_delivery.routing
 
+import com.bunbeauty.food_delivery.data.Constants.CITY_UUID_PARAMETER
 import com.bunbeauty.food_delivery.data.ext.toListWrapper
 import com.bunbeauty.food_delivery.data.model.cafe.GetCafe
 import com.bunbeauty.food_delivery.data.model.cafe.PostCafe
@@ -26,14 +27,10 @@ fun Routing.getCafesByCityUuid() {
     val cafeService: ICafeService by inject()
 
     get("/cafe") {
-        safely {
-            val cityUuid = call.parameters["cityUuid"]
-            if (cityUuid == null) {
-                call.respond(HttpStatusCode.BadRequest, "Parameter cityUuid = null")
-            } else {
-                val cafeList = cafeService.getCafeListByCityUuid(cityUuid)
-                call.respond(HttpStatusCode.OK, cafeList.toListWrapper())
-            }
+        safely(CITY_UUID_PARAMETER) { parameterList ->
+            val cityUuid = parameterList[0]
+            val cafeList = cafeService.getCafeListByCityUuid(cityUuid)
+            call.respondOk(cafeList)
         }
     }
 }

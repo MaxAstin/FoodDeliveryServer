@@ -27,8 +27,10 @@ fun main() {
                 orderModule,
                 cityModule,
                 cafeModule,
+                streetModule,
                 categoryModule,
                 menuProductModule,
+                deliveryModule
             )
         }
         install(Authentication) {

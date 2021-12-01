@@ -11,11 +11,13 @@ import org.koin.ktor.ext.inject
 fun Application.configureRouting() {
     configureUserRouting()
     configureCompanyRouting()
-    configureDefaultRouting()
     configureCityRouting()
     configureCafeRouting()
+    configureStreetRouting()
     configureCategoryRouting()
     configureMenuProductRouting()
+    configureDeliveryRouting()
+    configureDefaultRouting()
 
 
     val orderService: IOrderService by inject()

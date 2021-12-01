@@ -1,5 +1,6 @@
 package com.bunbeauty.food_delivery.routing
 
+import com.bunbeauty.food_delivery.data.model.user.GetUser
 import com.bunbeauty.food_delivery.data.model.user.JwtUser
 import com.bunbeauty.food_delivery.data.model.user.PostAuth
 import com.bunbeauty.food_delivery.data.model.user.PostUser
@@ -34,7 +35,7 @@ fun Routing.login() {
             if (token == null) {
                 call.respond(HttpStatusCode.BadRequest, "Unable to log in with provided credentials")
             } else {
-                call.respond(HttpStatusCode.OK, token)
+                call.respondOk(token)
             }
         }
     }
@@ -45,14 +46,8 @@ fun Route.createUser() {
     val userService: IUserService by inject()
 
     post("/user") {
-        safelyWithAuth { jwtUser ->
-            if (jwtUser.isAdmin()) {
-                val postUser: PostUser = call.receive()
-                val user = userService.createUser(postUser)
-                call.respond(HttpStatusCode.Created, user)
-            } else {
-                call.respond(HttpStatusCode.Forbidden)
-            }
+        adminPost<PostUser, GetUser> { _, postUser ->
+            userService.createUser(postUser)
         }
     }
 }

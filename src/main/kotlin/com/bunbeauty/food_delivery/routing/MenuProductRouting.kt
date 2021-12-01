@@ -1,5 +1,6 @@
 package com.bunbeauty.food_delivery.routing
 
+import com.bunbeauty.food_delivery.data.Constants.COMPANY_UUID_PARAMETER
 import com.bunbeauty.food_delivery.data.ext.toListWrapper
 import com.bunbeauty.food_delivery.data.model.menu_product.GetMenuProduct
 import com.bunbeauty.food_delivery.data.model.menu_product.PostMenuProduct
@@ -26,12 +27,10 @@ fun Routing.getAllMenuProducts() {
     val menuProductService: IMenuProductService by inject()
 
     get("/menu_product") {
-        val companyUuid = call.parameters["companyUuid"]
-        if (companyUuid == null) {
-            call.respond(HttpStatusCode.BadRequest, "Parameter companyUuid = null")
-        } else {
+        safely(COMPANY_UUID_PARAMETER) { parameterList ->
+            val companyUuid = parameterList[0]
             val menuProductList = menuProductService.getMenuProductListByCompanyUuid(companyUuid)
-            call.respond(HttpStatusCode.OK, menuProductList.toListWrapper())
+            call.respondOk(menuProductList)
         }
     }
 }
