@@ -30,7 +30,8 @@ fun main() {
                 streetModule,
                 categoryModule,
                 menuProductModule,
-                deliveryModule
+                deliveryModule,
+                addressModule
             )
         }
         install(Authentication) {

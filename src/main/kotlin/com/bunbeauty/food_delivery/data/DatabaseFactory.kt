@@ -24,6 +24,7 @@ object DatabaseFactory {
             SchemaUtils.create(CategoryTable)
             SchemaUtils.create(MenuProductTable)
             SchemaUtils.create(MenuProductCategoryTable)
+            SchemaUtils.create(AddressTable)
             SchemaUtils.create(OrderTable)
         }
     }

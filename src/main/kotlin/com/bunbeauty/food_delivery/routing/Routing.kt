@@ -17,6 +17,7 @@ fun Application.configureRouting() {
     configureCategoryRouting()
     configureMenuProductRouting()
     configureDeliveryRouting()
+    configureAddressRouting()
     configureDefaultRouting()
 
 
