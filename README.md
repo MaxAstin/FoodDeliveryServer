@@ -1,5 +1,5 @@
 # Food delivery API
-REST API for catering establishment 🍽 and their clients 👩‍💼👨‍💼
+🍔. REST API for catering establishment and their clients 
 
 ### Stack
 - Kotlin
