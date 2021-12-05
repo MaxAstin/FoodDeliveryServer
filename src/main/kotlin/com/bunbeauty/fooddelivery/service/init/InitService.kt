@@ -35,7 +35,8 @@ class InitService(
             val insertCompany = InsertCompany(
                 name = MAIN_COMPANY_NAME,
                 forFreeDelivery = 0,
-                deliveryCost = 0
+                deliveryCost = 0,
+                forceUpdateVersion = 0,
             )
             companyRepository.insertCompany(insertCompany)
         } else {

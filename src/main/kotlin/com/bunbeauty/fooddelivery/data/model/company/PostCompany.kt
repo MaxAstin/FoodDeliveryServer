@@ -7,4 +7,5 @@ data class PostCompany(
     val name: String,
     val forFreeDelivery: Int,
     val deliveryCost: Int,
+    val forceUpdateVersion: Int,
 )

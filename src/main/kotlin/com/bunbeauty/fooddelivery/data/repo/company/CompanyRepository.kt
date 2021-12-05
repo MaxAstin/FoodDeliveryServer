@@ -5,6 +5,7 @@ import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.CompanyEntity
 import com.bunbeauty.fooddelivery.data.model.company.GetCompany
 import com.bunbeauty.fooddelivery.data.model.company.InsertCompany
+import com.bunbeauty.fooddelivery.data.model.company.UpdateCompany
 import com.bunbeauty.fooddelivery.data.table.CompanyTable
 import java.util.*
 
@@ -15,7 +16,17 @@ class CompanyRepository : ICompanyRepository {
             name = insertCompany.name
             forFreeDelivery = insertCompany.forFreeDelivery
             deliveryCost = insertCompany.deliveryCost
+            forceUpdateVersion = insertCompany.forceUpdateVersion
         }.toCompany()
+    }
+
+    override suspend fun updateCompany(updateCompany: UpdateCompany): GetCompany? = query {
+        CompanyEntity.findById(updateCompany.uuid)?.apply {
+            name = updateCompany.name ?: name
+            forFreeDelivery = updateCompany.forFreeDelivery ?: forFreeDelivery
+            deliveryCost = updateCompany.deliveryCost ?: deliveryCost
+            forceUpdateVersion = updateCompany.forceUpdateVersion ?: forceUpdateVersion
+        }?.toCompany()
     }
 
     override suspend fun getCompanyByUuid(uuid: UUID): GetCompany? = query {
