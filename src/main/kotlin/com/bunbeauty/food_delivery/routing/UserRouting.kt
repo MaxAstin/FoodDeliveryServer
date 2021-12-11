@@ -1,9 +1,10 @@
 package com.bunbeauty.food_delivery.routing
 
+import com.bunbeauty.food_delivery.data.model.client_user.PostClientUserAuth
 import com.bunbeauty.food_delivery.data.model.user.GetUser
-import com.bunbeauty.food_delivery.data.model.user.JwtUser
-import com.bunbeauty.food_delivery.data.model.user.PostAuth
 import com.bunbeauty.food_delivery.data.model.user.PostUser
+import com.bunbeauty.food_delivery.data.model.user.PostUserAuth
+import com.bunbeauty.food_delivery.service.client_user.IClientUserService
 import com.bunbeauty.food_delivery.service.user.IUserService
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -16,24 +17,44 @@ import org.koin.ktor.ext.inject
 fun Application.configureUserRouting() {
 
     routing {
-        login()
+        loginAdmin()
+        loginClient()
+
         //createUserWithoutAuth()
         authenticate {
+            getClient()
             createUser()
         }
     }
 }
 
-fun Routing.login() {
+fun Routing.loginAdmin() {
 
     val userService: IUserService by inject()
 
-    post("/login") {
+    post("/user/login") {
         safely {
-            val postAuth: PostAuth = call.receive()
-            val token = userService.getToken(postAuth)
+            val postUserAuth: PostUserAuth = call.receive()
+            val token = userService.getToken(postUserAuth)
             if (token == null) {
-                call.respond(HttpStatusCode.BadRequest, "Unable to log in with provided credentials")
+                call.respondBad("Unable to log in with provided credentials")
+            } else {
+                call.respondOk(token)
+            }
+        }
+    }
+}
+
+fun Routing.loginClient() {
+
+    val clientUserService: IClientUserService by inject()
+
+    post("/client/login") {
+        safely {
+            val postClientUserAuth: PostClientUserAuth = call.receive()
+            val token = clientUserService.getToken(postClientUserAuth)
+            if (token == null) {
+                call.respondBad("Unable to log in with provided credentials")
             } else {
                 call.respondOk(token)
             }
@@ -48,6 +69,22 @@ fun Route.createUser() {
     post("/user") {
         adminPost<PostUser, GetUser> { _, postUser ->
             userService.createUser(postUser)
+        }
+    }
+}
+
+fun Route.getClient() {
+
+    val clientUserService: IClientUserService by inject()
+
+    get("/client") {
+        client { jwtUser ->
+            val clientUser = clientUserService.getClientUserByUuid(jwtUser.uuid)
+            if (clientUser == null) {
+                call.respondBad("No user with such uuid")
+            } else {
+                call.respondOk(clientUser)
+            }
         }
     }
 }

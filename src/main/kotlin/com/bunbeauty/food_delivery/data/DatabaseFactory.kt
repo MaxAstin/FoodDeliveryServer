@@ -18,6 +18,7 @@ object DatabaseFactory {
         transaction {
             SchemaUtils.create(CompanyTable)
             SchemaUtils.create(UserTable)
+            SchemaUtils.create(ClientUserTable)
             SchemaUtils.create(CityTable)
             SchemaUtils.create(CafeTable)
             SchemaUtils.create(StreetTable)

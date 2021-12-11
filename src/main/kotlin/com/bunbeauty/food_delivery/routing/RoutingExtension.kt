@@ -1,13 +1,12 @@
 package com.bunbeauty.food_delivery.routing
 
 import com.bunbeauty.food_delivery.data.ext.toListWrapper
-import com.bunbeauty.food_delivery.data.model.user.JwtUser
+import com.bunbeauty.food_delivery.auth.JwtUser
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
-import io.ktor.routing.*
 import io.ktor.util.pipeline.*
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(
@@ -41,6 +40,12 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.manager(block: (JwtUse
 suspend inline fun PipelineContext<Unit, ApplicationCall>.admin(block: (JwtUser) -> Unit) {
     checkRights(block) { jwtUser ->
         jwtUser.isAdmin()
+    }
+}
+
+suspend inline fun PipelineContext<Unit, ApplicationCall>.client(block: (JwtUser) -> Unit) {
+    checkRights(block) { jwtUser ->
+        jwtUser.isClient()
     }
 }
 
@@ -93,4 +98,8 @@ suspend inline fun <reified T: Any> ApplicationCall.respondOk(model: T) {
 
 suspend inline fun <reified T: Any> ApplicationCall.respondOk(list: List<T>) {
     respond(HttpStatusCode.OK, list.toListWrapper())
+}
+
+suspend inline fun ApplicationCall.respondBad(message: String) {
+    respond(HttpStatusCode.BadRequest, message)
 }

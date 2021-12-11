@@ -6,6 +6,7 @@ val hikari_version: String by project
 val postgres_version: String by project
 val koin_version: String by project
 val bcrypt_version: String by project
+val firebase_admin_version: String by project
 
 plugins {
     application
@@ -51,4 +52,7 @@ dependencies {
 
     // Hashing
     implementation("com.ToxicBakery.library.bcrypt:bcrypt:$bcrypt_version")
+
+    // Firebase
+    implementation("com.google.firebase:firebase-admin:$firebase_admin_version")
 }

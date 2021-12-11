@@ -6,7 +6,7 @@ import com.bunbeauty.food_delivery.data.enums.UserRole
 import com.bunbeauty.food_delivery.data.ext.toUuid
 import com.bunbeauty.food_delivery.data.model.user.GetUser
 import com.bunbeauty.food_delivery.data.model.user.InsertUser
-import com.bunbeauty.food_delivery.data.model.user.PostAuth
+import com.bunbeauty.food_delivery.data.model.user.PostUserAuth
 import com.bunbeauty.food_delivery.data.model.user.PostUser
 import com.bunbeauty.food_delivery.data.repo.user.IUserRepository
 import com.toxicbakery.bcrypt.Bcrypt
@@ -26,9 +26,9 @@ class UserService(private val userRepository: IUserRepository, private val jwtSe
         return userRepository.insertUser(insertUser)
     }
 
-    override suspend fun getToken(postAuth: PostAuth): String? {
-        val user = userRepository.getUserByUsername(postAuth.username) ?: return null
-        return if (verify(postAuth.password, user.passwordHash.toByteArray())) {
+    override suspend fun getToken(postUserAuth: PostUserAuth): String? {
+        val user = userRepository.getUserByUsername(postUserAuth.username) ?: return null
+        return if (verify(postUserAuth.password, user.passwordHash.toByteArray())) {
             jwtService.generateToken(user)
         } else {
             null

@@ -3,10 +3,9 @@ package com.bunbeauty.food_delivery.auth
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import com.bunbeauty.food_delivery.data.enums.UserRole
+import com.bunbeauty.food_delivery.data.model.client_user.GetClientUser
 import com.bunbeauty.food_delivery.data.model.user.GetUser
-import com.bunbeauty.food_delivery.data.model.user.JwtUser
-import com.bunbeauty.food_delivery.data.model.user.PostUser
-import io.ktor.auth.*
 import io.ktor.auth.jwt.*
 
 class JwtService: IJwtService {
@@ -17,6 +16,15 @@ class JwtService: IJwtService {
         .withSubject(JWT_SUBJECT)
         .withIssuer(JWT_ISSUER)
         .build()
+
+    override fun generateToken(clientUser: GetClientUser): String {
+        return JWT.create()
+            .withSubject(JWT_SUBJECT)
+            .withIssuer(JWT_ISSUER)
+            .withClaim(USER_UUID, clientUser.uuid)
+            .withClaim(USER_ROLE, UserRole.CLIENT.roleName)
+            .sign(algorithm)
+    }
 
     override fun generateToken(user: GetUser): String {
         return JWT.create()

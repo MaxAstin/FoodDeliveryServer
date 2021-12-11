@@ -6,6 +6,7 @@ import com.bunbeauty.food_delivery.di.*
 import com.bunbeauty.food_delivery.plugins.configureSerialization
 import com.bunbeauty.food_delivery.plugins.configureSockets
 import com.bunbeauty.food_delivery.routing.configureRouting
+import com.google.firebase.FirebaseApp
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -17,12 +18,14 @@ import org.koin.ktor.ext.inject
 fun main() {
     DatabaseFactory.init()
     embeddedServer(Netty, port = 8080) {
+        FirebaseApp.initializeApp()
         configureSockets()
         configureSerialization()
         install(Koin) {
             modules(
                 authModule,
                 userModule,
+                clientUserModule,
                 companyModule,
                 orderModule,
                 cityModule,

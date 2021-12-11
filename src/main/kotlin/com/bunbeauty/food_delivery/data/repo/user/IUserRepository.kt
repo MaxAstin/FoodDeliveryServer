@@ -6,7 +6,6 @@ import java.util.*
 
 interface IUserRepository {
 
-
     suspend fun getCompanyUuidByUserUuid(uuid: UUID): String?
     suspend fun getUserByUuid(uuid: UUID): GetUser?
     suspend fun getUserByUsername(username: String): GetUser?
