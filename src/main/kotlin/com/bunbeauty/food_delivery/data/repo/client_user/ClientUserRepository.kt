@@ -6,6 +6,7 @@ import com.bunbeauty.food_delivery.data.entity.CompanyEntity
 import com.bunbeauty.food_delivery.data.model.client_user.GetClientUser
 import com.bunbeauty.food_delivery.data.model.client_user.InsertClientUser
 import com.bunbeauty.food_delivery.data.table.ClientUserTable
+import org.jetbrains.exposed.sql.SizedCollection
 import java.util.*
 
 class ClientUserRepository : IClientUserRepository {

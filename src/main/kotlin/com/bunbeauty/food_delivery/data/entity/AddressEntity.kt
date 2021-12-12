@@ -16,7 +16,7 @@ class AddressEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var floor: String? by AddressTable.floor
     var comment: String? by AddressTable.comment
     var street: StreetEntity by StreetEntity referencedOn AddressTable.street
-    var user: UserEntity by UserEntity referencedOn AddressTable.user
+    var clientUser: ClientUserEntity by ClientUserEntity referencedOn AddressTable.clientUser
     var isVisible: Boolean by AddressTable.isVisible
 
     companion object : UUIDEntityClass<AddressEntity>(AddressTable)

@@ -2,8 +2,8 @@ package com.bunbeauty.food_delivery.data.repo.address
 
 import com.bunbeauty.food_delivery.data.DatabaseFactory.query
 import com.bunbeauty.food_delivery.data.entity.AddressEntity
+import com.bunbeauty.food_delivery.data.entity.ClientUserEntity
 import com.bunbeauty.food_delivery.data.entity.StreetEntity
-import com.bunbeauty.food_delivery.data.entity.UserEntity
 import com.bunbeauty.food_delivery.data.model.address.GetAddress
 import com.bunbeauty.food_delivery.data.model.address.InsertAddress
 import com.bunbeauty.food_delivery.data.table.AddressTable
@@ -21,14 +21,14 @@ class AddressRepository : IAddressRepository {
             floor = insertAddress.floor
             comment = insertAddress.comment
             street = StreetEntity[insertAddress.streetUuid]
-            user = UserEntity[insertAddress.userUuid]
+            clientUser = ClientUserEntity[insertAddress.clientUserUuid]
             isVisible = insertAddress.isVisible
         }.toAddress()
     }
 
-    override suspend fun getAddressListByUserUuid(uuid: UUID): List<GetAddress> {
-        return AddressEntity.find {
-            AddressTable.user eq uuid and
+    override suspend fun getAddressListByUserUuid(uuid: UUID): List<GetAddress> = query {
+        AddressEntity.find {
+            AddressTable.clientUser eq uuid and
                     AddressTable.isVisible eq booleanLiteral(true)
         }.map { addressEntity ->
             addressEntity.toAddress()

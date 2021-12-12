@@ -11,20 +11,20 @@ import org.koin.ktor.ext.inject
 fun Application.configureAddressRouting() {
 
     routing {
-        getAddresses()
         authenticate {
+            getAddresses()
             postAddress()
         }
     }
 }
 
-fun Routing.getAddresses() {
+fun Route.getAddresses() {
 
     val addressService: IAddressService by inject()
 
     get("/address") {
-        safely {
-            val addressList = addressService.getAddressListByUserUuid("")
+        client { jwtUser ->
+            val addressList = addressService.getAddressListByUserUuid(jwtUser.uuid)
             call.respondOk(addressList)
         }
     }
@@ -35,7 +35,7 @@ fun Route.postAddress() {
     val addressService: IAddressService by inject()
 
     post("/address") {
-        managerPost<PostAddress, GetAddress> { jwtUser, postAddress ->
+        clientPost<PostAddress, GetAddress> { jwtUser, postAddress ->
             addressService.createAddress(jwtUser.uuid, postAddress)
         }
     }

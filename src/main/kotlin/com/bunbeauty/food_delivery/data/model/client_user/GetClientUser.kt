@@ -1,5 +1,6 @@
 package com.bunbeauty.food_delivery.data.model.client_user
 
+import com.bunbeauty.food_delivery.data.model.address.GetAddress
 import com.bunbeauty.food_delivery.data.model.company.GetCompany
 import kotlinx.serialization.Serializable
 
@@ -9,4 +10,5 @@ data class GetClientUser(
     val phoneNumber: String,
     val email: String?,
     val company: GetCompany,
+    val addresses: List<GetAddress>,
 )

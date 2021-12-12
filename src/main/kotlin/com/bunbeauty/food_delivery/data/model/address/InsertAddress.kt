@@ -9,6 +9,6 @@ data class InsertAddress(
     val floor: String?,
     val comment: String?,
     val streetUuid: UUID,
-    val userUuid: UUID,
+    val clientUserUuid: UUID,
     val isVisible: Boolean,
 )

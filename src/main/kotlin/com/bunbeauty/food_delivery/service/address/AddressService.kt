@@ -16,7 +16,7 @@ class AddressService(private val addressRepository: IAddressRepository) : IAddre
             floor = postAddress.floor,
             comment = postAddress.comment,
             streetUuid = postAddress.streetUuid.toUuid(),
-            userUuid = userUuid.toUuid(),
+            clientUserUuid = userUuid.toUuid(),
             isVisible = postAddress.isVisible,
         )
 

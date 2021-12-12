@@ -79,6 +79,12 @@ suspend inline fun <reified P, reified G> PipelineContext<Unit, ApplicationCall>
     }
 }
 
+suspend inline fun <reified P, reified G> PipelineContext<Unit, ApplicationCall>.clientPost(postBlock: (JwtUser, P) -> G?) {
+    client { jwtUser ->
+        handlePost(jwtUser, postBlock)
+    }
+}
+
 suspend inline fun <reified P, reified G> PipelineContext<Unit, ApplicationCall>.handlePost(
     jwtUser: JwtUser,
     postBlock: (JwtUser, P) -> G?,

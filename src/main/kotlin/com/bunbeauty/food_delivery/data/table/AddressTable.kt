@@ -10,7 +10,7 @@ object AddressTable : UUIDTable() {
     val floor = varchar("floor", 512).nullable()
     val comment = varchar("comment", 512).nullable()
     val street = reference("street", StreetTable)
-    val user = reference("user", UserTable)
+    val clientUser = reference("clientUser", ClientUserTable)
     val isVisible = bool("isVisible")
 
 }
