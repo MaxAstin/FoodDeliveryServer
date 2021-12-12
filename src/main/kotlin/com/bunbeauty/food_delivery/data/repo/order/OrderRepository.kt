@@ -1,27 +1,47 @@
 package com.bunbeauty.food_delivery.data.repo.order
 
 import com.bunbeauty.food_delivery.data.DatabaseFactory.query
-import com.bunbeauty.food_delivery.data.entity.OrderEntity
-import com.bunbeauty.food_delivery.data.model.order.GetOrder
-import com.bunbeauty.food_delivery.data.model.order.PostOrder
+import com.bunbeauty.food_delivery.data.entity.*
+import com.bunbeauty.food_delivery.data.model.order.GetCafeOrder
+import com.bunbeauty.food_delivery.data.model.order.GetClientOrder
+import com.bunbeauty.food_delivery.data.model.order.InsertOrder
 import com.bunbeauty.food_delivery.data.table.OrderTable
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.and
 import java.util.*
 
-class OrderRepository: IOrderRepository {
+class OrderRepository : IOrderRepository {
 
-   override suspend fun insertOrder(postOrder: PostOrder): GetOrder = query {
-       OrderEntity.new {
-           isDelivery = postOrder.isDelivery
-           code = "A-00"  //TODO generate code
-           address = postOrder.address
-           comment = postOrder.comment
-           deferredTime = postOrder.deferredTime
-           status = "NOT_ACCEPTED"
-           addressUuid = postOrder.addressUuid
-           cafeUuid = postOrder.cafeUuid ?: "" // TODO get real cafe uuid
-           userUuid = UUID.randomUUID().toString() // TODO get real user uuid
-       }.toOrder()
+    override suspend fun insertOrder(insertOrder: InsertOrder): GetClientOrder = query {
+        val orderEntity = OrderEntity.new {
+            time = insertOrder.time
+            isDelivery = insertOrder.isDelivery
+            code = insertOrder.code
+            addressDescription = insertOrder.addressDescription
+            comment = insertOrder.comment
+            deferredTime = insertOrder.deferredTime
+            status = insertOrder.status
+            cafe = CafeEntity[insertOrder.cafeUuid]
+            clientUser = ClientUserEntity[insertOrder.clientUserUuid]
+        }
+        insertOrder.orderProductList.onEach { insertOrderProduct ->
+            OrderProductEntity.new {
+                menuProduct = MenuProductEntity[insertOrderProduct.menuProductUuid]
+                count = insertOrderProduct.count
+                order = orderEntity
+            }
+        }
+
+        orderEntity.toClientOrder()
+    }
+
+    override suspend fun getOrderListByCafeUuid(cafeUuid: UUID, limitTime: Long): List<GetCafeOrder> = query {
+        OrderEntity.find {
+            (OrderTable.cafe eq cafeUuid) and
+                    (OrderTable.time greater limitTime)
+        }.orderBy(OrderTable.time to SortOrder.DESC)
+            .map { orderEntity ->
+                orderEntity.toCafeOrder()
+            }
     }
 }

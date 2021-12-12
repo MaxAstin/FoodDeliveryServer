@@ -1,37 +1,57 @@
 package com.bunbeauty.food_delivery.data.entity
 
-import com.bunbeauty.food_delivery.data.model.order.GetOrder
+import com.bunbeauty.food_delivery.data.model.order.GetCafeOrder
+import com.bunbeauty.food_delivery.data.model.order.GetClientOrder
+import com.bunbeauty.food_delivery.data.table.OrderProductTable
 import com.bunbeauty.food_delivery.data.table.OrderTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.sql.SizedIterable
 import java.util.*
 
 class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     val uuid: String = uuid.value.toString()
+    var time: Long by OrderTable.time
     var isDelivery: Boolean by OrderTable.isDelivery
     var code: String by OrderTable.code
-    var address: String by OrderTable.address
+    var addressDescription: String by OrderTable.addressDescription
     var comment: String? by OrderTable.comment
     var deferredTime: Long? by OrderTable.deferredTime
     var status: String by OrderTable.status
-    var addressUuid: String? by OrderTable.addressUuid
-    var cafeUuid: String by OrderTable.cafeUuid
-    var userUuid: String by OrderTable.userUuid
+    var cafe: CafeEntity by CafeEntity referencedOn OrderTable.cafe
+    var clientUser: ClientUserEntity by ClientUserEntity referencedOn OrderTable.clientUser
+    val oderProducts: SizedIterable<OrderProductEntity> by OrderProductEntity referrersOn OrderProductTable.order
 
     companion object : UUIDEntityClass<OrderEntity>(OrderTable)
 
-    fun toOrder() = GetOrder(
+    fun toClientOrder() = GetClientOrder(
         uuid = uuid,
-        isDelivery = isDelivery,
         code = code,
-        address = address,
-        comment = comment,
-        deferredTime = deferredTime,
         status = status,
-        addressUuid = addressUuid,
-        cafeUuid = cafeUuid,
-        userUuid = userUuid,
+        time = time,
+        isDelivery = isDelivery,
+        deferredTime = deferredTime,
+        addressDescription = addressDescription,
+        comment = comment,
+        oderProductList = oderProducts.map { oderProductEntity ->
+            oderProductEntity.toOrderProduct()
+        }
+    )
+
+    fun toCafeOrder() = GetCafeOrder(
+        uuid = uuid,
+        code = code,
+        status = status,
+        time = time,
+        isDelivery = isDelivery,
+        deferredTime = deferredTime,
+        addressDescription = addressDescription,
+        comment = comment,
+        clientUser = clientUser.toCafeUser(),
+        oderProductList = oderProducts.map { oderProductEntity ->
+            oderProductEntity.toOrderProduct()
+        }
     )
 }

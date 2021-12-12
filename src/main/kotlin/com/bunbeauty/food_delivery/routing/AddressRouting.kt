@@ -23,8 +23,8 @@ fun Route.getAddresses() {
     val addressService: IAddressService by inject()
 
     get("/address") {
-        client { jwtUser ->
-            val addressList = addressService.getAddressListByUserUuid(jwtUser.uuid)
+        client { request ->
+            val addressList = addressService.getAddressListByUserUuid(request.jwtUser.uuid)
             call.respondOk(addressList)
         }
     }

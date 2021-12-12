@@ -1,8 +1,10 @@
 package com.bunbeauty.food_delivery.data.entity
 
+import com.bunbeauty.food_delivery.data.model.client_user.GetCafeClientUser
 import com.bunbeauty.food_delivery.data.model.client_user.GetClientUser
 import com.bunbeauty.food_delivery.data.table.AddressTable
 import com.bunbeauty.food_delivery.data.table.ClientUserTable
+import com.bunbeauty.food_delivery.data.table.OrderTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -16,6 +18,7 @@ class ClientUserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var email: String? by ClientUserTable.email
     var company: CompanyEntity by CompanyEntity referencedOn ClientUserTable.company
     val addresses: SizedIterable<AddressEntity> by AddressEntity referrersOn AddressTable.clientUser
+    val orders: SizedIterable<OrderEntity> by OrderEntity referrersOn OrderTable.clientUser
 
     companion object : UUIDEntityClass<ClientUserEntity>(ClientUserTable)
 
@@ -29,7 +32,18 @@ class ClientUserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
                 addressEntity.isVisible
             }.map { addressEntity ->
                 addressEntity.toAddress()
+            },
+            orders = orders.map { orderEntity ->
+                orderEntity.toClientOrder()
             }
+        )
+    }
+
+    fun toCafeUser(): GetCafeClientUser {
+        return GetCafeClientUser(
+            uuid = uuid,
+            phoneNumber = phoneNumber,
+            email = email
         )
     }
 }

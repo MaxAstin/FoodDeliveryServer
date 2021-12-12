@@ -1,10 +1,14 @@
 package com.bunbeauty.food_delivery.data.repo.street
 
 import com.bunbeauty.food_delivery.data.DatabaseFactory.query
+import com.bunbeauty.food_delivery.data.entity.AddressEntity
 import com.bunbeauty.food_delivery.data.entity.CafeEntity
+import com.bunbeauty.food_delivery.data.entity.CompanyEntity
 import com.bunbeauty.food_delivery.data.entity.StreetEntity
+import com.bunbeauty.food_delivery.data.model.cafe.GetCafe
 import com.bunbeauty.food_delivery.data.model.street.GetStreet
 import com.bunbeauty.food_delivery.data.model.street.InsertStreet
+import com.bunbeauty.food_delivery.data.table.AddressTable
 import com.bunbeauty.food_delivery.data.table.CafeTable
 import com.bunbeauty.food_delivery.data.table.CityTable
 import com.bunbeauty.food_delivery.data.table.StreetTable
@@ -25,12 +29,18 @@ class StreetRepository : IStreetRepository {
     }
 
     override suspend fun getStreetListByCompanyUuid(companyUuid: UUID): List<GetStreet> = query {
+        // TODO CompanyEntity.findById(companyUuid)?.citylist.cafelist.streetlist
+
         ((StreetTable leftJoin CafeTable) leftJoin CityTable).select {
             CityTable.company eq companyUuid and
                     StreetTable.isVisible eq booleanLiteral(true)
         }.map { resultRow ->
             resultRow.toStreet()
         }
+    }
+
+    override suspend fun getStreetByAddressUuid(addressUuid: UUID): GetCafe? = query {
+        AddressEntity.findById(addressUuid)?.street?.cafe?.toCafe()
     }
 
     fun ResultRow.toStreet() = GetStreet(

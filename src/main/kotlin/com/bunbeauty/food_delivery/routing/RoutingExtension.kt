@@ -1,7 +1,7 @@
 package com.bunbeauty.food_delivery.routing
 
-import com.bunbeauty.food_delivery.data.ext.toListWrapper
 import com.bunbeauty.food_delivery.auth.JwtUser
+import com.bunbeauty.food_delivery.data.ext.toListWrapper
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
@@ -31,35 +31,50 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(
     }
 }
 
-suspend inline fun PipelineContext<Unit, ApplicationCall>.manager(block: (JwtUser) -> Unit) {
-    checkRights(block) { jwtUser ->
+suspend inline fun PipelineContext<Unit, ApplicationCall>.manager(
+    vararg parameterNameList: String,
+    block: (Request) -> Unit,
+) {
+    checkRights(parameterNameList, block) { jwtUser ->
         jwtUser.isManager()
     }
 }
 
-suspend inline fun PipelineContext<Unit, ApplicationCall>.admin(block: (JwtUser) -> Unit) {
-    checkRights(block) { jwtUser ->
+suspend inline fun PipelineContext<Unit, ApplicationCall>.admin(
+    vararg parameterNameList: String,
+    block: (Request) -> Unit,
+) {
+    checkRights(parameterNameList, block) { jwtUser ->
         jwtUser.isAdmin()
     }
 }
 
-suspend inline fun PipelineContext<Unit, ApplicationCall>.client(block: (JwtUser) -> Unit) {
-    checkRights(block) { jwtUser ->
+suspend inline fun PipelineContext<Unit, ApplicationCall>.client(
+    vararg parameterNameList: String,
+    block: (Request) -> Unit,
+) {
+    checkRights(parameterNameList, block) { jwtUser ->
         jwtUser.isClient()
     }
 }
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.checkRights(
-    block: (JwtUser) -> Unit,
+    parameterNameList: Array<out String>,
+    block: (Request) -> Unit,
     checkBlock: (JwtUser) -> Boolean,
 ) {
-    safely {
+    safely(*parameterNameList) { parameterList ->
         val jwtUser = call.authentication.principal as? JwtUser
         if (jwtUser == null) {
             call.respond(HttpStatusCode.Unauthorized)
         } else {
             if (checkBlock(jwtUser)) {
-                block(jwtUser)
+                block(
+                    Request(
+                        jwtUser = jwtUser,
+                        parameterList = parameterList
+                    )
+                )
             } else {
                 call.respond(HttpStatusCode.Forbidden)
             }
@@ -68,20 +83,20 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.checkRights(
 }
 
 suspend inline fun <reified P, reified G> PipelineContext<Unit, ApplicationCall>.managerPost(postBlock: (JwtUser, P) -> G?) {
-    manager { jwtUser ->
-        handlePost(jwtUser, postBlock)
+    manager { request ->
+        handlePost(request.jwtUser, postBlock)
     }
 }
 
 suspend inline fun <reified P, reified G> PipelineContext<Unit, ApplicationCall>.adminPost(postBlock: (JwtUser, P) -> G?) {
-    admin { jwtUser ->
-        handlePost(jwtUser, postBlock)
+    admin { request ->
+        handlePost(request.jwtUser, postBlock)
     }
 }
 
 suspend inline fun <reified P, reified G> PipelineContext<Unit, ApplicationCall>.clientPost(postBlock: (JwtUser, P) -> G?) {
-    client { jwtUser ->
-        handlePost(jwtUser, postBlock)
+    client { request ->
+        handlePost(request.jwtUser, postBlock)
     }
 }
 
@@ -98,11 +113,11 @@ suspend inline fun <reified P, reified G> PipelineContext<Unit, ApplicationCall>
     }
 }
 
-suspend inline fun <reified T: Any> ApplicationCall.respondOk(model: T) {
+suspend inline fun <reified T : Any> ApplicationCall.respondOk(model: T) {
     respond(HttpStatusCode.OK, model)
 }
 
-suspend inline fun <reified T: Any> ApplicationCall.respondOk(list: List<T>) {
+suspend inline fun <reified T : Any> ApplicationCall.respondOk(list: List<T>) {
     respond(HttpStatusCode.OK, list.toListWrapper())
 }
 

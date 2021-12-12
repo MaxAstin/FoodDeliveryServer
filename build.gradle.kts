@@ -7,6 +7,7 @@ val postgres_version: String by project
 val koin_version: String by project
 val bcrypt_version: String by project
 val firebase_admin_version: String by project
+val joda_time_version: String by project
 
 plugins {
     application
@@ -55,4 +56,8 @@ dependencies {
 
     // Firebase
     implementation("com.google.firebase:firebase-admin:$firebase_admin_version")
+
+    // DateTime
+    implementation("joda-time:joda-time:$joda_time_version")
+
 }

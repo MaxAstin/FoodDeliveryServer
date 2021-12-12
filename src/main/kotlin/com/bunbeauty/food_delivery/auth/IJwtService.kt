@@ -10,6 +10,6 @@ interface IJwtService {
     val verifier: JWTVerifier
 
     fun generateToken(user: GetUser): String
-    fun generateToken(user: GetClientUser): String
+    fun generateToken(clientUser: GetClientUser): String
     fun configureAuth(config: JWTAuthenticationProvider.Configuration)
 }

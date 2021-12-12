@@ -78,8 +78,8 @@ fun Route.getClient() {
     val clientUserService: IClientUserService by inject()
 
     get("/client") {
-        client { jwtUser ->
-            val clientUser = clientUserService.getClientUserByUuid(jwtUser.uuid)
+        client { request ->
+            val clientUser = clientUserService.getClientUserByUuid(request.jwtUser.uuid)
             if (clientUser == null) {
                 call.respondBad("No user with such uuid")
             } else {
