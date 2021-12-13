@@ -8,14 +8,8 @@ import com.bunbeauty.food_delivery.data.entity.StreetEntity
 import com.bunbeauty.food_delivery.data.model.cafe.GetCafe
 import com.bunbeauty.food_delivery.data.model.street.GetStreet
 import com.bunbeauty.food_delivery.data.model.street.InsertStreet
-import com.bunbeauty.food_delivery.data.table.AddressTable
-import com.bunbeauty.food_delivery.data.table.CafeTable
-import com.bunbeauty.food_delivery.data.table.CityTable
 import com.bunbeauty.food_delivery.data.table.StreetTable
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.booleanLiteral
-import org.jetbrains.exposed.sql.select
 import java.util.*
 
 class StreetRepository : IStreetRepository {
@@ -29,24 +23,18 @@ class StreetRepository : IStreetRepository {
     }
 
     override suspend fun getStreetListByCompanyUuid(companyUuid: UUID): List<GetStreet> = query {
-        // TODO CompanyEntity.findById(companyUuid)?.citylist.cafelist.streetlist
-
-        ((StreetTable leftJoin CafeTable) leftJoin CityTable).select {
-            CityTable.company eq companyUuid and
-                    StreetTable.isVisible eq booleanLiteral(true)
-        }.map { resultRow ->
-            resultRow.toStreet()
-        }
+        CompanyEntity.findById(companyUuid)?.cities?.flatMap { cityEntity ->
+            cityEntity.cafes.flatMap { cafeEntity ->
+                cafeEntity.streets
+            }
+        }?.filter { streetEntity ->
+            streetEntity.isVisible
+        }?.map { streetEntity ->
+            streetEntity.toStreet()
+        } ?: emptyList()
     }
 
     override suspend fun getStreetByAddressUuid(addressUuid: UUID): GetCafe? = query {
         AddressEntity.findById(addressUuid)?.street?.cafe?.toCafe()
     }
-
-    fun ResultRow.toStreet() = GetStreet(
-        uuid = this[StreetTable.id].toString(),
-        name = this[StreetTable.name],
-        cafeUuid = this[StreetTable.cafe].value.toString(),
-        isVisible = this[StreetTable.isVisible],
-    )
 }
