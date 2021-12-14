@@ -52,6 +52,10 @@ class OrderService(private val orderRepository: IOrderRepository, private val st
         return orderRepository.getOrderListByCafeUuid(cafeUuid.toUuid(), limitTime)
     }
 
+    override suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder? {
+        return orderRepository.updateOrderStatusByUuid(orderUuid.toUuid(), patchOrder.status)
+    }
+
     fun generateCode(currentMillis: Long): String {
         val currentSeconds = currentMillis / 1000
 

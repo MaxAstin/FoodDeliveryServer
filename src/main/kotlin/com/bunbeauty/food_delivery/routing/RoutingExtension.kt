@@ -2,6 +2,8 @@ package com.bunbeauty.food_delivery.routing
 
 import com.bunbeauty.food_delivery.auth.JwtUser
 import com.bunbeauty.food_delivery.data.ext.toListWrapper
+import com.bunbeauty.food_delivery.routing.model.BodyRequest
+import com.bunbeauty.food_delivery.routing.model.Request
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
@@ -11,22 +13,23 @@ import io.ktor.util.pipeline.*
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(
     vararg parameterNameList: String,
-    block: (List<String>) -> Unit,
+    block: (Map<String, String>) -> Unit,
 ) {
     try {
-        val parameterList = parameterNameList.mapNotNull { parameterName ->
-            call.parameters[parameterName]
+        val nullParameterName = parameterNameList.find { parameterName ->
+            call.parameters[parameterName] == null
         }
-        if (parameterList.size == parameterNameList.size) {
-            block(parameterList)
-        } else {
-            val nullParameterName = parameterNameList.find { parameterName ->
-                call.parameters[parameterName] == null
+        if (nullParameterName == null) {
+            val nonNullableParameters = parameterNameList.mapNotNull { parameterName ->
+                call.parameters[parameterName]
             }
-            call.respond(HttpStatusCode.BadRequest, "Parameter $nullParameterName is required")
+            val parameterMap = parameterNameList.zip(nonNullableParameters).toMap()
+            block(parameterMap)
+        } else {
+            call.respondBad("Parameter $nullParameterName is required")
         }
     } catch (exception: Exception) {
-        call.respond(HttpStatusCode.BadRequest, "Exception: ${exception.message}")
+        call.respondBad("Exception: ${exception.message}")
         exception.printStackTrace()
     }
 }
@@ -72,7 +75,7 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.checkRights(
                 block(
                     Request(
                         jwtUser = jwtUser,
-                        parameterList = parameterList
+                        parameterMap = parameterList
                     )
                 )
             } else {
@@ -82,34 +85,48 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.checkRights(
     }
 }
 
-suspend inline fun <reified P, reified G> PipelineContext<Unit, ApplicationCall>.managerPost(postBlock: (JwtUser, P) -> G?) {
-    manager { request ->
-        handlePost(request.jwtUser, postBlock)
-    }
-}
-
-suspend inline fun <reified P, reified G> PipelineContext<Unit, ApplicationCall>.adminPost(postBlock: (JwtUser, P) -> G?) {
-    admin { request ->
-        handlePost(request.jwtUser, postBlock)
-    }
-}
-
-suspend inline fun <reified P, reified G> PipelineContext<Unit, ApplicationCall>.clientPost(postBlock: (JwtUser, P) -> G?) {
-    client { request ->
-        handlePost(request.jwtUser, postBlock)
-    }
-}
-
-suspend inline fun <reified P, reified G> PipelineContext<Unit, ApplicationCall>.handlePost(
-    jwtUser: JwtUser,
-    postBlock: (JwtUser, P) -> G?,
+suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.managerWithBody(
+    vararg parameterNameList: String,
+    block: (BodyRequest<B>) -> G?,
 ) {
-    val postModel: P = call.receive()
-    val getModel: G? = postBlock(jwtUser, postModel)
+    manager(*parameterNameList) { request ->
+        handleBody(request, block)
+    }
+}
+
+suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.adminWithBody(
+    vararg parameterNameList: String,
+    block: (BodyRequest<B>) -> G?,
+) {
+    admin(*parameterNameList) { request ->
+        handleBody(request, block)
+    }
+}
+
+suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.clientWithBody(
+    vararg parameterNameList: String,
+    block: (BodyRequest<B>) -> G?,
+) {
+    client(*parameterNameList) { request ->
+        handleBody(request, block)
+    }
+}
+
+suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.handleBody(
+    request: Request,
+    block: (BodyRequest<B>) -> G?,
+) {
+    val bodyModel: B = call.receive()
+    val getModel: G? = block(
+        BodyRequest(
+            request = request,
+            body = bodyModel
+        )
+    )
     if (getModel == null) {
-        call.respond(HttpStatusCode.BadRequest, "Can't create")
+        call.respondBad("Something went wrong")
     } else {
-        call.respond(HttpStatusCode.Created, getModel)
+        call.respondOk(getModel)
     }
 }
 

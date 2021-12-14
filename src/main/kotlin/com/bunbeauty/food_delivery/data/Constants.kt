@@ -7,6 +7,7 @@ object Constants {
     const val COMPANY_UUID_PARAMETER = "companyUuid"
     const val CITY_UUID_PARAMETER = "cityUuid"
     const val CAFE_UUID_PARAMETER = "cafeUuid"
+    const val UUID_PARAMETER = "uuid"
 
     // CODE
     const val CODE_NUMBER_COUNT = 100

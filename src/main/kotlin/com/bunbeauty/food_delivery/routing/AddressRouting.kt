@@ -35,8 +35,8 @@ fun Route.postAddress() {
     val addressService: IAddressService by inject()
 
     post("/address") {
-        clientPost<PostAddress, GetAddress> { jwtUser, postAddress ->
-            addressService.createAddress(jwtUser.uuid, postAddress)
+        clientWithBody<PostAddress, GetAddress> { bodyRequest ->
+            addressService.createAddress(bodyRequest.request.jwtUser.uuid, bodyRequest.body)
         }
     }
 }

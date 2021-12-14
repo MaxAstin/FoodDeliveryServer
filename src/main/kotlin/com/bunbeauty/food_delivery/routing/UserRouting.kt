@@ -67,8 +67,8 @@ fun Route.createUser() {
     val userService: IUserService by inject()
 
     post("/user") {
-        adminPost<PostUser, GetUser> { _, postUser ->
-            userService.createUser(postUser)
+        adminWithBody<PostUser, GetUser> { bodyRequest ->
+            userService.createUser(bodyRequest.body)
         }
     }
 }

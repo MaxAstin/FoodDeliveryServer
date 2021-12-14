@@ -1,6 +1,5 @@
 package com.bunbeauty.food_delivery.routing
 
-import com.bunbeauty.food_delivery.data.model.cafe.PostCafe
 import com.bunbeauty.food_delivery.data.model.company.GetCompany
 import com.bunbeauty.food_delivery.data.model.company.PostCompany
 import com.bunbeauty.food_delivery.service.company.ICompanyService
@@ -27,8 +26,8 @@ fun Route.createCompany() {
     val companyService: ICompanyService by inject()
 
     post("/company") {
-        adminPost<PostCompany, GetCompany> { _, postCompany ->
-            companyService.createCompany(postCompany)
+        adminWithBody<PostCompany, GetCompany> { bodyRequest ->
+            companyService.createCompany(bodyRequest.body)
         }
     }
 }

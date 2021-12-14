@@ -1,9 +1,11 @@
 package com.bunbeauty.food_delivery.routing
 
 import com.bunbeauty.food_delivery.data.Constants.CAFE_UUID_PARAMETER
+import com.bunbeauty.food_delivery.data.Constants.UUID_PARAMETER
+import com.bunbeauty.food_delivery.data.model.order.GetCafeOrder
 import com.bunbeauty.food_delivery.data.model.order.GetClientOrder
+import com.bunbeauty.food_delivery.data.model.order.PatchOrder
 import com.bunbeauty.food_delivery.data.model.order.PostOrder
-import com.bunbeauty.food_delivery.service.address.IAddressService
 import com.bunbeauty.food_delivery.service.order.IOrderService
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -16,6 +18,7 @@ fun Application.configureOrderRouting() {
         authenticate {
             getOrders()
             postOrder()
+            patchOrder()
         }
     }
 }
@@ -26,7 +29,7 @@ fun Route.getOrders() {
 
     get("/order") {
         manager(CAFE_UUID_PARAMETER) { request ->
-            val cafeUuid = request.parameterList[0] as String
+            val cafeUuid = request.parameterMap[CAFE_UUID_PARAMETER]!!
             val addressList = orderService.getOrderListByCafeUuid(cafeUuid)
             call.respondOk(addressList)
         }
@@ -38,8 +41,23 @@ fun Route.postOrder() {
     val orderService: IOrderService by inject()
 
     post("/order") {
-        clientPost<PostOrder, GetClientOrder> { jwtUser, postOrder ->
-            orderService.createOrder(jwtUser.uuid, postOrder)
+        clientWithBody<PostOrder, GetClientOrder> { bodyRequest ->
+            orderService.createOrder(
+                bodyRequest.request.jwtUser.uuid,
+                bodyRequest.body
+            )
+        }
+    }
+}
+
+fun Route.patchOrder() {
+
+    val orderService: IOrderService by inject()
+
+    patch("/order") {
+        managerWithBody<PatchOrder, GetCafeOrder>(UUID_PARAMETER) { bodyRequest ->
+            val orderUuid = bodyRequest.request.parameterMap[UUID_PARAMETER]!!
+            orderService.changeOrder(orderUuid, bodyRequest.body)
         }
     }
 }

@@ -20,11 +20,11 @@ fun Routing.getDelivery() {
     val deliveryService: IDeliveryService by inject()
 
     get("/delivery") {
-        safely(COMPANY_UUID_PARAMETER) { parameterList ->
-            val companyUuid = parameterList[0]
+        safely(COMPANY_UUID_PARAMETER) { parameterMap ->
+            val companyUuid = parameterMap[COMPANY_UUID_PARAMETER]!!
             val delivery = deliveryService.getDeliveryByCompanyUuid(companyUuid)
             if (delivery == null) {
-                call.respond(HttpStatusCode.BadRequest, "No delivery with companyUuid = $companyUuid")
+                call.respondBad("No delivery with companyUuid = $companyUuid")
             } else {
                 call.respondOk(delivery)
             }
