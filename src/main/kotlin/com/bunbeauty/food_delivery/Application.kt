@@ -34,7 +34,9 @@ fun main() {
                 categoryModule,
                 menuProductModule,
                 deliveryModule,
-                addressModule
+                addressModule,
+                statisticModule,
+                dateTimeModule,
             )
         }
         install(Authentication) {

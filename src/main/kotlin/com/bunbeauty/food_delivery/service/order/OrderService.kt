@@ -51,7 +51,7 @@ class OrderService(private val orderRepository: IOrderRepository, private val st
 
     override suspend fun getOrderListByCafeUuid(cafeUuid: String): List<GetCafeOrder> {
         val limitTime = DateTime.now().withTimeAtStartOfDay().minusDays(ORDER_HISTORY_DAY_COUNT).millis
-        return orderRepository.getOrderListByCafeUuid(cafeUuid.toUuid(), limitTime)
+        return orderRepository.getOrderListByCafeUuidLimited(cafeUuid.toUuid(), limitTime)
     }
 
     override suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder? {

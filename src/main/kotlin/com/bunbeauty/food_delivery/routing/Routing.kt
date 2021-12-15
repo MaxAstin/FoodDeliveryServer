@@ -13,5 +13,6 @@ fun Application.configureRouting() {
     configureDeliveryRouting()
     configureAddressRouting()
     configureOrderRouting()
+    configureStatisticRouting()
     configureDefaultRouting()
 }

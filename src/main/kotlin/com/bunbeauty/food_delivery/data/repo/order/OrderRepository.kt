@@ -26,9 +26,19 @@ class OrderRepository : IOrderRepository {
             clientUser = ClientUserEntity[insertOrder.clientUserUuid]
         }
         insertOrder.orderProductList.onEach { insertOrderProduct ->
+            val menuProductEntity = MenuProductEntity[insertOrderProduct.menuProductUuid]
             OrderProductEntity.new {
-                menuProduct = MenuProductEntity[insertOrderProduct.menuProductUuid]
                 count = insertOrderProduct.count
+                name = menuProductEntity.name
+                newPrice = menuProductEntity.newPrice
+                oldPrice = menuProductEntity.oldPrice
+                utils = menuProductEntity.utils
+                nutrition = menuProductEntity.nutrition
+                description = menuProductEntity.description
+                comboDescription = menuProductEntity.comboDescription
+                photoLink = menuProductEntity.photoLink
+                barcode = menuProductEntity.barcode
+                menuProduct = menuProductEntity
                 order = orderEntity
             }
         }
@@ -36,7 +46,7 @@ class OrderRepository : IOrderRepository {
         orderEntity.toClientOrder()
     }
 
-    override suspend fun getOrderListByCafeUuid(cafeUuid: UUID, limitTime: Long): List<GetCafeOrder> = query {
+    override suspend fun getOrderListByCafeUuidLimited(cafeUuid: UUID, limitTime: Long): List<GetCafeOrder> = query {
         OrderEntity.find {
             (OrderTable.cafe eq cafeUuid) and
                     (OrderTable.time greater limitTime)
@@ -44,6 +54,27 @@ class OrderRepository : IOrderRepository {
             .map { orderEntity ->
                 orderEntity.toCafeOrder()
             }
+    }
+
+    override suspend fun getOrderListByCafeUuid(cafeUuid: UUID): List<GetCafeOrder> = query {
+        OrderEntity.find {
+            OrderTable.cafe eq cafeUuid
+        }.orderBy(OrderTable.time to SortOrder.DESC)
+            .map { orderEntity ->
+                orderEntity.toCafeOrder()
+            }
+    }
+
+    override suspend fun getOrderListByCompanyUuid(companyUuid: UUID): List<GetCafeOrder> = query {
+        CompanyEntity.findById(companyUuid)?.cities?.flatMap { cityEntity ->
+            cityEntity.cafes
+        }?.flatMap { cafeEntity ->
+            cafeEntity.orders
+        }?.sortedByDescending { orderEntity ->
+            orderEntity.time
+        }?.map { orderEntity ->
+            orderEntity.toCafeOrder()
+        } ?: emptyList()
     }
 
     override suspend fun updateOrderStatusByUuid(orderUuid: UUID, status: String): GetCafeOrder? = query {

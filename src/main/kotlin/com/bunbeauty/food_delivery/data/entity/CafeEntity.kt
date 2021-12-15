@@ -2,6 +2,7 @@ package com.bunbeauty.food_delivery.data.entity
 
 import com.bunbeauty.food_delivery.data.model.cafe.GetCafe
 import com.bunbeauty.food_delivery.data.table.CafeTable
+import com.bunbeauty.food_delivery.data.table.OrderTable
 import com.bunbeauty.food_delivery.data.table.StreetTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
@@ -22,6 +23,7 @@ class CafeEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var isVisible: Boolean by CafeTable.isVisible
 
     val streets: SizedIterable<StreetEntity> by StreetEntity referrersOn StreetTable.cafe
+    val orders: SizedIterable<OrderEntity> by OrderEntity referrersOn OrderTable.cafe
 
     companion object : UUIDEntityClass<CafeEntity>(CafeTable)
 
