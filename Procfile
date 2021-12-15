@@ -1,1 +1,1 @@
-web: ./build/install/FoodDeliveryApi_v2/bin/FoodDeliveryApi_v2
+web: ./build/install/food_delivery/bin/food_delivery
