@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -15,18 +17,27 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.6.0"
 }
 
-group = "com.example"
-version = "0.0.1"
 application {
-    mainClass.set("com.example.ApplicationKt")
+    mainClass.set("com.bunbeauty.food_delivery.ApplicationKt")
 }
 
 repositories {
     mavenCentral()
 }
 
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "1.8"
+    }
+}
+
 tasks.withType<Test> {
     useJUnit()
+}
+
+tasks.jar {
+    enabled = false
 }
 
 dependencies {
