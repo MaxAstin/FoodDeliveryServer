@@ -1,0 +1,1 @@
+web: ./build/install/FoodDeliveryApi_v2/bin/FoodDeliveryApi_v2

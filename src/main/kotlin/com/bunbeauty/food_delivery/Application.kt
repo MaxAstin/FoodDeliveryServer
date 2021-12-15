@@ -21,7 +21,7 @@ import java.io.InputStream
 
 fun main() {
     DatabaseFactory.init()
-    embeddedServer(Netty, port = 8080) {
+    embeddedServer(Netty, port = System.getenv("PORT").toInt()) {
         val inputStream: InputStream = System.getenv("FB_ADMIN_KEY").byteInputStream()
         val options = FirebaseOptions.builder()
             .setCredentials(GoogleCredentials.fromStream(inputStream))
