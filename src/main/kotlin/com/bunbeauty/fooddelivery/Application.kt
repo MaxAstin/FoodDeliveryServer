@@ -18,7 +18,6 @@ import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import java.io.InputStream
 
-
 fun main() {
     DatabaseFactory.init()
     embeddedServer(Netty, port = System.getenv("PORT").toInt()) {
