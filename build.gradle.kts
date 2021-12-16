@@ -24,13 +24,13 @@ repositories {
     mavenCentral()
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-}
-
-tasks.compileKotlin {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
-}
+//java {
+//    sourceCompatibility = JavaVersion.VERSION_1_8
+//}
+//
+//tasks.compileKotlin {
+//    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
+//}
 
 tasks.create("stage").dependsOn("installDist")
 
