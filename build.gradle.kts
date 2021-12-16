@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -18,9 +16,7 @@ plugins {
 }
 
 group = "com.bunbeauty.fooddelivery"
-version = "0.0.1"
 application {
-    applicationDefaultJvmArgs = listOf("-Dgreeting.language=en")
     mainClass.set("com.bunbeauty.fooddelivery.Applicationkt")
 }
 
@@ -28,20 +24,13 @@ repositories {
     mavenCentral()
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "1.8"
-    }
-}
+//tasks.withType<Test> {
+//    useJUnit()
+//}
 
-tasks.withType<Test> {
-    useJUnit()
-}
-
-tasks.jar {
-    enabled = false
-}
+//tasks.jar {
+//    enabled = false
+//}
 
 tasks.create("stage") {
     dependsOn("installDist")
