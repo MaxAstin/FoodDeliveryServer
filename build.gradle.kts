@@ -17,7 +17,10 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.6.0"
 }
 
+group = "com.bunbeauty.fooddelivery"
+version = "0.0.1"
 application {
+    applicationDefaultJvmArgs = listOf("-Dgreeting.language=en")
     mainClass.set("com.bunbeauty.fooddelivery.Applicationkt")
 }
 
