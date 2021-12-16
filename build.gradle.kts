@@ -18,7 +18,6 @@ plugins {
 }
 
 application {
-    mainModule.set("fooddelivery.main")
     mainClass.set("com.bunbeauty.fooddelivery.Applicationkt")
 }
 
