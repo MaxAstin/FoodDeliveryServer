@@ -40,16 +40,22 @@ object DatabaseFactory {
     }
 
     private fun getDataSource(): HikariDataSource {
-        val config = HikariConfig().apply {
-            //driverClassName = System.getenv("JDBC_DRIVER")
-            jdbcUrl = System.getenv("DATABASE_JDBC_URL")
-            username = System.getenv("DATASOURCE_USERNAME")
-            password = System.getenv("DATASOURCE_PASSWORD")
-            maximumPoolSize = 3
-            //isAutoCommit = false
-            //transactionIsolation = "TRANSACTION_REPEATABLE_READ"
-            //validate()
-        }
+        val config = HikariConfig()
+        config.jdbcUrl = System.getenv("DATABASE_JDBC_URL")
+        config.username = System.getenv("DATASOURCE_USERNAME")
+        config.password = System.getenv("DATASOURCE_PASSWORD")
+        config.maximumPoolSize = 3
+
+//            .apply {
+//            //driverClassName = System.getenv("JDBC_DRIVER")
+//                jdbcUrl = System.getenv("DATABASE_JDBC_URL")
+//            username = System.getenv("DATASOURCE_USERNAME")
+//            password = System.getenv("DATASOURCE_PASSWORD")
+//            maximumPoolSize = 3
+//            //isAutoCommit = false
+//            //transactionIsolation = "TRANSACTION_REPEATABLE_READ"
+//            //validate()
+//        }
         return HikariDataSource(config)
     }
 
