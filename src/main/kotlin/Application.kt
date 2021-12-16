@@ -1,5 +1,3 @@
-package com.bunbeauty.fooddelivery
-
 import com.bunbeauty.fooddelivery.auth.IJwtService
 import com.bunbeauty.fooddelivery.data.DatabaseFactory
 import com.bunbeauty.fooddelivery.di.*

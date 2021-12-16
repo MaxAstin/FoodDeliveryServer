@@ -15,26 +15,24 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.6.0"
 }
 
-group = "com.bunbeauty.fooddelivery"
+//group = "com.bunbeauty.fooddelivery"
 application {
-    mainClass.set("com.bunbeauty.fooddelivery.Applicationkt")
+    mainClass.set("ApplicationKt")
 }
 
 repositories {
     mavenCentral()
 }
 
-//tasks.withType<Test> {
-//    useJUnit()
-//}
-
-//tasks.jar {
-//    enabled = false
-//}
-
-tasks.create("stage") {
-    dependsOn("installDist")
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
 }
+
+tasks.compileKotlin {
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
+}
+
+tasks.create("stage").dependsOn("installDist")
 
 dependencies {
     implementation("io.ktor:ktor-server-core:$ktor_version")
