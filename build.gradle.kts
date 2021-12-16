@@ -15,7 +15,6 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.6.0"
 }
 
-//group = "com.bunbeauty.fooddelivery"
 application {
     mainClass.set("ApplicationKt")
 }
@@ -23,14 +22,6 @@ application {
 repositories {
     mavenCentral()
 }
-
-//java {
-//    sourceCompatibility = JavaVersion.VERSION_1_8
-//}
-//
-//tasks.compileKotlin {
-//    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
-//}
 
 tasks.create("stage").dependsOn("installDist")
 
