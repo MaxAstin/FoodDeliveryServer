@@ -77,8 +77,8 @@ class OrderRepository : IOrderRepository {
         } ?: emptyList()
     }
 
-    override suspend fun getOrderByUuid(orderUuid: UUID): GetClientOrder? {
-        return OrderEntity.findById(orderUuid)?.toClientOrder()
+    override suspend fun getOrderByUuid(orderUuid: UUID): GetClientOrder? = query {
+        OrderEntity.findById(orderUuid)?.toClientOrder()
     }
 
     override suspend fun updateOrderStatusByUuid(orderUuid: UUID, status: String): GetCafeOrder? = query {
