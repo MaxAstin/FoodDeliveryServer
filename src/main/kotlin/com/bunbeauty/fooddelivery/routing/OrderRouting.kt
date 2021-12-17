@@ -1,13 +1,12 @@
 package com.bunbeauty.fooddelivery.routing
 
-import com.bunbeauty.fooddelivery.auth.JwtUser
 import com.bunbeauty.fooddelivery.data.Constants.CAFE_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
-import com.bunbeauty.fooddelivery.data.ext.toListWrapper
 import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrder
 import com.bunbeauty.fooddelivery.data.model.order.GetClientOrder
 import com.bunbeauty.fooddelivery.data.model.order.PatchOrder
 import com.bunbeauty.fooddelivery.data.model.order.PostOrder
+import com.bunbeauty.fooddelivery.routing.extension.clientSocket
 import com.bunbeauty.fooddelivery.service.order.IOrderService
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -15,6 +14,7 @@ import io.ktor.http.cio.websocket.*
 import io.ktor.routing.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.flow.collect
+import kotlinx.serialization.json.Json
 import org.koin.ktor.ext.inject
 
 fun Application.configureOrderRouting() {
@@ -71,36 +71,18 @@ fun Route.patchOrder() {
 fun Route.observeClientOrders() {
 
     val orderService: IOrderService by inject()
+    val json: Json by inject()
 
     webSocket("/order/subscribe") {
-        try {
-            val jwtUser = call.authentication.principal as? JwtUser
-            if (jwtUser == null) {
-                close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Only for authorized users"))
-            } else {
-                if (jwtUser.isClient()) {
-                    orderService.observeActiveOrderList(jwtUser.uuid).collect { clientOrderList ->
-                        outgoing.send(Frame.Text(clientOrderList.toListWrapper().toString()))
-                    }
-                } else {
-                    close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Only for clients"))
+        clientSocket(
+            block = { jwtUser ->
+                orderService.observeChangedOrder(jwtUser.uuid).collect { clientOrder ->
+                    outgoing.send(Frame.Text(json.encodeToString(GetClientOrder.serializer(), clientOrder)))
                 }
+            },
+            closeBlock = { jwtUser ->
+                orderService.clientDisconnect(jwtUser.uuid)
             }
-        } catch (exception: Exception) {
-            close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Exception: ${exception.message}"))
-        }
-
-//        for (frame in incoming) {
-//            println(frame.toString())
-//                when (frame) {
-//                    is Frame.Text -> {
-//                        val text = frame.readText()
-//                        outgoing.send(Frame.Text("YOU SAID: $text"))
-//                        if (text.equals("bye", ignoreCase = true)) {
-//                            close(CloseReason(CloseReason.Codes.NORMAL, "Client said BYE"))
-//                        }
-//                    }
-//                }
-//        }
+        )
     }
 }

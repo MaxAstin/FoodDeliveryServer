@@ -28,6 +28,7 @@ fun main() {
         configureSerialization()
         install(Koin) {
             modules(
+                dataModule,
                 authModule,
                 userModule,
                 clientUserModule,

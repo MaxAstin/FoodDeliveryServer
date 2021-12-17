@@ -9,12 +9,15 @@ import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.order.*
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.data.repo.street.IStreetRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import org.joda.time.DateTime
+import java.util.*
+import kotlin.collections.LinkedHashMap
 
 class OrderService(private val orderRepository: IOrderRepository, private val streetRepository: IStreetRepository) :
     IOrderService {
+
+    val listenerMap: LinkedHashMap<String, MutableSharedFlow<GetClientOrder>> = LinkedHashMap()
 
     override suspend fun createOrder(clientUserUuid: String, postOrder: PostOrder): GetClientOrder? {
         val currentMillis = DateTime.now().millis
@@ -55,13 +58,24 @@ class OrderService(private val orderRepository: IOrderRepository, private val st
     }
 
     override suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder? {
-        return orderRepository.updateOrderStatusByUuid(orderUuid.toUuid(), patchOrder.status)
+        val changedOrder = orderRepository.updateOrderStatusByUuid(orderUuid.toUuid(), patchOrder.status)
+
+        val clientOrder = orderRepository.getOrderByUuid(orderUuid.toUuid())
+        if (clientOrder != null) {
+            listenerMap[orderUuid]?.emit(clientOrder)
+        }
+
+        return changedOrder
     }
 
-    override suspend fun observeActiveOrderList(clientUserUuid: String): Flow<List<GetClientOrder>> {
-        return flow {
-            emit(orderRepository.observeActiveOrderList(clientUserUuid.toUuid()))
-        }
+    override suspend fun observeChangedOrder(clientUserUuid: String): SharedFlow<GetClientOrder> {
+        val mutableSharedFlow = MutableSharedFlow<GetClientOrder>(replay = 0)
+        listenerMap[clientUserUuid] = mutableSharedFlow
+        return mutableSharedFlow.asSharedFlow()
+    }
+
+    override fun clientDisconnect(clientUserUuid: String) {
+        listenerMap.remove(clientUserUuid)
     }
 
     fun generateCode(currentMillis: Long): String {
