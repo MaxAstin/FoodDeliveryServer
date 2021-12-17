@@ -61,7 +61,9 @@ class OrderService(private val orderRepository: IOrderRepository, private val st
         val changedOrder = orderRepository.updateOrderStatusByUuid(orderUuid.toUuid(), patchOrder.status)
 
         val clientOrder = orderRepository.getOrderByUuid(orderUuid.toUuid())
+        println("changeOrder clientOrder = ${clientOrder?.uuid}")
         if (clientOrder != null) {
+            println("changeOrder listener = ${listenerMap[orderUuid]}")
             listenerMap[orderUuid]?.emit(clientOrder)
         }
 

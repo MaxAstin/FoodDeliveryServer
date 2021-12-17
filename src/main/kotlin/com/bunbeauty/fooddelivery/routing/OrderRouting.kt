@@ -77,6 +77,7 @@ fun Route.observeClientOrders() {
         clientSocket(
             block = { jwtUser ->
                 orderService.observeChangedOrder(jwtUser.uuid).collect { clientOrder ->
+                    println("observeChangedOrder ${clientOrder.uuid}")
                     outgoing.send(Frame.Text(json.encodeToString(GetClientOrder.serializer(), clientOrder)))
                 }
             },
