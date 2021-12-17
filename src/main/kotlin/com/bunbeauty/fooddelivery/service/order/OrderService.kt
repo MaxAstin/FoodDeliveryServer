@@ -77,7 +77,9 @@ class OrderService(private val orderRepository: IOrderRepository, private val st
     }
 
     override fun clientDisconnect(clientUserUuid: String) {
+        println("clientDisconnect before: listenerMap.size = ${listenerMap.size}")
         listenerMap.remove(clientUserUuid)
+        println("clientDisconnect after: listenerMap.size = ${listenerMap.size}")
     }
 
     fun generateCode(currentMillis: Long): String {

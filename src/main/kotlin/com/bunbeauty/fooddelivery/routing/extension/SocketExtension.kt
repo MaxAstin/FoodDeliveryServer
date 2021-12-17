@@ -12,6 +12,7 @@ suspend inline fun DefaultWebSocketServerSession.clientSocket(
     crossinline closeBlock: (JwtUser) -> Unit,
 ) {
     val jwtUser = call.authentication.principal as? JwtUser
+    println("jwtUser $jwtUser")
     if (jwtUser != null) {
         try {
             launch {
@@ -24,13 +25,15 @@ suspend inline fun DefaultWebSocketServerSession.clientSocket(
             if (jwtUser.isClient()) {
                 block(jwtUser)
             } else {
+                println("2 close Only for clients")
                 close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Only for clients"))
             }
         } catch (exception: Exception) {
             closeBlock(jwtUser)
-            println("2 onClose ${closeReason.await()}")
+            println("3 onClose ${closeReason.await()}")
         }
     } else {
+        println("4 Only for authorized users")
         close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Only for authorized users"))
     }
 }
