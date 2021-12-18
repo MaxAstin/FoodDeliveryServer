@@ -7,8 +7,10 @@ class SessionHandler<T> {
 
     private val sessionMap: LinkedHashMap<String, Session<T>> = LinkedHashMap()
 
-    suspend fun emitNewValue(key: String, value: T) {
-        sessionMap[key]?.mutableSharedFlow?.emit(value)
+    suspend fun emitNewValue(key: String?, value: T?) {
+        if (key != null && value != null) {
+            sessionMap[key]?.mutableSharedFlow?.emit(value)
+        }
     }
 
     fun connect(key: String): SharedFlow<T> {

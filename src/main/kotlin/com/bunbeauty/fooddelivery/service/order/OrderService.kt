@@ -12,7 +12,6 @@ import com.bunbeauty.fooddelivery.data.repo.street.IStreetRepository
 import com.bunbeauty.fooddelivery.data.session.SessionHandler
 import kotlinx.coroutines.flow.*
 import org.joda.time.DateTime
-import kotlin.collections.LinkedHashMap
 
 class OrderService(private val orderRepository: IOrderRepository, private val streetRepository: IStreetRepository) :
     IOrderService {
@@ -52,9 +51,7 @@ class OrderService(private val orderRepository: IOrderRepository, private val st
         )
         val clientOrder = orderRepository.insertOrder(insertOrder)
         val cafeOrder = orderRepository.getCafeOrderByUuid(clientOrder.uuid.toUuid())
-        if (cafeOrder != null) {
-            cafeSessionHandler.emitNewValue(cafeOrder.cafeUuid, cafeOrder)
-        }
+        cafeSessionHandler.emitNewValue(cafeOrder?.cafeUuid, cafeOrder)
 
         return clientOrder
     }
@@ -65,21 +62,20 @@ class OrderService(private val orderRepository: IOrderRepository, private val st
     }
 
     override suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder? {
-        val changedOrder = orderRepository.updateOrderStatusByUuid(orderUuid.toUuid(), patchOrder.status)
+        val getCafeOrder = orderRepository.updateOrderStatusByUuid(orderUuid.toUuid(), patchOrder.status)
 
-        val clientOrder = orderRepository.getClientOrderByUuid(orderUuid.toUuid())
-        if (clientOrder != null) {
-            clientSessionHandler.emitNewValue(clientOrder.clientUserUuid, clientOrder)
-        }
+        val getClientOrder = orderRepository.getClientOrderByUuid(orderUuid.toUuid())
+        clientSessionHandler.emitNewValue(getClientOrder?.clientUserUuid, getClientOrder)
+        cafeSessionHandler.emitNewValue(getCafeOrder?.cafeUuid, getCafeOrder)
 
-        return changedOrder
+        return getCafeOrder
     }
 
-    override suspend fun observeChangedOrder(clientUserUuid: String): SharedFlow<GetClientOrder> {
+    override suspend fun observeClientOrderUpdates(clientUserUuid: String): SharedFlow<GetClientOrder> {
         return clientSessionHandler.connect(clientUserUuid)
     }
 
-    override suspend fun observeCreatedOrder(cafeUuid: String): SharedFlow<GetCafeOrder> {
+    override suspend fun observeCafeOrderUpdates(cafeUuid: String): SharedFlow<GetCafeOrder> {
         return cafeSessionHandler.connect(cafeUuid)
     }
 

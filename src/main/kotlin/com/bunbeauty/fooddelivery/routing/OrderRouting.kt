@@ -77,7 +77,7 @@ fun Route.observeClientOrders() {
     webSocket("/client/order/subscribe") {
         clientSocket(
             block = { request ->
-                orderService.observeChangedOrder(request.jwtUser.uuid).collect { clientOrder ->
+                orderService.observeClientOrderUpdates(request.jwtUser.uuid).collect { clientOrder ->
                     outgoing.send(Frame.Text(json.encodeToString(GetClientOrder.serializer(), clientOrder)))
                 }
             },
@@ -98,7 +98,7 @@ fun Route.observeManagerOrders() {
             CAFE_UUID_PARAMETER,
             block = { request ->
                 val cafeUuid = request.parameterMap[CAFE_UUID_PARAMETER]!!
-                orderService.observeCreatedOrder(cafeUuid).collect { cafeOrder ->
+                orderService.observeCafeOrderUpdates(cafeUuid).collect { cafeOrder ->
                     outgoing.send(Frame.Text(json.encodeToString(GetCafeOrder.serializer(), cafeOrder)))
                 }
             },
