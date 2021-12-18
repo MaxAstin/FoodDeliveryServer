@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 suspend inline fun DefaultWebSocketServerSession.clientSocket(
     vararg parameterNameList: String,
     block: (Request) -> Unit,
-    crossinline closeBlock: (JwtUser) -> Unit,
+    crossinline closeBlock: (Request) -> Unit,
 ) {
     println("managerSocket")
     socket(*parameterNameList, block = block, closeBlock = closeBlock) { jwtUser ->
@@ -22,7 +22,7 @@ suspend inline fun DefaultWebSocketServerSession.clientSocket(
 suspend inline fun DefaultWebSocketServerSession.managerSocket(
     vararg parameterNameList: String,
     block: (Request) -> Unit,
-    crossinline closeBlock: (JwtUser) -> Unit,
+    crossinline closeBlock: (Request) -> Unit,
 ) {
     println("managerSocket")
     socket(*parameterNameList, block = block, closeBlock = closeBlock) { jwtUser ->
@@ -33,40 +33,30 @@ suspend inline fun DefaultWebSocketServerSession.managerSocket(
 suspend inline fun DefaultWebSocketServerSession.socket(
     vararg parameterNameList: String,
     block: (Request) -> Unit,
-    crossinline closeBlock: (JwtUser) -> Unit,
+    crossinline closeBlock: (Request) -> Unit,
     checkBlock: (JwtUser) -> Boolean,
 ) {
     val jwtUser = call.authentication.principal as? JwtUser
     println("socket $jwtUser")
     if (jwtUser != null) {
         call.handleParameters(*parameterNameList) { parameterMap ->
+            val request = Request(jwtUser, parameterMap)
             try {
                 launch {
                     while (!incoming.isClosedForReceive) {
                         delay(1000)
                     }
                     println("onClose ${closeReason.await()}")
-                    closeBlock(jwtUser)
+                    closeBlock(request)
                 }
                 if (checkBlock(jwtUser)) {
-                    val nullParameterName = parameterNameList.find { parameterName ->
-                        call.parameters[parameterName] == null
-                    }
-                    if (nullParameterName == null) {
-                        val nonNullableParameters = parameterNameList.mapNotNull { parameterName ->
-                            call.parameters[parameterName]
-                        }
-                        val parameterMap = parameterNameList.zip(nonNullableParameters).toMap()
-                        block(Request(jwtUser, parameterMap))
-                    } else {
-                        call.respondBad("Parameter $nullParameterName is required")
-                    }
+                    block(request)
                 } else {
                     close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Only for clients"))
                 }
             } catch (exception: Exception) {
                 println("onClose ${closeReason.await()}")
-                closeBlock(jwtUser)
+                closeBlock(request)
             }
         }
     } else {

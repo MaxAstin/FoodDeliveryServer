@@ -81,8 +81,8 @@ fun Route.observeClientOrders() {
                     outgoing.send(Frame.Text(json.encodeToString(GetClientOrder.serializer(), clientOrder)))
                 }
             },
-            closeBlock = { jwtUser ->
-                orderService.clientDisconnect(jwtUser.uuid)
+            closeBlock = { request ->
+                orderService.clientDisconnect(request.jwtUser.uuid)
             }
         )
     }
@@ -102,8 +102,9 @@ fun Route.observeManagerOrders() {
                     outgoing.send(Frame.Text(json.encodeToString(GetCafeOrder.serializer(), cafeOrder)))
                 }
             },
-            closeBlock = { jwtUser ->
-                orderService.clientDisconnect(jwtUser.uuid)
+            closeBlock = { request ->
+                val cafeUuid = request.parameterMap[CAFE_UUID_PARAMETER]!!
+                orderService.userDisconnect(cafeUuid)
             }
         )
     }
