@@ -26,6 +26,7 @@ class SessionHandler<T> {
     }
 
     fun disconnect(key: String) {
+        println("session ${sessionMap[key]}")
         sessionMap[key]?.let { session ->
             if (session.count.get() == 1) {
                 println("session $key removed")
