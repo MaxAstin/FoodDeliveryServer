@@ -14,5 +14,6 @@ data class GetCafeOrder(
     val addressDescription: String,
     val comment: String?,
     val clientUser: GetCafeClientUser,
+    val cafeUuid: String,
     val oderProductList: List<GetOrderProduct>,
 )

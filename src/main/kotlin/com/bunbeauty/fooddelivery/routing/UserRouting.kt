@@ -4,6 +4,7 @@ import com.bunbeauty.fooddelivery.data.model.client_user.PostClientUserAuth
 import com.bunbeauty.fooddelivery.data.model.user.GetUser
 import com.bunbeauty.fooddelivery.data.model.user.PostUser
 import com.bunbeauty.fooddelivery.data.model.user.PostUserAuth
+import com.bunbeauty.fooddelivery.routing.extension.*
 import com.bunbeauty.fooddelivery.service.client_user.IClientUserService
 import com.bunbeauty.fooddelivery.service.user.IUserService
 import io.ktor.application.*

@@ -9,15 +9,16 @@ import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.order.*
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.data.repo.street.IStreetRepository
+import com.bunbeauty.fooddelivery.data.session.SessionHandler
 import kotlinx.coroutines.flow.*
 import org.joda.time.DateTime
-import java.util.*
 import kotlin.collections.LinkedHashMap
 
 class OrderService(private val orderRepository: IOrderRepository, private val streetRepository: IStreetRepository) :
     IOrderService {
 
-    val listenerMap: LinkedHashMap<String, MutableSharedFlow<GetClientOrder>> = LinkedHashMap()
+    val cafeSessionHandler: SessionHandler<GetCafeOrder> = SessionHandler()
+    val clientSessionHandler: SessionHandler<GetClientOrder> = SessionHandler()
 
     override suspend fun createOrder(clientUserUuid: String, postOrder: PostOrder): GetClientOrder? {
         val currentMillis = DateTime.now().millis
@@ -49,7 +50,13 @@ class OrderService(private val orderRepository: IOrderRepository, private val st
                 )
             },
         )
-        return orderRepository.insertOrder(insertOrder)
+        val clientOrder = orderRepository.insertOrder(insertOrder)
+        val cafeOrder = orderRepository.getCafeOrderByUuid(clientOrder.uuid.toUuid())
+        if (cafeOrder != null) {
+            cafeSessionHandler.emitNewValue(cafeOrder.cafeUuid, cafeOrder)
+        }
+
+        return clientOrder
     }
 
     override suspend fun getOrderListByCafeUuid(cafeUuid: String): List<GetCafeOrder> {
@@ -60,25 +67,28 @@ class OrderService(private val orderRepository: IOrderRepository, private val st
     override suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder? {
         val changedOrder = orderRepository.updateOrderStatusByUuid(orderUuid.toUuid(), patchOrder.status)
 
-        val clientOrder = orderRepository.getOrderByUuid(orderUuid.toUuid())
-        val clientUserUuid = changedOrder?.clientUser?.uuid
-        if (clientOrder != null && clientUserUuid != null) {
-            listenerMap[clientUserUuid]?.emit(clientOrder)
+        val clientOrder = orderRepository.getClientOrderByUuid(orderUuid.toUuid())
+        if (clientOrder != null) {
+            clientSessionHandler.emitNewValue(clientOrder.clientUserUuid, clientOrder)
         }
 
         return changedOrder
     }
 
     override suspend fun observeChangedOrder(clientUserUuid: String): SharedFlow<GetClientOrder> {
-        val mutableSharedFlow = MutableSharedFlow<GetClientOrder>(replay = 0)
-        listenerMap[clientUserUuid] = mutableSharedFlow
-        return mutableSharedFlow.asSharedFlow()
+        return clientSessionHandler.connect(clientUserUuid)
+    }
+
+    override suspend fun observeCreatedOrder(cafeUuid: String): SharedFlow<GetCafeOrder> {
+        return cafeSessionHandler.connect(cafeUuid)
     }
 
     override fun clientDisconnect(clientUserUuid: String) {
-        println("clientDisconnect before: listenerMap.size = ${listenerMap.size}")
-        listenerMap.remove(clientUserUuid)
-        println("clientDisconnect after: listenerMap.size = ${listenerMap.size}")
+        clientSessionHandler.disconnect(clientUserUuid)
+    }
+
+    override fun userDisconnect(cafeUuid: String) {
+        cafeSessionHandler.disconnect(cafeUuid)
     }
 
     fun generateCode(currentMillis: Long): String {

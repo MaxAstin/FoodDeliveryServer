@@ -3,6 +3,9 @@ package com.bunbeauty.fooddelivery.routing
 import com.bunbeauty.fooddelivery.data.Constants.COMPANY_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.model.city.GetCity
 import com.bunbeauty.fooddelivery.data.model.city.PostCity
+import com.bunbeauty.fooddelivery.routing.extension.adminWithBody
+import com.bunbeauty.fooddelivery.routing.extension.respondOk
+import com.bunbeauty.fooddelivery.routing.extension.safely
 import com.bunbeauty.fooddelivery.service.city.ICityService
 import io.ktor.application.*
 import io.ktor.auth.*

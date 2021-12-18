@@ -35,6 +35,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         deferredTime = deferredTime,
         addressDescription = addressDescription,
         comment = comment,
+        clientUserUuid = clientUser.uuid,
         oderProductList = oderProducts.map { oderProductEntity ->
             oderProductEntity.toOrderProduct()
         }
@@ -50,6 +51,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         addressDescription = addressDescription,
         comment = comment,
         clientUser = clientUser.toCafeUser(),
+        cafeUuid = cafe.uuid,
         oderProductList = oderProducts.map { oderProductEntity ->
             oderProductEntity.toOrderProduct()
         }

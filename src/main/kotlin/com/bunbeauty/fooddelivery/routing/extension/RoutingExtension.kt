@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.routing
+package com.bunbeauty.fooddelivery.routing.extension
 
 import com.bunbeauty.fooddelivery.auth.JwtUser
 import com.bunbeauty.fooddelivery.data.ext.toListWrapper
@@ -11,22 +11,32 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.util.pipeline.*
 
+
+suspend inline fun ApplicationCall.handleParameters(
+    vararg parameterNameList: String,
+    block: (Map<String, String>) -> Unit,
+) {
+    val nullParameterName = parameterNameList.find { parameterName ->
+        parameters[parameterName] == null
+    }
+    if (nullParameterName == null) {
+        val nonNullableParameters = parameterNameList.mapNotNull { parameterName ->
+            parameters[parameterName]
+        }
+        val parameterMap = parameterNameList.zip(nonNullableParameters).toMap()
+        block(parameterMap)
+    } else {
+        respondBad("Parameter $nullParameterName is required")
+    }
+}
+
 suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(
     vararg parameterNameList: String,
     block: (Map<String, String>) -> Unit,
 ) {
     try {
-        val nullParameterName = parameterNameList.find { parameterName ->
-            call.parameters[parameterName] == null
-        }
-        if (nullParameterName == null) {
-            val nonNullableParameters = parameterNameList.mapNotNull { parameterName ->
-                call.parameters[parameterName]
-            }
-            val parameterMap = parameterNameList.zip(nonNullableParameters).toMap()
+        call.handleParameters(*parameterNameList) { parameterMap ->
             block(parameterMap)
-        } else {
-            call.respondBad("Parameter $nullParameterName is required")
         }
     } catch (exception: Exception) {
         call.respondBad("Exception: ${exception.message}")

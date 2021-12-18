@@ -6,7 +6,7 @@ import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrder
 import com.bunbeauty.fooddelivery.data.model.order.GetClientOrder
 import com.bunbeauty.fooddelivery.data.model.order.PatchOrder
 import com.bunbeauty.fooddelivery.data.model.order.PostOrder
-import com.bunbeauty.fooddelivery.routing.extension.clientSocket
+import com.bunbeauty.fooddelivery.routing.extension.*
 import com.bunbeauty.fooddelivery.service.order.IOrderService
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -25,6 +25,7 @@ fun Application.configureOrderRouting() {
             postOrder()
             patchOrder()
             observeClientOrders()
+            observeManagerOrders()
         }
     }
 }
@@ -73,11 +74,32 @@ fun Route.observeClientOrders() {
     val orderService: IOrderService by inject()
     val json: Json by inject()
 
-    webSocket("/order/subscribe") {
+    webSocket("/client/order/subscribe") {
         clientSocket(
-            block = { jwtUser ->
-                orderService.observeChangedOrder(jwtUser.uuid).collect { clientOrder ->
+            block = { request ->
+                orderService.observeChangedOrder(request.jwtUser.uuid).collect { clientOrder ->
                     outgoing.send(Frame.Text(json.encodeToString(GetClientOrder.serializer(), clientOrder)))
+                }
+            },
+            closeBlock = { jwtUser ->
+                orderService.clientDisconnect(jwtUser.uuid)
+            }
+        )
+    }
+}
+
+fun Route.observeManagerOrders() {
+
+    val orderService: IOrderService by inject()
+    val json: Json by inject()
+
+    webSocket("/user/order/subscribe") {
+        managerSocket(
+            CAFE_UUID_PARAMETER,
+            block = { request ->
+                val cafeUuid = request.parameterMap[CAFE_UUID_PARAMETER]!!
+                orderService.observeCreatedOrder(cafeUuid).collect { cafeOrder ->
+                    outgoing.send(Frame.Text(json.encodeToString(GetCafeOrder.serializer(), cafeOrder)))
                 }
             },
             closeBlock = { jwtUser ->

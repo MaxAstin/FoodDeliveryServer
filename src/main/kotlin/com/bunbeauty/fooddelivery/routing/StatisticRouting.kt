@@ -2,6 +2,9 @@ package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.CAFE_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.PERIOD_PARAMETER
+import com.bunbeauty.fooddelivery.routing.extension.manager
+import com.bunbeauty.fooddelivery.routing.extension.respondBad
+import com.bunbeauty.fooddelivery.routing.extension.respondOk
 import com.bunbeauty.fooddelivery.service.statistic.IStatisticService
 import io.ktor.application.*
 import io.ktor.auth.*
