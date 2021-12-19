@@ -1,5 +1,9 @@
 package com.bunbeauty.fooddelivery.data
 
+import com.bunbeauty.fooddelivery.data.Constants.DATABASE_JDBC_URL
+import com.bunbeauty.fooddelivery.data.Constants.DATASOURCE_PASSWORD
+import com.bunbeauty.fooddelivery.data.Constants.DATASOURCE_USERNAME
+import com.bunbeauty.fooddelivery.data.Constants.JDBC_DRIVER
 import com.bunbeauty.fooddelivery.data.table.*
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -41,10 +45,10 @@ object DatabaseFactory {
 
     private fun getDataSource(): HikariDataSource {
         val config = HikariConfig().apply {
-            driverClassName = System.getenv("JDBC_DRIVER")
-            jdbcUrl = System.getenv("DATABASE_JDBC_URL")
-            username = System.getenv("DATASOURCE_USERNAME")
-            password = System.getenv("DATASOURCE_PASSWORD")
+            driverClassName = System.getenv(JDBC_DRIVER)
+            jdbcUrl = System.getenv(DATABASE_JDBC_URL)
+            username = System.getenv(DATASOURCE_USERNAME)
+            password = System.getenv(DATASOURCE_PASSWORD)
             maximumPoolSize = 3
             isAutoCommit = false
             transactionIsolation = "TRANSACTION_REPEATABLE_READ"

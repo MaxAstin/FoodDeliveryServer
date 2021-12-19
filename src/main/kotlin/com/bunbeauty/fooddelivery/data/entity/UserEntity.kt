@@ -14,7 +14,7 @@ class UserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var username: String by UserTable.username
     var passwordHash: String by UserTable.passwordHash
     var role: UserRole by UserTable.role
-    var company: CompanyEntity by CompanyEntity referencedOn UserTable.company
+    var city: CityEntity by CityEntity referencedOn UserTable.city
 
     companion object : UUIDEntityClass<UserEntity>(UserTable)
 
@@ -23,7 +23,7 @@ class UserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
             uuid = uuid,
             username = username,
             passwordHash = passwordHash,
-            company = company.toCompany(),
+            company = city.toCity(),
             role = role.roleName,
         )
     }

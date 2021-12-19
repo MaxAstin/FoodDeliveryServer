@@ -3,6 +3,7 @@ package com.bunbeauty.fooddelivery.auth
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import com.bunbeauty.fooddelivery.data.Constants.JWT_SECRET
 import com.bunbeauty.fooddelivery.data.enums.UserRole
 import com.bunbeauty.fooddelivery.data.model.Token
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
@@ -11,7 +12,7 @@ import io.ktor.auth.jwt.*
 
 class JwtService : IJwtService {
 
-    val jwtSecret: String = System.getenv("JWT_SECRET")
+    val jwtSecret: String = System.getenv(JWT_SECRET)
     val algorithm: Algorithm = Algorithm.HMAC256(jwtSecret)
     override val verifier: JWTVerifier = JWT.require(algorithm)
         .withSubject(JWT_SUBJECT)

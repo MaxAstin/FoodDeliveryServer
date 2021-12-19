@@ -8,5 +8,5 @@ object UserTable : UUIDTable() {
     val username = varchar("username", 512).uniqueIndex()
     val passwordHash = varchar("passwordHash", 512)
     val role = enumeration("role", UserRole::class)
-    val company = reference("company", CompanyTable)
+    val city = reference("city", CityTable)
 }

@@ -21,7 +21,7 @@ class UserService(private val userRepository: IUserRepository, private val jwtSe
             username = postUser.username,
             passwordHash = passwordHash,
             role = UserRole.findByRoleName(postUser.role),
-            companyUuid = postUser.companyUuid.toUuid(),
+            cityUuid = postUser.cityUuid.toUuid(),
         )
 
         return userRepository.insertUser(insertUser)

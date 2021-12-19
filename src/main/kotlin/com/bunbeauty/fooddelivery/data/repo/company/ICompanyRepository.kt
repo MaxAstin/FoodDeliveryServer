@@ -8,4 +8,5 @@ interface ICompanyRepository {
 
     suspend fun insertCompany(insertCompany: InsertCompany): GetCompany
     suspend fun getCompanyByUuid(uuid: UUID): GetCompany?
+    suspend fun getCompanyByName(name: String): GetCompany?
 }

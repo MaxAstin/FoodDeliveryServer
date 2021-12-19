@@ -1,6 +1,7 @@
 package com.bunbeauty.fooddelivery.data.repo.user
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
+import com.bunbeauty.fooddelivery.data.entity.CityEntity
 import com.bunbeauty.fooddelivery.data.entity.CompanyEntity
 import com.bunbeauty.fooddelivery.data.entity.UserEntity
 import com.bunbeauty.fooddelivery.data.model.user.GetUser
@@ -11,7 +12,7 @@ import java.util.*
 class UserRepository : IUserRepository {
 
     override suspend fun getCompanyUuidByUserUuid(uuid: UUID): String? = query {
-        UserEntity.findById(uuid)?.company?.uuid
+        UserEntity.findById(uuid)?.city?.company?.uuid
     }
 
     override suspend fun getUserByUuid(uuid: UUID): GetUser? = query {
@@ -21,16 +22,15 @@ class UserRepository : IUserRepository {
     override suspend fun getUserByUsername(username: String): GetUser? = query {
         UserEntity.find {
             UserTable.username eq username
-        }.firstOrNull()
-            ?.toUser()
+        }.firstOrNull()?.toUser()
     }
 
     override suspend fun insertUser(insertUser: InsertUser): GetUser = query {
         UserEntity.new {
             username = insertUser.username
             passwordHash = insertUser.passwordHash
-            company = CompanyEntity[insertUser.companyUuid]  //CompanyEntity[insertUser.companyUuid]
             role = insertUser.role
+            city = CityEntity[insertUser.cityUuid]
         }.toUser()
     }
 }
