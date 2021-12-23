@@ -35,8 +35,7 @@ class MenuProductRepository : IMenuProductRepository {
 
     override suspend fun getMenuProductListByCompanyUuid(companyUuid: UUID): List<GetMenuProduct> = query {
         MenuProductEntity.find {
-            MenuProductTable.company eq companyUuid and
-                    MenuProductTable.isVisible eq booleanLiteral(true)
+            MenuProductTable.company eq companyUuid
         }.map { menuProductEntity ->
             menuProductEntity.toMenuProduct()
         }.toList()

@@ -8,6 +8,6 @@ import java.util.*
 interface IStreetRepository {
 
     suspend fun insertStreet(insertStreet: InsertStreet): GetStreet
-    suspend fun getStreetListByCompanyUuid(companyUuid: UUID): List<GetStreet>
+    suspend fun getStreetListByCityUuid(cityUuid: UUID): List<GetStreet>
     suspend fun getStreetByAddressUuid(addressUuid: UUID): GetCafe?
 }

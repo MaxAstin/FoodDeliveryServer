@@ -27,6 +27,7 @@ class OrderProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     companion object : UUIDEntityClass<OrderProductEntity>(OrderProductTable)
 
     fun toOrderProduct() = GetOrderProduct(
+        uuid = uuid,
         count = count,
         name = name,
         newPrice = newPrice,

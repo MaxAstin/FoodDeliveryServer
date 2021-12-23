@@ -24,8 +24,7 @@ class CityRepository : ICityRepository {
 
     override suspend fun getCityListByCompanyUuid(companyUuid: UUID): List<GetCity> = query {
         CityEntity.find {
-            CityTable.company eq companyUuid and
-                    CityTable.isVisible eq booleanLiteral(true)
+            CityTable.company eq companyUuid
         }.map { cityEntity ->
             cityEntity.toCity()
         }.toList()

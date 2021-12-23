@@ -27,8 +27,7 @@ class CafeRepository : ICafeRepository {
 
     override suspend fun getCafeListByCityUuid(cityUuid: UUID): List<GetCafe> = query {
         CafeEntity.find {
-            CafeTable.city eq cityUuid and
-                    CafeTable.isVisible eq booleanLiteral(true)
+            CafeTable.city eq cityUuid
         }.map { cafeEntity ->
             cafeEntity.toCafe()
         }.toList()

@@ -28,9 +28,7 @@ class ClientUserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
             phoneNumber = phoneNumber,
             email = email,
             company = company.toCompany(),
-            addresses = addresses.filter { addressEntity ->
-                addressEntity.isVisible
-            }.map { addressEntity ->
+            addresses = addresses.map { addressEntity ->
                 addressEntity.toAddress()
             },
             orders = orders.map { orderEntity ->

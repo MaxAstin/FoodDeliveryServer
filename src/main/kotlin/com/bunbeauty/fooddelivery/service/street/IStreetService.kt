@@ -6,5 +6,5 @@ import com.bunbeauty.fooddelivery.data.model.street.PostStreet
 interface IStreetService {
 
     suspend fun createStreet(postStreet: PostStreet): GetStreet
-    suspend fun getStreetListByCompanyUuid(companyUuid: String): List<GetStreet>
+    suspend fun getStreetListByCompanyUuid(cityUuid: String): List<GetStreet>
 }

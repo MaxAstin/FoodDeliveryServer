@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.routing
 
-import com.bunbeauty.fooddelivery.data.Constants.COMPANY_UUID_PARAMETER
+import com.bunbeauty.fooddelivery.data.Constants.CITY_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.model.street.GetStreet
 import com.bunbeauty.fooddelivery.data.model.street.PostStreet
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
@@ -15,21 +15,21 @@ import org.koin.ktor.ext.inject
 fun Application.configureStreetRouting() {
 
     routing {
-        getStreets()
+        getStreetsByCityUuid()
         authenticate {
             postStreet()
         }
     }
 }
 
-fun Routing.getStreets() {
+fun Routing.getStreetsByCityUuid() {
 
     val streetService: IStreetService by inject()
 
     get("/street") {
-        safely(COMPANY_UUID_PARAMETER) { parameterMap->
-            val companyUuid = parameterMap[COMPANY_UUID_PARAMETER]!!
-            val streetList = streetService.getStreetListByCompanyUuid(companyUuid)
+        safely(CITY_UUID_PARAMETER) { parameterMap ->
+            val cityUuid = parameterMap[CITY_UUID_PARAMETER]!!
+            val streetList = streetService.getStreetListByCompanyUuid(cityUuid)
             call.respondOk(streetList)
         }
     }

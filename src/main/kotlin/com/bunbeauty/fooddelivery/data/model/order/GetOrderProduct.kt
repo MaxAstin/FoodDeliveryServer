@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetOrderProduct(
+    val uuid: String,
     val count: Int,
     val name: String,
     val newPrice: Int,

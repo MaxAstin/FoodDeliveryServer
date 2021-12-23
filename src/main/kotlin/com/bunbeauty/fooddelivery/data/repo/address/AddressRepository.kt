@@ -28,8 +28,7 @@ class AddressRepository : IAddressRepository {
 
     override suspend fun getAddressListByUserUuid(uuid: UUID): List<GetAddress> = query {
         AddressEntity.find {
-            AddressTable.clientUser eq uuid and
-                    AddressTable.isVisible eq booleanLiteral(true)
+            AddressTable.clientUser eq uuid
         }.map { addressEntity ->
             addressEntity.toAddress()
         }

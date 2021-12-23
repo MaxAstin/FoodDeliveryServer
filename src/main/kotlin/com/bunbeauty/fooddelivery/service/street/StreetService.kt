@@ -18,7 +18,7 @@ class StreetService(private val streetRepository: IStreetRepository) : IStreetSe
         return streetRepository.insertStreet(insertStreet)
     }
 
-    override suspend fun getStreetListByCompanyUuid(companyUuid: String): List<GetStreet> {
-        return streetRepository.getStreetListByCompanyUuid(companyUuid.toUuid())
+    override suspend fun getStreetListByCompanyUuid(cityUuid: String): List<GetStreet> {
+        return streetRepository.getStreetListByCityUuid(cityUuid.toUuid())
     }
 }
