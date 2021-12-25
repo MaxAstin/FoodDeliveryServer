@@ -12,5 +12,6 @@ data class GetAddress(
     val floor: String?,
     val comment: String?,
     val street: GetStreet,
+    val userUuid: String,
     val isVisible: Boolean,
 )
