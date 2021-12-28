@@ -9,5 +9,6 @@ sealed interface IClientUserRepository {
     suspend fun getClientUserByUuid(uuid: UUID): GetClientUser?
     suspend fun getClientUserByPhoneNumber(phoneNumber: String): GetClientUser?
     suspend fun insertClientUser(insertClientUser: InsertClientUser): GetClientUser
+    suspend fun updateClientUserByUuid(uuid: UUID, email: String?): GetClientUser?
 
 }

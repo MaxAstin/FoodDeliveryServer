@@ -27,4 +27,10 @@ class ClientUserRepository : IClientUserRepository {
             company = CompanyEntity[insertClientUser.companyUuid]
         }.toClientUser()
     }
+
+    override suspend fun updateClientUserByUuid(uuid: UUID, email: String?): GetClientUser? = query {
+        ClientUserEntity.findById(uuid)?.apply {
+            this.email = email
+        }?.toClientUser()
+    }
 }

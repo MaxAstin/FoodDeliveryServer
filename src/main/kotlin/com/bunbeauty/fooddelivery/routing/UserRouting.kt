@@ -1,5 +1,8 @@
 package com.bunbeauty.fooddelivery.routing
 
+import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
+import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
+import com.bunbeauty.fooddelivery.data.model.client_user.PatchClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.PostClientUserAuth
 import com.bunbeauty.fooddelivery.data.model.user.GetUser
 import com.bunbeauty.fooddelivery.data.model.user.PostUser
@@ -21,10 +24,10 @@ fun Application.configureUserRouting() {
         userLogin()
         clientLogin()
 
-        //createUserWithoutAuth()
         authenticate {
-            getClient()
             createUser()
+            getClient()
+            patchClientUser()
         }
     }
 }
@@ -90,15 +93,14 @@ fun Route.getClient() {
     }
 }
 
-fun Route.createUserWithoutAuth() {
+fun Route.patchClientUser() {
 
-    val userService: IUserService by inject()
+    val clientUserService: IClientUserService by inject()
 
-    post("/user") {
-        safely {
-            val postUser: PostUser = call.receive()
-            val user = userService.createUser(postUser)
-            call.respond(HttpStatusCode.Created, user)
+    patch("/client") {
+        clientWithBody<PatchClientUser, GetClientUser>(UUID_PARAMETER) { bodyRequest ->
+            val clientUserUuid = bodyRequest.request.parameterMap[UUID_PARAMETER]!!
+            clientUserService.updateClientUserByUuid(clientUserUuid, bodyRequest.body)
         }
     }
 }

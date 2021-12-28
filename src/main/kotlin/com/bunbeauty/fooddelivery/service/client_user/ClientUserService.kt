@@ -6,6 +6,7 @@ import com.bunbeauty.fooddelivery.data.model.ClientAuthResponse
 import com.bunbeauty.fooddelivery.data.model.UserAuthResponse
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.InsertClientUser
+import com.bunbeauty.fooddelivery.data.model.client_user.PatchClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.PostClientUserAuth
 import com.bunbeauty.fooddelivery.data.repo.client_user.IClientUserRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -38,6 +39,13 @@ class ClientUserService(
 
     override suspend fun getClientUserByUuid(clientUserUuid: String): GetClientUser? {
         return clientUserRepository.getClientUserByUuid(clientUserUuid.toUuid())
+    }
+
+    override suspend fun updateClientUserByUuid(
+        clientUserUuid: String,
+        patchClientUser: PatchClientUser
+    ): GetClientUser? {
+        return clientUserRepository.updateClientUserByUuid(clientUserUuid.toUuid(), patchClientUser.email)
     }
 
 }
