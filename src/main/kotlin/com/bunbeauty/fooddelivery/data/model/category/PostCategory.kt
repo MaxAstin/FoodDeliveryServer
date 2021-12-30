@@ -4,5 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PostCategory(
-    val name: String
+    val name: String,
+    val priority: Int
 )

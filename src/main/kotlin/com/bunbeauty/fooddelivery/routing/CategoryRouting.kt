@@ -1,7 +1,9 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.COMPANY_UUID_PARAMETER
+import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.model.category.GetCategory
+import com.bunbeauty.fooddelivery.data.model.category.PatchCategory
 import com.bunbeauty.fooddelivery.data.model.category.PostCategory
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import com.bunbeauty.fooddelivery.routing.extension.respondOk
@@ -18,6 +20,7 @@ fun Application.configureCategoryRouting() {
         getCategories()
         authenticate {
             postCategory()
+            patchCategory()
         }
     }
 }
@@ -42,6 +45,18 @@ fun Route.postCategory() {
     post("/category") {
         managerWithBody<PostCategory, GetCategory> { bodyRequest ->
             categoryService.createCategory(bodyRequest.body, bodyRequest.request.jwtUser.uuid)
+        }
+    }
+}
+
+fun Route.patchCategory() {
+
+    val categoryService: ICategoryService by inject()
+
+    patch("/category") {
+        managerWithBody<PatchCategory, GetCategory>(UUID_PARAMETER) { bodyRequest ->
+            val categoryUuid = bodyRequest.request.parameterMap[UUID_PARAMETER]!!
+            categoryService.updateCategory(categoryUuid, bodyRequest.body)
         }
     }
 }

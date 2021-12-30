@@ -11,12 +11,14 @@ class CategoryEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     val uuid: String = uuid.value.toString()
     var name: String by CategoryTable.name
+    var priority: Int by CategoryTable.priority
     var company: CompanyEntity by CompanyEntity referencedOn CategoryTable.company
 
     companion object : UUIDEntityClass<CategoryEntity>(CategoryTable)
 
     fun toCategory() = GetCategory(
         uuid = uuid,
-        name = name
+        name = name,
+        priority = priority,
     )
 }
