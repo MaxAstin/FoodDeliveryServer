@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PatchCategory(
-    val name: String?,
-    val priority: Int?
+    val name: String? = null,
+    val priority: Int? = null,
 )
