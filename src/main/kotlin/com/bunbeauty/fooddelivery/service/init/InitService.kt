@@ -68,7 +68,7 @@ class InitService(
                 username = MAIN_ADMIN_USERNAME,
                 passwordHash = passwordHash,
                 role = UserRole.ADMIN,
-                cityUuid = cityUuid.toUuid(),
+                cityUuid = cityUuid.toUuid()
             )
             userRepository.insertUser(insertUser)
         }

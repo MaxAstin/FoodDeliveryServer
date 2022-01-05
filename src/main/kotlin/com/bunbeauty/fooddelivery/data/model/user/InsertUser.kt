@@ -7,5 +7,5 @@ data class InsertUser(
     val username: String,
     val passwordHash: String,
     val role: UserRole,
-    val cityUuid: UUID,
+    val cityUuid: UUID
 )

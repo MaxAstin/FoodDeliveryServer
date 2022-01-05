@@ -9,6 +9,7 @@ data class GetUser(
     val uuid: String,
     val username: String,
     val passwordHash: String,
-    val city: GetCity,
     val role: String,
+    val city: GetCity,
+    val company: GetCompany,
 )

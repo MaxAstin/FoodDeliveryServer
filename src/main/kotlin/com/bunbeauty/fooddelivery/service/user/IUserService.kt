@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.service.user
 
-import com.bunbeauty.fooddelivery.data.model.UserAuthResponse
+import com.bunbeauty.fooddelivery.data.model.user.UserAuthResponse
 import com.bunbeauty.fooddelivery.data.model.user.GetUser
 import com.bunbeauty.fooddelivery.data.model.user.PostUserAuth
 import com.bunbeauty.fooddelivery.data.model.user.PostUser

@@ -1,7 +1,6 @@
 package com.bunbeauty.fooddelivery.auth
 
 import com.auth0.jwt.JWTVerifier
-import com.bunbeauty.fooddelivery.data.model.UserAuthResponse
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.data.model.user.GetUser
 import io.ktor.auth.jwt.*

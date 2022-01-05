@@ -7,5 +7,5 @@ data class PostUser(
     val username: String,
     val password: String,
     val role: String,
-    val cityUuid: String,
+    val cityUuid: String
 )

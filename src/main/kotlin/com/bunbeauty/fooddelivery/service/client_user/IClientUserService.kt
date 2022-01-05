@@ -1,7 +1,6 @@
 package com.bunbeauty.fooddelivery.service.client_user
 
-import com.bunbeauty.fooddelivery.data.model.ClientAuthResponse
-import com.bunbeauty.fooddelivery.data.model.UserAuthResponse
+import com.bunbeauty.fooddelivery.data.model.client_user.ClientAuthResponse
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.PatchClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.PostClientUserAuth

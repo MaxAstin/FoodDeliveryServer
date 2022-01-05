@@ -4,7 +4,7 @@ import at.favre.lib.crypto.bcrypt.BCrypt.MIN_COST
 import com.bunbeauty.fooddelivery.auth.IJwtService
 import com.bunbeauty.fooddelivery.data.enums.UserRole
 import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.UserAuthResponse
+import com.bunbeauty.fooddelivery.data.model.user.UserAuthResponse
 import com.bunbeauty.fooddelivery.data.model.user.GetUser
 import com.bunbeauty.fooddelivery.data.model.user.InsertUser
 import com.bunbeauty.fooddelivery.data.model.user.PostUserAuth
@@ -21,7 +21,7 @@ class UserService(private val userRepository: IUserRepository, private val jwtSe
             username = postUser.username,
             passwordHash = passwordHash,
             role = UserRole.findByRoleName(postUser.role),
-            cityUuid = postUser.cityUuid.toUuid(),
+            cityUuid = postUser.cityUuid.toUuid()
         )
 
         return userRepository.insertUser(insertUser)
@@ -31,7 +31,11 @@ class UserService(private val userRepository: IUserRepository, private val jwtSe
         val user = userRepository.getUserByUsername(postUserAuth.username) ?: return null
         return if (verify(postUserAuth.password, user.passwordHash.toByteArray())) {
             val token = jwtService.generateToken(user)
-            UserAuthResponse(token = token, cityUuid = user.city.uuid)
+            UserAuthResponse(
+                token = token,
+                cityUuid = user.city.uuid,
+                companyUuid = user.company.uuid
+            )
         } else {
             null
         }

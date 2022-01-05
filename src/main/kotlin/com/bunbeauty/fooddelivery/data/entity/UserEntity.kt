@@ -23,8 +23,9 @@ class UserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
             uuid = uuid,
             username = username,
             passwordHash = passwordHash,
-            city = city.toCity(),
             role = role.roleName,
+            city = city.toCity(),
+            company = city.company.toCompany()
         )
     }
 }
