@@ -1,7 +1,9 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.COMPANY_UUID_PARAMETER
+import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.model.menu_product.GetMenuProduct
+import com.bunbeauty.fooddelivery.data.model.menu_product.PatchMenuProduct
 import com.bunbeauty.fooddelivery.data.model.menu_product.PostMenuProduct
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import com.bunbeauty.fooddelivery.routing.extension.respondOk
@@ -18,6 +20,7 @@ fun Application.configureMenuProductRouting() {
         getAllMenuProducts()
         authenticate {
             postMenuProduct()
+            patchMenuProduct()
         }
     }
 }
@@ -42,6 +45,18 @@ fun Route.postMenuProduct() {
     post("/menu_product") {
         managerWithBody<PostMenuProduct, GetMenuProduct> { bodyRequest ->
             menuProductService.createMenuProduct(bodyRequest.body, bodyRequest.request.jwtUser.uuid)
+        }
+    }
+}
+
+fun Route.patchMenuProduct() {
+
+    val menuProductService: IMenuProductService by inject()
+
+    patch("/menu_product") {
+        managerWithBody<PatchMenuProduct, GetMenuProduct>(UUID_PARAMETER) { bodyRequest ->
+            val menuProductUuid = bodyRequest.request.parameterMap[UUID_PARAMETER]!!
+            menuProductService.updateMenuProduct(menuProductUuid, bodyRequest.body)
         }
     }
 }

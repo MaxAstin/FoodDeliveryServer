@@ -6,10 +6,9 @@ import com.bunbeauty.fooddelivery.data.entity.CompanyEntity
 import com.bunbeauty.fooddelivery.data.entity.MenuProductEntity
 import com.bunbeauty.fooddelivery.data.model.menu_product.GetMenuProduct
 import com.bunbeauty.fooddelivery.data.model.menu_product.InsertMenuProduct
+import com.bunbeauty.fooddelivery.data.model.menu_product.UpdateMenuProduct
 import com.bunbeauty.fooddelivery.data.table.MenuProductTable
 import org.jetbrains.exposed.sql.SizedCollection
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.booleanLiteral
 import java.util.*
 
 class MenuProductRepository : IMenuProductRepository {
@@ -31,6 +30,29 @@ class MenuProductRepository : IMenuProductRepository {
                 CategoryEntity[categoryUuid]
             })
         }.toMenuProduct()
+    }
+
+    override suspend fun updateMenuProduct(
+        menuProductUuid: UUID,
+        updateMenuProduct: UpdateMenuProduct,
+    ): GetMenuProduct? = query {
+        MenuProductEntity.findById(menuProductUuid)?.apply {
+            name = updateMenuProduct.name ?: name
+            newPrice = updateMenuProduct.newPrice ?: newPrice
+            oldPrice = updateMenuProduct.oldPrice ?: oldPrice
+            utils = updateMenuProduct.utils ?: utils
+            nutrition = updateMenuProduct.nutrition ?: nutrition
+            description = updateMenuProduct.description ?: description
+            comboDescription = updateMenuProduct.comboDescription ?: comboDescription
+            photoLink = updateMenuProduct.photoLink ?: photoLink
+            barcode = updateMenuProduct.barcode ?: barcode
+            isVisible = updateMenuProduct.isVisible ?: isVisible
+            updateMenuProduct.categoryUuids?.let { categoryUuids ->
+                categories = SizedCollection(categoryUuids.map { categoryUuid ->
+                    CategoryEntity[categoryUuid]
+                })
+            }
+        }?.toMenuProduct()
     }
 
     override suspend fun getMenuProductListByCompanyUuid(companyUuid: UUID): List<GetMenuProduct> = query {
