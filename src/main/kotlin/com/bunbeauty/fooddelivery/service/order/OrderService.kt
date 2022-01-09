@@ -115,11 +115,12 @@ class OrderService(
             return
         }
 
-        firebaseMessaging.send(
+        val messageId = firebaseMessaging.send(
             Message.builder()
                 .putData(ORDER_KOD_KEY, cafeOrder.code)
                 .setTopic(cafeOrder.cafeUuid)
                 .build()
         )
+        println("Message $messageId sent")
     }
 }
