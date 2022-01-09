@@ -27,15 +27,13 @@ object Constants {
     // TIME
     const val ORDER_HISTORY_DAY_COUNT = 2
 
-    // PATTERN
-    const val DD_MMMM_YYYY_PATTERN = "dd MMMM YYYY"
-    const val MMMM_YYYY_PATTERN = "MMM YYYY"
-
     // INIT DB
     const val MAIN_COMPANY_NAME = "BunBeauty"
     const val MAIN_CITY_NAME = "Дубна"
     const val MAIN_ADMIN_USERNAME = "mainAdmin"
-    //const val MAIN_COMPANY_NAME = "BunBeauty"
+
+    // NOTIFICATION KEYS
+    const val ORDER_KOD_KEY = "orderCode"
 
     const val ALL = "ALL"
 }

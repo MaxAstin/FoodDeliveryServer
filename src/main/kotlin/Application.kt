@@ -49,6 +49,7 @@ fun main() {
                 statisticModule,
                 dateTimeModule,
                 versionModule,
+                firebaseModule
             )
         }
         install(Authentication) {

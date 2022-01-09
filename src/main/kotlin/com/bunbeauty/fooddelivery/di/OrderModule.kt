@@ -7,6 +7,6 @@ import com.bunbeauty.fooddelivery.service.order.OrderService
 import org.koin.dsl.module
 
 val orderModule = module(createdAtStart = true) {
-    single<IOrderService> { OrderService(get(), get()) }
+    single<IOrderService> { OrderService(get(), get(), get()) }
     single<IOrderRepository> { OrderRepository() }
 }

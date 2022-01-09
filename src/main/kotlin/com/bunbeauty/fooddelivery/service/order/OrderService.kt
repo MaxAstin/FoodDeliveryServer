@@ -4,17 +4,23 @@ import com.bunbeauty.fooddelivery.data.Constants.CODE_DIVIDER
 import com.bunbeauty.fooddelivery.data.Constants.CODE_LETTERS
 import com.bunbeauty.fooddelivery.data.Constants.CODE_NUMBER_COUNT
 import com.bunbeauty.fooddelivery.data.Constants.ORDER_HISTORY_DAY_COUNT
+import com.bunbeauty.fooddelivery.data.Constants.ORDER_KOD_KEY
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.order.*
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.data.repo.street.IStreetRepository
 import com.bunbeauty.fooddelivery.data.session.SessionHandler
-import kotlinx.coroutines.flow.*
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.Message
+import kotlinx.coroutines.flow.SharedFlow
 import org.joda.time.DateTime
 
-class OrderService(private val orderRepository: IOrderRepository, private val streetRepository: IStreetRepository) :
-    IOrderService {
+class OrderService(
+    private val orderRepository: IOrderRepository,
+    private val streetRepository: IStreetRepository,
+    private val firebaseMessaging: FirebaseMessaging,
+) : IOrderService {
 
     val cafeSessionHandler: SessionHandler<GetCafeOrder> = SessionHandler()
     val clientSessionHandler: SessionHandler<GetClientOrder> = SessionHandler()
@@ -52,6 +58,8 @@ class OrderService(private val orderRepository: IOrderRepository, private val st
         val clientOrder = orderRepository.insertOrder(insertOrder)
         val cafeOrder = orderRepository.getCafeOrderByUuid(clientOrder.uuid.toUuid())
         cafeSessionHandler.emitNewValue(cafeOrder?.cafeUuid, cafeOrder)
+
+        sendNotification(cafeOrder)
 
         return clientOrder
     }
@@ -100,5 +108,18 @@ class OrderService(private val orderRepository: IOrderRepository, private val st
         }
 
         return codeLetter + CODE_DIVIDER + codeNumberString
+    }
+
+    fun sendNotification(cafeOrder: GetCafeOrder?) {
+        if (cafeOrder == null) {
+            return
+        }
+
+        firebaseMessaging.send(
+            Message.builder()
+                .putData(ORDER_KOD_KEY, cafeOrder.code)
+                .setTopic(cafeOrder.cafeUuid)
+                .build()
+        )
     }
 }
