@@ -25,7 +25,7 @@ class MenuProductRepository : IMenuProductRepository {
             photoLink = insertMenuProduct.photoLink
             barcode = insertMenuProduct.barcode
             isVisible = insertMenuProduct.isVisible
-            company = CompanyEntity[insertMenuProduct.companyUUID]
+            company = CompanyEntity[insertMenuProduct.companyUuid]
             categories = SizedCollection(insertMenuProduct.categoryUuids.map { categoryUuid ->
                 CategoryEntity[categoryUuid]
             })

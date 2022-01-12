@@ -5,5 +5,15 @@ import com.bunbeauty.fooddelivery.service.init.InitService
 import org.koin.dsl.module
 
 val initModule = module(createdAtStart = true) {
-    single<IInitService> { InitService(get(), get(), get()) }
+    single<IInitService> {
+        InitService(
+            companyRepository = get(),
+            categoryRepository = get(),
+            menuProductRepository = get(),
+            cityRepository = get(),
+            userRepository = get(),
+            cafeRepository = get(),
+            streetRepository = get()
+        )
+    }
 }

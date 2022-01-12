@@ -2,6 +2,8 @@ import com.bunbeauty.fooddelivery.auth.IJwtService
 import com.bunbeauty.fooddelivery.data.Constants.FB_ADMIN_KEY
 import com.bunbeauty.fooddelivery.data.Constants.PORT
 import com.bunbeauty.fooddelivery.data.DatabaseFactory
+import com.bunbeauty.fooddelivery.data.init.InitCompany
+import com.bunbeauty.fooddelivery.data.init.InitPapaKarloData
 import com.bunbeauty.fooddelivery.di.*
 import com.bunbeauty.fooddelivery.plugins.configureSerialization
 import com.bunbeauty.fooddelivery.plugins.configureSockets
@@ -63,6 +65,7 @@ fun main() {
         val initService: IInitService by inject()
         launch {
             initService.initDataBase()
+            initService.initNewCompany(InitPapaKarloData.company)
         }
     }.start(wait = true)
 }

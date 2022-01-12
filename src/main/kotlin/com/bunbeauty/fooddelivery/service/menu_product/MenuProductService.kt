@@ -22,7 +22,7 @@ class MenuProductService(
             comboDescription = postMenuProduct.comboDescription,
             photoLink = postMenuProduct.photoLink,
             barcode = postMenuProduct.barcode,
-            companyUUID = companyUuid.toUuid(),
+            companyUuid = companyUuid.toUuid(),
             categoryUuids = postMenuProduct.categoryUuids.map { categoryUuid ->
                 categoryUuid.toUuid()
             },
