@@ -1,9 +1,11 @@
 package com.bunbeauty.fooddelivery.data
 
-import com.bunbeauty.fooddelivery.data.Constants.DATABASE_JDBC_URL
-import com.bunbeauty.fooddelivery.data.Constants.DATASOURCE_PASSWORD
-import com.bunbeauty.fooddelivery.data.Constants.DATASOURCE_USERNAME
+import com.bunbeauty.fooddelivery.data.Constants.AT_SIGN_DIVIDER
+import com.bunbeauty.fooddelivery.data.Constants.COLON_DIVIDER
+import com.bunbeauty.fooddelivery.data.Constants.DATABASE_URL
 import com.bunbeauty.fooddelivery.data.Constants.JDBC_DRIVER
+import com.bunbeauty.fooddelivery.data.Constants.JDBC_POSTGRESQL_PREFIX
+import com.bunbeauty.fooddelivery.data.Constants.POSTGRES_PREFIX
 import com.bunbeauty.fooddelivery.data.table.*
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -67,11 +69,13 @@ object DatabaseFactory {
     }
 
     private fun getDataSource(): HikariDataSource {
+        val databaseUrl = System.getenv(DATABASE_URL).replace(POSTGRES_PREFIX, "")
+        val databaseUsernameAndPassword = databaseUrl.split(AT_SIGN_DIVIDER, COLON_DIVIDER)
         val config = HikariConfig().apply {
             driverClassName = System.getenv(JDBC_DRIVER)
-            jdbcUrl = System.getenv(DATABASE_JDBC_URL)
-            username = System.getenv(DATASOURCE_USERNAME)
-            password = System.getenv(DATASOURCE_PASSWORD)
+            jdbcUrl = JDBC_POSTGRESQL_PREFIX + databaseUrl.split(AT_SIGN_DIVIDER)[1]
+            username = databaseUsernameAndPassword[0]
+            password = databaseUsernameAndPassword[1]
             maximumPoolSize = 3
             isAutoCommit = false
             transactionIsolation = "TRANSACTION_REPEATABLE_READ"
@@ -79,5 +83,4 @@ object DatabaseFactory {
         }
         return HikariDataSource(config)
     }
-
 }

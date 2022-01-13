@@ -65,7 +65,7 @@ fun main() {
         val initService: IInitService by inject()
         launch {
             initService.initDataBase()
-            initService.initNewCompany(InitPapaKarloData.company)
+            //initService.initNewCompany(InitPapaKarloData.company)
         }
     }.start(wait = true)
 }

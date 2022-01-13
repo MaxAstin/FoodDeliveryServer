@@ -94,7 +94,7 @@ class InitService(
             initCity.userList.onEach { initUser ->
                 val insertUser = InsertUser(
                     username = initUser.username,
-                    passwordHash = String(Bcrypt.hash(initUser.password, BCrypt.MIN_COST)),
+                    passwordHash = initUser.passwordHash,
                     role = initUser.role,
                     cityUuid = getCity.uuid.toUuid()
                 )

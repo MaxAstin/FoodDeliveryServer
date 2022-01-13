@@ -4,13 +4,18 @@ object Constants {
 
     // ENVIRONMENT VARIABLE KEY
     const val JDBC_DRIVER = "JDBC_DRIVER"
-    const val DATABASE_JDBC_URL = "DATABASE_JDBC_URL"
-    const val DATASOURCE_USERNAME = "DATASOURCE_USERNAME"
-    const val DATASOURCE_PASSWORD = "DATASOURCE_PASSWORD"
+    const val DATABASE_URL = "DATABASE_URL"
     const val PORT = "PORT"
     const val FB_ADMIN_KEY = "FB_ADMIN_KEY"
     const val JWT_SECRET = "JWT_SECRET"
     const val MAIN_ADMIN_PASSWORD = "MAIN_ADMIN_PASSWORD"
+
+    // DATABASE
+    const val JDBC_POSTGRESQL_PREFIX = "jdbc:postgresql://"
+    const val POSTGRES_PREFIX = "postgres://"
+    const val AT_SIGN_DIVIDER = "@"
+    const val COLON_DIVIDER = ":"
+
 
     // PARAMS
     const val COMPANY_UUID_PARAMETER = "companyUuid"
