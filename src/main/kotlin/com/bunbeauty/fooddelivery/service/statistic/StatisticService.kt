@@ -55,7 +55,7 @@ class StatisticService(
         timestampConverter: (Long) -> String,
     ): List<GetStatistic> {
         return orderList.filter { order ->
-            order.status == OrderStatus.DELIVERED.name || order.status == OrderStatus.DONE.name
+            order.status == OrderStatus.DELIVERED.name
         }.groupBy { order ->
             timestampConverter(order.time)
         }.map { orderEntry ->

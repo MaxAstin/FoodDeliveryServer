@@ -10,4 +10,5 @@ interface ICategoryRepository {
     suspend fun insertCategory(category: InsertCategory) : GetCategory
     suspend fun updateCategory(categoryUuid: UUID, category: UpdateCategory) : GetCategory?
     suspend fun getCategoryListByCompanyUuid(companyUuid: UUID) : List<GetCategory>
+    fun getHitsCategory(): GetCategory
 }

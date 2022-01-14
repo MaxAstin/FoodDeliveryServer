@@ -7,6 +7,6 @@ import com.bunbeauty.fooddelivery.service.menu_product.MenuProductService
 import org.koin.dsl.module
 
 val menuProductModule = module(createdAtStart = true) {
-    single<IMenuProductService> { MenuProductService(get(), get()) }
+    single<IMenuProductService> { MenuProductService(get(), get(), get(), get()) }
     single<IMenuProductRepository> { MenuProductRepository() }
 }

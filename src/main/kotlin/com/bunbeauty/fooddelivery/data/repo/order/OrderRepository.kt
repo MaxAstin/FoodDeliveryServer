@@ -23,6 +23,7 @@ class OrderRepository : IOrderRepository {
             deferredTime = insertOrder.deferredTime
             status = insertOrder.status
             cafe = CafeEntity[insertOrder.cafeUuid]
+            company = CompanyEntity[insertOrder.companyUuid]
             clientUser = ClientUserEntity[insertOrder.clientUserUuid]
         }
         insertOrder.orderProductList.onEach { insertOrderProduct ->
@@ -55,6 +56,17 @@ class OrderRepository : IOrderRepository {
                 orderEntity.toCafeOrder()
             }
     }
+
+    override suspend fun getOrderListByCompanyUuidLimited(companyUuid: UUID, limitTime: Long): List<GetCafeOrder> =
+        query {
+            OrderEntity.find {
+                (OrderTable.company eq companyUuid) and
+                        (OrderTable.time greater limitTime)
+            }.orderBy(OrderTable.time to SortOrder.DESC)
+                .map { orderEntity ->
+                    orderEntity.toCafeOrder()
+                }
+        }
 
     override suspend fun getOrderListByCafeUuid(cafeUuid: UUID): List<GetCafeOrder> = query {
         OrderEntity.find {
@@ -95,7 +107,7 @@ class OrderRepository : IOrderRepository {
     }
 
     override suspend fun updateOrderStatusByUuid(orderUuid: UUID, status: String): GetCafeOrder? = query {
-        val orderEntity =  OrderEntity.findById(orderUuid)
+        val orderEntity = OrderEntity.findById(orderUuid)
         orderEntity?.status = status
         orderEntity?.toCafeOrder()
     }

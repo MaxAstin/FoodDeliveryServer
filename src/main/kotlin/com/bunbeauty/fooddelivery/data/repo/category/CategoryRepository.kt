@@ -1,5 +1,7 @@
 package com.bunbeauty.fooddelivery.data.repo.category
 
+import com.bunbeauty.fooddelivery.data.Constants
+import com.bunbeauty.fooddelivery.data.Constants.HITS_CATEGORY_NAME
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.CategoryEntity
 import com.bunbeauty.fooddelivery.data.entity.CompanyEntity
@@ -32,5 +34,13 @@ class CategoryRepository : ICategoryRepository {
         }.map { categoryEntity ->
             categoryEntity.toCategory()
         }.toList()
+    }
+
+    override fun getHitsCategory(): GetCategory {
+        return GetCategory(
+            uuid = "",
+            name = HITS_CATEGORY_NAME,
+            priority = 1
+        )
     }
 }

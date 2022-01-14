@@ -31,6 +31,9 @@ class CategoryService(
     }
 
     override suspend fun getCategoryListByCompanyUuid(companyUuid: String): List<GetCategory> {
-        return categoryRepository.getCategoryListByCompanyUuid(companyUuid.toUuid())
+        val categoryList = categoryRepository.getCategoryListByCompanyUuid(companyUuid.toUuid())
+        val hitsCategory = categoryRepository.getHitsCategory()
+
+        return categoryList + hitsCategory
     }
 }

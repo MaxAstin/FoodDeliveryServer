@@ -8,8 +8,10 @@ import com.bunbeauty.fooddelivery.data.Constants.ORDER_KOD_KEY
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.order.*
+import com.bunbeauty.fooddelivery.data.repo.client_user.IClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.data.repo.street.IStreetRepository
+import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
 import com.bunbeauty.fooddelivery.data.session.SessionHandler
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
@@ -19,6 +21,7 @@ import org.joda.time.DateTime
 class OrderService(
     private val orderRepository: IOrderRepository,
     private val streetRepository: IStreetRepository,
+    private val clientUserRepository: IClientUserRepository,
     private val firebaseMessaging: FirebaseMessaging,
 ) : IOrderService {
 
@@ -38,6 +41,10 @@ class OrderService(
             postOrder.cafeUuid
         }
         cafeUuid ?: return null
+
+        val companyUuid = clientUserRepository.getClientUserByUuid(clientUserUuid.toUuid())?.company?.uuid
+        companyUuid ?: return null
+
         val insertOrder = InsertOrder(
             time = currentMillis,
             isDelivery = postOrder.isDelivery,
@@ -47,6 +54,7 @@ class OrderService(
             deferredTime = postOrder.deferredTime,
             status = OrderStatus.NOT_ACCEPTED.name,
             cafeUuid = cafeUuid.toUuid(),
+            companyUuid = companyUuid.toUuid(),
             clientUserUuid = clientUserUuid.toUuid(),
             orderProductList = postOrder.orderProducts.map { postOrderProduct ->
                 InsertOrderProduct(

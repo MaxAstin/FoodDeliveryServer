@@ -8,6 +8,7 @@ val koin_version: String by project
 val bcrypt_version: String by project
 val firebase_admin_version: String by project
 val joda_time_version: String by project
+val mockk_version: String by project
 
 plugins {
     application
@@ -55,5 +56,8 @@ dependencies {
 
     // DateTime
     implementation("joda-time:joda-time:$joda_time_version")
+
+    // Test
+    testImplementation("io.mockk:mockk:$mockk_version")
 
 }

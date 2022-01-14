@@ -11,6 +11,7 @@ data class InsertOrder(
     val deferredTime: Long?,
     val status: String,
     val cafeUuid: UUID,
+    val companyUuid: UUID,
     val clientUserUuid: UUID,
     val orderProductList: List<InsertOrderProduct>,
 )

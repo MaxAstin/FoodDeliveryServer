@@ -9,6 +9,7 @@ interface IOrderRepository {
 
     suspend fun insertOrder(insertOrder: InsertOrder): GetClientOrder
     suspend fun getOrderListByCafeUuidLimited(cafeUuid: UUID, limitTime: Long): List<GetCafeOrder>
+    suspend fun getOrderListByCompanyUuidLimited(companyUuid: UUID, limitTime: Long): List<GetCafeOrder>
     suspend fun getOrderListByCafeUuid(cafeUuid: UUID): List<GetCafeOrder>
     suspend fun getOrderListByCompanyUuid(companyUuid: UUID): List<GetCafeOrder>
     suspend fun getClientOrderByUuid(orderUuid: UUID): GetClientOrder?

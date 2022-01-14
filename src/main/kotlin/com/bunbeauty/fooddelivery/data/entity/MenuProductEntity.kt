@@ -40,7 +40,7 @@ class MenuProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         barcode = barcode,
         categories = categories.map { categoryEntity ->
             categoryEntity.toCategory()
-        },
+        }.toMutableList(),
         isVisible = isVisible,
     )
 }

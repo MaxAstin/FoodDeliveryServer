@@ -36,14 +36,15 @@ object InitPapaKarloData {
             )
         ),
         categoryList = listOf(
-            InitCategory(name = "Комбо", priority = 1),
-            InitCategory(name = "Пицца", priority = 2),
-            InitCategory(name = "На мангале", priority = 3),
-            InitCategory(name = "Бургеры", priority = 4),
-            InitCategory(name = "Напитки", priority = 5),
-            InitCategory(name = "Картошка", priority = 6),
-            InitCategory(name = "Соусы", priority = 7),
-            InitCategory(name = "Выпечка", priority = 8)
+            InitCategory(name = "Хиты", priority = 1),
+            InitCategory(name = "Комбо", priority = 2),
+            InitCategory(name = "Пицца", priority = 3),
+            InitCategory(name = "На мангале", priority = 4),
+            InitCategory(name = "Бургеры", priority = 5),
+            InitCategory(name = "Напитки", priority = 6),
+            InitCategory(name = "Картошка", priority = 7),
+            InitCategory(name = "Соусы", priority = 8),
+            InitCategory(name = "Выпечка", priority = 9)
         ),
         menuList = getMenuProductList(),
     )
@@ -208,7 +209,7 @@ object InitPapaKarloData {
             photoLink = "https://firebasestorage.googleapis.com/v0/b/fooddelivery-ce2ef.appspot.com/o/33.jpg?alt=media&token=9631ee98-260f-4396-8ea5-100bb90b9158",
             barcode = 0,
             isVisible = true,
-            categories = listOf("Пицца")
+            categories = listOf("Пицца", "Хиты")
         ),
         InitMenuProduct(
             name = "Пицца Охота 30см",
@@ -234,7 +235,7 @@ object InitPapaKarloData {
             photoLink = "https://firebasestorage.googleapis.com/v0/b/fooddelivery-ce2ef.appspot.com/o/58.jpeg?alt=media&token=79b73755-a0bb-4ca4-8ebb-bb28dd3ef594",
             barcode = 0,
             isVisible = true,
-            categories = listOf("Пицца")
+            categories = listOf("Пицца", "Хиты")
         ),
         InitMenuProduct(
             name = "Пицца Пеперонни 30см",
@@ -338,20 +339,7 @@ object InitPapaKarloData {
             photoLink = "https://firebasestorage.googleapis.com/v0/b/fooddelivery-ce2ef.appspot.com/o/97.jpg?alt=media&token=a465e45f-aa1e-455b-9bd0-d579a86867b3",
             barcode = 0,
             isVisible = true,
-            categories = listOf("На мангале")
-        ),
-        InitMenuProduct(
-            name = "Шашлык свиной",
-            newPrice = 390,
-            oldPrice = null,
-            utils = "г",
-            nutrition = 90,
-            description = "Снаружи — румяная и поджаристая, а внутри — нежная и сочная свиная шейка зажаренная на углях, подаётся с лавашом, луком, зеленью и фирменным томатным соусом",
-            comboDescription = null,
-            photoLink = "https://firebasestorage.googleapis.com/v0/b/fooddelivery-ce2ef.appspot.com/o/97.jpg?alt=media&token=a465e45f-aa1e-455b-9bd0-d579a86867b3",
-            barcode = 0,
-            isVisible = true,
-            categories = listOf("На мангале")
+            categories = listOf("На мангале", "Хиты")
         ),
         InitMenuProduct(
             name = "Бургер Mini mix",
@@ -442,7 +430,7 @@ object InitPapaKarloData {
             photoLink = "https://firebasestorage.googleapis.com/v0/b/fooddelivery-ce2ef.appspot.com/o/37.jpg?alt=media&token=5f7ff7b0-f1de-49de-890f-0cd716523284",
             barcode = 0,
             isVisible = true,
-            categories = listOf("Бургеры")
+            categories = listOf("Бургеры", "Хиты")
         ),
         InitMenuProduct(
             name = "Бургер со свининой",
@@ -546,7 +534,7 @@ object InitPapaKarloData {
             photoLink = "https://firebasestorage.googleapis.com/v0/b/fooddelivery-ce2ef.appspot.com/o/174.jpg?alt=media&token=2da4be4a-4f56-4e58-8f8a-b8dc46c600af",
             barcode = 0,
             isVisible = true,
-            categories = listOf("Бургеры")
+            categories = listOf("Бургеры", "Хиты")
         ),
         InitMenuProduct(
             name = "Пит-бургер со свининой",
@@ -585,7 +573,7 @@ object InitPapaKarloData {
             photoLink = "https://firebasestorage.googleapis.com/v0/b/fooddelivery-ce2ef.appspot.com/o/100.jpg?alt=media&token=ac004957-acff-4a0d-b9ca-31acb3387e30",
             barcode = 0,
             isVisible = true,
-            categories = listOf("Бургеры")
+            categories = listOf("Бургеры", "Хиты")
         ),
         InitMenuProduct(
             name = "Шаурма Mix",
@@ -611,7 +599,7 @@ object InitPapaKarloData {
             photoLink = "https://firebasestorage.googleapis.com/v0/b/fooddelivery-ce2ef.appspot.com/o/90.jpg?alt=media&token=0476f2ab-8807-4067-b858-1b29bc6ed6dc",
             barcode = 0,
             isVisible = true,
-            categories = listOf("Бургеры")
+            categories = listOf("Бургеры", "Хиты")
         ),
         InitMenuProduct(
             name = "Шаурма со свининой",
@@ -910,7 +898,7 @@ object InitPapaKarloData {
             photoLink = "https://firebasestorage.googleapis.com/v0/b/fooddelivery-ce2ef.appspot.com/o/0.jpg?alt=media&token=6e40a102-3d63-455b-b92b-a8c5d2c08fd5",
             barcode = 0,
             isVisible = true,
-            categories = listOf("Выпечка")
+            categories = listOf("Выпечка", "Хиты")
         ),
     )
 }
