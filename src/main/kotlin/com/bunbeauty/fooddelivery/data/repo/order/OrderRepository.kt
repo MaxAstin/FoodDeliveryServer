@@ -85,6 +85,12 @@ class OrderRepository : IOrderRepository {
         OrderEntity.findById(orderUuid)?.toCafeOrder()
     }
 
+    override suspend fun deleteCafeOrderByUuid(orderUuid: UUID): GetCafeOrder? = query {
+        val orderEntity = OrderEntity.findById(orderUuid)
+        orderEntity?.delete()
+        orderEntity?.toCafeOrder()
+    }
+
     override suspend fun updateOrderStatusByUuid(orderUuid: UUID, status: String): GetCafeOrder? = query {
         val orderEntity =  OrderEntity.findById(orderUuid)
         orderEntity?.status = status

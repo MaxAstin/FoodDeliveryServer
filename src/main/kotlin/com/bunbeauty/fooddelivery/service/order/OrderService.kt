@@ -79,6 +79,10 @@ class OrderService(
         return getCafeOrder
     }
 
+    override suspend fun deleteOrder(orderUuid: String): GetCafeOrder? {
+        return orderRepository.deleteCafeOrderByUuid(orderUuid.toUuid())
+    }
+
     override suspend fun observeClientOrderUpdates(clientUserUuid: String): SharedFlow<GetClientOrder> {
         return clientSessionHandler.connect(clientUserUuid)
     }

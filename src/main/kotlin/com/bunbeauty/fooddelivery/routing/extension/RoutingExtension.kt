@@ -1,6 +1,7 @@
 package com.bunbeauty.fooddelivery.routing.extension
 
 import com.bunbeauty.fooddelivery.auth.JwtUser
+import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.ext.toListWrapper
 import com.bunbeauty.fooddelivery.routing.model.BodyRequest
 import com.bunbeauty.fooddelivery.routing.model.Request
@@ -140,6 +141,22 @@ suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>
     }
 }
 
+suspend inline fun PipelineContext<Unit, ApplicationCall>.adminDelete(deleteBlock: (String) -> Any?) {
+    admin(UUID_PARAMETER) { request ->
+        val orderUuid = request.parameterMap[UUID_PARAMETER]!!
+        val deletedObject = deleteBlock(orderUuid)
+        if (deletedObject == null) {
+            call.respondNotFound()
+        } else {
+            call.respondOk()
+        }
+    }
+}
+
+suspend inline fun ApplicationCall.respondOk() {
+    respond(HttpStatusCode.OK)
+}
+
 suspend inline fun <reified T : Any> ApplicationCall.respondOk(model: T) {
     respond(HttpStatusCode.OK, model)
 }
@@ -150,4 +167,8 @@ suspend inline fun <reified T : Any> ApplicationCall.respondOk(list: List<T>) {
 
 suspend inline fun ApplicationCall.respondBad(message: String) {
     respond(HttpStatusCode.BadRequest, message)
+}
+
+suspend inline fun ApplicationCall.respondNotFound() {
+    respond(HttpStatusCode.NotFound)
 }

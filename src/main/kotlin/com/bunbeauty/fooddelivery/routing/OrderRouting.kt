@@ -24,6 +24,7 @@ fun Application.configureOrderRouting() {
             getOrders()
             postOrder()
             patchOrder()
+            deleteOrder()
             observeClientOrders()
             observeManagerOrders()
         }
@@ -65,6 +66,17 @@ fun Route.patchOrder() {
         managerWithBody<PatchOrder, GetCafeOrder>(UUID_PARAMETER) { bodyRequest ->
             val orderUuid = bodyRequest.request.parameterMap[UUID_PARAMETER]!!
             orderService.changeOrder(orderUuid, bodyRequest.body)
+        }
+    }
+}
+
+fun Route.deleteOrder() {
+
+    val orderService: IOrderService by inject()
+
+    delete("/order") {
+        adminDelete { uuid ->
+            orderService.deleteOrder(uuid)
         }
     }
 }
