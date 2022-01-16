@@ -62,4 +62,8 @@ class MenuProductRepository : IMenuProductRepository {
             menuProductEntity.toMenuProduct()
         }.toList()
     }
+
+    override suspend fun getMenuProductByUuid(uuid: UUID): GetMenuProduct? = query {
+        MenuProductEntity.findById(uuid)?.toMenuProduct()
+    }
 }

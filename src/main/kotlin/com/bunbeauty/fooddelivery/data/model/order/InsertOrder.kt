@@ -10,6 +10,7 @@ data class InsertOrder(
     val comment: String?,
     val deferredTime: Long?,
     val status: String,
+    val deliveryCost: Int?,
     val cafeUuid: UUID,
     val companyUuid: UUID,
     val clientUserUuid: UUID,

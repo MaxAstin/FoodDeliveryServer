@@ -10,4 +10,5 @@ interface IMenuProductRepository {
     suspend fun insertMenuProduct(insertMenuProduct: InsertMenuProduct): GetMenuProduct
     suspend fun updateMenuProduct(menuProductUuid: UUID, updateMenuProduct: UpdateMenuProduct): GetMenuProduct?
     suspend fun getMenuProductListByCompanyUuid(companyUuid: UUID): List<GetMenuProduct>
+    suspend fun getMenuProductByUuid(uuid: UUID): GetMenuProduct?
 }

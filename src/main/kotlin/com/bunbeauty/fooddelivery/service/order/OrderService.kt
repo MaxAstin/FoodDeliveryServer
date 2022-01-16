@@ -7,8 +7,11 @@ import com.bunbeauty.fooddelivery.data.Constants.ORDER_HISTORY_DAY_COUNT
 import com.bunbeauty.fooddelivery.data.Constants.ORDER_KOD_KEY
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.ext.toUuid
+import com.bunbeauty.fooddelivery.data.model.company.GetCompany
 import com.bunbeauty.fooddelivery.data.model.order.*
 import com.bunbeauty.fooddelivery.data.repo.client_user.IClientUserRepository
+import com.bunbeauty.fooddelivery.data.repo.company.ICompanyRepository
+import com.bunbeauty.fooddelivery.data.repo.menu_product.IMenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.data.repo.street.IStreetRepository
 import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
@@ -22,6 +25,7 @@ class OrderService(
     private val orderRepository: IOrderRepository,
     private val streetRepository: IStreetRepository,
     private val clientUserRepository: IClientUserRepository,
+    private val menuProductRepository: IMenuProductRepository,
     private val firebaseMessaging: FirebaseMessaging,
 ) : IOrderService {
 
@@ -42,8 +46,10 @@ class OrderService(
         }
         cafeUuid ?: return null
 
-        val companyUuid = clientUserRepository.getClientUserByUuid(clientUserUuid.toUuid())?.company?.uuid
-        companyUuid ?: return null
+        val company = clientUserRepository.getClientUserByUuid(clientUserUuid.toUuid())?.company
+        company ?: return null
+
+        val deliveryCost = getDeliveryCost(postOrder.orderProducts, company)
 
         val insertOrder = InsertOrder(
             time = currentMillis,
@@ -53,8 +59,9 @@ class OrderService(
             comment = postOrder.comment,
             deferredTime = postOrder.deferredTime,
             status = OrderStatus.NOT_ACCEPTED.name,
+            deliveryCost = deliveryCost,
             cafeUuid = cafeUuid.toUuid(),
-            companyUuid = companyUuid.toUuid(),
+            companyUuid = company.uuid.toUuid(),
             clientUserUuid = clientUserUuid.toUuid(),
             orderProductList = postOrder.orderProducts.map { postOrderProduct ->
                 InsertOrderProduct(
@@ -120,6 +127,18 @@ class OrderService(
         }
 
         return codeLetter + CODE_DIVIDER + codeNumberString
+    }
+
+    suspend fun getDeliveryCost(orderProductList: List<PostOrderProduct>, company: GetCompany): Int {
+        val orderCost = orderProductList.sumOf { postOrderProduct ->
+            val menuProduct = menuProductRepository.getMenuProductByUuid(postOrderProduct.menuProductUuid.toUuid())
+            (menuProduct?.newPrice ?: 0) * postOrderProduct.count
+        }
+        return if (orderCost >= company.delivery.forFree) {
+            0
+        } else {
+            company.delivery.cost
+        }
     }
 
     fun sendNotification(cafeOrder: GetCafeOrder?) {

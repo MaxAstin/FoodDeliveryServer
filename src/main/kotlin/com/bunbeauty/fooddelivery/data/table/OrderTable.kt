@@ -11,6 +11,7 @@ object OrderTable : UUIDTable() {
     val comment = varchar("comment", 512).nullable()
     val deferredTime = long("deferredTime").nullable()
     val status = varchar("status", 512)
+    val deliveryCost = integer("deliveryCost").nullable()
     val cafe = reference("cafe", CafeTable)
     val company = reference("company", CompanyTable)
     val clientUser = reference("clientUser", ClientUserTable)

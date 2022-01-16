@@ -20,6 +20,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var comment: String? by OrderTable.comment
     var deferredTime: Long? by OrderTable.deferredTime
     var status: String by OrderTable.status
+    var deliveryCost: Int? by OrderTable.deliveryCost
     var cafe: CafeEntity by CafeEntity referencedOn OrderTable.cafe
     var company: CompanyEntity by CompanyEntity referencedOn OrderTable.company
     var clientUser: ClientUserEntity by ClientUserEntity referencedOn OrderTable.clientUser
