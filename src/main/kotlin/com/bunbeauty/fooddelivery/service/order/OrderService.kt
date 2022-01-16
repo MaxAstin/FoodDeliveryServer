@@ -10,11 +10,9 @@ import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.company.GetCompany
 import com.bunbeauty.fooddelivery.data.model.order.*
 import com.bunbeauty.fooddelivery.data.repo.client_user.IClientUserRepository
-import com.bunbeauty.fooddelivery.data.repo.company.ICompanyRepository
 import com.bunbeauty.fooddelivery.data.repo.menu_product.IMenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.data.repo.street.IStreetRepository
-import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
 import com.bunbeauty.fooddelivery.data.session.SessionHandler
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
@@ -49,7 +47,7 @@ class OrderService(
         val company = clientUserRepository.getClientUserByUuid(clientUserUuid.toUuid())?.company
         company ?: return null
 
-        val deliveryCost = getDeliveryCost(postOrder.orderProducts, company)
+        val deliveryCost = getDeliveryCost(postOrder, company)
 
         val insertOrder = InsertOrder(
             time = currentMillis,
@@ -129,8 +127,11 @@ class OrderService(
         return codeLetter + CODE_DIVIDER + codeNumberString
     }
 
-    suspend fun getDeliveryCost(orderProductList: List<PostOrderProduct>, company: GetCompany): Int {
-        val orderCost = orderProductList.sumOf { postOrderProduct ->
+    suspend fun getDeliveryCost(orderProduct: PostOrder, company: GetCompany): Int? {
+        if (!orderProduct.isDelivery) {
+            return null
+        }
+        val orderCost = orderProduct.orderProducts.sumOf { postOrderProduct ->
             val menuProduct = menuProductRepository.getMenuProductByUuid(postOrderProduct.menuProductUuid.toUuid())
             (menuProduct?.newPrice ?: 0) * postOrderProduct.count
         }

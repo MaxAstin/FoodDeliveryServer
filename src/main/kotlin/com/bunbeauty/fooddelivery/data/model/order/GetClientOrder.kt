@@ -12,6 +12,7 @@ data class GetClientOrder(
     val deferredTime: Long?,
     val addressDescription: String,
     val comment: String?,
+    val deliveryCost: Int?,
     val clientUserUuid: String,
     val oderProductList: List<GetOrderProduct>,
 )

@@ -13,6 +13,7 @@ data class GetCafeOrder(
     val deferredTime: Long?,
     val addressDescription: String,
     val comment: String?,
+    val deliveryCost: Int?,
     val clientUser: GetCafeClientUser,
     val cafeUuid: String,
     val oderProductList: List<GetOrderProduct>,
