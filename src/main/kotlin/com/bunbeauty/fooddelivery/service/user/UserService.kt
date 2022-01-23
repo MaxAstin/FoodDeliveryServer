@@ -18,7 +18,7 @@ class UserService(private val userRepository: IUserRepository, private val jwtSe
     override suspend fun createUser(postUser: PostUser): GetUser {
         val passwordHash = String(Bcrypt.hash(postUser.password, MIN_COST))
         val insertUser = InsertUser(
-            username = postUser.username,
+            username = postUser.username.lowercase(),
             passwordHash = passwordHash,
             role = UserRole.findByRoleName(postUser.role),
             cityUuid = postUser.cityUuid.toUuid()
@@ -28,16 +28,17 @@ class UserService(private val userRepository: IUserRepository, private val jwtSe
     }
 
     override suspend fun login(postUserAuth: PostUserAuth): UserAuthResponse? {
-        val user = userRepository.getUserByUsername(postUserAuth.username) ?: return null
-        return if (verify(postUserAuth.password, user.passwordHash.toByteArray())) {
-            val token = jwtService.generateToken(user)
-            UserAuthResponse(
-                token = token,
-                cityUuid = user.city.uuid,
-                companyUuid = user.company.uuid
-            )
-        } else {
-            null
+        return userRepository.getUserByUsername(postUserAuth.username.lowercase())?.let { user ->
+            if (verify(postUserAuth.password, user.passwordHash.toByteArray())) {
+                val token = jwtService.generateToken(user)
+                UserAuthResponse(
+                    token = token,
+                    cityUuid = user.city.uuid,
+                    companyUuid = user.company.uuid
+                )
+            } else {
+                null
+            }
         }
     }
 }
