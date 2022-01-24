@@ -8,7 +8,7 @@ import io.ktor.websocket.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-suspend inline fun DefaultWebSocketServerSession.clientSocket(
+suspend inline fun WebSocketServerSession.clientSocket(
     vararg parameterNameList: String,
     block: (Request) -> Unit,
     crossinline closeBlock: (Request) -> Unit,
@@ -19,7 +19,7 @@ suspend inline fun DefaultWebSocketServerSession.clientSocket(
     }
 }
 
-suspend inline fun DefaultWebSocketServerSession.managerSocket(
+suspend inline fun WebSocketServerSession.managerSocket(
     vararg parameterNameList: String,
     block: (Request) -> Unit,
     crossinline closeBlock: (Request) -> Unit,
@@ -30,7 +30,7 @@ suspend inline fun DefaultWebSocketServerSession.managerSocket(
     }
 }
 
-suspend inline fun DefaultWebSocketServerSession.socket(
+suspend inline fun WebSocketServerSession.socket(
     vararg parameterNameList: String,
     block: (Request) -> Unit,
     crossinline closeBlock: (Request) -> Unit,
@@ -46,13 +46,22 @@ suspend inline fun DefaultWebSocketServerSession.socket(
                 } else {
                     close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Only for clients"))
                 }
-                while (!incoming.isClosedForReceive) {
-                    delay(1000)
+                launch {
+                    for (frame in incoming) {
+                        if (frame is Frame.Ping) {
+                            send(Frame.Pong(frame.buffer))
+                        }
+                    }
                 }
-                println("onClose ${closeReason.await()}")
-                closeBlock(request)
+                launch {
+                    while (!incoming.isClosedForReceive) {
+                        delay(1000)
+                    }
+                    println("onClose")
+                    closeBlock(request)
+                }
             } catch (exception: Exception) {
-                println("onClose ${closeReason.await()}")
+                println("onClose")
                 closeBlock(request)
             }
         }
