@@ -87,7 +87,7 @@ fun Route.observeClientOrders() {
     val orderService: IOrderService by inject()
     val json: Json by inject()
 
-    webSocketRaw("/client/order/subscribe") {
+    webSocket("/client/order/subscribe") {
         clientSocket(
             block = { request ->
                 orderService.observeClientOrderUpdates(request.jwtUser.uuid).onEach { clientOrder ->

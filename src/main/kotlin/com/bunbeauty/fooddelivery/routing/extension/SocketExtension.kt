@@ -8,7 +8,7 @@ import io.ktor.websocket.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-suspend inline fun WebSocketServerSession.clientSocket(
+suspend inline fun DefaultWebSocketServerSession.clientSocket(
     vararg parameterNameList: String,
     block: (Request) -> Unit,
     crossinline closeBlock: (Request) -> Unit,
@@ -19,7 +19,7 @@ suspend inline fun WebSocketServerSession.clientSocket(
     }
 }
 
-suspend inline fun WebSocketServerSession.managerSocket(
+suspend inline fun DefaultWebSocketServerSession.managerSocket(
     vararg parameterNameList: String,
     block: (Request) -> Unit,
     crossinline closeBlock: (Request) -> Unit,
@@ -30,7 +30,7 @@ suspend inline fun WebSocketServerSession.managerSocket(
     }
 }
 
-suspend inline fun WebSocketServerSession.socket(
+suspend inline fun DefaultWebSocketServerSession.socket(
     vararg parameterNameList: String,
     block: (Request) -> Unit,
     crossinline closeBlock: (Request) -> Unit,
@@ -47,19 +47,14 @@ suspend inline fun WebSocketServerSession.socket(
                     close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Only for clients"))
                 }
                 launch {
-                    for (frame in incoming) {
-                        if (frame is Frame.Ping) {
-                            send(Frame.Pong(frame.buffer))
-                        }
+                    while (!incoming.isClosedForReceive) {
+                        delay(1000)
                     }
+                    println("onClose ${closeReason.await()?.message}")
+                    closeBlock(request)
                 }
-                while (!incoming.isClosedForReceive) {
-                    delay(1000)
-                }
-                println("onClose")
-                closeBlock(request)
             } catch (exception: Exception) {
-                println("onClose")
+                println("onClose ${closeReason.await()?.message}")
                 closeBlock(request)
             }
         }

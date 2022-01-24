@@ -20,6 +20,7 @@ class ApplicationTest {
         menuProductRepository = mockk(),
         orderRepository = mockk(),
         userRepository = mockk(),
+        categoryRepository = mockk(),
     )
 
     @Test
@@ -74,6 +75,7 @@ class ApplicationTest {
             deferredTime = null,
             addressDescription = "",
             comment = "",
+            deliveryCost = null,
             clientUser = mockk(),
             cafeUuid = "",
             oderProductList = orderProductList
