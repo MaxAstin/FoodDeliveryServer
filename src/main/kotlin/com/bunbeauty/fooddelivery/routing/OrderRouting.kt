@@ -13,7 +13,8 @@ import io.ktor.auth.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.routing.*
 import io.ktor.websocket.*
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.json.Json
 import org.koin.ktor.ext.inject
 
@@ -89,9 +90,9 @@ fun Route.observeClientOrders() {
     webSocket("/client/order/subscribe") {
         clientSocket(
             block = { request ->
-                orderService.observeClientOrderUpdates(request.jwtUser.uuid).collect { clientOrder ->
+                orderService.observeClientOrderUpdates(request.jwtUser.uuid).onEach { clientOrder ->
                     outgoing.send(Frame.Text(json.encodeToString(GetClientOrder.serializer(), clientOrder)))
-                }
+                }.launchIn(this)
             },
             closeBlock = { request ->
                 orderService.clientDisconnect(request.jwtUser.uuid)
@@ -110,9 +111,9 @@ fun Route.observeManagerOrders() {
             CAFE_UUID_PARAMETER,
             block = { request ->
                 val cafeUuid = request.parameterMap[CAFE_UUID_PARAMETER]!!
-                orderService.observeCafeOrderUpdates(cafeUuid).collect { cafeOrder ->
+                orderService.observeCafeOrderUpdates(cafeUuid).onEach { cafeOrder ->
                     outgoing.send(Frame.Text(json.encodeToString(GetCafeOrder.serializer(), cafeOrder)))
-                }
+                }.launchIn(this)
             },
             closeBlock = { request ->
                 val cafeUuid = request.parameterMap[CAFE_UUID_PARAMETER]!!
