@@ -6,7 +6,6 @@ import io.ktor.auth.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 suspend inline fun DefaultWebSocketServerSession.clientSocket(
     vararg parameterNameList: String,
@@ -46,13 +45,11 @@ suspend inline fun DefaultWebSocketServerSession.socket(
                 } else {
                     close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Only for clients"))
                 }
-                launch {
-                    while (!incoming.isClosedForReceive) {
-                        delay(1000)
-                    }
-                    println("onClose ${closeReason.await()?.message}")
-                    closeBlock(request)
+                while (!incoming.isClosedForReceive) {
+                    delay(1000)
                 }
+                println("onClose ${closeReason.await()?.message}")
+                closeBlock(request)
             } catch (exception: Exception) {
                 println("onClose ${closeReason.await()?.message}")
                 closeBlock(request)

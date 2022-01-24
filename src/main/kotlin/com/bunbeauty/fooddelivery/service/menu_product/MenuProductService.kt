@@ -1,20 +1,17 @@
 package com.bunbeauty.fooddelivery.service.menu_product
 
-import com.bunbeauty.fooddelivery.data.Constants.HITS_CATEGORY_NAME
 import com.bunbeauty.fooddelivery.data.Constants.HITS_COUNT
 import com.bunbeauty.fooddelivery.data.Constants.HITS_ORDER_DAY_COUNT
 import com.bunbeauty.fooddelivery.data.Constants.HITS_PRODUCT_COUNT_COEFFICIENT
 import com.bunbeauty.fooddelivery.data.Constants.HITS_PRODUCT_PRICE_COEFFICIENT
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.category.GetCategory
 import com.bunbeauty.fooddelivery.data.model.menu_product.*
 import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrder
 import com.bunbeauty.fooddelivery.data.repo.category.ICategoryRepository
 import com.bunbeauty.fooddelivery.data.repo.menu_product.IMenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
-import com.bunbeauty.fooddelivery.service.category.ICategoryService
 import org.joda.time.DateTime
 
 class MenuProductService(
