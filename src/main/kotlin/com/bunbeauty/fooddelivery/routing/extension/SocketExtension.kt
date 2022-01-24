@@ -41,18 +41,16 @@ suspend inline fun DefaultWebSocketServerSession.socket(
         call.handleParameters(*parameterNameList) { parameterMap ->
             val request = Request(jwtUser, parameterMap)
             try {
-                launch {
-                    while (!incoming.isClosedForReceive) {
-                        delay(1000)
-                    }
-                    println("onClose ${closeReason.await()}")
-                    closeBlock(request)
-                }
                 if (checkBlock(jwtUser)) {
                     block(request)
                 } else {
                     close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Only for clients"))
                 }
+//                while (!incoming.isClosedForReceive) {
+//                    delay(1000)
+//                }
+//                println("onClose ${closeReason.await()}")
+//                closeBlock(request)
             } catch (exception: Exception) {
                 println("onClose ${closeReason.await()}")
                 closeBlock(request)
