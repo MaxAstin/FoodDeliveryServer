@@ -47,18 +47,16 @@ suspend inline fun WebSocketServerSession.socket(
                     close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Only for clients"))
                 }
                 launch {
-                    for (frame in incoming) {
-                        if (frame is Frame.Ping) {
-                            send(Frame.Pong(frame.buffer))
-                        }
-                    }
-                }
-                launch {
                     while (!incoming.isClosedForReceive) {
                         delay(1000)
                     }
                     println("onClose")
                     closeBlock(request)
+                }
+                for (frame in incoming) {
+                    if (frame is Frame.Ping) {
+                        send(Frame.Pong(frame.buffer))
+                    }
                 }
             } catch (exception: Exception) {
                 println("onClose")
