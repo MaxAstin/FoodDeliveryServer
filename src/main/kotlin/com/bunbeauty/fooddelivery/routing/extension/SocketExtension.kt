@@ -46,11 +46,11 @@ suspend inline fun DefaultWebSocketServerSession.socket(
                 } else {
                     close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Only for clients"))
                 }
-//                while (!incoming.isClosedForReceive) {
-//                    delay(1000)
-//                }
-//                println("onClose ${closeReason.await()}")
-//                closeBlock(request)
+                while (!incoming.isClosedForReceive) {
+                    delay(1000)
+                }
+                println("onClose ${closeReason.await()}")
+                closeBlock(request)
             } catch (exception: Exception) {
                 println("onClose ${closeReason.await()}")
                 closeBlock(request)
