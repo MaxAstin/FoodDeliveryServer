@@ -14,26 +14,30 @@ class SessionHandler<T> {
     }
 
     fun connect(key: String): SharedFlow<T> {
+        println("connect to session $key")
         val existedSession = sessionMap[key]
         return if (existedSession == null) {
             val session = Session<T>()
             sessionMap[key] = session
 
+            println("session $key created")
             session.mutableSharedFlow.asSharedFlow()
         } else {
+            val newCount = existedSession.count.incrementAndGet()
+            println("session $key count increment $newCount")
             existedSession.mutableSharedFlow.asSharedFlow()
         }
     }
 
     fun disconnect(key: String) {
-        println("session ${sessionMap[key]}")
+        println("disconnect from session $key")
         sessionMap[key]?.let { session ->
             if (session.count.get() == 1) {
-                println("session $key removed")
                 sessionMap.remove(key)
+                println("session $key removed")
             } else {
-                session.count.decrementAndGet()
-                println("session $key count decreased to ${session.count.get()}")
+                val newCount = session.count.decrementAndGet()
+                println("session $key count decrement $newCount")
             }
         }
     }

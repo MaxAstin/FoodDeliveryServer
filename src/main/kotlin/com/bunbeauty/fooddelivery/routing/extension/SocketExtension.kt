@@ -13,7 +13,7 @@ suspend inline fun DefaultWebSocketServerSession.clientSocket(
     block: (Request) -> Unit,
     crossinline closeBlock: (Request) -> Unit,
 ) {
-    println("managerSocket")
+    println("clientSocket")
     socket(*parameterNameList, block = block, closeBlock = closeBlock) { jwtUser ->
         jwtUser.isClient()
     }
@@ -37,7 +37,6 @@ suspend inline fun DefaultWebSocketServerSession.socket(
     checkBlock: (JwtUser) -> Boolean,
 ) {
     val jwtUser = call.authentication.principal as? JwtUser
-    println("socket $jwtUser")
     if (jwtUser != null) {
         call.handleParameters(*parameterNameList) { parameterMap ->
             val request = Request(jwtUser, parameterMap)
