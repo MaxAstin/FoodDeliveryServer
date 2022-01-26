@@ -764,20 +764,19 @@ object InitPapaKarloData {
             isVisible = true,
             categories = listOf("Бургеры")
         ),
-        //TODO price, description
-        //InitMenuProduct(
-        //    name = "Гиро",
-        //    newPrice = 1,
-        //    oldPrice = null,
-        //    utils = "г",
-        //    nutrition = 450,
-        //    description = "-",
-        //    comboDescription = null,
-        //    photoLink = "https://firebasestorage.googleapis.com/v0/b/fooddelivery-ce2ef.appspot.com/o/papakarlo%2Fgiro.jpg?alt=media&token=36840c33-b4fb-4374-aced-beedfe32fb4f",
-        //    barcode = 0,
-        //    isVisible = true,
-        //    categories = listOf("Бургеры")
-        //),
+        InitMenuProduct(
+            name = "Гиро",
+            newPrice = 210,
+            oldPrice = null,
+            utils = "г",
+            nutrition = 300,
+            description = "Обжаренное на гриле куриное мясо в нежной пите с фирменным чесночным и томатным соусами, картошкой фри, свжим салатом, помидорами, огурцами и лучком",
+            comboDescription = null,
+            photoLink = "https://firebasestorage.googleapis.com/v0/b/fooddelivery-ce2ef.appspot.com/o/papakarlo%2Fgiro.jpg?alt=media&token=36840c33-b4fb-4374-aced-beedfe32fb4f",
+            barcode = 0,
+            isVisible = true,
+            categories = listOf("Бургеры")
+        ),
         InitMenuProduct(
             name = "Компот из сухофруктов",
             newPrice = 69,

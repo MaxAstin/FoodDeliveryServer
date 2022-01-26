@@ -2,8 +2,6 @@ package com.bunbeauty.fooddelivery.service.menu_product
 
 import com.bunbeauty.fooddelivery.data.Constants.HITS_COUNT
 import com.bunbeauty.fooddelivery.data.Constants.HITS_ORDER_DAY_COUNT
-import com.bunbeauty.fooddelivery.data.Constants.HITS_PRODUCT_COUNT_COEFFICIENT
-import com.bunbeauty.fooddelivery.data.Constants.HITS_PRODUCT_PRICE_COEFFICIENT
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.menu_product.*
@@ -81,35 +79,23 @@ class MenuProductService(
     }
 
     fun getHitMenuProductUuidList(orderList: List<GetCafeOrder>, count: Int): List<String> {
-        val menuProductMap = orderList.filter { order ->
+        return orderList.filter { order ->
             order.status == OrderStatus.DELIVERED.name
         }.flatMap { order ->
             order.oderProductList
-        }.groupBy { orderProduct ->
-            orderProduct.menuProduct.uuid
-        }
-        val maxCount = menuProductMap.maxOfOrNull { (_, orderProductList) ->
-            orderProductList.sumOf { orderProduct ->
-                orderProduct.count
-            }
-        } ?: return emptyList()
-        val maxPrice = menuProductMap.maxOfOrNull { (_, orderProductList) ->
-            orderProductList.first().menuProduct.newPrice
-        } ?: return emptyList()
-        return menuProductMap.map { (menuProductUuid, orderProductList) ->
-            val productCount = orderProductList.sumOf { orderProduct ->
-                orderProduct.count
-            }
-            val price = orderProductList.first().menuProduct.newPrice
-            val score = (productCount.toFloat() / maxCount) * HITS_PRODUCT_COUNT_COEFFICIENT +
-                    (price.toFloat() / maxPrice) * HITS_PRODUCT_PRICE_COEFFICIENT
-            menuProductUuid to score
-        }.sortedByDescending { (_, score) ->
-            score
-        }.take(count)
+        }.asSequence()
+            .groupBy { orderProduct ->
+                orderProduct.menuProduct.uuid
+            }.map { (menuProductUuid, orderProductList) ->
+                menuProductUuid to orderProductList.sumOf { orderProduct ->
+                    orderProduct.count * orderProduct.newPrice
+                }
+            }.sortedByDescending { (_, cost) ->
+                cost
+            }.take(count)
             .map { (menuProductUuid, _) ->
                 menuProductUuid
-            }
+            }.toList()
     }
 
 
