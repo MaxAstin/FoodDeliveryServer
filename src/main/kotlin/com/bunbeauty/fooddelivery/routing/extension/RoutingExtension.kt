@@ -35,6 +35,7 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(
     vararg parameterNameList: String,
     block: (Map<String, String>) -> Unit,
 ) {
+    println("request " + context.request.path())
     try {
         call.handleParameters(*parameterNameList) { parameterMap ->
             block(parameterMap)

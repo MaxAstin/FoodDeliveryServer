@@ -14,7 +14,7 @@ interface IOrderService {
     suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder?
     suspend fun deleteOrder(orderUuid: String): GetCafeOrder?
     suspend fun observeClientOrderUpdates(clientUserUuid: String): SharedFlow<GetClientOrder>
-    suspend fun observeCafeOrderUpdates(userUuid: String): SharedFlow<GetCafeOrder>
+    suspend fun observeCafeOrderUpdates(cafeUuid: String): SharedFlow<GetCafeOrder>
     fun clientDisconnect(clientUserUuid: String)
-    fun userDisconnect(userUuid: String)
+    fun userDisconnect(cafeUuid: String)
 }
