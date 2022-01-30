@@ -48,6 +48,13 @@ class OrderService(
         company ?: return null
 
         val deliveryCost = getDeliveryCost(postOrder, company)
+        val deferredTime = postOrder.deferredTime?.let { deferredTime ->
+            if (postOrder.deferredTime < 0) {
+                null
+            } else {
+                deferredTime
+            }
+        }
 
         val insertOrder = InsertOrder(
             time = currentMillis,
@@ -55,7 +62,7 @@ class OrderService(
             code = generateCode(currentMillis),
             addressDescription = postOrder.addressDescription,
             comment = postOrder.comment,
-            deferredTime = postOrder.deferredTime,
+            deferredTime = deferredTime,
             status = OrderStatus.NOT_ACCEPTED.name,
             deliveryCost = deliveryCost,
             cafeUuid = cafeUuid.toUuid(),

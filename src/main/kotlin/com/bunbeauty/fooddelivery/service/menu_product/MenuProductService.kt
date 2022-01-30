@@ -70,7 +70,6 @@ class MenuProductService(
         val hitsCategory = categoryRepository.getHitsCategory()
         getHitMenuProductUuidList(orderList, HITS_COUNT).forEach { hitMenuProductUuid ->
             menuProductList.find { menuProduct ->
-                println("hit " + menuProduct.name)
                 menuProduct.uuid == hitMenuProductUuid
             }?.categories?.add(hitsCategory)
         }
