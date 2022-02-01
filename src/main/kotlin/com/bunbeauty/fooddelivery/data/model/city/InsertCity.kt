@@ -4,7 +4,7 @@ import java.util.*
 
 data class InsertCity(
     val name: String,
-    val offset: Int,
+    val timeZone: String,
     val company: UUID,
     val isVisible: Boolean,
 )

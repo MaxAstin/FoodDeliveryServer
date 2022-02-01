@@ -31,7 +31,7 @@ class CafeEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         uuid = uuid,
         fromTime = fromTime,
         toTime = toTime,
-        offset = city.offset,
+        offset = 0,
         phone = phone,
         latitude = latitude,
         longitude = longitude,

@@ -13,7 +13,7 @@ class CityEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     val uuid: String = uuid.value.toString()
     var name: String by CityTable.name
-    var offset: Int by CityTable.offset
+    var timeZone: String by CityTable.timeZone
     var company: CompanyEntity by CompanyEntity referencedOn CityTable.company
     var isVisible: Boolean by CityTable.isVisible
 
@@ -24,7 +24,7 @@ class CityEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     fun toCity() = GetCity(
         uuid = uuid,
         name = name,
-        offset = offset,
+        timeZone = timeZone,
         isVisible = isVisible,
     )
 }

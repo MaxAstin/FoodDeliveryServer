@@ -4,6 +4,7 @@ import java.util.*
 
 data class InsertOrder(
     val time: Long,
+    val timeZone: String,
     val isDelivery: Boolean,
     val code: String,
     val addressDescription: String,

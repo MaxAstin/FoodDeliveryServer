@@ -14,6 +14,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     val uuid: String = uuid.value.toString()
     var time: Long by OrderTable.time
+    var timeZone: String by OrderTable.timeZone
     var isDelivery: Boolean by OrderTable.isDelivery
     var code: String by OrderTable.code
     var addressDescription: String by OrderTable.addressDescription
@@ -33,6 +34,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         code = code,
         status = status,
         time = time,
+        timeZone = timeZone,
         isDelivery = isDelivery,
         deferredTime = deferredTime,
         addressDescription = addressDescription,
@@ -49,6 +51,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         code = code,
         status = status,
         time = time,
+        timeZone = timeZone,
         isDelivery = isDelivery,
         deferredTime = deferredTime,
         addressDescription = addressDescription,

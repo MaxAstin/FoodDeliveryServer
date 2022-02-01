@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 data class GetCity(
     val uuid: String,
     val name: String,
-    val offset: Int,
+    val timeZone: String,
     val isVisible: Boolean,
 )

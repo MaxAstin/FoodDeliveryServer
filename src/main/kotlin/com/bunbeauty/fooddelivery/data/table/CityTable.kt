@@ -5,7 +5,7 @@ import org.jetbrains.exposed.dao.id.UUIDTable
 object CityTable : UUIDTable() {
 
     val name = varchar("name", 512)
-    val offset = integer("offset")
+    val timeZone = varchar("timeZone", 512).default("UTC+3")
     val company = reference("company", CompanyTable)
     val isVisible = bool("isVisible")
 

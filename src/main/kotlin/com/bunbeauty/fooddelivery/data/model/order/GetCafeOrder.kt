@@ -9,6 +9,7 @@ data class GetCafeOrder(
     val code: String,
     val status: String,
     val time: Long,
+    val timeZone: String,
     val isDelivery: Boolean,
     val deferredTime: Long?,
     val addressDescription: String,

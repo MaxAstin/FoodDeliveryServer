@@ -7,13 +7,13 @@ import com.bunbeauty.fooddelivery.data.model.city.PostCity
 import com.bunbeauty.fooddelivery.data.repo.city.ICityRepository
 import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
 
-class CityService(private val cityRepository: ICityRepository, private val userRepository: IUserRepository) :
+class CityService(private val cityRepository: ICityRepository) :
     ICityService {
 
     override suspend fun createCity(creatorUuid: String, postCity: PostCity): GetCity {
         val insertCity = InsertCity(
             name = postCity.name,
-            offset = postCity.offset,
+            timeZone = postCity.timeZone,
             company = postCity.companyUuid.toUuid(),
             isVisible = postCity.isVisible,
         )

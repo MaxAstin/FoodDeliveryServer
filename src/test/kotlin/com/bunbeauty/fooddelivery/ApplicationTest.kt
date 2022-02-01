@@ -91,6 +91,7 @@ class ApplicationTest {
             code = "",
             status = status,
             time = time,
+            timeZone = "UTC+3",
             isDelivery = true,
             deferredTime = null,
             addressDescription = "",

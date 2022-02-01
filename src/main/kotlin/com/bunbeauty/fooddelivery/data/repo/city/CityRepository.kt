@@ -2,6 +2,7 @@ package com.bunbeauty.fooddelivery.data.repo.city
 
 import com.bunbeauty.fooddelivery.data.Constants
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
+import com.bunbeauty.fooddelivery.data.entity.CafeEntity
 import com.bunbeauty.fooddelivery.data.entity.CityEntity
 import com.bunbeauty.fooddelivery.data.entity.CompanyEntity
 import com.bunbeauty.fooddelivery.data.model.city.GetCity
@@ -16,7 +17,7 @@ class CityRepository : ICityRepository {
     override suspend fun insertCity(insertCity: InsertCity): GetCity = query {
         CityEntity.new {
             name = insertCity.name
-            offset = insertCity.offset
+            timeZone = insertCity.timeZone
             company = CompanyEntity[insertCity.company]
             isVisible = insertCity.isVisible
         }.toCity()
@@ -34,5 +35,9 @@ class CityRepository : ICityRepository {
         CityEntity.find {
             (CityTable.name eq Constants.MAIN_CITY_NAME) and (CityTable.company eq companyUuid)
         }.singleOrNull()?.toCity()
+    }
+
+    override suspend fun getCityByCafeUuid(cafeUuid: UUID): GetCity? = query {
+        CafeEntity.findById(cafeUuid)?.city?.toCity()
     }
 }

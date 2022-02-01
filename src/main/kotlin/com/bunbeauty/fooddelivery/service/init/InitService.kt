@@ -85,7 +85,7 @@ class InitService(
         initCompany.cityList.onEach { initCity ->
             val insertCity = InsertCity(
                 name = initCity.name,
-                offset = initCity.offset,
+                timeZone = initCity.timeZone,
                 company = getCompany.uuid.toUuid(),
                 isVisible = initCity.isVisible,
             )
@@ -146,7 +146,7 @@ class InitService(
         return if (city == null) {
             val insertCity = InsertCity(
                 name = MAIN_CITY_NAME,
-                offset = 3,
+                timeZone = "UTC+3",
                 company = companyUuid.toUuid(),
                 isVisible = true
             )

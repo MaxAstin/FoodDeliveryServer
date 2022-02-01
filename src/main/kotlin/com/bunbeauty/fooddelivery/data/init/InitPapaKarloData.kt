@@ -12,7 +12,7 @@ object InitPapaKarloData {
         cityList = listOf(
             InitCity(
                 name = "Кимры",
-                offset = 3,
+                timeZone = "UTC+3",
                 isVisible = true,
                 cafeList = listOf(
                     InitCafe(
