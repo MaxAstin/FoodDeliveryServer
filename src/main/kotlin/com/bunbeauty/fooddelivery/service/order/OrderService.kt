@@ -46,8 +46,6 @@ class OrderService(
             postOrder.cafeUuid
         } ?: return null
 
-        val cityTimeZone = cityRepository.getCityByCafeUuid(cafeUuid.toUuid())?.timeZone ?: return null
-
         val company = clientUserRepository.getClientUserByUuid(clientUserUuid.toUuid())?.company ?: return null
 
         val deliveryCost = getDeliveryCost(postOrder, company)
@@ -61,7 +59,6 @@ class OrderService(
 
         val insertOrder = InsertOrder(
             time = currentMillis,
-            timeZone = cityTimeZone,
             isDelivery = postOrder.isDelivery,
             code = generateCode(currentMillis),
             addressDescription = postOrder.addressDescription,

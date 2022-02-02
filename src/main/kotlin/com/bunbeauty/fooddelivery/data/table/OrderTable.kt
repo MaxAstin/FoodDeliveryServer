@@ -6,7 +6,6 @@ object OrderTable : UUIDTable() {
 
     val isDelivery = bool("isDelivery")
     val time = long("time")
-    val timeZone = varchar("timeZone", 512).default("UTC+3")
     val code = varchar("code", 512)
     val addressDescription = varchar("addressDescription", 512)
     val comment = varchar("comment", 512).nullable()

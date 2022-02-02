@@ -36,8 +36,4 @@ class CityRepository : ICityRepository {
             (CityTable.name eq Constants.MAIN_CITY_NAME) and (CityTable.company eq companyUuid)
         }.singleOrNull()?.toCity()
     }
-
-    override suspend fun getCityByCafeUuid(cafeUuid: UUID): GetCity? = query {
-        CafeEntity.findById(cafeUuid)?.city?.toCity()
-    }
 }
