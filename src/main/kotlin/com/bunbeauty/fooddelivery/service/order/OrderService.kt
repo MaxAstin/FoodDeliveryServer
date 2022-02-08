@@ -9,8 +9,6 @@ import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.company.GetCompany
 import com.bunbeauty.fooddelivery.data.model.order.*
-import com.bunbeauty.fooddelivery.data.repo.cafe.ICafeRepository
-import com.bunbeauty.fooddelivery.data.repo.city.ICityRepository
 import com.bunbeauty.fooddelivery.data.repo.client_user.IClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.menu_product.IMenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
@@ -20,16 +18,18 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import kotlinx.coroutines.flow.SharedFlow
 import org.joda.time.DateTime
+import java.util.concurrent.atomic.AtomicInteger
 
 class OrderService(
     private val orderRepository: IOrderRepository,
     private val streetRepository: IStreetRepository,
     private val clientUserRepository: IClientUserRepository,
     private val menuProductRepository: IMenuProductRepository,
-    private val cityRepository: ICityRepository,
     private val firebaseMessaging: FirebaseMessaging,
 ) : IOrderService {
 
+    val codesCount = CODE_LETTERS.length * CODE_NUMBER_COUNT
+    var orderCodeNumber = AtomicInteger((DateTime.now().millis % codesCount).toInt())
     val cafeSessionHandler: SessionHandler<GetCafeOrder> = SessionHandler()
     val clientSessionHandler: SessionHandler<GetClientOrder> = SessionHandler()
 
@@ -60,7 +60,7 @@ class OrderService(
         val insertOrder = InsertOrder(
             time = currentMillis,
             isDelivery = postOrder.isDelivery,
-            code = generateCode(currentMillis),
+            code = generateCode(),
             addressDescription = postOrder.addressDescription,
             comment = postOrder.comment,
             deferredTime = deferredTime,
@@ -120,12 +120,12 @@ class OrderService(
         cafeSessionHandler.disconnect(cafeUuid)
     }
 
-    fun generateCode(currentMillis: Long): String {
-        val currentSeconds = currentMillis / 1000
-
-        val number = (currentSeconds % (CODE_LETTERS.length * CODE_NUMBER_COUNT)).toInt()
-        val codeLetter = CODE_LETTERS[number % CODE_LETTERS.length].toString()
-        val codeNumber = (number / CODE_LETTERS.length)
+    fun generateCode(): String {
+        val newOrderCodeNumber = orderCodeNumber.updateAndGet { number ->
+            (number + 1) % codesCount
+        }
+        val codeLetter = CODE_LETTERS[newOrderCodeNumber % CODE_LETTERS.length].toString()
+        val codeNumber = (newOrderCodeNumber / CODE_LETTERS.length)
         val codeNumberString = if (codeNumber < 10) {
             "0$codeNumber"
         } else {
