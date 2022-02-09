@@ -25,6 +25,7 @@ object Constants {
 
     // CODE
     const val CODE_NUMBER_COUNT = 100
+    const val CODE_NUMBER_STEP = 9
     const val CODE_DIVIDER = "-"
     const val CODE_LETTERS = "АБВГДЕИКЛМНПРСТУФХЦЧШЭЮЯ"
 

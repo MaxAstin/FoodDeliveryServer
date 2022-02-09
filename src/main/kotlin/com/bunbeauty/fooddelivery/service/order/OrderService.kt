@@ -3,6 +3,7 @@ package com.bunbeauty.fooddelivery.service.order
 import com.bunbeauty.fooddelivery.data.Constants.CODE_DIVIDER
 import com.bunbeauty.fooddelivery.data.Constants.CODE_LETTERS
 import com.bunbeauty.fooddelivery.data.Constants.CODE_NUMBER_COUNT
+import com.bunbeauty.fooddelivery.data.Constants.CODE_NUMBER_STEP
 import com.bunbeauty.fooddelivery.data.Constants.ORDER_HISTORY_DAY_COUNT
 import com.bunbeauty.fooddelivery.data.Constants.ORDER_KOD_KEY
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
@@ -125,7 +126,7 @@ class OrderService(
             (number + 1) % codesCount
         }
         val codeLetter = CODE_LETTERS[newOrderCodeNumber % CODE_LETTERS.length].toString()
-        val codeNumber = (newOrderCodeNumber / CODE_LETTERS.length)
+        val codeNumber = (newOrderCodeNumber * CODE_NUMBER_STEP) / (CODE_LETTERS.length * CODE_NUMBER_COUNT)
         val codeNumberString = if (codeNumber < 10) {
             "0$codeNumber"
         } else {
