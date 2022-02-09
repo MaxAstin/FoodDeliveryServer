@@ -2,8 +2,6 @@ import com.bunbeauty.fooddelivery.auth.IJwtService
 import com.bunbeauty.fooddelivery.data.Constants.FB_ADMIN_KEY
 import com.bunbeauty.fooddelivery.data.Constants.PORT
 import com.bunbeauty.fooddelivery.data.DatabaseFactory
-import com.bunbeauty.fooddelivery.data.init.InitCompany
-import com.bunbeauty.fooddelivery.data.init.InitPapaKarloData
 import com.bunbeauty.fooddelivery.di.*
 import com.bunbeauty.fooddelivery.plugins.configureSerialization
 import com.bunbeauty.fooddelivery.plugins.configureSockets
@@ -23,7 +21,7 @@ import org.koin.ktor.ext.inject
 import java.io.InputStream
 
 fun main() {
-    //DatabaseFactory.init()
+    DatabaseFactory.init()
     embeddedServer(Netty, port = System.getenv(PORT).toInt()) {
         val inputStream: InputStream = System.getenv(FB_ADMIN_KEY).byteInputStream()
         val options = FirebaseOptions.builder()
@@ -65,7 +63,7 @@ fun main() {
 
         val initService: IInitService by inject()
         launch {
-            //initService.initDataBase()
+            initService.initDataBase()
             //initService.initNewCompany(InitPapaKarloData.company)
         }
     }.start(wait = true)

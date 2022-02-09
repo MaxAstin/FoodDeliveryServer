@@ -170,6 +170,4 @@ class InitService(
             userRepository.insertUser(insertUser)
         }
     }
-
-
 }
