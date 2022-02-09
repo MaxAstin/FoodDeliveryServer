@@ -57,6 +57,9 @@ object DatabaseFactory {
 
             SchemaUtils.create(OrderProductTable)
             SchemaUtils.createMissingTablesAndColumns(OrderProductTable)
+
+            SchemaUtils.create(RequestTable)
+            SchemaUtils.createMissingTablesAndColumns(RequestTable)
         }
     }
 

@@ -31,6 +31,10 @@ object Constants {
     // TIME
     const val ORDER_HISTORY_DAY_COUNT = 2
 
+    // REQUEST
+    const val REQUEST_LIMIT_TIMEOUT = 60 * 1000L
+    const val CONSECUTIVE_REQUESTS_LIMIT = 2
+
     // HITS
     const val HITS_CATEGORY_NAME = "Хиты"
     const val HITS_COUNT = 5

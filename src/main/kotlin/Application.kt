@@ -23,7 +23,7 @@ import org.koin.ktor.ext.inject
 import java.io.InputStream
 
 fun main() {
-    DatabaseFactory.init()
+    //DatabaseFactory.init()
     embeddedServer(Netty, port = System.getenv(PORT).toInt()) {
         val inputStream: InputStream = System.getenv(FB_ADMIN_KEY).byteInputStream()
         val options = FirebaseOptions.builder()
@@ -51,7 +51,8 @@ fun main() {
                 statisticModule,
                 dateTimeModule,
                 versionModule,
-                firebaseModule
+                firebaseModule,
+                requestModule
             )
         }
         install(Authentication) {
@@ -64,7 +65,7 @@ fun main() {
 
         val initService: IInitService by inject()
         launch {
-            initService.initDataBase()
+            //initService.initDataBase()
             //initService.initNewCompany(InitPapaKarloData.company)
         }
     }.start(wait = true)

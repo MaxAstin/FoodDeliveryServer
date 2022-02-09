@@ -2,13 +2,10 @@ package com.bunbeauty.fooddelivery.service.client_user
 
 import com.bunbeauty.fooddelivery.auth.IJwtService
 import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.client_user.ClientAuthResponse
-import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
-import com.bunbeauty.fooddelivery.data.model.client_user.InsertClientUser
-import com.bunbeauty.fooddelivery.data.model.client_user.PatchClientUser
-import com.bunbeauty.fooddelivery.data.model.client_user.PostClientUserAuth
+import com.bunbeauty.fooddelivery.data.model.client_user.*
 import com.bunbeauty.fooddelivery.data.repo.client_user.IClientUserRepository
 import com.google.firebase.auth.FirebaseAuth
+
 
 class ClientUserService(
     private val firebaseAuth: FirebaseAuth,
@@ -34,6 +31,14 @@ class ClientUserService(
         } else {
             null
         }
+    }
+
+    override suspend fun sendCode(postClientCodeRequest: PostClientCodeRequest): GetClientUserLoginSession? {
+        return null
+    }
+
+    override suspend fun checkCode(clientUserAuth: PostClientUserAuth): ClientAuthResponse? {
+        return null
     }
 
     override suspend fun getClientUserByUuid(clientUserUuid: String): GetClientUser? {

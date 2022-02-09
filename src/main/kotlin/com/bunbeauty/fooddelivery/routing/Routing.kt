@@ -4,6 +4,7 @@ import io.ktor.application.*
 
 fun Application.configureRouting() {
     configureUserRouting()
+    configureClientUserRouting()
     configureCompanyRouting()
     configureCityRouting()
     configureCafeRouting()

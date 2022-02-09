@@ -3,14 +3,21 @@ package com.bunbeauty.fooddelivery.routing.extension
 import com.bunbeauty.fooddelivery.auth.JwtUser
 import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.ext.toListWrapper
+import com.bunbeauty.fooddelivery.data.model.request.RequestAvailability
 import com.bunbeauty.fooddelivery.routing.model.BodyRequest
 import com.bunbeauty.fooddelivery.routing.model.Request
+import com.bunbeauty.fooddelivery.service.ip.IRequestService
 import io.ktor.application.*
 import io.ktor.auth.*
+import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import io.ktor.util.pipeline.*
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.isAccessible
 
 
 suspend inline fun ApplicationCall.handleParameters(
@@ -152,6 +159,41 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.adminDelete(deleteBloc
             call.respondOk()
         }
     }
+}
+
+suspend inline fun PipelineContext<Unit, ApplicationCall>.limitRequestNumber(
+    requestService: IRequestService,
+    block: () -> Unit,
+) {
+    when (val requestAvailability = requestService.isRequestAvailable(getIp(), call.request.path())) {
+        is RequestAvailability.Available -> {
+            block()
+        }
+        is RequestAvailability.NotAvailable -> {
+            call.respondBad("Request is not available for more ${requestAvailability.seconds} seconds")
+        }
+    }
+}
+
+@OptIn(EngineAPI::class, io.ktor.util.InternalAPI::class)
+fun PipelineContext<Unit, ApplicationCall>.getIp(): String {
+    val remoteHost = call.request.origin.remoteHost
+    println("remoteHost: $remoteHost")
+
+    //or
+
+    return context::class.memberProperties
+        .find { memberProperty ->
+            memberProperty.name == "call"
+        }?.let { callProperty ->
+            callProperty.isAccessible = true
+            (callProperty.getter.call(context) as NettyApplicationCall).request
+                .context
+                .pipeline()
+                .channel()
+                .remoteAddress()
+                .toString()
+        } ?: ""
 }
 
 suspend inline fun ApplicationCall.respondOk() {
