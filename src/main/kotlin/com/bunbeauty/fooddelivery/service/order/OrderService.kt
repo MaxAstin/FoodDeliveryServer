@@ -126,7 +126,7 @@ class OrderService(
             (number + 1) % codesCount
         }
         val codeLetter = CODE_LETTERS[newOrderCodeNumber % CODE_LETTERS.length].toString()
-        val codeNumber = (newOrderCodeNumber * CODE_NUMBER_STEP) / (CODE_LETTERS.length * CODE_NUMBER_COUNT)
+        val codeNumber = ((newOrderCodeNumber / CODE_LETTERS.length) * CODE_NUMBER_STEP) % CODE_NUMBER_COUNT
         val codeNumberString = if (codeNumber < 10) {
             "0$codeNumber"
         } else {

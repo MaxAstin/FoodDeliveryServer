@@ -40,8 +40,6 @@ object Constants {
     const val HITS_CATEGORY_NAME = "Хиты"
     const val HITS_COUNT = 5
     const val HITS_ORDER_DAY_COUNT = 30
-    const val HITS_PRODUCT_COUNT_COEFFICIENT = 0.4f
-    const val HITS_PRODUCT_PRICE_COEFFICIENT = 0.6f
 
     // INIT DB
     const val MAIN_COMPANY_NAME = "BunBeauty"
