@@ -15,7 +15,7 @@ class CafeEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     val uuid: String = uuid.value.toString()
     var fromTime: Int by CafeTable.fromTime
     var toTime: Int by CafeTable.toTime
-    var phone: String by CafeTable.phone
+    var phoneNumber: String by CafeTable.phoneNumber
     var latitude: Double by CafeTable.latitude
     var longitude: Double by CafeTable.longitude
     var address: String by CafeTable.address
@@ -33,7 +33,7 @@ class CafeEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         fromTime = fromTime,
         toTime = toTime,
         offset = 0,
-        phone = phone,
+        phone = phoneNumber,
         latitude = latitude,
         longitude = longitude,
         address = address,

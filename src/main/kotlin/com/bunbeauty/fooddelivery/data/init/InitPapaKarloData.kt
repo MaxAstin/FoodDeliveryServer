@@ -18,7 +18,7 @@ object InitPapaKarloData {
                     InitCafe(
                         fromTime = 32400,
                         toTime = 79200,
-                        phone = "+7 (900) 111-14-21",
+                        phoneNumber = "+7 (900) 111-14-21",
                         latitude = 56.847141,
                         longitude = 37.369326,
                         address = "Кимры, ул. Чапаева, 22А",

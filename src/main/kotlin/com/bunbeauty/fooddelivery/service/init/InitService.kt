@@ -105,7 +105,7 @@ class InitService(
                 val insertCafe = InsertCafe(
                     fromTime = initCafe.fromTime,
                     toTime = initCafe.toTime,
-                    phone = initCafe.phone,
+                    phoneNumber = initCafe.phoneNumber,
                     latitude = initCafe.latitude,
                     longitude = initCafe.longitude,
                     address = initCafe.address,

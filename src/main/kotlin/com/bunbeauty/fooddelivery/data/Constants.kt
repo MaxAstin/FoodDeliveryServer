@@ -31,6 +31,7 @@ object Constants {
 
     // TIME
     const val ORDER_HISTORY_DAY_COUNT = 2
+    const val CLIENT_USER_LOGIN_SESSION_TIMEOUT = 2 * 60 * 1000L
 
     // REQUEST
     const val REQUEST_LIMIT_TIMEOUT = 60 * 1000L

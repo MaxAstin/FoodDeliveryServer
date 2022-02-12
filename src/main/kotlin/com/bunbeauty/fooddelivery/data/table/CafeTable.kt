@@ -6,7 +6,7 @@ object CafeTable : UUIDTable() {
 
     val fromTime = integer("fromTime")
     val toTime = integer("toTime")
-    val phone = varchar("phone", 512)
+    val phoneNumber = varchar("phone", 512)
     val latitude = double("latitude")
     val longitude = double("longitude")
     val address = varchar("address", 512)

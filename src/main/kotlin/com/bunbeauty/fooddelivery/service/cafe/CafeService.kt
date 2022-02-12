@@ -12,7 +12,7 @@ class CafeService(private val cafeRepository: ICafeRepository) : ICafeService {
         val insertCafe = InsertCafe(
             fromTime = postCafe.fromTime,
             toTime = postCafe.toTime,
-            phone = postCafe.phone,
+            phoneNumber = postCafe.phoneNumber,
             latitude = postCafe.latitude,
             longitude = postCafe.longitude,
             address = postCafe.address,
