@@ -165,7 +165,9 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.limitRequestNumber(
     requestService: IRequestService,
     block: () -> Unit,
 ) {
-    when (val requestAvailability = requestService.isRequestAvailable(getIp(), call.request.path())) {
+    val ip = getIp()
+    println("ip = $ip")
+    when (val requestAvailability = requestService.isRequestAvailable(ip, call.request.path())) {
         is RequestAvailability.Available -> {
             block()
         }
@@ -177,11 +179,6 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.limitRequestNumber(
 
 @OptIn(EngineAPI::class, io.ktor.util.InternalAPI::class)
 fun PipelineContext<Unit, ApplicationCall>.getIp(): String {
-    val remoteHost = call.request.origin.remoteHost
-    println("remoteHost: $remoteHost")
-
-    //or
-
     return context::class.memberProperties
         .find { memberProperty ->
             memberProperty.name == "call"
