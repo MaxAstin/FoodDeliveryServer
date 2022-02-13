@@ -16,7 +16,7 @@ class ClientUserLoginSessionEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var time: Long by ClientUserLoginSessionTable.time
     var code: String by ClientUserLoginSessionTable.code
 
-    companion object : UUIDEntityClass<ClientUserLoginSessionEntity>(AddressTable)
+    companion object : UUIDEntityClass<ClientUserLoginSessionEntity>(ClientUserLoginSessionTable)
 
     fun toClientUserLoginSession() = GetClientUserLoginSessionUuid(
         uuid = uuid
