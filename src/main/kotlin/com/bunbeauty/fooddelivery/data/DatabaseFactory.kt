@@ -60,6 +60,9 @@ object DatabaseFactory {
 
             SchemaUtils.create(RequestTable)
             SchemaUtils.createMissingTablesAndColumns(RequestTable)
+
+            SchemaUtils.create(ClientUserLoginSessionTable)
+            SchemaUtils.createMissingTablesAndColumns(ClientUserLoginSessionTable)
         }
     }
 
