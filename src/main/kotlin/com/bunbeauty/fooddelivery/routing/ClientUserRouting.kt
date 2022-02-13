@@ -21,10 +21,10 @@ fun Application.configureClientUserRouting() {
 
     routing {
         clientLogin()
-        sendCode()
-        checkCode()
 
         authenticate {
+            sendCode()
+            checkCode()
             getClient()
             patchClientUser()
         }
@@ -49,7 +49,7 @@ fun Routing.clientLogin() {
     }
 }
 
-fun Routing.sendCode() {
+fun Route.sendCode() {
 
     val clientUserService: IClientUserService by inject()
     val requestService: IRequestService by inject()
@@ -63,7 +63,7 @@ fun Routing.sendCode() {
     }
 }
 
-fun Routing.checkCode() {
+fun Route.checkCode() {
 
     val clientUserService: IClientUserService by inject()
 
