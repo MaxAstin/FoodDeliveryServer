@@ -13,6 +13,7 @@ val orderModule = module(createdAtStart = true) {
             streetRepository = get(),
             clientUserRepository = get(),
             menuProductRepository = get(),
+            cafeRepository = get(),
             firebaseMessaging = get()
         )
     }

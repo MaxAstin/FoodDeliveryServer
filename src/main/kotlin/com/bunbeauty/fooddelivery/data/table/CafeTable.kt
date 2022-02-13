@@ -10,6 +10,7 @@ object CafeTable : UUIDTable() {
     val latitude = double("latitude")
     val longitude = double("longitude")
     val address = varchar("address", 512)
+    val codeCounter = integer("codeCounter").default(0)
     val city = reference("city", CityTable)
     val isVisible = bool("isVisible")
 

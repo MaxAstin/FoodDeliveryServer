@@ -10,6 +10,7 @@ import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.company.GetCompany
 import com.bunbeauty.fooddelivery.data.model.order.*
+import com.bunbeauty.fooddelivery.data.repo.cafe.ICafeRepository
 import com.bunbeauty.fooddelivery.data.repo.client_user.IClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.menu_product.IMenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
@@ -26,11 +27,11 @@ class OrderService(
     private val streetRepository: IStreetRepository,
     private val clientUserRepository: IClientUserRepository,
     private val menuProductRepository: IMenuProductRepository,
+    private val cafeRepository: ICafeRepository,
     private val firebaseMessaging: FirebaseMessaging,
 ) : IOrderService {
 
     val codesCount = CODE_LETTERS.length * CODE_NUMBER_COUNT
-    var orderCodeNumber = AtomicInteger((DateTime.now().millis % codesCount).toInt())
     val cafeSessionHandler: SessionHandler<GetCafeOrder> = SessionHandler()
     val clientSessionHandler: SessionHandler<GetClientOrder> = SessionHandler()
 
@@ -46,6 +47,7 @@ class OrderService(
         } else {
             postOrder.cafeUuid
         } ?: return null
+        val cafeCodeCounter = cafeRepository.incrementCafeCodeCounter(cafeUuid.toUuid(), codesCount) ?: return null
 
         val company = clientUserRepository.getClientUserByUuid(clientUserUuid.toUuid())?.company ?: return null
 
@@ -61,7 +63,7 @@ class OrderService(
         val insertOrder = InsertOrder(
             time = currentMillis,
             isDelivery = postOrder.isDelivery,
-            code = generateCode(),
+            code = generateCode(cafeCodeCounter),
             addressDescription = postOrder.addressDescription,
             comment = postOrder.comment,
             deferredTime = deferredTime,
@@ -121,12 +123,9 @@ class OrderService(
         cafeSessionHandler.disconnect(cafeUuid)
     }
 
-    fun generateCode(): String {
-        val newOrderCodeNumber = orderCodeNumber.updateAndGet { number ->
-            (number + 1) % codesCount
-        }
-        val codeLetter = CODE_LETTERS[newOrderCodeNumber % CODE_LETTERS.length].toString()
-        val codeNumber = (newOrderCodeNumber * CODE_NUMBER_STEP) % CODE_NUMBER_COUNT
+    fun generateCode(codeCounter: Int): String {
+        val codeLetter = CODE_LETTERS[codeCounter % CODE_LETTERS.length].toString()
+        val codeNumber = (codeCounter * CODE_NUMBER_STEP) % CODE_NUMBER_COUNT
         val codeNumberString = if (codeNumber < 10) {
             "0$codeNumber"
         } else {

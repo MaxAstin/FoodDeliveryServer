@@ -8,4 +8,5 @@ interface ICafeRepository {
 
     suspend fun insertCafe(insertCafe: InsertCafe): GetCafe
     suspend fun getCafeListByCityUuid(cityUuid: UUID): List<GetCafe>
+    suspend fun incrementCafeCodeCounter(cafeUuid: UUID, divisor: Int): Int?
 }

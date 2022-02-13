@@ -19,6 +19,7 @@ class CafeEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var latitude: Double by CafeTable.latitude
     var longitude: Double by CafeTable.longitude
     var address: String by CafeTable.address
+    var codeCounter: Int by CafeTable.codeCounter
     var city: CityEntity by CityEntity referencedOn CafeTable.city
     var isVisible: Boolean by CafeTable.isVisible
 
