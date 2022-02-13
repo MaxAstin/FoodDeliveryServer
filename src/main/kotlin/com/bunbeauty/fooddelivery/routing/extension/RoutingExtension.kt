@@ -184,12 +184,14 @@ fun PipelineContext<Unit, ApplicationCall>.getIp(): String {
             memberProperty.name == "call"
         }?.let { callProperty ->
             callProperty.isAccessible = true
-            (callProperty.getter.call(context) as NettyApplicationCall).request
+            val ip = (callProperty.getter.call(context) as NettyApplicationCall).request
                 .context
                 .pipeline()
                 .channel()
                 .remoteAddress()
                 .toString()
+            val regex = Regex("\\d{0,3}\\.\\d{0,3}\\.\\d{0,3}\\.\\d{0,3}")
+            regex.find(ip)?.value
         } ?: ""
 }
 

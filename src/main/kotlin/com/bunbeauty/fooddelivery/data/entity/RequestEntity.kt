@@ -15,7 +15,7 @@ class RequestEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var name: String by RequestTable.name
     var time: Long by RequestTable.time
 
-    companion object : UUIDEntityClass<RequestEntity>(UserTable)
+    companion object : UUIDEntityClass<RequestEntity>(RequestTable)
 
     fun toRequest(): GetRequest {
         return GetRequest(
