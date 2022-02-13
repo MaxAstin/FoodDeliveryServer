@@ -33,7 +33,7 @@ class CafeRepository : ICafeRepository {
 
     override suspend fun incrementCafeCodeCounter(cafeUuid: UUID, divisor: Int): Int? = query {
         CafeEntity.findById(cafeUuid)?.apply {
-            (codeCounter + 1) % divisor
+            codeCounter = (codeCounter + 1) % divisor
         }?.codeCounter
     }
 }
