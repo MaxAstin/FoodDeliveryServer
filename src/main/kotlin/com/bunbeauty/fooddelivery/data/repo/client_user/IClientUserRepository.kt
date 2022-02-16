@@ -11,6 +11,7 @@ interface IClientUserRepository {
     suspend fun getClientUserLoginSessionByUuid(uuid: UUID): GetClientUserLoginSession?
     suspend fun insertTestClientUserPhone(insertTestClientUserPhone: InsertTestClientUserPhone): GetTestClientUserPhone
     suspend fun getTestClientUserPhoneByPhoneNumber(phoneNumber: String): GetTestClientUserPhone?
+    suspend fun getTestClientUserPhoneList(): List<GetTestClientUserPhone>
 
     suspend fun getClientUserByUuid(uuid: UUID): GetClientUser?
     suspend fun getClientUserByPhoneNumber(phoneNumber: String): GetClientUser?

@@ -24,6 +24,7 @@ fun Application.configureClientUserRouting() {
             sendCode()
             checkCode()
             createTestClientUserPhone()
+            getTestClientUserPhones()
             getClient()
             patchClientUser()
         }
@@ -80,6 +81,18 @@ fun Route.createTestClientUserPhone() {
     post("/test_phone") {
         adminWithBody<PostTestClientUserPhone, GetTestClientUserPhone> { bodyRequest ->
             clientUserService.createTestClientUserPhone(bodyRequest.body)
+        }
+    }
+}
+
+fun Route.getTestClientUserPhones() {
+
+    val clientUserService: IClientUserService by inject()
+
+    get("/test_phone") {
+        admin {
+            val testClientUserPhoneList = clientUserService.getTestClientUserPhoneList()
+            call.respondOk(testClientUserPhoneList)
         }
     }
 }

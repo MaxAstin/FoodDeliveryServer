@@ -10,6 +10,7 @@ interface IClientUserService {
     suspend fun sendCode(postClientCodeRequest: PostClientCodeRequest): GetClientUserLoginSessionUuid?
     suspend fun checkCode(postClientCode: PostClientCode): ClientAuthResponse?
     suspend fun createTestClientUserPhone(postTestClientUserPhone: PostTestClientUserPhone): GetTestClientUserPhone
+    suspend fun getTestClientUserPhoneList(): List<GetTestClientUserPhone>
     suspend fun getClientUserByUuid(clientUserUuid: String): GetClientUser?
     suspend fun updateClientUserByUuid(clientUserUuid: String, patchClientUser: PatchClientUser): GetClientUser?
 }

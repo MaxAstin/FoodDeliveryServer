@@ -41,6 +41,12 @@ class ClientUserRepository : IClientUserRepository {
         }.firstOrNull()?.toTestClientUserPhone()
     }
 
+    override suspend fun getTestClientUserPhoneList(): List<GetTestClientUserPhone> = query {
+        TestClientUserPhoneEntity.all().map { testClientUserPhoneEntity ->
+            testClientUserPhoneEntity.toTestClientUserPhone()
+        }
+    }
+
     override suspend fun getClientUserByPhoneNumber(phoneNumber: String): GetClientUser? = query {
         ClientUserEntity.find {
             ClientUserTable.phoneNumber eq phoneNumber
