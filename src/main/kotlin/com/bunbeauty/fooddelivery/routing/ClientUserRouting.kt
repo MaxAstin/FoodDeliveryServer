@@ -5,9 +5,7 @@ import com.bunbeauty.fooddelivery.data.model.client_user.ClientAuthResponse
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.PatchClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.PostClientUserAuth
-import com.bunbeauty.fooddelivery.data.model.client_user.login.GetClientUserLoginSessionUuid
-import com.bunbeauty.fooddelivery.data.model.client_user.login.PostClientCode
-import com.bunbeauty.fooddelivery.data.model.client_user.login.PostClientCodeRequest
+import com.bunbeauty.fooddelivery.data.model.client_user.login.*
 import com.bunbeauty.fooddelivery.routing.extension.*
 import com.bunbeauty.fooddelivery.service.client_user.IClientUserService
 import com.bunbeauty.fooddelivery.service.ip.IRequestService
@@ -25,6 +23,7 @@ fun Application.configureClientUserRouting() {
         authenticate {
             sendCode()
             checkCode()
+            createTestClientUserPhone()
             getClient()
             patchClientUser()
         }
@@ -70,6 +69,17 @@ fun Route.checkCode() {
     post("/client/code") {
         clientWithBody<PostClientCode, ClientAuthResponse> { bodyRequest ->
             clientUserService.checkCode(bodyRequest.body)
+        }
+    }
+}
+
+fun Route.createTestClientUserPhone() {
+
+    val clientUserService: IClientUserService by inject()
+
+    post("/test_phone") {
+        adminWithBody<PostTestClientUserPhone, GetTestClientUserPhone> { bodyRequest ->
+            clientUserService.createTestClientUserPhone(bodyRequest.body)
         }
     }
 }

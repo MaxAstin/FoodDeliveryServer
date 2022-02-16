@@ -4,13 +4,11 @@ import com.bunbeauty.fooddelivery.auth.IJwtService
 import com.bunbeauty.fooddelivery.data.Constants.CLIENT_USER_LOGIN_SESSION_TIMEOUT
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.client_user.*
-import com.bunbeauty.fooddelivery.data.model.client_user.login.GetClientUserLoginSessionUuid
-import com.bunbeauty.fooddelivery.data.model.client_user.login.InsertClientUserLoginSession
-import com.bunbeauty.fooddelivery.data.model.client_user.login.PostClientCode
-import com.bunbeauty.fooddelivery.data.model.client_user.login.PostClientCodeRequest
+import com.bunbeauty.fooddelivery.data.model.client_user.login.*
 import com.bunbeauty.fooddelivery.data.repo.client_user.IClientUserRepository
 import com.google.firebase.auth.FirebaseAuth
 import org.joda.time.DateTime
+import java.util.*
 
 class ClientUserService(
     private val firebaseAuth: FirebaseAuth,
@@ -39,17 +37,26 @@ class ClientUserService(
     }
 
     override suspend fun sendCode(postClientCodeRequest: PostClientCodeRequest): GetClientUserLoginSessionUuid? {
-        val code = sendCode(postClientCodeRequest.phoneNumber) ?: return null
-        val insertClientUserLoginSession = InsertClientUserLoginSession(
-            phoneNumber = postClientCodeRequest.phoneNumber,
-            time = DateTime.now().millis,
-            code = code
-        )
-        return clientUserRepository.insertClientUserLoginSession(insertClientUserLoginSession)
+        return if (isRequestForTestPhone(postClientCodeRequest)) {
+            GetClientUserLoginSessionUuid(
+                uuid = UUID.randomUUID().toString()
+            )
+        } else {
+            sendCode(postClientCodeRequest.phoneNumber)?.let { code ->
+                val insertClientUserLoginSession = InsertClientUserLoginSession(
+                    phoneNumber = postClientCodeRequest.phoneNumber,
+                    time = DateTime.now().millis,
+                    code = code
+                )
+                clientUserRepository.insertClientUserLoginSession(insertClientUserLoginSession)
+            }
+        }
     }
 
     override suspend fun checkCode(postClientCode: PostClientCode): ClientAuthResponse? {
-        return if (isCodeActual(postClientCode)) {
+        return if ((isCodeForTestPhone(postClientCode) && isCodeActualForTestPhone(postClientCode))
+            || isCodeActual(postClientCode)
+        ) {
             val getClientUser = clientUserRepository.getClientUserByPhoneNumber(postClientCode.phoneNumber)
                 ?: registerClientUser(postClientCode)
             val token = jwtService.generateToken(getClientUser)
@@ -57,6 +64,15 @@ class ClientUserService(
         } else {
             null
         }
+    }
+
+    override suspend fun createTestClientUserPhone(postTestClientUserPhone: PostTestClientUserPhone): GetTestClientUserPhone {
+        return clientUserRepository.insertTestClientUserPhone(
+            InsertTestClientUserPhone(
+                phoneNumber = postTestClientUserPhone.phoneNumber,
+                code = postTestClientUserPhone.code
+            )
+        )
     }
 
     override suspend fun getClientUserByUuid(clientUserUuid: String): GetClientUser? {
@@ -70,8 +86,27 @@ class ClientUserService(
         return clientUserRepository.updateClientUserByUuid(clientUserUuid.toUuid(), patchClientUser.email)
     }
 
+    suspend fun isRequestForTestPhone(postClientCodeRequest: PostClientCodeRequest): Boolean {
+        return isForTestPhone(postClientCodeRequest.phoneNumber)
+    }
+
     suspend fun sendCode(phoneNumber: String): String? {
         return ""
+    }
+
+    suspend fun isCodeForTestPhone(postClientCode: PostClientCode): Boolean {
+        return isForTestPhone(postClientCode.phoneNumber)
+    }
+
+    suspend fun isForTestPhone(phoneNumber: String): Boolean {
+        return clientUserRepository.getTestClientUserPhoneByPhoneNumber(phoneNumber) != null
+    }
+
+    suspend fun isCodeActualForTestPhone(postClientCode: PostClientCode): Boolean {
+        return clientUserRepository.getTestClientUserPhoneByPhoneNumber(postClientCode.phoneNumber)
+            ?.let { getTestClientUserPhone ->
+                getTestClientUserPhone.code == postClientCode.code
+            } ?: false
     }
 
     suspend fun isCodeActual(postClientCode: PostClientCode): Boolean {
