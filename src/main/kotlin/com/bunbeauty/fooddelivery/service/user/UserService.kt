@@ -37,6 +37,9 @@ class UserService(private val userRepository: IUserRepository, private val jwtSe
                     companyUuid = user.company.uuid
                 )
             } else {
+                println("Incorrect password ${postUserAuth.password} " +
+                        "password hash [${String(Bcrypt.hash(postUserAuth.password, MIN_COST))}] " +
+                        "actual hash [${user.passwordHash}]")
                 null
             }
         }

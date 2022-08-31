@@ -483,7 +483,7 @@ object InitPapaKarloData {
             newPrice = 390,
             oldPrice = null,
             utils = "г",
-            nutrition = 90,
+            nutrition = 250,
             description = "Снаружи — румяная и поджаристая, а внутри — нежная и сочная свиная шейка зажаренная на углях, подаётся с лавашом, луком, зеленью и фирменным томатным соусом",
             comboDescription = null,
             photoLink = "https://firebasestorage.googleapis.com/v0/b/fooddelivery-ce2ef.appspot.com/o/97.jpg?alt=media&token=a465e45f-aa1e-455b-9bd0-d579a86867b3",
