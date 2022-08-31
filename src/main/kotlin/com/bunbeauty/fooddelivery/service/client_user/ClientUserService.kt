@@ -19,7 +19,10 @@ class ClientUserService(
     override suspend fun login(clientUserAuth: PostClientUserAuth): ClientAuthResponse? {
         val firebaseUser = firebaseAuth.getUser(clientUserAuth.firebaseUuid)
         return if (firebaseUser.phoneNumber == clientUserAuth.phoneNumber) {
-            var getClientUser = clientUserRepository.getClientUserByPhoneNumber(clientUserAuth.phoneNumber)
+            var getClientUser = clientUserRepository.getClientUserByPhoneNumberAndCompayUuid(
+                clientUserAuth.phoneNumber,
+                clientUserAuth.companyUuid.toUuid()
+            )
             if (getClientUser == null) {
                 val insertClientUser = InsertClientUser(
                     phoneNumber = clientUserAuth.phoneNumber,
@@ -57,8 +60,10 @@ class ClientUserService(
         return if ((isCodeForTestPhone(postClientCode) && isCodeActualForTestPhone(postClientCode))
             || isCodeActual(postClientCode)
         ) {
-            val getClientUser = clientUserRepository.getClientUserByPhoneNumber(postClientCode.phoneNumber)
-                ?: registerClientUser(postClientCode)
+            val getClientUser = clientUserRepository.getClientUserByPhoneNumberAndCompayUuid(
+                postClientCode.phoneNumber,
+                postClientCode.companyUuid.toUuid()
+            ) ?: registerClientUser(postClientCode)
             val token = jwtService.generateToken(getClientUser)
             ClientAuthResponse(token = token)
         } else {

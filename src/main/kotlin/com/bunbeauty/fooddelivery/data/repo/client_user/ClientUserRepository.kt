@@ -10,6 +10,7 @@ import com.bunbeauty.fooddelivery.data.model.client_user.InsertClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.login.*
 import com.bunbeauty.fooddelivery.data.table.ClientUserTable
 import com.bunbeauty.fooddelivery.data.table.TestClientUserPhoneTable
+import org.jetbrains.exposed.sql.and
 import java.util.*
 
 class ClientUserRepository : IClientUserRepository {
@@ -47,9 +48,9 @@ class ClientUserRepository : IClientUserRepository {
         }
     }
 
-    override suspend fun getClientUserByPhoneNumber(phoneNumber: String): GetClientUser? = query {
+    override suspend fun getClientUserByPhoneNumberAndCompayUuid(phoneNumber: String, companyUuid: UUID): GetClientUser? = query {
         ClientUserEntity.find {
-            ClientUserTable.phoneNumber eq phoneNumber
+            (ClientUserTable.phoneNumber eq phoneNumber) and (ClientUserTable.company eq companyUuid)
         }.singleOrNull()?.toClientUser()
     }
 
