@@ -4,10 +4,11 @@ import com.bunbeauty.fooddelivery.data.Constants.COMPANY_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.routing.extension.respondBad
 import com.bunbeauty.fooddelivery.routing.extension.respondOk
 import com.bunbeauty.fooddelivery.routing.extension.safely
-import com.bunbeauty.fooddelivery.service.delivery.IDeliveryService
 import com.bunbeauty.fooddelivery.service.version.IVersionService
-import io.ktor.application.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.request.*
+import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureVersionRouting() {

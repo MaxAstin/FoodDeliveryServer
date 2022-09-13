@@ -6,9 +6,9 @@ import com.bunbeauty.fooddelivery.routing.extension.manager
 import com.bunbeauty.fooddelivery.routing.extension.respondBad
 import com.bunbeauty.fooddelivery.routing.extension.respondOk
 import com.bunbeauty.fooddelivery.service.statistic.IStatisticService
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureStatisticRouting() {

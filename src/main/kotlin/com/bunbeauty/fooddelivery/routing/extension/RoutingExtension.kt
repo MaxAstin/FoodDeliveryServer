@@ -7,18 +7,16 @@ import com.bunbeauty.fooddelivery.data.model.request.RequestAvailability
 import com.bunbeauty.fooddelivery.routing.model.BodyRequest
 import com.bunbeauty.fooddelivery.routing.model.Request
 import com.bunbeauty.fooddelivery.service.ip.IRequestService
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.features.*
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.server.engine.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.netty.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.util.pipeline.*
+import java.sql.DriverManager.println
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
-
 
 suspend inline fun ApplicationCall.handleParameters(
     vararg parameterNameList: String,
@@ -177,7 +175,6 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.limitRequestNumber(
     }
 }
 
-@OptIn(EngineAPI::class, io.ktor.util.InternalAPI::class)
 fun PipelineContext<Unit, ApplicationCall>.getIp(): String {
     return context::class.memberProperties
         .find { memberProperty ->

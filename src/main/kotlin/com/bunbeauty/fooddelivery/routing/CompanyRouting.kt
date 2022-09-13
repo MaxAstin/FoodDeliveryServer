@@ -6,9 +6,9 @@ import com.bunbeauty.fooddelivery.data.model.company.PatchCompany
 import com.bunbeauty.fooddelivery.data.model.company.PostCompany
 import com.bunbeauty.fooddelivery.routing.extension.adminWithBody
 import com.bunbeauty.fooddelivery.service.company.ICompanyService
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureCompanyRouting() {

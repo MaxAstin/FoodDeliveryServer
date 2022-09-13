@@ -7,7 +7,7 @@ import com.bunbeauty.fooddelivery.data.Constants.JWT_SECRET
 import com.bunbeauty.fooddelivery.data.enums.UserRole
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.data.model.user.GetUser
-import io.ktor.auth.jwt.*
+import io.ktor.server.auth.jwt.*
 
 class JwtService : IJwtService {
 
@@ -36,7 +36,7 @@ class JwtService : IJwtService {
             .sign(algorithm)
     }
 
-    override fun configureAuth(config: JWTAuthenticationProvider.Configuration) = config.run {
+    override fun configureAuth(config: JWTAuthenticationProvider.Config) = config.run {
         verifier(verifier)
         realm = JWT_REALM
         validate { call ->

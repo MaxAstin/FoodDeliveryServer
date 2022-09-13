@@ -10,15 +10,15 @@ import com.bunbeauty.fooddelivery.service.init.IInitService
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.auth.jwt.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import kotlinx.coroutines.launch
-import org.koin.ktor.ext.Koin
-import org.koin.ktor.ext.inject
+import org.koin.ktor.plugin.Koin
 import java.io.InputStream
+import org.koin.ktor.ext.inject
 
 fun main() {
     DatabaseFactory.init()
@@ -53,9 +53,9 @@ fun main() {
                 requestModule
             )
         }
+        val jwtService: IJwtService by inject()
         install(Authentication) {
             jwt {
-                val jwtService: IJwtService by inject()
                 jwtService.configureAuth(this)
             }
         }
