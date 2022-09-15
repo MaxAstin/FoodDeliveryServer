@@ -118,8 +118,8 @@ fun Route.patchClientUser() {
     val clientUserService: IClientUserService by inject()
 
     patch("/client") {
-        clientWithBody<PatchClientUser, GetClientUser>(Constants.UUID_PARAMETER) { bodyRequest ->
-            val clientUserUuid = bodyRequest.request.parameterMap[Constants.UUID_PARAMETER]!!
+        clientWithBody<PatchClientUser, GetClientUser> { bodyRequest ->
+            val clientUserUuid = bodyRequest.request.jwtUser.uuid
             clientUserService.updateClientUserByUuid(clientUserUuid, bodyRequest.body)
         }
     }

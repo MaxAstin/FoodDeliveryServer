@@ -10,6 +10,7 @@ import com.bunbeauty.fooddelivery.data.repo.category.ICategoryRepository
 import com.bunbeauty.fooddelivery.data.repo.menu_product.IMenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
+import com.bunbeauty.fooddelivery.service.menu_product.model.HitsCache
 import org.joda.time.DateTime
 
 class MenuProductService(
@@ -18,6 +19,9 @@ class MenuProductService(
     private val userRepository: IUserRepository,
     private val categoryRepository: ICategoryRepository,
 ) : IMenuProductService {
+
+    @Volatile
+    private var hitCache: HitsCache? = null
 
     override suspend fun createMenuProduct(postMenuProduct: PostMenuProduct, creatorUuid: String): GetMenuProduct? {
         val companyUuid = userRepository.getCompanyUuidByUserUuid(creatorUuid.toUuid()) ?: return null
@@ -67,11 +71,20 @@ class MenuProductService(
         val menuProductList = menuProductRepository.getMenuProductListByCompanyUuid(companyUuid.toUuid())
         val limitTime = DateTime.now().withTimeAtStartOfDay().minusDays(HITS_ORDER_DAY_COUNT).millis
         val orderList = orderRepository.getOrderListByCompanyUuidLimited(companyUuid.toUuid(), limitTime)
-        val hitsCategory = categoryRepository.getHitsCategory()
-        getHitMenuProductUuidList(orderList, HITS_COUNT).forEach { hitMenuProductUuid ->
-            menuProductList.find { menuProduct ->
-                menuProduct.uuid == hitMenuProductUuid
-            }?.categories?.add(hitsCategory)
+
+        if (hitCache?.isActual() != true) {
+            hitCache = HitsCache(
+                hitMenuProductUuidList = getHitMenuProductUuidList(orderList, HITS_COUNT),
+                dateTime = DateTime.now()
+            )
+        }
+        hitCache?.let { hitCache ->
+            val hitsCategory = categoryRepository.getHitsCategory()
+            menuProductList.forEach { menuProduct ->
+                if (hitCache.hitMenuProductUuidList.contains(menuProduct.uuid)) {
+                    menuProduct.categories.add(hitsCategory)
+                }
+            }
         }
 
         return menuProductList
@@ -96,6 +109,5 @@ class MenuProductService(
                 menuProductUuid
             }.toList()
     }
-
 
 }
