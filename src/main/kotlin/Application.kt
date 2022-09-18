@@ -16,9 +16,9 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import kotlinx.coroutines.launch
+import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 import java.io.InputStream
-import org.koin.ktor.ext.inject
 
 fun main() {
     DatabaseFactory.init()
@@ -50,6 +50,7 @@ fun main() {
                 dateTimeModule,
                 versionModule,
                 firebaseModule,
+                paymentModule,
                 requestModule
             )
         }

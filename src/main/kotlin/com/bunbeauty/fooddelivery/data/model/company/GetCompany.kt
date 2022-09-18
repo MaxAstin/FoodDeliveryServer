@@ -9,4 +9,5 @@ data class GetCompany(
     val name: String,
     val delivery: GetDelivery,
     val forceUpdateVersion: GetForceUpdateVersion,
+    val payment: GetPayment
 )
