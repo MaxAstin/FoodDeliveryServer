@@ -100,6 +100,8 @@ class StatisticService(
                 getCafe.uuid == cafeUuid
             } ?: return null
             orderRepository.getOrderListByCafeUuid(selectedCafe.uuid.toUuid(), startTimeMillis, endTimeMillis)
+        }.filter { order ->
+            order.status == OrderStatus.DELIVERED.name
         }
     }
 
@@ -115,9 +117,7 @@ class StatisticService(
         orderList: List<GetCafeOrder>,
         timestampConverter: (Long) -> String,
     ): List<GetStatistic> {
-        return orderList.filter { order ->
-            order.status == OrderStatus.DELIVERED.name
-        }.groupBy { order ->
+        return orderList.groupBy { order ->
             timestampConverter(order.time)
         }.map { orderEntry ->
             GetStatistic(
