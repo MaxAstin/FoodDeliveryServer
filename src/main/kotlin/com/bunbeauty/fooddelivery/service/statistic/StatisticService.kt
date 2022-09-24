@@ -9,15 +9,20 @@ import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrder
 import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
 import com.bunbeauty.fooddelivery.data.model.statistic.GetProductStatistic
 import com.bunbeauty.fooddelivery.data.model.statistic.GetStatistic
+import com.bunbeauty.fooddelivery.data.repo.cafe.ICafeRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
 import com.bunbeauty.fooddelivery.service.date_time.IDateTimeService
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import org.joda.time.DateTime
 
 class StatisticService(
     private val orderRepository: IOrderRepository,
     private val dateTimeService: IDateTimeService,
     private val userRepository: IUserRepository,
+    private val cafeRepository: ICafeRepository,
 ) : IStatisticService {
 
     override suspend fun getStatisticList(userUuid: String, cafeUuid: String, period: String): List<GetStatistic>? {
@@ -30,12 +35,23 @@ class StatisticService(
             .withTimeAtStartOfDay()
             .millis
 
-        val getCafeOrderList = if (cafeUuid == ALL) {
-            val companyUuid = userRepository.getCompanyUuidByUserUuid(userUuid.toUuid()) ?: return null
-            orderRepository.getOrderListByCompanyUuid(companyUuid.toUuid(), limitTimeMillis)
+        val cityUuid = userRepository.getUserByUuid(userUuid.toUuid())?.city?.uuid ?: return null
+        val cafeList = cafeRepository.getCafeListByCityUuid(cityUuid.toUuid())
+        val getCafeOrderList: List<GetCafeOrder> = if (cafeUuid == ALL) {
+            coroutineScope {
+                cafeList.map { cafe ->
+                    async {
+                        orderRepository.getOrderListByCafeUuid(cafe.uuid.toUuid(), limitTimeMillis)
+                    }
+                }.awaitAll().flatten()
+            }
         } else {
-            orderRepository.getOrderListByCafeUuid(cafeUuid.toUuid(), limitTimeMillis)
+            val selectedCafe = cafeList.find { getCafe ->
+                getCafe.uuid == cafeUuid
+            } ?: return null
+            orderRepository.getOrderListByCafeUuid(selectedCafe.uuid.toUuid(), limitTimeMillis)
         }
+
         return mapToStatisticList(getCafeOrderList, getTimestampConverter(statisticPeriod))
     }
 

@@ -78,22 +78,6 @@ class OrderRepository : IOrderRepository {
             }
     }
 
-    override suspend fun getOrderListByCompanyUuid(companyUuid: UUID, limitTimeMillis: Long): List<GetCafeOrder> = query {
-        val companyEntity = CompanyEntity.findById(companyUuid) ?: return@query emptyList()
-
-        companyEntity.cities.flatMap { cityEntity ->
-            cityEntity.cafes
-        }.flatMap { cafeEntity ->
-            cafeEntity.orders
-        }.filter { orderEntity ->
-            orderEntity.time > limitTimeMillis
-        }.sortedByDescending { getCafeOrder ->
-            getCafeOrder.time
-        }.map { orderEntity ->
-            orderEntity.toCafeOrder()
-        }
-    }
-
     override suspend fun getClientOrderByUuid(orderUuid: UUID): GetClientOrder? = query {
         OrderEntity.findById(orderUuid)?.toClientOrder()
     }
