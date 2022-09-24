@@ -1,6 +1,5 @@
 package com.bunbeauty.fooddelivery.service.statistic
 
-import com.bunbeauty.fooddelivery.data.Constants.ALL
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.enums.StatisticPeriod
 import com.bunbeauty.fooddelivery.data.enums.StatisticPeriod.*
@@ -9,6 +8,7 @@ import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrder
 import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
 import com.bunbeauty.fooddelivery.data.model.statistic.GetProductStatistic
 import com.bunbeauty.fooddelivery.data.model.statistic.GetStatistic
+import com.bunbeauty.fooddelivery.data.model.statistic.GetStatisticDetails
 import com.bunbeauty.fooddelivery.data.repo.cafe.ICafeRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
@@ -23,25 +23,75 @@ class StatisticService(
     private val dateTimeService: IDateTimeService,
     private val userRepository: IUserRepository,
     private val cafeRepository: ICafeRepository,
-) : IStatisticService {
+) {
 
-    override suspend fun getStatisticList(userUuid: String, cafeUuid: String, period: String): List<GetStatistic>? {
+    suspend fun getStatisticList(userUuid: String, cafeUuid: String?, period: String): List<GetStatistic>? {
         val statisticPeriod = StatisticPeriod.values().find { statisticPeriod ->
             statisticPeriod.name == period
         } ?: return null
         val currentDateTime = DateTime.now()
-        val limitTimeMillis = currentDateTime.minusMonths(3)
+        val startTimeMillis = currentDateTime.minusMonths(3)
             .minusDays(currentDateTime.dayOfMonth - 1)
             .withTimeAtStartOfDay()
             .millis
+        val endTimeMillis = currentDateTime.millis
 
+        val cafeOrderList = getCafeOrderList(
+            userUuid = userUuid,
+            cafeUuid = cafeUuid,
+            startTimeMillis = startTimeMillis,
+            endTimeMillis = endTimeMillis,
+        ) ?: return null
+
+        return mapToStatisticList(cafeOrderList, getTimestampConverter(statisticPeriod))
+    }
+
+    suspend fun getStatisticDetails(
+        userUuid: String,
+        cafeUuid: String?,
+        period: String,
+        startTimeMillis: Long,
+    ): GetStatisticDetails? {
+        val statisticPeriod = StatisticPeriod.values().find { statisticPeriod ->
+            statisticPeriod.name == period
+        } ?: return null
+        val startDateTime = DateTime(startTimeMillis)
+        val endTimeMillis = when (statisticPeriod) {
+            DAY -> startDateTime.plusDays(1)
+            WEEK -> startDateTime.plusWeeks(1)
+            MONTH -> startDateTime.plusMonths(1)
+        }.millis
+
+        val cafeOrderList = getCafeOrderList(
+            userUuid = userUuid,
+            cafeUuid = cafeUuid,
+            startTimeMillis = startTimeMillis,
+            endTimeMillis = endTimeMillis,
+        ) ?: return null
+
+        val timestampConverter = getTimestampConverter(statisticPeriod)
+        return GetStatisticDetails(
+            period = timestampConverter(startTimeMillis),
+            orderCount = cafeOrderList.size,
+            proceeds = countCost(cafeOrderList),
+            averageCheck = countAverageCheck(cafeOrderList),
+            productStatisticList = getProductStatisticList(cafeOrderList)
+        )
+    }
+
+    private suspend fun getCafeOrderList(
+        userUuid: String,
+        cafeUuid: String?,
+        startTimeMillis: Long,
+        endTimeMillis: Long,
+    ): List<GetCafeOrder>? {
         val cityUuid = userRepository.getUserByUuid(userUuid.toUuid())?.city?.uuid ?: return null
         val cafeList = cafeRepository.getCafeListByCityUuid(cityUuid.toUuid())
-        val getCafeOrderList: List<GetCafeOrder> = if (cafeUuid == ALL) {
+        return if (cafeUuid == null) {
             coroutineScope {
                 cafeList.map { cafe ->
                     async {
-                        orderRepository.getOrderListByCafeUuid(cafe.uuid.toUuid(), limitTimeMillis)
+                        orderRepository.getOrderListByCafeUuid(cafe.uuid.toUuid(), startTimeMillis, endTimeMillis)
                     }
                 }.awaitAll().flatten()
             }
@@ -49,13 +99,11 @@ class StatisticService(
             val selectedCafe = cafeList.find { getCafe ->
                 getCafe.uuid == cafeUuid
             } ?: return null
-            orderRepository.getOrderListByCafeUuid(selectedCafe.uuid.toUuid(), limitTimeMillis)
+            orderRepository.getOrderListByCafeUuid(selectedCafe.uuid.toUuid(), startTimeMillis, endTimeMillis)
         }
-
-        return mapToStatisticList(getCafeOrderList, getTimestampConverter(statisticPeriod))
     }
 
-    fun getTimestampConverter(statisticPeriod: StatisticPeriod): (Long) -> String {
+    private fun getTimestampConverter(statisticPeriod: StatisticPeriod): (Long) -> String {
         return when (statisticPeriod) {
             DAY -> dateTimeService::getDateDDMMMMYYYY
             WEEK -> dateTimeService::getWeekPeriod
@@ -63,7 +111,7 @@ class StatisticService(
         }
     }
 
-    inline fun mapToStatisticList(
+    private inline fun mapToStatisticList(
         orderList: List<GetCafeOrder>,
         timestampConverter: (Long) -> String,
     ): List<GetStatistic> {
@@ -85,44 +133,46 @@ class StatisticService(
         }
     }
 
-    fun getStartPeriodTime(orderList: List<GetCafeOrder>): Long {
+    private fun getStartPeriodTime(orderList: List<GetCafeOrder>): Long {
         return orderList.minOf { getCafeOrder ->
             getCafeOrder.time
         }
     }
 
-    fun countCost(orderList: List<GetCafeOrder>): Int {
+    private fun countCost(orderList: List<GetCafeOrder>): Int {
         return orderList.sumOf { getCafeOrder ->
             countProductListCost(getCafeOrder.oderProductList)
         }
     }
 
-    fun countAverageCheck(orderList: List<GetCafeOrder>): Int {
+    private fun countAverageCheck(orderList: List<GetCafeOrder>): Int {
         return countCost(orderList) / orderList.size
     }
 
-    fun getProductStatisticList(orderList: List<GetCafeOrder>): List<GetProductStatistic> {
+    private fun getProductStatisticList(orderList: List<GetCafeOrder>): List<GetProductStatistic> {
         return orderList.flatMap { getCafeOrder ->
             getCafeOrder.oderProductList
         }.groupBy { getCafeOrder ->
             getCafeOrder.menuProduct.uuid
-        }.map { entry ->
+        }.map { (_, oderProductList) ->
             GetProductStatistic(
-                name = entry.value.first().menuProduct.name,
-                orderCount = entry.value.size,
-                productCount = countProduct(entry.value),
-                proceeds = countProductListCost(entry.value),
+                name = oderProductList.first().menuProduct.name,
+                orderCount = oderProductList.size,
+                productCount = countProduct(oderProductList),
+                proceeds = countProductListCost(oderProductList),
             )
+        }.sortedBy { productStatistic ->
+            productStatistic.proceeds
         }
     }
 
-    fun countProduct(oderProductList: List<GetOrderProduct>): Int {
+    private fun countProduct(oderProductList: List<GetOrderProduct>): Int {
         return oderProductList.sumOf { getOrderProduct ->
             getOrderProduct.count
         }
     }
 
-    fun countProductListCost(oderProductList: List<GetOrderProduct>): Int {
+    private fun countProductListCost(oderProductList: List<GetOrderProduct>): Int {
         return oderProductList.sumOf { getOrderProduct ->
             getOrderProduct.count * getOrderProduct.newPrice
         }

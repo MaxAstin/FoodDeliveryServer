@@ -26,7 +26,7 @@ suspend inline fun ApplicationCall.handleParameters(
         parameters[parameterName] == null
     }
     if (nullParameterName == null) {
-        val nonNullableParameters = parameterNameList.mapNotNull { parameterName ->
+        val nonNullableParameters: List<String> = parameterNameList.mapNotNull { parameterName ->
             parameters[parameterName]
         }
         val parameterMap = parameterNameList.zip(nonNullableParameters).toMap()

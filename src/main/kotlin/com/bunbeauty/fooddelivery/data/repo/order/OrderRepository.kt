@@ -69,9 +69,15 @@ class OrderRepository : IOrderRepository {
                 }
         }
 
-    override suspend fun getOrderListByCafeUuid(cafeUuid: UUID, limitTimeMillis: Long): List<GetCafeOrder> = query {
+    override suspend fun getOrderListByCafeUuid(
+        cafeUuid: UUID,
+        startTimeMillis: Long,
+        endTimeMillis: Long,
+    ): List<GetCafeOrder> = query {
         OrderEntity.find {
-            OrderTable.cafe eq cafeUuid and OrderTable.time.greater(limitTimeMillis)
+            OrderTable.cafe eq cafeUuid and
+                    OrderTable.time.greaterEq(startTimeMillis) and
+                    OrderTable.time.less(endTimeMillis)
         }.orderBy(OrderTable.time to SortOrder.DESC)
             .map { orderEntity ->
                 orderEntity.toCafeOrder()

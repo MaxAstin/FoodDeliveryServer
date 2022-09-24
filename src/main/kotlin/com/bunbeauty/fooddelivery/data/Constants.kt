@@ -22,6 +22,7 @@ object Constants {
     const val CAFE_UUID_PARAMETER = "cafeUuid"
     const val UUID_PARAMETER = "uuid"
     const val PERIOD_PARAMETER = "period"
+    const val START_TIME_PARAMETER = "startTime"
 
     // CODE
     const val CODE_NUMBER_COUNT = 100
@@ -49,6 +50,4 @@ object Constants {
 
     // NOTIFICATION KEYS
     const val ORDER_KOD_KEY = "orderCode"
-
-    const val ALL = "ALL"
 }
