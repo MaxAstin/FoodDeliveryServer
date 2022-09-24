@@ -12,6 +12,7 @@ import com.bunbeauty.fooddelivery.data.model.statistic.GetStatistic
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
 import com.bunbeauty.fooddelivery.service.date_time.IDateTimeService
+import org.joda.time.DateTime
 
 class StatisticService(
     private val orderRepository: IOrderRepository,
@@ -23,23 +24,19 @@ class StatisticService(
         val statisticPeriod = StatisticPeriod.values().find { statisticPeriod ->
             statisticPeriod.name == period
         } ?: return null
+        val currentDateTime = DateTime.now()
+        val limitTimeMillis = currentDateTime.minusMonths(3)
+            .minusDays(currentDateTime.dayOfMonth - 1)
+            .withTimeAtStartOfDay()
+            .millis
 
-        return if (cafeUuid == ALL) {
+        val getCafeOrderList = if (cafeUuid == ALL) {
             val companyUuid = userRepository.getCompanyUuidByUserUuid(userUuid.toUuid()) ?: return null
-            getStatisticByCompanyUuid(companyUuid, statisticPeriod)
+            orderRepository.getOrderListByCompanyUuid(companyUuid.toUuid(), limitTimeMillis)
         } else {
-            getStatisticByCafeUuid(cafeUuid, statisticPeriod)
+            orderRepository.getOrderListByCafeUuid(cafeUuid.toUuid(), limitTimeMillis)
         }
-    }
-
-    suspend fun getStatisticByCafeUuid(cafeUuid: String, statisticPeriod: StatisticPeriod): List<GetStatistic> {
-        val orderList = orderRepository.getOrderListByCafeUuid(cafeUuid.toUuid())
-        return mapToStatisticList(orderList, getTimestampConverter(statisticPeriod))
-    }
-
-    suspend fun getStatisticByCompanyUuid(companyUuid: String, statisticPeriod: StatisticPeriod): List<GetStatistic> {
-        val orderList = orderRepository.getOrderListByCompanyUuid(companyUuid.toUuid())
-        return mapToStatisticList(orderList, getTimestampConverter(statisticPeriod))
+        return mapToStatisticList(getCafeOrderList, getTimestampConverter(statisticPeriod))
     }
 
     fun getTimestampConverter(statisticPeriod: StatisticPeriod): (Long) -> String {
