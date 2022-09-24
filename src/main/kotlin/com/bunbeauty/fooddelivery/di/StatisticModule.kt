@@ -5,5 +5,12 @@ import com.bunbeauty.fooddelivery.service.statistic.StatisticService
 import org.koin.dsl.module
 
 val statisticModule = module(createdAtStart = true) {
-    single<IStatisticService> { StatisticService(get(), get(), get()) }
+    single<IStatisticService> {
+        StatisticService(
+            orderRepository = get(),
+            dateTimeService = get(),
+            userRepository = get(),
+            cafeRepository = get()
+        )
+    }
 }
