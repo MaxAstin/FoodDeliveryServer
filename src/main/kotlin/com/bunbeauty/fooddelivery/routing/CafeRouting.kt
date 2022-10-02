@@ -27,8 +27,8 @@ fun Routing.getCafesByCityUuid() {
     val cafeService: ICafeService by inject()
 
     get("/cafe") {
-        safely(CITY_UUID_PARAMETER) { parameterMap ->
-            val cityUuid = parameterMap[CITY_UUID_PARAMETER]!!
+        safely {
+            val cityUuid = call.parameters[CITY_UUID_PARAMETER] ?: error("$CITY_UUID_PARAMETER is required")
             val cafeList = cafeService.getCafeListByCityUuid(cityUuid)
             call.respondOk(cafeList)
         }

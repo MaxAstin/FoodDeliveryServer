@@ -36,15 +36,10 @@ suspend inline fun ApplicationCall.handleParameters(
     }
 }
 
-suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(
-    vararg parameterNameList: String,
-    block: (Map<String, String>) -> Unit,
-) {
+suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(block: () -> Unit) {
     println("request " + context.request.path())
     try {
-        call.handleParameters(*parameterNameList) { parameterMap ->
-            block(parameterMap)
-        }
+        block()
     } catch (exception: Exception) {
         call.respondBad("Exception: ${exception.message}")
         exception.printStackTrace()
@@ -52,49 +47,36 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(
 }
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.manager(
-    vararg parameterNameList: String,
     block: (Request) -> Unit,
 ) {
-    checkRights(parameterNameList, block) { jwtUser ->
+    checkRights(block) { jwtUser ->
         jwtUser.isManager()
     }
 }
 
-suspend inline fun PipelineContext<Unit, ApplicationCall>.admin(
-    vararg parameterNameList: String,
-    block: (Request) -> Unit,
-) {
-    checkRights(parameterNameList, block) { jwtUser ->
+suspend inline fun PipelineContext<Unit, ApplicationCall>.admin(block: (Request) -> Unit) {
+    checkRights(block) { jwtUser ->
         jwtUser.isAdmin()
     }
 }
 
-suspend inline fun PipelineContext<Unit, ApplicationCall>.client(
-    vararg parameterNameList: String,
-    block: (Request) -> Unit,
-) {
-    checkRights(parameterNameList, block) { jwtUser ->
+suspend inline fun PipelineContext<Unit, ApplicationCall>.client(block: (Request) -> Unit) {
+    checkRights(block) { jwtUser ->
         jwtUser.isClient()
     }
 }
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.checkRights(
-    parameterNameList: Array<out String>,
     block: (Request) -> Unit,
     checkBlock: (JwtUser) -> Boolean,
 ) {
-    safely(*parameterNameList) { parameterList ->
+    safely {
         val jwtUser = call.authentication.principal as? JwtUser
         if (jwtUser == null) {
             call.respond(HttpStatusCode.Unauthorized)
         } else {
             if (checkBlock(jwtUser)) {
-                block(
-                    Request(
-                        jwtUser = jwtUser,
-                        parameterMap = parameterList
-                    )
-                )
+                block(Request(jwtUser = jwtUser))
             } else {
                 call.respond(HttpStatusCode.Forbidden)
             }
@@ -103,28 +85,25 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.checkRights(
 }
 
 suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.managerWithBody(
-    vararg parameterNameList: String,
     block: (BodyRequest<B>) -> G?,
 ) {
-    manager(*parameterNameList) { request ->
+    manager { request ->
         handleBody(request, block)
     }
 }
 
 suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.adminWithBody(
-    vararg parameterNameList: String,
     block: (BodyRequest<B>) -> G?,
 ) {
-    admin(*parameterNameList) { request ->
+    admin { request ->
         handleBody(request, block)
     }
 }
 
 suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.clientWithBody(
-    vararg parameterNameList: String,
     block: (BodyRequest<B>) -> G?,
 ) {
-    client(*parameterNameList) { request ->
+    client { request ->
         handleBody(request, block)
     }
 }
@@ -148,8 +127,8 @@ suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>
 }
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.adminDelete(deleteBlock: (String) -> Any?) {
-    admin(UUID_PARAMETER) { request ->
-        val orderUuid = request.parameterMap[UUID_PARAMETER]!!
+    admin {
+        val orderUuid = call.parameters[UUID_PARAMETER] ?: error("$UUID_PARAMETER is required")
         val deletedObject = deleteBlock(orderUuid)
         if (deletedObject == null) {
             call.respondNotFound()

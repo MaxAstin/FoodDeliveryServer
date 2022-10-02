@@ -27,8 +27,8 @@ fun Routing.getStreetsByCityUuid() {
     val streetService: IStreetService by inject()
 
     get("/street") {
-        safely(CITY_UUID_PARAMETER) { parameterMap ->
-            val cityUuid = parameterMap[CITY_UUID_PARAMETER]!!
+        safely {
+            val cityUuid = call.parameters[CITY_UUID_PARAMETER] ?: error("$CITY_UUID_PARAMETER is required")
             val streetList = streetService.getStreetListByCompanyUuid(cityUuid)
             call.respondOk(streetList)
         }

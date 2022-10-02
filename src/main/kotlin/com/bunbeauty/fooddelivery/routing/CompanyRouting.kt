@@ -37,8 +37,8 @@ fun Route.changeCompany() {
     val companyService: ICompanyService by inject()
 
     patch("/company") {
-        adminWithBody<PatchCompany, GetCompany>(COMPANY_UUID_PARAMETER) { bodyRequest ->
-            val companyUuid = bodyRequest.request.parameterMap[COMPANY_UUID_PARAMETER]!!
+        adminWithBody<PatchCompany, GetCompany> { bodyRequest ->
+            val companyUuid = call.parameters[COMPANY_UUID_PARAMETER] ?: error("$COMPANY_UUID_PARAMETER is required")
             companyService.changeCompanyByUuid(companyUuid, bodyRequest.body)
         }
     }

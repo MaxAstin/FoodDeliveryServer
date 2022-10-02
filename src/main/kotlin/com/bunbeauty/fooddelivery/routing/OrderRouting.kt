@@ -37,8 +37,8 @@ fun Route.getOrders() {
     val orderService: IOrderService by inject()
 
     get("/order") {
-        manager(CAFE_UUID_PARAMETER) { request ->
-            val cafeUuid = request.parameterMap[CAFE_UUID_PARAMETER]!!
+        manager {
+            val cafeUuid = call.parameters[CAFE_UUID_PARAMETER] ?: error("$CAFE_UUID_PARAMETER is required")
             val addressList = orderService.getOrderListByCafeUuid(cafeUuid)
             call.respondOk(addressList)
         }
@@ -64,8 +64,8 @@ fun Route.patchOrder() {
     val orderService: IOrderService by inject()
 
     patch("/order") {
-        managerWithBody<PatchOrder, GetCafeOrder>(UUID_PARAMETER) { bodyRequest ->
-            val orderUuid = bodyRequest.request.parameterMap[UUID_PARAMETER]!!
+        managerWithBody<PatchOrder, GetCafeOrder> { bodyRequest ->
+            val orderUuid = call.parameters[UUID_PARAMETER] ?: error("$UUID_PARAMETER is required")
             orderService.changeOrder(orderUuid, bodyRequest.body)
         }
     }
@@ -108,15 +108,14 @@ fun Route.observeManagerOrders() {
 
     webSocket("/user/order/subscribe") {
         managerSocket(
-            CAFE_UUID_PARAMETER,
-            block = { request ->
-                val cafeUuid = request.parameterMap[CAFE_UUID_PARAMETER]!!
+            block = {
+                val cafeUuid = call.parameters[CAFE_UUID_PARAMETER] ?: error("$CAFE_UUID_PARAMETER is required")
                 orderService.observeCafeOrderUpdates(cafeUuid).onEach { cafeOrder ->
                     outgoing.send(Frame.Text(json.encodeToString(GetCafeOrder.serializer(), cafeOrder)))
                 }.launchIn(this)
             },
-            closeBlock = { request ->
-                val cafeUuid = request.parameterMap[CAFE_UUID_PARAMETER]!!
+            closeBlock = {
+                val cafeUuid = call.parameters[CAFE_UUID_PARAMETER] ?: error("$CAFE_UUID_PARAMETER is required")
                 orderService.userDisconnect(cafeUuid)
             }
         )

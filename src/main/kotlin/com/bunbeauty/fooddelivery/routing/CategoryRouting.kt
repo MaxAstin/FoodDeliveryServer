@@ -30,8 +30,8 @@ fun Routing.getCategories() {
     val categoryService: ICategoryService by inject()
 
     get("/category") {
-        safely(COMPANY_UUID_PARAMETER) { parameterMap ->
-            val companyUuid = parameterMap[COMPANY_UUID_PARAMETER]!!
+        safely {
+            val companyUuid = call.parameters[COMPANY_UUID_PARAMETER] ?: error("$COMPANY_UUID_PARAMETER is required")
             val categoryList = categoryService.getCategoryListByCompanyUuid(companyUuid)
             call.respondOk(categoryList)
         }
@@ -54,8 +54,8 @@ fun Route.patchCategory() {
     val categoryService: ICategoryService by inject()
 
     patch("/category") {
-        managerWithBody<PatchCategory, GetCategory>(UUID_PARAMETER) { bodyRequest ->
-            val categoryUuid = bodyRequest.request.parameterMap[UUID_PARAMETER]!!
+        managerWithBody<PatchCategory, GetCategory> { bodyRequest ->
+            val categoryUuid = call.parameters[UUID_PARAMETER] ?: error("$UUID_PARAMETER is required")
             categoryService.updateCategory(categoryUuid, bodyRequest.body)
         }
     }

@@ -27,8 +27,8 @@ fun Routing.getAllCities() {
     val cityService: ICityService by inject()
 
     get("/city") {
-        safely(COMPANY_UUID_PARAMETER) { parameterMap ->
-            val companyUuid = parameterMap[COMPANY_UUID_PARAMETER]!!
+        safely {
+            val companyUuid = call.parameters[COMPANY_UUID_PARAMETER] ?: error("$COMPANY_UUID_PARAMETER is required")
             val cityList = cityService.getCityListByCompanyUuid(companyUuid)
             call.respondOk(cityList)
         }

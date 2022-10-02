@@ -30,8 +30,8 @@ fun Routing.getAllMenuProducts() {
     val menuProductService: IMenuProductService by inject()
 
     get("/menu_product") {
-        safely(COMPANY_UUID_PARAMETER) { parameterMap ->
-            val companyUuid = parameterMap[COMPANY_UUID_PARAMETER]!!
+        safely {
+            val companyUuid = call.parameters[COMPANY_UUID_PARAMETER] ?: error("$COMPANY_UUID_PARAMETER is required")
             val menuProductList = menuProductService.getMenuProductListByCompanyUuid(companyUuid)
             call.respondOk(menuProductList)
         }
@@ -54,8 +54,8 @@ fun Route.patchMenuProduct() {
     val menuProductService: IMenuProductService by inject()
 
     patch("/menu_product") {
-        managerWithBody<PatchMenuProduct, GetMenuProduct>(UUID_PARAMETER) { bodyRequest ->
-            val menuProductUuid = bodyRequest.request.parameterMap[UUID_PARAMETER]!!
+        managerWithBody<PatchMenuProduct, GetMenuProduct> { bodyRequest ->
+            val menuProductUuid = call.parameters[UUID_PARAMETER] ?: error("$UUID_PARAMETER is required")
             menuProductService.updateMenuProduct(menuProductUuid, bodyRequest.body)
         }
     }

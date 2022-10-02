@@ -26,9 +26,9 @@ fun Route.getStatistic() {
     val statisticService: StatisticService by inject()
 
     get("/statistic") {
-        manager(CAFE_UUID_PARAMETER, PERIOD_PARAMETER) { request ->
-            val cafeUuid = request.parameterMap[CAFE_UUID_PARAMETER]
-            val period = request.parameterMap[PERIOD_PARAMETER]!!
+        manager { request ->
+            val cafeUuid = call.parameters[CAFE_UUID_PARAMETER]
+            val period = call.parameters[PERIOD_PARAMETER] ?: error("$PERIOD_PARAMETER is required")
             val statisticList = statisticService.getStatisticList(request.jwtUser.uuid, cafeUuid, period)
             if (statisticList == null) {
                 call.respondBad("Wrong parameters values")
@@ -39,10 +39,11 @@ fun Route.getStatistic() {
     }
 
     get("/statistic/details") {
-        manager(CAFE_UUID_PARAMETER, PERIOD_PARAMETER, START_TIME_PARAMETER) { request ->
-            val cafeUuid = request.parameterMap[CAFE_UUID_PARAMETER]
-            val period = request.parameterMap[PERIOD_PARAMETER]!!
-            val startTime = request.parameterMap[START_TIME_PARAMETER]!!.toLong()
+        manager { request ->
+            val cafeUuid = call.parameters[CAFE_UUID_PARAMETER]
+            val period = call.parameters[PERIOD_PARAMETER] ?: error("$PERIOD_PARAMETER is required")
+            val startTime =
+                call.parameters[START_TIME_PARAMETER]?.toLong() ?: error("$START_TIME_PARAMETER is required")
             val statisticList = statisticService.getStatisticDetails(request.jwtUser.uuid, cafeUuid, period, startTime)
             if (statisticList == null) {
                 call.respondBad("Wrong parameters values")
