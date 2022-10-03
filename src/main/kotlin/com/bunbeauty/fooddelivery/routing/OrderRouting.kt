@@ -8,8 +8,10 @@ import com.bunbeauty.fooddelivery.data.model.order.PatchOrder
 import com.bunbeauty.fooddelivery.data.model.order.PostOrder
 import com.bunbeauty.fooddelivery.routing.extension.*
 import com.bunbeauty.fooddelivery.service.order.IOrderService
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
@@ -27,6 +29,7 @@ fun Application.configureOrderRouting() {
             patchOrder()
             deleteOrder()
             observeClientOrders()
+            getClientOrdersSse()
             observeManagerOrders()
         }
     }
@@ -98,6 +101,23 @@ fun Route.observeClientOrders() {
                 orderService.clientDisconnect(request.jwtUser.uuid)
             }
         )
+    }
+}
+
+fun Route.getClientOrdersSse() {
+
+    val orderService: IOrderService by inject()
+    val json: Json by inject()
+
+    get("/client/order/sse") {
+        client { request ->
+            call.respondTextWriter(contentType = ContentType.Text.EventStream) {
+                orderService.observeClientOrderUpdates(request.jwtUser.uuid).onEach { clientOrder ->
+                    write(json.encodeToString(GetClientOrder.serializer(), clientOrder))
+                    flush()
+                }.launchIn(this@get)
+            }
+        }
     }
 }
 
