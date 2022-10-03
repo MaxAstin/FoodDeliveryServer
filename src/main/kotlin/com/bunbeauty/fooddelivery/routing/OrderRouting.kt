@@ -113,7 +113,9 @@ fun Route.getClientOrdersSse() {
         client { request ->
             call.respondTextWriter(contentType = ContentType.Text.EventStream) {
                 orderService.observeClientOrderUpdates(request.jwtUser.uuid).onEach { clientOrder ->
-                    write(json.encodeToString(GetClientOrder.serializer(), clientOrder))
+                    val clientOrderJson = json.encodeToString(GetClientOrder.serializer(), clientOrder)
+                    println("sent $clientOrderJson")
+                    write(clientOrderJson)
                     flush()
                 }.launchIn(this@get)
             }
