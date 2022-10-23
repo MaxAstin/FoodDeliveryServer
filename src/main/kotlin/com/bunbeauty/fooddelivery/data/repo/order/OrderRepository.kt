@@ -4,6 +4,7 @@ import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.*
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrder
+import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrderDetails
 import com.bunbeauty.fooddelivery.data.model.order.GetClientOrder
 import com.bunbeauty.fooddelivery.data.model.order.InsertOrder
 import com.bunbeauty.fooddelivery.data.table.OrderTable
@@ -56,6 +57,10 @@ class OrderRepository : IOrderRepository {
             .map { orderEntity ->
                 orderEntity.toCafeOrder()
             }
+    }
+
+    override suspend fun getOrderByUuid(orderUuid: UUID): GetCafeOrderDetails? = query {
+        OrderEntity.findById(orderUuid)?.toCafeOrderDetails()
     }
 
     override suspend fun getOrderListByCompanyUuidLimited(companyUuid: UUID, limitTime: Long): List<GetCafeOrder> =

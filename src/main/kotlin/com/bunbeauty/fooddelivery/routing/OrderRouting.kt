@@ -25,11 +25,11 @@ fun Application.configureOrderRouting() {
     routing {
         authenticate {
             getOrders()
+            getOrderDetails()
             postOrder()
             patchOrder()
             deleteOrder()
             observeClientOrders()
-            getClientOrdersSse()
             observeManagerOrders()
         }
     }
@@ -42,8 +42,21 @@ fun Route.getOrders() {
     get("/order") {
         manager {
             val cafeUuid = call.parameters[CAFE_UUID_PARAMETER] ?: error("$CAFE_UUID_PARAMETER is required")
-            val addressList = orderService.getOrderListByCafeUuid(cafeUuid)
-            call.respondOk(addressList)
+            val orderList = orderService.getOrderListByCafeUuid(cafeUuid)
+            call.respondOk(orderList)
+        }
+    }
+}
+
+fun Route.getOrderDetails() {
+
+    val orderService: IOrderService by inject()
+
+    get("/order/details") {
+        manager {
+            val orderUuid = call.parameters[UUID_PARAMETER] ?: error("$UUID_PARAMETER is required")
+            val order = orderService.getOrderByUuid(orderUuid)
+            call.respondOkOrBad(order)
         }
     }
 }
@@ -101,25 +114,6 @@ fun Route.observeClientOrders() {
                 orderService.clientDisconnect(request.jwtUser.uuid)
             }
         )
-    }
-}
-
-fun Route.getClientOrdersSse() {
-
-    val orderService: IOrderService by inject()
-    val json: Json by inject()
-
-    get("/client/order/sse") {
-        client { request ->
-            call.respondTextWriter(contentType = ContentType.Text.EventStream) {
-                orderService.observeClientOrderUpdates(request.jwtUser.uuid).onEach { clientOrder ->
-                    val clientOrderJson = json.encodeToString(GetClientOrder.serializer(), clientOrder)
-                    println("sent $clientOrderJson")
-                    write(clientOrderJson)
-                    flush()
-                }.launchIn(this@get)
-            }
-        }
     }
 }
 

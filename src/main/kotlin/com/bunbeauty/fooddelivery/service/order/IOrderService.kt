@@ -1,15 +1,13 @@
 package com.bunbeauty.fooddelivery.service.order
 
-import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrder
-import com.bunbeauty.fooddelivery.data.model.order.GetClientOrder
-import com.bunbeauty.fooddelivery.data.model.order.PatchOrder
-import com.bunbeauty.fooddelivery.data.model.order.PostOrder
+import com.bunbeauty.fooddelivery.data.model.order.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 
 interface IOrderService {
 
     suspend fun getOrderListByCafeUuid(cafeUuid: String): List<GetCafeOrder>
+    suspend fun getOrderByUuid(uuid: String): GetCafeOrderDetails?
     suspend fun createOrder(clientUserUuid: String, postOrder: PostOrder): GetClientOrder?
     suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder?
     suspend fun deleteOrder(orderUuid: String): GetCafeOrder?

@@ -93,6 +93,10 @@ class OrderService(
         return orderRepository.getOrderListByCafeUuidLimited(cafeUuid.toUuid(), limitTime)
     }
 
+    override suspend fun getOrderByUuid(uuid: String): GetCafeOrderDetails? {
+        return orderRepository.getOrderByUuid(uuid.toUuid())
+    }
+
     override suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder? {
         val getCafeOrder = orderRepository.updateOrderStatusByUuid(orderUuid.toUuid(), patchOrder.status)
 

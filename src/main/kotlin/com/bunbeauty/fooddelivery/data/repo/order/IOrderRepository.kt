@@ -1,6 +1,7 @@
 package com.bunbeauty.fooddelivery.data.repo.order
 
 import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrder
+import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrderDetails
 import com.bunbeauty.fooddelivery.data.model.order.GetClientOrder
 import com.bunbeauty.fooddelivery.data.model.order.InsertOrder
 import java.util.*
@@ -9,6 +10,7 @@ interface IOrderRepository {
 
     suspend fun insertOrder(insertOrder: InsertOrder): GetClientOrder
     suspend fun getOrderListByCafeUuidLimited(cafeUuid: UUID, limitTime: Long): List<GetCafeOrder>
+    suspend fun getOrderByUuid(orderUuid: UUID): GetCafeOrderDetails?
     suspend fun getOrderListByCompanyUuidLimited(companyUuid: UUID, limitTime: Long): List<GetCafeOrder>
     suspend fun getOrderListByCafeUuid(cafeUuid: UUID, startTimeMillis: Long, endTimeMillis: Long): List<GetCafeOrder>
     suspend fun getClientOrderByUuid(orderUuid: UUID): GetClientOrder?

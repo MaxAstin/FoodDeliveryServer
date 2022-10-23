@@ -1,6 +1,8 @@
 package com.bunbeauty.fooddelivery.data.entity
 
+import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrder
+import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrderDetails
 import com.bunbeauty.fooddelivery.data.model.order.GetClientOrder
 import com.bunbeauty.fooddelivery.data.table.OrderProductTable
 import com.bunbeauty.fooddelivery.data.table.OrderTable
@@ -61,5 +63,37 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         oderProductList = oderProducts.map { oderProductEntity ->
             oderProductEntity.toOrderProduct()
         }
+    )
+
+    fun toCafeOrderDetails() = GetCafeOrderDetails(
+        uuid = uuid,
+        code = code,
+        status = status,
+        time = time,
+        timeZone = cafe.city.timeZone,
+        isDelivery = isDelivery,
+        deferredTime = deferredTime,
+        addressDescription = addressDescription,
+        comment = comment,
+        deliveryCost = deliveryCost,
+        clientUser = clientUser.toCafeUser(),
+        cafeUuid = cafe.uuid,
+        oderProductList = oderProducts.map { oderProductEntity ->
+            oderProductEntity.toOrderProduct()
+        },
+        availableStatusList = buildList {
+            add(OrderStatus.NOT_ACCEPTED.name)
+            if (deferredTime != null) {
+                add(OrderStatus.ACCEPTED.name)
+            }
+            add(OrderStatus.PREPARING.name)
+            if (isDelivery) {
+                add(OrderStatus.SENT_OUT.name)
+            } else {
+                add(OrderStatus.DONE.name)
+            }
+            add(OrderStatus.DELIVERED.name)
+            add(OrderStatus.CANCELED.name)
+        },
     )
 }

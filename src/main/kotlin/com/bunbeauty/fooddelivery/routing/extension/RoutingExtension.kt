@@ -179,6 +179,14 @@ suspend inline fun <reified T : Any> ApplicationCall.respondOk(model: T) {
     respond(HttpStatusCode.OK, model)
 }
 
+suspend inline fun <reified T : Any> ApplicationCall.respondOkOrBad(model: T?) {
+    if (model == null) {
+        respond(HttpStatusCode.BadRequest, "Data not found")
+    } else {
+        respondOk(model)
+    }
+}
+
 suspend inline fun <reified T : Any> ApplicationCall.respondOk(list: List<T>) {
     respond(HttpStatusCode.OK, list.toListWrapper())
 }
