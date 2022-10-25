@@ -72,7 +72,9 @@ class MenuProductService(
         val limitTime = DateTime.now().withTimeAtStartOfDay().minusDays(HITS_ORDER_DAY_COUNT).millis
         val orderList = orderRepository.getOrderListByCompanyUuidLimited(companyUuid.toUuid(), limitTime)
 
-        if (hitCache?.isActual() != true) {
+        val cache = hitCache
+        if (cache == null || !cache.isActual() || cache.hitMenuProductUuidList.size < HITS_COUNT) {
+            println("hits calculation")
             hitCache = HitsCache(
                 hitMenuProductUuidList = getHitMenuProductUuidList(orderList, HITS_COUNT),
                 dateTime = DateTime.now()

@@ -4,7 +4,7 @@ import org.joda.time.DateTime
 
 class HitsCache(
     val hitMenuProductUuidList: List<String>,
-    val dateTime: DateTime
+    private val dateTime: DateTime
 ) {
 
     fun isActual(): Boolean {
