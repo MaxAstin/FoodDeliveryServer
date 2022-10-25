@@ -85,6 +85,7 @@ class MenuProductService(
                     menuProduct.categories.add(hitsCategory)
                 }
             }
+            println("hits ${hitCache.hitMenuProductUuidList.joinToString()}")
         }
 
         return menuProductList
