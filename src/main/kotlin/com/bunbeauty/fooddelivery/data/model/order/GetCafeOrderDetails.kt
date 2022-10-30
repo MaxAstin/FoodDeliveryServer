@@ -17,6 +17,8 @@ data class GetCafeOrderDetails(
     val clientUser: GetCafeClientUser,
     val cafeUuid: String,
     val deliveryCost: Int?,
+    val oldTotalCost: Int?,
+    val newTotalCost: Int,
     val oderProductList: List<GetOrderProduct>,
     val availableStatusList: List<String>
 )

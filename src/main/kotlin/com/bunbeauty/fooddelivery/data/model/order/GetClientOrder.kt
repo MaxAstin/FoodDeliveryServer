@@ -14,6 +14,8 @@ data class GetClientOrder(
     val addressDescription: String,
     val comment: String?,
     val deliveryCost: Int?,
+    val oldTotalCost: Int?,
+    val newTotalCost: Int,
     val clientUserUuid: String,
     val oderProductList: List<GetOrderProduct>,
 )

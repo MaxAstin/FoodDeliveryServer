@@ -41,6 +41,8 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         addressDescription = addressDescription,
         comment = comment,
         deliveryCost = deliveryCost,
+        oldTotalCost = calculateOldTotalCost(),
+        newTotalCost = calculateNewTotalCost(),
         clientUserUuid = clientUser.uuid,
         oderProductList = oderProducts.map { oderProductEntity ->
             oderProductEntity.toOrderProduct()
@@ -76,6 +78,8 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         addressDescription = addressDescription,
         comment = comment,
         deliveryCost = deliveryCost,
+        oldTotalCost = calculateOldTotalCost(),
+        newTotalCost = calculateNewTotalCost(),
         clientUser = clientUser.toCafeUser(),
         cafeUuid = cafe.uuid,
         oderProductList = oderProducts.map { oderProductEntity ->
@@ -96,4 +100,24 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
             add(OrderStatus.CANCELED.name)
         },
     )
+
+    private fun calculateNewTotalCost(): Int {
+        return oderProducts.sumOf { orderProductEntity ->
+            orderProductEntity.count * orderProductEntity.newPrice
+        } + (deliveryCost ?: 0)
+    }
+
+    private fun calculateOldTotalCost(): Int? {
+        val isOldTotalCostEnabled = oderProducts.any { orderProductEntity ->
+            orderProductEntity.oldPrice != null
+        }
+        return if (isOldTotalCostEnabled) {
+            oderProducts.sumOf { orderProductEntity ->
+                orderProductEntity.count * (orderProductEntity.oldPrice ?: orderProductEntity.newPrice)
+            } + (deliveryCost ?: 0)
+        } else {
+            null
+        }
+    }
+
 }
