@@ -1,6 +1,7 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.CAFE_UUID_PARAMETER
+import com.bunbeauty.fooddelivery.data.Constants.COUNT_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrder
 import com.bunbeauty.fooddelivery.data.model.order.GetClientOrder
@@ -8,10 +9,9 @@ import com.bunbeauty.fooddelivery.data.model.order.PatchOrder
 import com.bunbeauty.fooddelivery.data.model.order.PostOrder
 import com.bunbeauty.fooddelivery.routing.extension.*
 import com.bunbeauty.fooddelivery.service.order.IOrderService
-import io.ktor.http.*
+import io.ktor.client.request.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
@@ -24,8 +24,9 @@ fun Application.configureOrderRouting() {
 
     routing {
         authenticate {
-            getOrders()
-            getOrderDetails()
+            getCafeOrders()
+            getCafeOrderDetails()
+            getClientOrders()
             postOrder()
             patchOrder()
             deleteOrder()
@@ -35,7 +36,7 @@ fun Application.configureOrderRouting() {
     }
 }
 
-fun Route.getOrders() {
+fun Route.getCafeOrders() {
 
     val orderService: IOrderService by inject()
 
@@ -48,7 +49,7 @@ fun Route.getOrders() {
     }
 }
 
-fun Route.getOrderDetails() {
+fun Route.getCafeOrderDetails() {
 
     val orderService: IOrderService by inject()
 
@@ -57,6 +58,19 @@ fun Route.getOrderDetails() {
             val orderUuid = call.parameters[UUID_PARAMETER] ?: error("$UUID_PARAMETER is required")
             val order = orderService.getOrderByUuid(orderUuid)
             call.respondOkOrBad(order)
+        }
+    }
+}
+
+fun Route.getClientOrders() {
+
+    val orderService: IOrderService by inject()
+
+    get("/client/order") {
+        client { request ->
+            val count = call.parameters[COUNT_PARAMETER]?.toIntOrNull()
+            val orderList = orderService.getOrderListByUserUuid(request.jwtUser.uuid, count)
+            call.respondOk(orderList)
         }
     }
 }

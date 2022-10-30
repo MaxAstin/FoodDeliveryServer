@@ -20,7 +20,6 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import kotlinx.coroutines.flow.SharedFlow
 import org.joda.time.DateTime
-import java.util.concurrent.atomic.AtomicInteger
 
 class OrderService(
     private val orderRepository: IOrderRepository,
@@ -91,6 +90,10 @@ class OrderService(
     override suspend fun getOrderListByCafeUuid(cafeUuid: String): List<GetCafeOrder> {
         val limitTime = DateTime.now().withTimeAtStartOfDay().minusDays(ORDER_HISTORY_DAY_COUNT).millis
         return orderRepository.getOrderListByCafeUuidLimited(cafeUuid.toUuid(), limitTime)
+    }
+
+    override suspend fun getOrderListByUserUuid(userUuid: String, count: Int?): List<GetClientOrder> {
+        return orderRepository.getOrderListByUserUuid(userUuid.toUuid(), count)
     }
 
     override suspend fun getOrderByUuid(uuid: String): GetCafeOrderDetails? {

@@ -59,6 +59,22 @@ class OrderRepository : IOrderRepository {
             }
     }
 
+    override suspend fun getOrderListByUserUuid(userUuid: UUID, count: Int?): List<GetClientOrder> = query {
+        OrderEntity.find {
+            (OrderTable.clientUser eq userUuid)
+        }.orderBy(OrderTable.time to SortOrder.DESC)
+            .let { orderEntityList ->
+                if (count != null) {
+                    orderEntityList.limit(count)
+                } else {
+                    orderEntityList
+                }
+            }
+            .map { orderEntity ->
+                orderEntity.toClientOrder()
+            }
+    }
+
     override suspend fun getOrderByUuid(orderUuid: UUID): GetCafeOrderDetails? = query {
         OrderEntity.findById(orderUuid)?.toCafeOrderDetails()
     }

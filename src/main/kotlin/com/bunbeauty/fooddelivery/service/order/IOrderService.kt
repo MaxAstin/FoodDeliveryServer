@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.SharedFlow
 interface IOrderService {
 
     suspend fun getOrderListByCafeUuid(cafeUuid: String): List<GetCafeOrder>
+    suspend fun getOrderListByUserUuid(userUuid: String, count: Int?): List<GetClientOrder>
     suspend fun getOrderByUuid(uuid: String): GetCafeOrderDetails?
     suspend fun createOrder(clientUserUuid: String, postOrder: PostOrder): GetClientOrder?
     suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder?
