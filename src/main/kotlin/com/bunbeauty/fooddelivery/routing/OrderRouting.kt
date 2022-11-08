@@ -141,6 +141,7 @@ fun Route.observeManagerOrders() {
             block = {
                 val cafeUuid = call.parameters[CAFE_UUID_PARAMETER] ?: error("$CAFE_UUID_PARAMETER is required")
                 orderService.observeCafeOrderUpdates(cafeUuid).onEach { cafeOrder ->
+                    println("observeManagerOrders send frame")
                     outgoing.send(Frame.Text(json.encodeToString(GetCafeOrder.serializer(), cafeOrder)))
                 }.launchIn(this)
             },

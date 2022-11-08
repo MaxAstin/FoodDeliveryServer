@@ -79,7 +79,10 @@ class OrderService(
             },
         )
         val clientOrder = orderRepository.insertOrder(insertOrder)
+        println("createOrder ${clientOrder.uuid}")
         val cafeOrder = orderRepository.getCafeOrderByUuid(clientOrder.uuid.toUuid())
+        println("createOrder $cafeOrder")
+        println("createOrder ${cafeOrder?.cafeUuid}")
         cafeSessionHandler.emitNewValue(cafeOrder?.cafeUuid, cafeOrder)
 
         sendNotification(cafeOrder)
