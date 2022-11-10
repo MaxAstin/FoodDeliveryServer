@@ -61,7 +61,13 @@ class ClientUserRepository : IClientUserRepository {
     }
 
     override suspend fun getClientUserByUuid(uuid: UUID): GetClientUser? = query {
-        ClientUserEntity.findById(uuid)?.toClientUser()
+        ClientUserEntity.findById(uuid)?.let { clientUserEntity ->
+            if (clientUserEntity.isActive) {
+                clientUserEntity.toClientUser()
+            } else {
+                null
+            }
+        }
     }
 
     override suspend fun insertClientUser(insertClientUser: InsertClientUser): GetClientUser = query {
@@ -73,13 +79,19 @@ class ClientUserRepository : IClientUserRepository {
     }
 
     override suspend fun updateClientUserByUuid(updateClientUser: UpdateClientUser): GetClientUser? = query {
-        ClientUserEntity.findById(updateClientUser.uuid)?.apply {
-            updateClientUser.email?.let { newEmail ->
-                email = newEmail
+        ClientUserEntity.findById(updateClientUser.uuid)?.let { clientUserEntity ->
+            if (clientUserEntity.isActive) {
+                clientUserEntity.apply {
+                    updateClientUser.email?.let { newEmail ->
+                        email = newEmail
+                    }
+                    updateClientUser.isActive?.let { newIsActive ->
+                        isActive = newIsActive
+                    }
+                }.toClientUser()
+            } else {
+                null
             }
-            updateClientUser.isActive?.let { newIsActive ->
-                isActive = newIsActive
-            }
-        }?.toClientUser()
+        }
     }
 }
