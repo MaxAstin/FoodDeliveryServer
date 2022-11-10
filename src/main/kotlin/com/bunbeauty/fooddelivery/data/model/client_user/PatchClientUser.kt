@@ -4,5 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PatchClientUser(
-    val email: String?
+    val email: String? = null,
+    val isActive: Boolean? = null,
 )

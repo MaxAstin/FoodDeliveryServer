@@ -16,6 +16,7 @@ class ClientUserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     val uuid: String = uuid.value.toString()
     var phoneNumber: String by ClientUserTable.phoneNumber
     var email: String? by ClientUserTable.email
+    var isActive: Boolean by ClientUserTable.isActive
     var company: CompanyEntity by CompanyEntity referencedOn ClientUserTable.company
     val addresses: SizedIterable<AddressEntity> by AddressEntity referrersOn AddressTable.clientUser
     val orders: SizedIterable<OrderEntity> by OrderEntity referrersOn OrderTable.clientUser

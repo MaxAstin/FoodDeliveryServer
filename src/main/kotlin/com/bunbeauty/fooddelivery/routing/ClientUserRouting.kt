@@ -1,6 +1,5 @@
 package com.bunbeauty.fooddelivery.routing
 
-import com.bunbeauty.fooddelivery.data.Constants
 import com.bunbeauty.fooddelivery.data.model.client_user.ClientAuthResponse
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.PatchClientUser
@@ -31,7 +30,6 @@ fun Application.configureClientUserRouting() {
     }
 }
 
-@Deprecated("Old version of login by Firebase")
 fun Routing.clientLogin() {
 
     val clientUserService: IClientUserService by inject()
@@ -104,11 +102,7 @@ fun Route.getClient() {
     get("/client") {
         client { request ->
             val clientUser = clientUserService.getClientUserByUuid(request.jwtUser.uuid)
-            if (clientUser == null) {
-                call.respondBad("No user with such uuid")
-            } else {
-                call.respondOk(clientUser)
-            }
+            call.respondOkOrBad(clientUser)
         }
     }
 }
@@ -119,8 +113,13 @@ fun Route.patchClientUser() {
 
     patch("/client") {
         clientWithBody<PatchClientUser, GetClientUser> { bodyRequest ->
-            val clientUserUuid = bodyRequest.request.jwtUser.uuid
-            clientUserService.updateClientUserByUuid(clientUserUuid, bodyRequest.body)
+            // Client activation is forbidden for clients
+            if (bodyRequest.body.isActive == true) {
+                null
+            } else {
+                val clientUserUuid = bodyRequest.request.jwtUser.uuid
+                clientUserService.updateClientUserByUuid(clientUserUuid, bodyRequest.body)
+            }
         }
     }
 }

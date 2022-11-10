@@ -7,6 +7,7 @@ import com.bunbeauty.fooddelivery.data.entity.CompanyEntity
 import com.bunbeauty.fooddelivery.data.entity.TestClientUserPhoneEntity
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.InsertClientUser
+import com.bunbeauty.fooddelivery.data.model.client_user.UpdateClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.login.*
 import com.bunbeauty.fooddelivery.data.table.ClientUserTable
 import com.bunbeauty.fooddelivery.data.table.TestClientUserPhoneTable
@@ -48,9 +49,14 @@ class ClientUserRepository : IClientUserRepository {
         }
     }
 
-    override suspend fun getClientUserByPhoneNumberAndCompayUuid(phoneNumber: String, companyUuid: UUID): GetClientUser? = query {
+    override suspend fun getClientUserByPhoneNumberAndCompayUuid(
+        phoneNumber: String,
+        companyUuid: UUID,
+    ): GetClientUser? = query {
         ClientUserEntity.find {
-            (ClientUserTable.phoneNumber eq phoneNumber) and (ClientUserTable.company eq companyUuid)
+            (ClientUserTable.phoneNumber eq phoneNumber) and
+                    (ClientUserTable.company eq companyUuid) and
+                    (ClientUserTable.isActive eq true)
         }.singleOrNull()?.toClientUser()
     }
 
@@ -66,9 +72,14 @@ class ClientUserRepository : IClientUserRepository {
         }.toClientUser()
     }
 
-    override suspend fun updateClientUserByUuid(uuid: UUID, email: String?): GetClientUser? = query {
-        ClientUserEntity.findById(uuid)?.apply {
-            this.email = email
+    override suspend fun updateClientUserByUuid(updateClientUser: UpdateClientUser): GetClientUser? = query {
+        ClientUserEntity.findById(updateClientUser.uuid)?.apply {
+            updateClientUser.email?.let { newEmail ->
+                email = newEmail
+            }
+            updateClientUser.isActive?.let { newIsActive ->
+                isActive = newIsActive
+            }
         }?.toClientUser()
     }
 }

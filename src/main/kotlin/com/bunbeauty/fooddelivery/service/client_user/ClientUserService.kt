@@ -93,7 +93,13 @@ class ClientUserService(
         clientUserUuid: String,
         patchClientUser: PatchClientUser,
     ): GetClientUser? {
-        return clientUserRepository.updateClientUserByUuid(clientUserUuid.toUuid(), patchClientUser.email)
+        return clientUserRepository.updateClientUserByUuid(
+            UpdateClientUser(
+                uuid = clientUserUuid.toUuid(),
+                email = patchClientUser.email,
+                isActive = patchClientUser.isActive,
+            )
+        )
     }
 
     suspend fun isRequestForTestPhone(postClientCodeRequest: PostClientCodeRequest): Boolean {
