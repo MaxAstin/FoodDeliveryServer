@@ -26,7 +26,12 @@ class StreetRepository : IStreetRepository {
         } ?: emptyList()
     }
 
-    override suspend fun getStreetByAddressUuid(addressUuid: UUID): GetCafe? = query {
-        AddressEntity.findById(addressUuid)?.street?.cafe?.toCafe()
+    override suspend fun getStreetByAddressUuid(addressUuid: UUID): GetStreet? = query {
+        AddressEntity.findById(addressUuid)?.street?.toStreet()
     }
+
+    override suspend fun getStreetByUuid(streetUuid: UUID): GetStreet? = query {
+        StreetEntity.findById(streetUuid)?.toStreet()
+    }
+
 }

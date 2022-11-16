@@ -41,7 +41,7 @@ class OrderService(
             if (addressUuid == null) {
                 null
             } else {
-                streetRepository.getStreetByAddressUuid(addressUuid)?.uuid
+                streetRepository.getStreetByAddressUuid(addressUuid)?.cafeUuid
             }
         } else {
             postOrder.cafeUuid

@@ -9,4 +9,5 @@ interface ICityRepository {
     suspend fun insertCity(insertCity: InsertCity): GetCity
     suspend fun getCityListByCompanyUuid(companyUuid: UUID): List<GetCity>
     suspend fun getCityByCompanyUuidAndName(companyUuid: UUID, name: String): GetCity?
+    suspend fun getCityByUuid(cityUuid: UUID): GetCity?
 }
