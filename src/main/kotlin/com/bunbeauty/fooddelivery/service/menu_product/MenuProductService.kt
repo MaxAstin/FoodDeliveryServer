@@ -21,7 +21,7 @@ class MenuProductService(
 ) : IMenuProductService {
 
     @Volatile
-    private var hitCache: HitsCache? = null
+    private var hitCache: MutableMap<String, HitsCache> = mutableMapOf()
 
     override suspend fun createMenuProduct(postMenuProduct: PostMenuProduct, creatorUuid: String): GetMenuProduct? {
         val companyUuid = userRepository.getCompanyUuidByUserUuid(creatorUuid.toUuid()) ?: return null
@@ -72,15 +72,15 @@ class MenuProductService(
         val limitTime = DateTime.now().withTimeAtStartOfDay().minusDays(HITS_ORDER_DAY_COUNT).millis
         val orderList = orderRepository.getOrderListByCompanyUuidLimited(companyUuid.toUuid(), limitTime)
 
-        val cache = hitCache
+        val cache = hitCache[companyUuid]
         if (cache == null || !cache.isActual() || cache.hitMenuProductUuidList.size < HITS_COUNT) {
             println("hits calculation")
-            hitCache = HitsCache(
+            hitCache[companyUuid] = HitsCache(
                 hitMenuProductUuidList = getHitMenuProductUuidList(orderList, HITS_COUNT),
                 dateTime = DateTime.now()
             )
         }
-        hitCache?.let { hitCache ->
+        hitCache[companyUuid]?.let { hitCache ->
             val hitsCategory = categoryRepository.getHitsCategory()
             menuProductList.forEach { menuProduct ->
                 if (hitCache.hitMenuProductUuidList.contains(menuProduct.uuid)) {
