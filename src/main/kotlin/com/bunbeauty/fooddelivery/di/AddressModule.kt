@@ -7,6 +7,13 @@ import com.bunbeauty.fooddelivery.service.address.IAddressService
 import org.koin.dsl.module
 
 val addressModule = module(createdAtStart = true) {
-    single<IAddressService> { AddressService(get()) }
+    single<IAddressService> {
+        AddressService(
+            addressRepository = get(),
+            streetRepository = get(),
+            clientUserRepository = get(),
+            cityRepository = get(),
+        )
+    }
     single<IAddressRepository> { AddressRepository() }
 }
