@@ -4,5 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ClientAuthResponse(
-    val token: String
+    val token: String,
+    val userUuid: String
 )

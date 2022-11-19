@@ -9,7 +9,6 @@ import com.bunbeauty.fooddelivery.data.repo.client_user.IClientUserRepository
 import com.google.firebase.auth.FirebaseAuth
 import org.joda.time.DateTime
 import java.util.*
-import com.bunbeauty.fooddelivery.data.model.client_user.ClientAuthResponse
 
 class ClientUserService(
     private val firebaseAuth: FirebaseAuth,
@@ -34,7 +33,10 @@ class ClientUserService(
             }
 
             val token = jwtService.generateToken(getClientUser)
-            ClientAuthResponse(token = token)
+            ClientAuthResponse(
+                token = token,
+                userUuid = getClientUser.uuid
+            )
         } else {
             null
         }
@@ -66,7 +68,10 @@ class ClientUserService(
                 postClientCode.companyUuid.toUuid()
             ) ?: registerClientUser(postClientCode)
             val token = jwtService.generateToken(getClientUser)
-            ClientAuthResponse(token = token)
+            ClientAuthResponse(
+                token = token,
+                userUuid = getClientUser.uuid
+            )
         } else {
             null
         }
