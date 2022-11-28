@@ -6,6 +6,7 @@ import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.menu_product.*
 import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrder
+import com.bunbeauty.fooddelivery.data.model.order.GetClientOrderV2
 import com.bunbeauty.fooddelivery.data.repo.category.ICategoryRepository
 import com.bunbeauty.fooddelivery.data.repo.menu_product.IMenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
@@ -93,7 +94,7 @@ class MenuProductService(
         return menuProductList
     }
 
-    fun getHitMenuProductUuidList(orderList: List<GetCafeOrder>, count: Int): List<String> {
+    fun getHitMenuProductUuidList(orderList: List<GetClientOrderV2>, count: Int): List<String> {
         return orderList.filter { order ->
             order.status == OrderStatus.DELIVERED.name
         }.flatMap { order ->

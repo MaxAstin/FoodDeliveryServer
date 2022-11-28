@@ -46,11 +46,11 @@ class OrderService(
         } else {
             postOrder.cafeUuid
         } ?: return null
-        val cafeCodeCounter = cafeRepository.incrementCafeCodeCounter(cafeUuid.toUuid(), codesCount) ?: return null
+        val cafeCodeCounter = getNewOrderCode(cafeUuid) ?: return null
 
         val company = clientUserRepository.getClientUserByUuid(clientUserUuid.toUuid())?.company ?: return null
 
-        val deliveryCost = getDeliveryCost(postOrder, company)
+        val deliveryCost = getDeliveryCost(postOrder.isDelivery, postOrder.orderProducts, company)
         val deferredTime = postOrder.deferredTime?.let { deferredTime ->
             if (postOrder.deferredTime < 0) {
                 null
@@ -87,6 +87,62 @@ class OrderService(
         return clientOrder
     }
 
+    override suspend fun createOrder(clientUserUuid: String, postOrder: PostOrderV2): GetClientOrderV2? {
+        val currentMillis = DateTime.now().millis
+        val cafeUuid = if (postOrder.isDelivery) {
+            streetRepository.getStreetByAddressUuid(postOrder.address.uuid.toUuid())?.cafeUuid
+        } else {
+            postOrder.address.uuid
+        } ?: return null
+        val cafeCodeCounter = getNewOrderCode(cafeUuid) ?: return null
+
+        val company = clientUserRepository.getClientUserByUuid(clientUserUuid.toUuid())?.company ?: return null
+
+        val deliveryCost = getDeliveryCost(postOrder.isDelivery, postOrder.orderProducts, company)
+        val deferredTime = postOrder.deferredTime?.let { deferredTime ->
+            if (postOrder.deferredTime < 0) {
+                null
+            } else {
+                deferredTime
+            }
+        }
+
+        val insertOrder = InsertOrderV2(
+            time = currentMillis,
+            isDelivery = postOrder.isDelivery,
+            code = generateCode(cafeCodeCounter),
+            address = InsertOrderAddress(
+                description = postOrder.address.description,
+                street = postOrder.address.street,
+                house = postOrder.address.house,
+                flat = postOrder.address.flat,
+                entrance = postOrder.address.entrance,
+                floor = postOrder.address.floor,
+                comment = postOrder.address.comment,
+            ),
+            comment = postOrder.comment,
+            deferredTime = deferredTime,
+            status = OrderStatus.NOT_ACCEPTED.name,
+            deliveryCost = deliveryCost,
+            cafeUuid = cafeUuid.toUuid(),
+            companyUuid = company.uuid.toUuid(),
+            clientUserUuid = clientUserUuid.toUuid(),
+            orderProductList = postOrder.orderProducts.map { postOrderProduct ->
+                InsertOrderProduct(
+                    menuProductUuid = postOrderProduct.menuProductUuid.toUuid(),
+                    count = postOrderProduct.count
+                )
+            },
+        )
+        val clientOrder = orderRepository.insertOrder(insertOrder)
+        val cafeOrder = orderRepository.getCafeOrderByUuid(clientOrder.uuid.toUuid())
+        cafeSessionHandler.emitNewValue(cafeOrder?.cafeUuid, cafeOrder)
+
+        sendNotification(cafeOrder)
+
+        return clientOrder
+    }
+
     override suspend fun getOrderListByCafeUuid(cafeUuid: String): List<GetCafeOrder> {
         val limitTime = DateTime.now().withTimeAtStartOfDay().minusDays(ORDER_HISTORY_DAY_COUNT).millis
         return orderRepository.getOrderListByCafeUuidLimited(cafeUuid.toUuid(), limitTime)
@@ -96,8 +152,16 @@ class OrderService(
         return orderRepository.getOrderListByUserUuid(userUuid.toUuid(), count)
     }
 
+    override suspend fun getOrderListByUserUuidV2(userUuid: String, count: Int?): List<GetClientOrderV2> {
+        return orderRepository.getOrderListByUserUuidV2(userUuid.toUuid(), count)
+    }
+
     override suspend fun getOrderByUuid(uuid: String): GetCafeOrderDetails? {
         return orderRepository.getOrderByUuid(uuid.toUuid())
+    }
+
+    override suspend fun getOrderByUuidV2(uuid: String): GetCafeOrderDetailsV2? {
+        return orderRepository.getOrderByUuidV2(uuid.toUuid())
     }
 
     override suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder? {
@@ -142,11 +206,15 @@ class OrderService(
         return codeLetter + CODE_DIVIDER + codeNumberString
     }
 
-    suspend fun getDeliveryCost(orderProduct: PostOrder, company: GetCompany): Int? {
-        if (!orderProduct.isDelivery) {
+    suspend fun getDeliveryCost(
+        isDelivery: Boolean,
+        orderProductList: List<PostOrderProduct>,
+        company: GetCompany,
+    ): Int? {
+        if (!isDelivery) {
             return null
         }
-        val orderCost = orderProduct.orderProducts.sumOf { postOrderProduct ->
+        val orderCost = orderProductList.sumOf { postOrderProduct ->
             val menuProduct = menuProductRepository.getMenuProductByUuid(postOrderProduct.menuProductUuid.toUuid())
             (menuProduct?.newPrice ?: 0) * postOrderProduct.count
         }
@@ -168,5 +236,9 @@ class OrderService(
                 .setTopic(cafeOrder.cafeUuid)
                 .build()
         )
+    }
+
+    suspend fun getNewOrderCode(cafeUuid: String): Int? {
+        return cafeRepository.incrementCafeCodeCounter(cafeUuid.toUuid(), codesCount)
     }
 }

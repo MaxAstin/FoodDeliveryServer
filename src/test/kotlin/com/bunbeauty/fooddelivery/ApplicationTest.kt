@@ -3,7 +3,8 @@ package com.bunbeauty.fooddelivery
 import at.favre.lib.crypto.bcrypt.BCrypt
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.model.menu_product.GetMenuProduct
-import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrder
+import com.bunbeauty.fooddelivery.data.model.order.GetClientOrderV2
+import com.bunbeauty.fooddelivery.data.model.order.GetOrderAddress
 import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
 import com.bunbeauty.fooddelivery.service.menu_product.MenuProductService
 import com.toxicbakery.bcrypt.Bcrypt
@@ -85,8 +86,8 @@ class ApplicationTest {
         return DateTime.now().minusDays(daysAgo).millis
     }
 
-    private fun getFakeOrder(status: String, time: Long, orderProductList: List<GetOrderProduct>): GetCafeOrder {
-        return GetCafeOrder(
+    private fun getFakeOrder(status: String, time: Long, orderProductList: List<GetOrderProduct>): GetClientOrderV2 {
+        return GetClientOrderV2(
             uuid = "",
             code = "",
             status = status,
@@ -94,12 +95,21 @@ class ApplicationTest {
             timeZone = "UTC+3",
             isDelivery = true,
             deferredTime = null,
-            addressDescription = "",
+            address = GetOrderAddress(
+                description = "",
+                street = "",
+                house = "",
+                flat = "",
+                entrance = "",
+                floor = "",
+                comment = "",
+            ),
             comment = "",
-            deliveryCost = null,
-            clientUser = mockk(),
-            cafeUuid = "",
-            oderProductList = orderProductList
+            deliveryCost = 100,
+            oldTotalCost = 250,
+            newTotalCost = 245,
+            clientUserUuid = "",
+            oderProductList = orderProductList,
         )
     }
 

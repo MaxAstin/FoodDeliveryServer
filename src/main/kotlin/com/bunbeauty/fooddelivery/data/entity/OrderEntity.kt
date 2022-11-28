@@ -1,9 +1,7 @@
 package com.bunbeauty.fooddelivery.data.entity
 
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
-import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrder
-import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrderDetails
-import com.bunbeauty.fooddelivery.data.model.order.GetClientOrder
+import com.bunbeauty.fooddelivery.data.model.order.*
 import com.bunbeauty.fooddelivery.data.table.OrderProductTable
 import com.bunbeauty.fooddelivery.data.table.OrderTable
 import org.jetbrains.exposed.dao.UUIDEntity
@@ -18,7 +16,13 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var time: Long by OrderTable.time
     var isDelivery: Boolean by OrderTable.isDelivery
     var code: String by OrderTable.code
-    var addressDescription: String by OrderTable.addressDescription
+    var addressDescription: String? by OrderTable.addressDescription
+    var addressStreet: String? by OrderTable.addressStreet
+    var addressHouse: String? by OrderTable.addressHouse
+    var addressFlat: String? by OrderTable.addressFlat
+    var addressEntrance: String? by OrderTable.addressEntrance
+    var addressFloor: String? by OrderTable.addressFloor
+    var addressComment: String? by OrderTable.addressComment
     var comment: String? by OrderTable.comment
     var deferredTime: Long? by OrderTable.deferredTime
     var status: String by OrderTable.status
@@ -49,7 +53,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         }
     )
 
-    fun toCafeOrder() = GetCafeOrder(
+    fun toClientOrderV2() = GetClientOrderV2(
         uuid = uuid,
         code = code,
         status = status,
@@ -57,14 +61,33 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         timeZone = cafe.city.timeZone,
         isDelivery = isDelivery,
         deferredTime = deferredTime,
-        addressDescription = addressDescription,
+        address = GetOrderAddress(
+            description = addressDescription,
+            street = addressStreet,
+            house = addressHouse,
+            flat = addressFlat,
+            entrance = addressEntrance,
+            floor = addressFloor,
+            comment = addressComment,
+        ),
         comment = comment,
         deliveryCost = deliveryCost,
-        clientUser = clientUser.toCafeUser(),
-        cafeUuid = cafe.uuid,
+        oldTotalCost = calculateOldTotalCost(),
+        newTotalCost = calculateNewTotalCost(),
+        clientUserUuid = clientUser.uuid,
         oderProductList = oderProducts.map { oderProductEntity ->
             oderProductEntity.toOrderProduct()
         }
+    )
+
+    fun toCafeOrder() = GetCafeOrder(
+        uuid = uuid,
+        code = code,
+        status = status,
+        time = time,
+        timeZone = cafe.city.timeZone,
+        deferredTime = deferredTime,
+        cafeUuid = cafe.uuid,
     )
 
     fun toCafeOrderDetails() = GetCafeOrderDetails(
@@ -75,7 +98,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         timeZone = cafe.city.timeZone,
         isDelivery = isDelivery,
         deferredTime = deferredTime,
-        addressDescription = addressDescription,
+        addressDescription = addressDescription ?: "",
         comment = comment,
         deliveryCost = deliveryCost,
         oldTotalCost = calculateOldTotalCost(),
@@ -85,21 +108,52 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         oderProductList = oderProducts.map { oderProductEntity ->
             oderProductEntity.toOrderProduct()
         },
-        availableStatusList = buildList {
-            add(OrderStatus.NOT_ACCEPTED.name)
-            if (deferredTime != null) {
-                add(OrderStatus.ACCEPTED.name)
-            }
-            add(OrderStatus.PREPARING.name)
-            if (isDelivery) {
-                add(OrderStatus.SENT_OUT.name)
-            } else {
-                add(OrderStatus.DONE.name)
-            }
-            add(OrderStatus.DELIVERED.name)
-            add(OrderStatus.CANCELED.name)
-        },
+        availableStatusList = getAvailableStatusList(),
     )
+
+    fun toCafeOrderDetailsV2() = GetCafeOrderDetailsV2(
+        uuid = uuid,
+        code = code,
+        status = status,
+        time = time,
+        timeZone = cafe.city.timeZone,
+        isDelivery = isDelivery,
+        deferredTime = deferredTime,
+        address = GetOrderAddress(
+            description = addressDescription,
+            street = addressStreet,
+            house = addressHouse,
+            flat = addressFlat,
+            entrance = addressEntrance,
+            floor = addressFloor,
+            comment = addressComment,
+        ),
+        comment = comment,
+        deliveryCost = deliveryCost,
+        oldTotalCost = calculateOldTotalCost(),
+        newTotalCost = calculateNewTotalCost(),
+        clientUser = clientUser.toCafeUser(),
+        cafeUuid = cafe.uuid,
+        oderProductList = oderProducts.map { oderProductEntity ->
+            oderProductEntity.toOrderProduct()
+        },
+        availableStatusList = getAvailableStatusList(),
+    )
+
+    private fun getAvailableStatusList(): List<String> = buildList {
+        add(OrderStatus.NOT_ACCEPTED.name)
+        if (deferredTime != null) {
+            add(OrderStatus.ACCEPTED.name)
+        }
+        add(OrderStatus.PREPARING.name)
+        if (isDelivery) {
+            add(OrderStatus.SENT_OUT.name)
+        } else {
+            add(OrderStatus.DONE.name)
+        }
+        add(OrderStatus.DELIVERED.name)
+        add(OrderStatus.CANCELED.name)
+    }
 
     private fun calculateNewTotalCost(): Int {
         return oderProducts.sumOf { orderProductEntity ->

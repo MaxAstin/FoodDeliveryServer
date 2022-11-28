@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.data.model.order
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetClientOrder(
+class GetClientOrderV2(
     val uuid: String,
     val code: String,
     val status: String,
@@ -11,7 +11,7 @@ data class GetClientOrder(
     val timeZone: String,
     val isDelivery: Boolean,
     val deferredTime: Long?,
-    val addressDescription: String?,
+    val address: GetOrderAddress,
     val comment: String?,
     val deliveryCost: Int?,
     val oldTotalCost: Int?,
@@ -19,3 +19,4 @@ data class GetClientOrder(
     val clientUserUuid: String,
     val oderProductList: List<GetOrderProduct>,
 )
+

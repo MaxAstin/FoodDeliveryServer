@@ -3,10 +3,7 @@ package com.bunbeauty.fooddelivery.routing
 import com.bunbeauty.fooddelivery.data.Constants.CAFE_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.COUNT_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
-import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrder
-import com.bunbeauty.fooddelivery.data.model.order.GetClientOrder
-import com.bunbeauty.fooddelivery.data.model.order.PatchOrder
-import com.bunbeauty.fooddelivery.data.model.order.PostOrder
+import com.bunbeauty.fooddelivery.data.model.order.*
 import com.bunbeauty.fooddelivery.routing.extension.*
 import com.bunbeauty.fooddelivery.service.order.IOrderService
 import io.ktor.client.request.*
@@ -26,8 +23,11 @@ fun Application.configureOrderRouting() {
         authenticate {
             getCafeOrders()
             getCafeOrderDetails()
+            getCafeOrderDetailsV2()
             getClientOrders()
+            getClientOrdersV2()
             postOrder()
+            postOrderV2()
             patchOrder()
             deleteOrder()
             observeClientOrders()
@@ -62,6 +62,19 @@ fun Route.getCafeOrderDetails() {
     }
 }
 
+fun Route.getCafeOrderDetailsV2() {
+
+    val orderService: IOrderService by inject()
+
+    get("/v2/order/details") {
+        manager {
+            val orderUuid = call.parameters[UUID_PARAMETER] ?: error("$UUID_PARAMETER is required")
+            val order = orderService.getOrderByUuidV2(orderUuid)
+            call.respondOkOrBad(order)
+        }
+    }
+}
+
 fun Route.getClientOrders() {
 
     val orderService: IOrderService by inject()
@@ -75,12 +88,39 @@ fun Route.getClientOrders() {
     }
 }
 
+fun Route.getClientOrdersV2() {
+
+    val orderService: IOrderService by inject()
+
+    get("/v2/client/order") {
+        client { request ->
+            val count = call.parameters[COUNT_PARAMETER]?.toIntOrNull()
+            val orderList = orderService.getOrderListByUserUuidV2(request.jwtUser.uuid, count)
+            call.respondOk(orderList)
+        }
+    }
+}
+
 fun Route.postOrder() {
 
     val orderService: IOrderService by inject()
 
     post("/order") {
         clientWithBody<PostOrder, GetClientOrder> { bodyRequest ->
+            orderService.createOrder(
+                bodyRequest.request.jwtUser.uuid,
+                bodyRequest.body
+            )
+        }
+    }
+}
+
+fun Route.postOrderV2() {
+
+    val orderService: IOrderService by inject()
+
+    post("/v2/order") {
+        clientWithBody<PostOrderV2, GetClientOrderV2> { bodyRequest ->
             orderService.createOrder(
                 bodyRequest.request.jwtUser.uuid,
                 bodyRequest.body

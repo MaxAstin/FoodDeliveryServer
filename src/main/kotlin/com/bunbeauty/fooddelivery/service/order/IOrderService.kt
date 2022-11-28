@@ -8,8 +8,11 @@ interface IOrderService {
 
     suspend fun getOrderListByCafeUuid(cafeUuid: String): List<GetCafeOrder>
     suspend fun getOrderListByUserUuid(userUuid: String, count: Int?): List<GetClientOrder>
+    suspend fun getOrderListByUserUuidV2(userUuid: String, count: Int?): List<GetClientOrderV2>
     suspend fun getOrderByUuid(uuid: String): GetCafeOrderDetails?
+    suspend fun getOrderByUuidV2(uuid: String): GetCafeOrderDetailsV2?
     suspend fun createOrder(clientUserUuid: String, postOrder: PostOrder): GetClientOrder?
+    suspend fun createOrder(clientUserUuid: String, postOrder: PostOrderV2): GetClientOrderV2?
     suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder?
     suspend fun deleteOrder(orderUuid: String): GetCafeOrder?
     suspend fun observeClientOrderUpdates(clientUserUuid: String): SharedFlow<GetClientOrder>
