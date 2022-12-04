@@ -42,7 +42,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         timeZone = cafe.city.timeZone,
         isDelivery = isDelivery,
         deferredTime = deferredTime,
-        addressDescription = addressDescription,
+        addressDescription = addressDescription ?: getAddress(),
         comment = comment,
         deliveryCost = deliveryCost,
         oldTotalCost = calculateOldTotalCost(),
@@ -98,7 +98,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         timeZone = cafe.city.timeZone,
         isDelivery = isDelivery,
         deferredTime = deferredTime,
-        addressDescription = addressDescription ?: "",
+        addressDescription = addressDescription ?: getAddress(),
         comment = comment,
         deliveryCost = deliveryCost,
         oldTotalCost = calculateOldTotalCost(),
@@ -153,6 +153,23 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         }
         add(OrderStatus.DELIVERED.name)
         add(OrderStatus.CANCELED.name)
+    }
+
+    private fun getAddress(): String {
+        return addressStreet +
+                getAddressPart(data = addressHouse, prefix = ", д. ") +
+                getAddressPart(data = addressFlat, prefix = ", кв. ") +
+                getAddressPart(data = addressEntrance, prefix = ", ", postfix = " подъезд") +
+                getAddressPart(data = addressFloor, prefix = ", ", postfix = " этаж") +
+                getAddressPart(data = comment)
+    }
+
+    private fun getAddressPart(data: String?, prefix: String = "", postfix: String = ""): String {
+        return if (data.isNullOrEmpty()) {
+            ""
+        } else {
+            "$prefix$data$postfix"
+        }
     }
 
     private fun calculateNewTotalCost(): Int {
