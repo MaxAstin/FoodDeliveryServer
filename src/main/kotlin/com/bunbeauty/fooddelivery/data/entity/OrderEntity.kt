@@ -161,7 +161,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
                 getAddressPart(data = addressFlat, prefix = ", кв. ") +
                 getAddressPart(data = addressEntrance, prefix = ", ", postfix = " подъезд") +
                 getAddressPart(data = addressFloor, prefix = ", ", postfix = " этаж") +
-                getAddressPart(data = comment)
+                getAddressPart(data = addressComment, prefix = ", ")
     }
 
     private fun getAddressPart(data: String?, prefix: String = "", postfix: String = ""): String {
