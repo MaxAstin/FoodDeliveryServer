@@ -11,7 +11,7 @@ data class GetClientOrder(
     val timeZone: String,
     val isDelivery: Boolean,
     val deferredTime: Long?,
-    val addressDescription: String?,
+    val addressDescription: String,
     val comment: String?,
     val deliveryCost: Int?,
     val oldTotalCost: Int?,
