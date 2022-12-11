@@ -94,6 +94,10 @@ class ClientUserService(
         return clientUserRepository.getClientUserByUuid(clientUserUuid.toUuid())
     }
 
+    override suspend fun getClientSettingsByUuid(clientUserUuid: String): GetClientSettings? {
+        return clientUserRepository.getClientSettingsByUuid(clientUserUuid.toUuid())
+    }
+
     override suspend fun updateClientUserByUuid(
         clientUserUuid: String,
         patchClientUser: PatchClientUser,

@@ -1,10 +1,8 @@
 package com.bunbeauty.fooddelivery.data.repo.client_user
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.ClientUserEntity
-import com.bunbeauty.fooddelivery.data.entity.ClientUserLoginSessionEntity
-import com.bunbeauty.fooddelivery.data.entity.CompanyEntity
-import com.bunbeauty.fooddelivery.data.entity.TestClientUserPhoneEntity
+import com.bunbeauty.fooddelivery.data.entity.*
+import com.bunbeauty.fooddelivery.data.model.client_user.GetClientSettings
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.InsertClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.UpdateClientUser
@@ -67,6 +65,12 @@ class ClientUserRepository : IClientUserRepository {
             } else {
                 null
             }
+        }
+    }
+
+    override suspend fun getClientSettingsByUuid(uuid: UUID): GetClientSettings? = query {
+        ClientSettingsEntity.findById(uuid)?.let { clientSettingsEntity ->
+            clientSettingsEntity.toClientSetting()
         }
     }
 

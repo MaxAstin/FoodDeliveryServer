@@ -25,6 +25,7 @@ fun Application.configureClientUserRouting() {
             createTestClientUserPhone()
             getTestClientUserPhones()
             getClient()
+            getClientSettings()
             patchClientUser()
         }
     }
@@ -103,6 +104,18 @@ fun Route.getClient() {
         client { request ->
             val clientUser = clientUserService.getClientUserByUuid(request.jwtUser.uuid)
             call.respondOkOrBad(clientUser)
+        }
+    }
+}
+
+fun Route.getClientSettings() {
+
+    val clientUserService: IClientUserService by inject()
+
+    get("/client/settings") {
+        client { request ->
+            val clientSettings = clientUserService.getClientSettingsByUuid(request.jwtUser.uuid)
+            call.respondOkOrBad(clientSettings)
         }
     }
 }
