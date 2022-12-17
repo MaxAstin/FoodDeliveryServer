@@ -12,6 +12,7 @@ class ClientSettingsEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     val uuid: String = uuid.value.toString()
     var phoneNumber: String by ClientUserTable.phoneNumber
     var email: String? by ClientUserTable.email
+    var isActive: Boolean by ClientUserTable.isActive
 
     companion object : UUIDEntityClass<ClientSettingsEntity>(ClientUserTable)
 
@@ -20,6 +21,7 @@ class ClientSettingsEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
             uuid = uuid,
             phoneNumber = phoneNumber,
             email = email,
+            isActive = isActive,
         )
     }
 

@@ -7,4 +7,5 @@ data class GetClientSettings(
     val uuid: String,
     val phoneNumber: String,
     val email: String?,
+    val isActive: Boolean,
 )

@@ -100,9 +100,22 @@ class ClientUserService(
 
     override suspend fun updateClientUserByUuid(
         clientUserUuid: String,
-        patchClientUser: PatchClientUser,
+        patchClientUser: PatchClientUserSettings,
     ): GetClientUser? {
         return clientUserRepository.updateClientUserByUuid(
+            UpdateClientUser(
+                uuid = clientUserUuid.toUuid(),
+                email = patchClientUser.email,
+                isActive = patchClientUser.isActive,
+            )
+        )
+    }
+
+    override suspend fun updateClientUserSettingsByUuid(
+        clientUserUuid: String,
+        patchClientUser: PatchClientUserSettings
+    ): GetClientSettings? {
+        return clientUserRepository.updateClientUserSettingsByUuid(
             UpdateClientUser(
                 uuid = clientUserUuid.toUuid(),
                 email = patchClientUser.email,

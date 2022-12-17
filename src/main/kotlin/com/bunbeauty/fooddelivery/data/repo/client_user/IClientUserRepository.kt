@@ -20,5 +20,6 @@ interface IClientUserRepository {
     suspend fun getClientUserByPhoneNumberAndCompayUuid(phoneNumber: String, companyUuid: UUID): GetClientUser?
     suspend fun insertClientUser(insertClientUser: InsertClientUser): GetClientUser
     suspend fun updateClientUserByUuid(updateClientUser: UpdateClientUser): GetClientUser?
+    suspend fun updateClientUserSettingsByUuid(updateClientUser: UpdateClientUser): GetClientSettings?
 
 }

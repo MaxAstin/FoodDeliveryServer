@@ -1,9 +1,6 @@
 package com.bunbeauty.fooddelivery.routing
 
-import com.bunbeauty.fooddelivery.data.model.client_user.ClientAuthResponse
-import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
-import com.bunbeauty.fooddelivery.data.model.client_user.PatchClientUser
-import com.bunbeauty.fooddelivery.data.model.client_user.PostClientUserAuth
+import com.bunbeauty.fooddelivery.data.model.client_user.*
 import com.bunbeauty.fooddelivery.data.model.client_user.login.*
 import com.bunbeauty.fooddelivery.routing.extension.*
 import com.bunbeauty.fooddelivery.service.client_user.IClientUserService
@@ -27,6 +24,7 @@ fun Application.configureClientUserRouting() {
             getClient()
             getClientSettings()
             patchClientUser()
+            patchClientSettings()
         }
     }
 }
@@ -125,13 +123,30 @@ fun Route.patchClientUser() {
     val clientUserService: IClientUserService by inject()
 
     patch("/client") {
-        clientWithBody<PatchClientUser, GetClientUser> { bodyRequest ->
+        clientWithBody<PatchClientUserSettings, GetClientUser> { bodyRequest ->
             // Client activation is forbidden for clients
             if (bodyRequest.body.isActive == true) {
                 null
             } else {
                 val clientUserUuid = bodyRequest.request.jwtUser.uuid
                 clientUserService.updateClientUserByUuid(clientUserUuid, bodyRequest.body)
+            }
+        }
+    }
+}
+
+fun Route.patchClientSettings() {
+
+    val clientUserService: IClientUserService by inject()
+
+    patch("/client/settings") {
+        clientWithBody<PatchClientUserSettings, GetClientSettings> { bodyRequest ->
+            // Client activation is forbidden for clients
+            if (bodyRequest.body.isActive == true) {
+                null
+            } else {
+                val clientUserUuid = bodyRequest.request.jwtUser.uuid
+                clientUserService.updateClientUserSettingsByUuid(clientUserUuid, bodyRequest.body)
             }
         }
     }

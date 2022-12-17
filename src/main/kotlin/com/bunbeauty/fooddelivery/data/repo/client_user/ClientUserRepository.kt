@@ -98,4 +98,21 @@ class ClientUserRepository : IClientUserRepository {
             }
         }
     }
+
+    override suspend fun updateClientUserSettingsByUuid(updateClientUser: UpdateClientUser): GetClientSettings? = query {
+        ClientSettingsEntity.findById(updateClientUser.uuid)?.let { clientSettingsEntity ->
+            if (clientSettingsEntity.isActive) {
+                clientSettingsEntity.apply {
+                    updateClientUser.email?.let { newEmail ->
+                        email = newEmail
+                    }
+                    updateClientUser.isActive?.let { newIsActive ->
+                        isActive = newIsActive
+                    }
+                }.toClientSetting()
+            } else {
+                null
+            }
+        }
+    }
 }

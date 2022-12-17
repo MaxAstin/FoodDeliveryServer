@@ -12,5 +12,6 @@ interface IClientUserService {
     suspend fun getTestClientUserPhoneList(): List<GetTestClientUserPhone>
     suspend fun getClientUserByUuid(clientUserUuid: String): GetClientUser?
     suspend fun getClientSettingsByUuid(clientUserUuid: String): GetClientSettings?
-    suspend fun updateClientUserByUuid(clientUserUuid: String, patchClientUser: PatchClientUser): GetClientUser?
+    suspend fun updateClientUserByUuid(clientUserUuid: String, patchClientUser: PatchClientUserSettings): GetClientUser?
+    suspend fun updateClientUserSettingsByUuid(clientUserUuid: String, patchClientUser: PatchClientUserSettings): GetClientSettings?
 }
