@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery
 import at.favre.lib.crypto.bcrypt.BCrypt
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.model.menu_product.GetMenuProduct
-import com.bunbeauty.fooddelivery.data.model.order.GetClientOrderV2
+import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
 import com.bunbeauty.fooddelivery.data.model.order.GetOrderAddress
 import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
 import com.bunbeauty.fooddelivery.service.menu_product.MenuProductService

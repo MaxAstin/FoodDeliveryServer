@@ -2,6 +2,11 @@ package com.bunbeauty.fooddelivery.data.entity
 
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.model.order.*
+import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrder
+import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetails
+import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetailsV2
+import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrder
+import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
 import com.bunbeauty.fooddelivery.data.table.OrderProductTable
 import com.bunbeauty.fooddelivery.data.table.OrderTable
 import org.jetbrains.exposed.dao.UUIDEntity

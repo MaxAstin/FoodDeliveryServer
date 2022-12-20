@@ -4,9 +4,7 @@ import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.enums.StatisticPeriod
 import com.bunbeauty.fooddelivery.data.enums.StatisticPeriod.*
 import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrder
-import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrderDetails
-import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrderDetailsV2
+import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetailsV2
 import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
 import com.bunbeauty.fooddelivery.data.model.statistic.GetProductStatistic
 import com.bunbeauty.fooddelivery.data.model.statistic.GetStatistic

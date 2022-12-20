@@ -3,7 +3,14 @@ package com.bunbeauty.fooddelivery.data.repo.order
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.*
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
-import com.bunbeauty.fooddelivery.data.model.order.*
+import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrder
+import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetails
+import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetailsV2
+import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrder
+import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderUpdate
+import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
+import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrder
+import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrderV2
 import com.bunbeauty.fooddelivery.data.table.OrderTable
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
@@ -182,6 +189,10 @@ class OrderRepository : IOrderRepository {
 
     override suspend fun getClientOrderByUuid(orderUuid: UUID): GetClientOrder? = query {
         OrderEntity.findById(orderUuid)?.toClientOrder()
+    }
+
+    override suspend fun getClientOrderUpdateByUuid(orderUuid: UUID): GetClientOrderUpdate? = query {
+        OrderUpdateEntity.findById(orderUuid)?.toClientOrderUpdate()
     }
 
     override suspend fun getCafeOrderByUuid(orderUuid: UUID): GetCafeOrder? = query {

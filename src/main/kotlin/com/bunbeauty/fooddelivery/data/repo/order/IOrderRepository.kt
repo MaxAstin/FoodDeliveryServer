@@ -1,6 +1,13 @@
 package com.bunbeauty.fooddelivery.data.repo.order
 
-import com.bunbeauty.fooddelivery.data.model.order.*
+import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrder
+import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetails
+import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetailsV2
+import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrder
+import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderUpdate
+import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
+import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrder
+import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrderV2
 import java.util.*
 
 interface IOrderRepository {
@@ -16,6 +23,7 @@ interface IOrderRepository {
     suspend fun getOrderListByCafeUuid(cafeUuid: UUID, startTimeMillis: Long, endTimeMillis: Long): List<GetCafeOrder>
     suspend fun getOrderDetailsListByCafeUuid(cafeUuid: UUID, startTimeMillis: Long, endTimeMillis: Long): List<GetCafeOrderDetailsV2>
     suspend fun getClientOrderByUuid(orderUuid: UUID): GetClientOrder?
+    suspend fun getClientOrderUpdateByUuid(orderUuid: UUID): GetClientOrderUpdate?
     suspend fun getCafeOrderByUuid(orderUuid: UUID): GetCafeOrder?
     suspend fun deleteCafeOrderByUuid(orderUuid: UUID): GetCafeOrder?
     suspend fun updateOrderStatusByUuid(orderUuid: UUID, status: String): GetCafeOrder?

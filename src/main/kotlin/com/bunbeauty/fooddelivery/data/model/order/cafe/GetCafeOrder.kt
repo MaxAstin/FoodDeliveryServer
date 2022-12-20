@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.data.model.order
+package com.bunbeauty.fooddelivery.data.model.order.cafe
 
 import kotlinx.serialization.Serializable
 

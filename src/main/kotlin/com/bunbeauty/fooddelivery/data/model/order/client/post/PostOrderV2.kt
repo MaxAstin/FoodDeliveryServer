@@ -1,14 +1,12 @@
-package com.bunbeauty.fooddelivery.data.model.order
+package com.bunbeauty.fooddelivery.data.model.order.client.post
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PostOrder(
+class PostOrderV2(
     val isDelivery: Boolean,
+    val address: PostOrderAddress,
     val comment: String?,
-    val addressDescription: String,
     val deferredTime: Long?,
-    val addressUuid: String?,
-    val cafeUuid: String?,
     val orderProducts: List<PostOrderProduct>,
 )

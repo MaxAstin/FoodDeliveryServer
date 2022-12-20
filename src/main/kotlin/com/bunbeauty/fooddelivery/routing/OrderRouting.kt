@@ -3,10 +3,14 @@ package com.bunbeauty.fooddelivery.routing
 import com.bunbeauty.fooddelivery.data.Constants.CAFE_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.COUNT_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
-import com.bunbeauty.fooddelivery.data.model.order.*
+import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrder
+import com.bunbeauty.fooddelivery.data.model.order.client.patch.PatchOrder
+import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrder
+import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
+import com.bunbeauty.fooddelivery.data.model.order.client.post.PostOrder
+import com.bunbeauty.fooddelivery.data.model.order.client.post.PostOrderV2
 import com.bunbeauty.fooddelivery.routing.extension.*
 import com.bunbeauty.fooddelivery.service.order.IOrderService
-import io.ktor.client.request.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
@@ -31,6 +35,7 @@ fun Application.configureOrderRouting() {
             patchOrder()
             deleteOrder()
             observeClientOrders()
+            observeClientOrdersV2()
             observeManagerOrders()
         }
     }
@@ -158,6 +163,25 @@ fun Route.observeClientOrders() {
     val json: Json by inject()
 
     webSocket("/client/order/subscribe") {
+        clientSocket(
+            block = { request ->
+                orderService.observeClientOrderUpdates(request.jwtUser.uuid).onEach { clientOrder ->
+                    outgoing.send(Frame.Text(json.encodeToString(GetClientOrder.serializer(), clientOrder)))
+                }.launchIn(this)
+            },
+            closeBlock = { request ->
+                orderService.clientDisconnect(request.jwtUser.uuid)
+            }
+        )
+    }
+}
+
+fun Route.observeClientOrdersV2() {
+
+    val orderService: IOrderService by inject()
+    val json: Json by inject()
+
+    webSocket("/client/order/v2/subscribe") {
         clientSocket(
             block = { request ->
                 orderService.observeClientOrderUpdates(request.jwtUser.uuid).onEach { clientOrder ->

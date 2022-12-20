@@ -5,8 +5,7 @@ import com.bunbeauty.fooddelivery.data.Constants.HITS_ORDER_DAY_COUNT
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.menu_product.*
-import com.bunbeauty.fooddelivery.data.model.order.GetCafeOrder
-import com.bunbeauty.fooddelivery.data.model.order.GetClientOrderV2
+import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
 import com.bunbeauty.fooddelivery.data.repo.category.ICategoryRepository
 import com.bunbeauty.fooddelivery.data.repo.menu_product.IMenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository

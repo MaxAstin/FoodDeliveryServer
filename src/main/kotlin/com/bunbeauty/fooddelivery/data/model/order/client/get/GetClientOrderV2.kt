@@ -1,5 +1,7 @@
-package com.bunbeauty.fooddelivery.data.model.order
+package com.bunbeauty.fooddelivery.data.model.order.client.get
 
+import com.bunbeauty.fooddelivery.data.model.order.GetOrderAddress
+import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
 import kotlinx.serialization.Serializable
 
 @Serializable

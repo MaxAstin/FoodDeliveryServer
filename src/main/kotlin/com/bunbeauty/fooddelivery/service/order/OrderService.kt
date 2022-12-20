@@ -9,7 +9,20 @@ import com.bunbeauty.fooddelivery.data.Constants.ORDER_KOD_KEY
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.company.GetCompany
-import com.bunbeauty.fooddelivery.data.model.order.*
+import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrder
+import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetails
+import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetailsV2
+import com.bunbeauty.fooddelivery.data.model.order.client.patch.PatchOrder
+import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrder
+import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderUpdate
+import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
+import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrder
+import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrderAddress
+import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrderProduct
+import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrderV2
+import com.bunbeauty.fooddelivery.data.model.order.client.post.PostOrder
+import com.bunbeauty.fooddelivery.data.model.order.client.post.PostOrderProduct
+import com.bunbeauty.fooddelivery.data.model.order.client.post.PostOrderV2
 import com.bunbeauty.fooddelivery.data.repo.cafe.ICafeRepository
 import com.bunbeauty.fooddelivery.data.repo.client_user.IClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.menu_product.IMenuProductRepository
@@ -18,7 +31,7 @@ import com.bunbeauty.fooddelivery.data.repo.street.IStreetRepository
 import com.bunbeauty.fooddelivery.data.session.SessionHandler
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.Flow
 import org.joda.time.DateTime
 
 class OrderService(
@@ -33,6 +46,7 @@ class OrderService(
     val codesCount = CODE_LETTERS.length * CODE_NUMBER_COUNT
     val cafeSessionHandler: SessionHandler<GetCafeOrder> = SessionHandler()
     val clientSessionHandler: SessionHandler<GetClientOrder> = SessionHandler()
+    val clientSessionHandlerV2: SessionHandler<GetClientOrderUpdate> = SessionHandler()
 
     override suspend fun createOrder(clientUserUuid: String, postOrder: PostOrder): GetClientOrder? {
         val currentMillis = DateTime.now().millis
@@ -166,10 +180,13 @@ class OrderService(
 
     override suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder? {
         val getCafeOrder = orderRepository.updateOrderStatusByUuid(orderUuid.toUuid(), patchOrder.status)
+        cafeSessionHandler.emitNewValue(getCafeOrder?.cafeUuid, getCafeOrder)
 
         val getClientOrder = orderRepository.getClientOrderByUuid(orderUuid.toUuid())
         clientSessionHandler.emitNewValue(getClientOrder?.clientUserUuid, getClientOrder)
-        cafeSessionHandler.emitNewValue(getCafeOrder?.cafeUuid, getCafeOrder)
+
+        val getClientOrderUpdate = orderRepository.getClientOrderUpdateByUuid(orderUuid.toUuid())
+        clientSessionHandlerV2.emitNewValue(getCafeOrder?.cafeUuid, getClientOrderUpdate)
 
         return getCafeOrder
     }
@@ -178,11 +195,15 @@ class OrderService(
         return orderRepository.deleteCafeOrderByUuid(orderUuid.toUuid())
     }
 
-    override suspend fun observeClientOrderUpdates(clientUserUuid: String): SharedFlow<GetClientOrder> {
+    override suspend fun observeClientOrderUpdates(clientUserUuid: String): Flow<GetClientOrder> {
         return clientSessionHandler.connect(clientUserUuid)
     }
 
-    override suspend fun observeCafeOrderUpdates(cafeUuid: String): SharedFlow<GetCafeOrder> {
+    override suspend fun observeClientOrderUpdatesV2(clientUserUuid: String): Flow<GetClientOrderUpdate> {
+        return clientSessionHandlerV2.connect(clientUserUuid)
+    }
+
+    override suspend fun observeCafeOrderUpdates(cafeUuid: String): Flow<GetCafeOrder> {
         return cafeSessionHandler.connect(cafeUuid)
     }
 
