@@ -28,7 +28,7 @@ class AddressRepository : IAddressRepository {
         AddressEntity.find {
             AddressTable.clientUser eq userUuid
         }.filter { addressEntity ->
-            addressEntity.city.id.value == cityUuid
+            addressEntity.street.cafe.city.id.value == cityUuid
         }.map { addressEntity ->
             addressEntity.toAddress()
         }

@@ -19,8 +19,6 @@ class AddressEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var clientUser: ClientUserEntity by ClientUserEntity referencedOn AddressTable.clientUser
     var isVisible: Boolean by AddressTable.isVisible
 
-    val city: CityEntity = street.cafe.city
-
     companion object : UUIDEntityClass<AddressEntity>(AddressTable)
 
     fun toAddress() = GetAddress(
