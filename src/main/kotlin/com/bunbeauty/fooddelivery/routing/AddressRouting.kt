@@ -1,5 +1,6 @@
 package com.bunbeauty.fooddelivery.routing
 
+import com.bunbeauty.fooddelivery.data.Constants
 import com.bunbeauty.fooddelivery.data.model.address.GetAddress
 import com.bunbeauty.fooddelivery.data.model.address.PostAddress
 import com.bunbeauty.fooddelivery.routing.extension.client
@@ -27,7 +28,8 @@ fun Route.getAddresses() {
 
     get("/address") {
         client { request ->
-            val addressList = addressService.getAddressListByUserUuid(request.jwtUser.uuid)
+            val cityUuid = call.parameters[Constants.CITY_UUID_PARAMETER] ?: error("${Constants.CITY_UUID_PARAMETER} is required")
+            val addressList = addressService.getAddressListByUserUuidAndCityUuid(request.jwtUser.uuid, cityUuid)
             call.respondOk(addressList)
         }
     }

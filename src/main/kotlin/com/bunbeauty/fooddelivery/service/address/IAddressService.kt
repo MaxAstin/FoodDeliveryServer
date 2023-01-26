@@ -6,5 +6,5 @@ import com.bunbeauty.fooddelivery.data.model.address.PostAddress
 interface IAddressService {
 
     suspend fun createAddress(userUuid: String, postAddress: PostAddress): GetAddress
-    suspend fun getAddressListByUserUuid(userUuid: String): List<GetAddress>
+    suspend fun getAddressListByUserUuidAndCityUuid(userUuid: String, cityUuid: String): List<GetAddress>
 }

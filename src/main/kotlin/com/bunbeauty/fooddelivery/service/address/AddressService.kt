@@ -42,6 +42,6 @@ class AddressService(
         return addressRepository.insertAddress(insertAddress)
     }
 
-    override suspend fun getAddressListByUserUuid(userUuid: String): List<GetAddress> =
-        addressRepository.getAddressListByUserUuid(userUuid.toUuid())
+    override suspend fun getAddressListByUserUuidAndCityUuid(userUuid: String, cityUuid: String): List<GetAddress> =
+        addressRepository.getAddressListByUserUuidAndCityUuid(userUuid.toUuid(), cityUuid.toUuid())
 }

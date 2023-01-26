@@ -7,5 +7,5 @@ import java.util.*
 interface IAddressRepository {
 
     suspend fun insertAddress(insertAddress: InsertAddress): GetAddress
-    suspend fun getAddressListByUserUuid(uuid: UUID): List<GetAddress>
+    suspend fun getAddressListByUserUuidAndCityUuid(userUuid: UUID, cityUuid: UUID): List<GetAddress>
 }

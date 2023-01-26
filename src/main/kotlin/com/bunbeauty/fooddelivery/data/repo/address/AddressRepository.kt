@@ -7,8 +7,6 @@ import com.bunbeauty.fooddelivery.data.entity.StreetEntity
 import com.bunbeauty.fooddelivery.data.model.address.GetAddress
 import com.bunbeauty.fooddelivery.data.model.address.InsertAddress
 import com.bunbeauty.fooddelivery.data.table.AddressTable
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.booleanLiteral
 import java.util.*
 
 class AddressRepository : IAddressRepository {
@@ -26,9 +24,11 @@ class AddressRepository : IAddressRepository {
         }.toAddress()
     }
 
-    override suspend fun getAddressListByUserUuid(uuid: UUID): List<GetAddress> = query {
+    override suspend fun getAddressListByUserUuidAndCityUuid(userUuid: UUID, cityUuid: UUID): List<GetAddress> = query {
         AddressEntity.find {
-            AddressTable.clientUser eq uuid
+            AddressTable.clientUser eq userUuid
+        }.filter { addressEntity ->
+            addressEntity.city.id.value == cityUuid
         }.map { addressEntity ->
             addressEntity.toAddress()
         }
