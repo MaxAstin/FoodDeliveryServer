@@ -100,7 +100,8 @@ fun Route.getClientOrdersV2() {
     get("/v2/client/order") {
         client { request ->
             val count = call.parameters[COUNT_PARAMETER]?.toIntOrNull()
-            val orderList = orderService.getOrderListByUserUuidV2(request.jwtUser.uuid, count)
+            val uuid = call.parameters[UUID_PARAMETER]
+            val orderList = orderService.getOrderListByUserUuidV2(request.jwtUser.uuid, count, uuid)
             call.respondOk(orderList)
         }
     }

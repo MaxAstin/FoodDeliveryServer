@@ -12,7 +12,6 @@ import com.bunbeauty.fooddelivery.data.model.company.GetCompany
 import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrder
 import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetails
 import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetailsV2
-import com.bunbeauty.fooddelivery.data.model.order.client.patch.PatchOrder
 import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrder
 import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderUpdate
 import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
@@ -20,6 +19,7 @@ import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrder
 import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrderAddress
 import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrderProduct
 import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrderV2
+import com.bunbeauty.fooddelivery.data.model.order.client.patch.PatchOrder
 import com.bunbeauty.fooddelivery.data.model.order.client.post.PostOrder
 import com.bunbeauty.fooddelivery.data.model.order.client.post.PostOrderProduct
 import com.bunbeauty.fooddelivery.data.model.order.client.post.PostOrderV2
@@ -166,8 +166,21 @@ class OrderService(
         return orderRepository.getOrderListByUserUuid(userUuid.toUuid(), count)
     }
 
-    override suspend fun getOrderListByUserUuidV2(userUuid: String, count: Int?): List<GetClientOrderV2> {
-        return orderRepository.getOrderListByUserUuidV2(userUuid.toUuid(), count)
+    override suspend fun getOrderListByUserUuidV2(
+        userUuid: String,
+        count: Int?,
+        orderUuid: String?,
+    ): List<GetClientOrderV2> {
+        return if (orderUuid == null) {
+            orderRepository.getOrderListByUserUuidV2(userUuid.toUuid(), count)
+        } else {
+            orderRepository.getClientOrderByUuidV2(
+                userUuid = userUuid.toUuid(),
+                orderUuid = orderUuid.toUuid()
+            )?.let { getClientOrderV2 ->
+                listOf(getClientOrderV2)
+            } ?: emptyList()
+        }
     }
 
     override suspend fun getOrderByUuid(uuid: String): GetCafeOrderDetails? {

@@ -17,6 +17,7 @@ interface IOrderRepository {
     suspend fun getOrderListByCafeUuidLimited(cafeUuid: UUID, limitTime: Long): List<GetCafeOrder>
     suspend fun getOrderListByUserUuid(userUuid: UUID, count: Int?): List<GetClientOrder>
     suspend fun getOrderListByUserUuidV2(userUuid: UUID, count: Int?): List<GetClientOrderV2>
+    suspend fun getClientOrderByUuidV2(userUuid: UUID, orderUuid: UUID): GetClientOrderV2?
     suspend fun getOrderByUuid(orderUuid: UUID): GetCafeOrderDetails?
     suspend fun getOrderByUuidV2(orderUuid: UUID): GetCafeOrderDetailsV2?
     suspend fun getOrderListByCompanyUuidLimited(companyUuid: UUID, limitTime: Long): List<GetClientOrderV2>

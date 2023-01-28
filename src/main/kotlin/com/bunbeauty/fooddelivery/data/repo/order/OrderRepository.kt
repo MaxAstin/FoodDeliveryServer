@@ -136,6 +136,15 @@ class OrderRepository : IOrderRepository {
             }
     }
 
+    override suspend fun getClientOrderByUuidV2(userUuid: UUID, orderUuid: UUID): GetClientOrderV2? = query {
+        val orderEntity = OrderEntity.findById(orderUuid)
+        if (orderEntity?.clientUser?.id?.value == userUuid) {
+            orderEntity.toClientOrderV2()
+        } else {
+            null
+        }
+    }
+
     override suspend fun getOrderByUuid(orderUuid: UUID): GetCafeOrderDetails? = query {
         OrderEntity.findById(orderUuid)?.toCafeOrderDetails()
     }
