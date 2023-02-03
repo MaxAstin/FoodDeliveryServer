@@ -87,12 +87,15 @@ class StatisticService(
         startTimeMillis: Long,
         endTimeMillis: Long,
     ): List<GetCafeOrderDetailsV2>? {
+        println("getUserByUuid")
         val cityUuid = userRepository.getUserByUuid(userUuid.toUuid())?.city?.uuid ?: return null
+        println("getCafeListByCityUuid")
         val cafeList = cafeRepository.getCafeListByCityUuid(cityUuid.toUuid())
         return if (cafeUuid == null) {
             coroutineScope {
                 cafeList.map { cafe ->
                     async {
+                        println("getOrderDetailsListByCafeUuid")
                         orderRepository.getOrderDetailsListByCafeUuid(cafe.uuid.toUuid(), startTimeMillis, endTimeMillis)
                     }
                 }.awaitAll().flatten()
