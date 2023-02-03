@@ -184,16 +184,18 @@ class OrderRepository : IOrderRepository {
     override suspend fun getStatisticOrderListByCafeUuid(
         cafeUuid: UUID,
         startTimeMillis: Long,
-        endTimeMillis: Long
+        endTimeMillis: Long,
     ): List<GetStatisticOrder> = query {
         StatisticOrderEntity.find {
             OrderTable.cafe eq cafeUuid and
                     OrderTable.time.greaterEq(startTimeMillis) and
                     OrderTable.time.less(endTimeMillis)
-        }.orderBy(OrderTable.time to SortOrder.DESC)
-            .map { orderEntity ->
-                orderEntity.toStatisticOrder()
-            }
+        }.orderBy(OrderTable.time to SortOrder.DESC).let {
+            println("map toStatisticOrder")
+            it
+        }.map { orderEntity ->
+            orderEntity.toStatisticOrder()
+        }
     }
 
     override suspend fun getClientOrderByUuid(orderUuid: UUID): GetClientOrder? = query {
