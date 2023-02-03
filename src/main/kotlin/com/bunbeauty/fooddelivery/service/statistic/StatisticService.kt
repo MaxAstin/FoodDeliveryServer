@@ -36,6 +36,7 @@ class StatisticService(
             .millis
         val endTimeMillis = currentDateTime.millis
 
+        println("getCafeOrderList")
         val cafeOrderList = getCafeOrderList(
             userUuid = userUuid,
             cafeUuid = cafeUuid,
@@ -43,6 +44,7 @@ class StatisticService(
             endTimeMillis = endTimeMillis,
         ) ?: return null
 
+        println("mapToStatisticList")
         return mapToStatisticList(cafeOrderList, getTimestampConverter(statisticPeriod))
     }
 

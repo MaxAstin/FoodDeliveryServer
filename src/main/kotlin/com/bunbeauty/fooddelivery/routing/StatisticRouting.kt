@@ -27,9 +27,11 @@ fun Route.getStatistic() {
 
     get("/statistic") {
         manager { request ->
+            println("GET /statistic start")
             val cafeUuid = call.parameters[CAFE_UUID_PARAMETER]
             val period = call.parameters[PERIOD_PARAMETER] ?: error("$PERIOD_PARAMETER is required")
             val statisticList = statisticService.getStatisticList(request.jwtUser.uuid, cafeUuid, period)
+            println("GET /statistic end")
             if (statisticList == null) {
                 call.respondBad("Wrong parameters values")
             } else {
