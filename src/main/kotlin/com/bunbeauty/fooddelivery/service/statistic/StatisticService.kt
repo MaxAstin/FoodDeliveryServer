@@ -132,7 +132,7 @@ class StatisticService(
                 orderCount = orderEntry.value.size,
                 proceeds = countCost(orderEntry.value),
                 averageCheck = countAverageCheck(orderEntry.value),
-                productStatisticList = getProductStatisticList(orderEntry.value)
+                productStatisticList = emptyList() //getProductStatisticList(orderEntry.value)
             )
         }.sortedByDescending { getStatistic ->
             getStatistic.startPeriodTime
@@ -156,20 +156,21 @@ class StatisticService(
     }
 
     private fun getProductStatisticList(orderList: List<GetStatisticOrder>): List<GetProductStatistic> {
-        return orderList.flatMap { getCafeOrder ->
-            getCafeOrder.oderProductList
-        }.groupBy { getCafeOrder ->
-            getCafeOrder.menuProduct.uuid
-        }.map { (_, oderProductList) ->
-            GetProductStatistic(
-                name = oderProductList.first().menuProduct.name,
-                orderCount = oderProductList.size,
-                productCount = countProduct(oderProductList),
-                proceeds = countProductListCost(oderProductList),
-            )
-        }.sortedBy { productStatistic ->
-            productStatistic.proceeds
-        }
+        return emptyList()
+//        orderList.flatMap { getCafeOrder ->
+//            getCafeOrder.oderProductList
+//        }.groupBy { getCafeOrder ->
+//            getCafeOrder.menuProduct.uuid
+//        }.map { (_, oderProductList) ->
+//            GetProductStatistic(
+//                name = oderProductList.first().menuProduct.name,
+//                orderCount = oderProductList.size,
+//                productCount = countProduct(oderProductList),
+//                proceeds = countProductListCost(oderProductList),
+//            )
+//        }.sortedBy { productStatistic ->
+//            productStatistic.proceeds
+//        }
     }
 
     private fun countProduct(oderProductList: List<GetStatisticOrderProduct>): Int {

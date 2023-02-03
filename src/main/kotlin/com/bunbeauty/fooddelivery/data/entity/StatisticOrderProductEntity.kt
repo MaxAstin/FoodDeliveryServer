@@ -15,14 +15,11 @@ class StatisticOrderProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var newPrice: Int by OrderProductTable.newPrice
     var oldPrice: Int? by OrderProductTable.oldPrice
 
-    var menuProduct: MenuProductEntity by MenuProductEntity referencedOn OrderProductTable.menuProduct
-
     companion object : UUIDEntityClass<StatisticOrderProductEntity>(OrderProductTable)
 
     fun toStatisticOrderProduct() = GetStatisticOrderProduct(
         uuid = uuid,
         count = count,
-        newPrice = newPrice,
-        menuProduct = menuProduct.toMenuProduct()
+        newPrice = newPrice
     )
 }
