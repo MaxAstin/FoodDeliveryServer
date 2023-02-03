@@ -14,7 +14,7 @@ class StatisticOrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     val uuid: String = uuid.value.toString()
     var status: String by OrderTable.status
     var time: Long by OrderTable.time
-    val orderProducts: SizedIterable<OrderProductEntity> by OrderProductEntity referrersOn OrderProductTable.order
+    val orderProducts: SizedIterable<StatisticOrderProductEntity> by StatisticOrderProductEntity referrersOn OrderProductTable.order
 
     companion object : UUIDEntityClass<StatisticOrderEntity>(OrderTable)
 
@@ -23,7 +23,7 @@ class StatisticOrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         status = status,
         time = time,
         oderProductList = orderProducts.map { orderProductEntity ->
-            orderProductEntity.toOrderProduct()
+            orderProductEntity.toStatisticOrderProduct()
         }
     )
 

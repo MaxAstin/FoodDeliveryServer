@@ -5,6 +5,7 @@ import com.bunbeauty.fooddelivery.data.enums.StatisticPeriod
 import com.bunbeauty.fooddelivery.data.enums.StatisticPeriod.*
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
+import com.bunbeauty.fooddelivery.data.model.order.GetStatisticOrderProduct
 import com.bunbeauty.fooddelivery.data.model.order.cafe.GetStatisticOrder
 import com.bunbeauty.fooddelivery.data.model.statistic.GetProductStatistic
 import com.bunbeauty.fooddelivery.data.model.statistic.GetStatistic
@@ -171,13 +172,13 @@ class StatisticService(
         }
     }
 
-    private fun countProduct(oderProductList: List<GetOrderProduct>): Int {
+    private fun countProduct(oderProductList: List<GetStatisticOrderProduct>): Int {
         return oderProductList.sumOf { getOrderProduct ->
             getOrderProduct.count
         }
     }
 
-    private fun countProductListCost(oderProductList: List<GetOrderProduct>): Int {
+    private fun countProductListCost(oderProductList: List<GetStatisticOrderProduct>): Int {
         return oderProductList.sumOf { getOrderProduct ->
             getOrderProduct.count * getOrderProduct.newPrice
         }
