@@ -4,8 +4,8 @@ import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.enums.StatisticPeriod
 import com.bunbeauty.fooddelivery.data.enums.StatisticPeriod.*
 import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetailsV2
 import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
+import com.bunbeauty.fooddelivery.data.model.order.cafe.GetStatisticOrder
 import com.bunbeauty.fooddelivery.data.model.statistic.GetProductStatistic
 import com.bunbeauty.fooddelivery.data.model.statistic.GetStatistic
 import com.bunbeauty.fooddelivery.data.model.statistic.GetStatisticDetails
@@ -86,7 +86,7 @@ class StatisticService(
         cafeUuid: String?,
         startTimeMillis: Long,
         endTimeMillis: Long,
-    ): List<GetCafeOrderDetailsV2>? {
+    ): List<GetStatisticOrder>? {
         println("getUserByUuid")
         val cityUuid = userRepository.getUserByUuid(userUuid.toUuid())?.city?.uuid ?: return null
         println("getCafeListByCityUuid")
@@ -96,7 +96,7 @@ class StatisticService(
                 cafeList.map { cafe ->
                     async {
                         println("getOrderDetailsListByCafeUuid")
-                        orderRepository.getOrderDetailsListByCafeUuid(cafe.uuid.toUuid(), startTimeMillis, endTimeMillis)
+                        orderRepository.getStatisticOrderListByCafeUuid(cafe.uuid.toUuid(), startTimeMillis, endTimeMillis)
                     }
                 }.awaitAll().flatten()
             }
@@ -104,7 +104,7 @@ class StatisticService(
             val selectedCafe = cafeList.find { getCafe ->
                 getCafe.uuid == cafeUuid
             } ?: return null
-            orderRepository.getOrderDetailsListByCafeUuid(selectedCafe.uuid.toUuid(), startTimeMillis, endTimeMillis)
+            orderRepository.getStatisticOrderListByCafeUuid(selectedCafe.uuid.toUuid(), startTimeMillis, endTimeMillis)
         }.filter { order ->
             order.status == OrderStatus.DELIVERED.name
         }
@@ -119,7 +119,7 @@ class StatisticService(
     }
 
     private inline fun mapToStatisticList(
-        orderList: List<GetCafeOrderDetailsV2>,
+        orderList: List<GetStatisticOrder>,
         timestampConverter: (Long) -> String,
     ): List<GetStatistic> {
         return orderList.groupBy { order ->
@@ -138,23 +138,23 @@ class StatisticService(
         }
     }
 
-    private fun getStartPeriodTime(orderList: List<GetCafeOrderDetailsV2>): Long {
+    private fun getStartPeriodTime(orderList: List<GetStatisticOrder>): Long {
         return orderList.minOf { getCafeOrder ->
             getCafeOrder.time
         }
     }
 
-    private fun countCost(orderList: List<GetCafeOrderDetailsV2>): Int {
+    private fun countCost(orderList: List<GetStatisticOrder>): Int {
         return orderList.sumOf { getCafeOrder ->
             countProductListCost(getCafeOrder.oderProductList)
         }
     }
 
-    private fun countAverageCheck(orderList: List<GetCafeOrderDetailsV2>): Int {
+    private fun countAverageCheck(orderList: List<GetStatisticOrder>): Int {
         return countCost(orderList) / orderList.size
     }
 
-    private fun getProductStatisticList(orderList: List<GetCafeOrderDetailsV2>): List<GetProductStatistic> {
+    private fun getProductStatisticList(orderList: List<GetStatisticOrder>): List<GetProductStatistic> {
         return orderList.flatMap { getCafeOrder ->
             getCafeOrder.oderProductList
         }.groupBy { getCafeOrder ->
