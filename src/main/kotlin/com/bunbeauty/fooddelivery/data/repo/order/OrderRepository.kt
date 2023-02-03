@@ -191,7 +191,7 @@ class OrderRepository : IOrderRepository {
                     OrderTable.time.greaterEq(startTimeMillis) and
                     OrderTable.time.less(endTimeMillis)
         }.orderBy(OrderTable.time to SortOrder.DESC).let {
-            println("map toStatisticOrder")
+            println("map toStatisticOrder ${it.count()}")
             it
         }.map { orderEntity ->
             orderEntity.toStatisticOrder()
