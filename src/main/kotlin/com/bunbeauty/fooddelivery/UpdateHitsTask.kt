@@ -9,7 +9,7 @@ fun startUpdateHitsTask() {
                 println("Update hits task")
             }
         },
-        0L,
-        24 * 60 * 60 * 1000
+        1_000L,
+        60_000L
     )
 }
