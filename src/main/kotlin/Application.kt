@@ -7,6 +7,7 @@ import com.bunbeauty.fooddelivery.plugins.configureSerialization
 import com.bunbeauty.fooddelivery.plugins.configureSockets
 import com.bunbeauty.fooddelivery.routing.configureRouting
 import com.bunbeauty.fooddelivery.service.init.IInitService
+import com.bunbeauty.fooddelivery.startUpdateHitsTask
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
@@ -67,5 +68,6 @@ fun main() {
             initService.initDataBase()
             //initService.initNewCompany(InitPapaKarloData.company)
         }
+        startUpdateHitsTask()
     }.start(wait = true)
 }
