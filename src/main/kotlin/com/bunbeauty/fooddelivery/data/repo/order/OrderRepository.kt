@@ -196,9 +196,6 @@ class OrderRepository : IOrderRepository {
             println("map toStatisticOrder ${it.count()}")
             it
         }.mapIndexed { i, orderEntity ->
-            if (i % 100 == 0) {
-                println("map toStatisticOrder ${orderEntity.uuid}")
-            }
             orderEntity.toStatisticOrder()
         }
     }
