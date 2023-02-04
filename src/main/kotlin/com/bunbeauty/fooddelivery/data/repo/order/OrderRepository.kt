@@ -13,6 +13,7 @@ import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrder
 import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrderV2
 import com.bunbeauty.fooddelivery.data.table.OrderTable
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import java.util.*
 
@@ -187,9 +188,10 @@ class OrderRepository : IOrderRepository {
         endTimeMillis: Long,
     ): List<GetStatisticOrder> = query {
         StatisticOrderEntity.find {
-            OrderTable.cafe eq cafeUuid and
+            (OrderTable.cafe eq cafeUuid) and
                     OrderTable.time.greaterEq(startTimeMillis) and
-                    OrderTable.time.less(endTimeMillis)
+                    OrderTable.time.less(endTimeMillis) and
+                    (OrderTable.status eq "DELIVERED")
         }.orderBy(OrderTable.time to SortOrder.DESC).let {
             println("map toStatisticOrder ${it.count()}")
             it
