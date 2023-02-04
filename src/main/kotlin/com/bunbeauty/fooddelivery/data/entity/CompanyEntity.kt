@@ -22,8 +22,6 @@ class CompanyEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var paymentPhoneNumber: String? by CompanyTable.paymentPhoneNumber
     var paymentCardNumber: String? by CompanyTable.paymentCardNumber
 
-    val cities: SizedIterable<CityEntity> by CityEntity referrersOn CityTable.company
-
     companion object : UUIDEntityClass<CompanyEntity>(CompanyTable)
 
     fun toCompany() = GetCompany(

@@ -68,10 +68,13 @@ class MenuProductService(
     }
 
     override suspend fun getMenuProductListByCompanyUuid(companyUuid: String): List<GetMenuProduct> {
+        println("getMenuProductListByCompanyUuid")
         val menuProductList = menuProductRepository.getMenuProductListByCompanyUuid(companyUuid.toUuid())
         val limitTime = DateTime.now().withTimeAtStartOfDay().minusDays(HITS_ORDER_DAY_COUNT).millis
+        println("getOrderListByCompanyUuidLimited")
         val orderList = orderRepository.getOrderListByCompanyUuidLimited(companyUuid.toUuid(), limitTime)
 
+        println("get hitCache")
         val cache = hitCache[companyUuid]
         if (cache == null || !cache.isActual() || cache.hitMenuProductUuidList.size < HITS_COUNT) {
             println("hits calculation")
@@ -90,6 +93,7 @@ class MenuProductService(
             println("hits ${hitCache.hitMenuProductUuidList.joinToString()}")
         }
 
+        println("return menuProductList")
         return menuProductList
     }
 
