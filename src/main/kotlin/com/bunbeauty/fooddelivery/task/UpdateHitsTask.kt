@@ -11,14 +11,13 @@ import org.koin.ktor.ext.inject
 fun Application.startUpdateHitsTask() {
 
     val hitService: IHitService by inject()
-    val updateHitsJob = launch {
-        hitService.updateHits()
-    }
 
     Timer("Update hits").scheduleAtFixedRate(
         delay = 5_000L,
-        period = 5 * 60 * 1000,
+        period = TimeUnit.MINUTES.toMillis(2),
     ) {
-        updateHitsJob.start()
+        launch {
+            hitService.updateHits()
+        }
     }
 }
