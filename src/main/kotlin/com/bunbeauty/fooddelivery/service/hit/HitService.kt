@@ -21,6 +21,7 @@ class HitService(
         companyRepository.getCompanyList().forEach { getCompany ->
             val orderList = orderRepository.getOrderListByCompanyUuidLimited(getCompany.uuid.toUuid(), limitTime)
             val hits = getHitMenuProductUuidList(orderList, HITS_COUNT)
+            println("updateHits ${getCompany.name} hits ${hits.joinToString()}")
             hitRepository.updateHits(getCompany.uuid, hits)
         }
     }
