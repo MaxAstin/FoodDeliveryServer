@@ -17,7 +17,7 @@ fun Application.startUpdateHitsTask() {
 
     Timer("Update hits").scheduleAtFixedRate(
         delay = 5_000L,
-        period = TimeUnit.MINUTES.toMillis(5),
+        period = 5 * 60 * 1000,
     ) {
         updateHitsJob.start()
     }

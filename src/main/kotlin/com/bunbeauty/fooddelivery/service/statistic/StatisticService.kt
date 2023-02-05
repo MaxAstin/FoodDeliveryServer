@@ -37,7 +37,6 @@ class StatisticService(
             .millis
         val endTimeMillis = currentDateTime.millis
 
-        println("getCafeOrderList")
         val cafeOrderList = getCafeOrderList(
             userUuid = userUuid,
             cafeUuid = cafeUuid,
@@ -45,7 +44,6 @@ class StatisticService(
             endTimeMillis = endTimeMillis,
         ) ?: return null
 
-        println("mapToStatisticList")
         return mapToStatisticList(cafeOrderList, getTimestampConverter(statisticPeriod))
     }
 
@@ -88,15 +86,12 @@ class StatisticService(
         startTimeMillis: Long,
         endTimeMillis: Long,
     ): List<GetStatisticOrder>? {
-        println("getUserByUuid")
         val cityUuid = userRepository.getUserByUuid(userUuid.toUuid())?.city?.uuid ?: return null
-        println("getCafeListByCityUuid")
         val cafeList = cafeRepository.getCafeListByCityUuid(cityUuid.toUuid())
         return if (cafeUuid == null) {
             coroutineScope {
                 cafeList.map { cafe ->
                     async {
-                        println("getOrderDetailsListByCafeUuid")
                         orderRepository.getStatisticOrderListByCafeUuid(cafe.uuid.toUuid(), startTimeMillis, endTimeMillis)
                     }
                 }.awaitAll().flatten()
