@@ -38,4 +38,10 @@ class CompanyRepository : ICompanyRepository {
             CompanyTable.name eq Constants.MAIN_COMPANY_NAME
         }.singleOrNull()?.toCompany()
     }
+
+    override suspend fun getCompanyList(): List<GetCompany> = query {
+        CompanyEntity.all().map { companyEntity ->
+            companyEntity.toCompany()
+        }
+    }
 }

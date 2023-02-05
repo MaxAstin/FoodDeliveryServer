@@ -6,7 +6,7 @@ import com.bunbeauty.fooddelivery.data.model.menu_product.GetMenuProduct
 import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
 import com.bunbeauty.fooddelivery.data.model.order.GetOrderAddress
 import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
-import com.bunbeauty.fooddelivery.service.menu_product.MenuProductService
+import com.bunbeauty.fooddelivery.service.hit.HitService
 import com.toxicbakery.bcrypt.Bcrypt
 import com.toxicbakery.bcrypt.Bcrypt.verify
 import io.mockk.mockk
@@ -17,11 +17,10 @@ import kotlin.test.assertTrue
 
 class ApplicationTest {
 
-    private val menuProductService = MenuProductService(
-        menuProductRepository = mockk(),
+    private val hitService = HitService(
+        companyRepository = mockk(),
         orderRepository = mockk(),
-        userRepository = mockk(),
-        categoryRepository = mockk(),
+        hitRepository = mockk(),
     )
 
     @Test
@@ -35,7 +34,7 @@ class ApplicationTest {
 
     @Test
     fun testHitMenuProductUuidList() {
-        val hitCount = 5
+        val hitCount = 3
         val orderList = listOf(
             getFakeOrder(OrderStatus.DELIVERED.name, getFakeTime(1), listOf(
                 getFakeOrderProduct("пицца салями", 1, 400),
@@ -74,9 +73,9 @@ class ApplicationTest {
                 getFakeOrderProduct("соус острый", 1, 20),
             ))
         )
-        val expectedMenuProductUuidList = listOf("1", "2", "3")
+        val expectedMenuProductUuidList = listOf("шаурма с  кур", "пицца мясная", "люля свин")
 
-        val hitMenuProductUuidList = menuProductService.getHitMenuProductUuidList(orderList, hitCount)
+        val hitMenuProductUuidList = hitService.getHitMenuProductUuidList(orderList, hitCount)
 
         println(hitMenuProductUuidList.joinToString())
         assertContentEquals(expectedMenuProductUuidList, hitMenuProductUuidList)

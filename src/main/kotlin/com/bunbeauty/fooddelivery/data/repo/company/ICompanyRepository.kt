@@ -11,4 +11,5 @@ interface ICompanyRepository {
     suspend fun updateCompany(updateCompany: UpdateCompany): GetCompany?
     suspend fun getCompanyByUuid(uuid: UUID): GetCompany?
     suspend fun getCompanyByName(name: String): GetCompany?
+    suspend fun getCompanyList(): List<GetCompany>
 }

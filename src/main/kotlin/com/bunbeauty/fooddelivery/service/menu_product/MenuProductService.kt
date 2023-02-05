@@ -1,23 +1,18 @@
 package com.bunbeauty.fooddelivery.service.menu_product
 
-import com.bunbeauty.fooddelivery.data.Constants.HITS_COUNT
-import com.bunbeauty.fooddelivery.data.Constants.HITS_ORDER_DAY_COUNT
-import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.menu_product.*
-import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
 import com.bunbeauty.fooddelivery.data.repo.category.ICategoryRepository
+import com.bunbeauty.fooddelivery.data.repo.hit.IHitRepository
 import com.bunbeauty.fooddelivery.data.repo.menu_product.IMenuProductRepository
-import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
 import com.bunbeauty.fooddelivery.service.menu_product.model.HitsCache
-import org.joda.time.DateTime
 
 class MenuProductService(
     private val menuProductRepository: IMenuProductRepository,
-    private val orderRepository: IOrderRepository,
     private val userRepository: IUserRepository,
     private val categoryRepository: ICategoryRepository,
+    private val hitRepository: IHitRepository,
 ) : IMenuProductService {
 
     @Volatile
@@ -68,52 +63,18 @@ class MenuProductService(
     }
 
     override suspend fun getMenuProductListByCompanyUuid(companyUuid: String): List<GetMenuProduct> {
-        println("getMenuProductListByCompanyUuid")
         val menuProductList = menuProductRepository.getMenuProductListByCompanyUuid(companyUuid.toUuid())
 
-        println("get hitCache")
-        val cache = hitCache[companyUuid]
-        if (cache == null || !cache.isActual() || cache.hitMenuProductUuidList.size < HITS_COUNT) {
-            println("hits calculation")
-            val limitTime = DateTime.now().withTimeAtStartOfDay().minusDays(HITS_ORDER_DAY_COUNT).millis
-            val orderList = orderRepository.getOrderListByCompanyUuidLimited(companyUuid.toUuid(), limitTime)
-            hitCache[companyUuid] = HitsCache(
-                hitMenuProductUuidList = getHitMenuProductUuidList(orderList, HITS_COUNT),
-                dateTime = DateTime.now()
-            )
-        }
-        hitCache[companyUuid]?.let { hitCache ->
+        val hits = hitRepository.getHitsByCompanyUuid(companyUuid)
+        if (hits.isNotEmpty()) {
             val hitsCategory = categoryRepository.getHitsCategory()
             menuProductList.forEach { menuProduct ->
-                if (hitCache.hitMenuProductUuidList.contains(menuProduct.uuid)) {
+                if (hits.contains(menuProduct.uuid)) {
                     menuProduct.categories.add(hitsCategory)
                 }
             }
-            println("hits ${hitCache.hitMenuProductUuidList.joinToString()}")
         }
 
-        println("return menuProductList")
         return menuProductList
     }
-
-    fun getHitMenuProductUuidList(orderList: List<GetClientOrderV2>, count: Int): List<String> {
-        return orderList.filter { order ->
-            order.status == OrderStatus.DELIVERED.name
-        }.flatMap { order ->
-            order.oderProductList
-        }.asSequence()
-            .groupBy { orderProduct ->
-                orderProduct.menuProduct.uuid
-            }.map { (menuProductUuid, orderProductList) ->
-                menuProductUuid to orderProductList.sumOf { orderProduct ->
-                    orderProduct.count * orderProduct.newPrice
-                }
-            }.sortedByDescending { (_, cost) ->
-                cost
-            }.take(count)
-            .map { (menuProductUuid, _) ->
-                menuProductUuid
-            }.toList()
-    }
-
 }
