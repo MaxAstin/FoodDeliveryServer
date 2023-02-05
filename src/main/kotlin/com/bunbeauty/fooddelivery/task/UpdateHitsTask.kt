@@ -14,7 +14,7 @@ fun Application.startUpdateHitsTask() {
 
     Timer("Update hits").scheduleAtFixedRate(
         delay = 5_000L,
-        period = TimeUnit.MINUTES.toMillis(2),
+        period = TimeUnit.HOURS.toMillis(24),
     ) {
         launch {
             hitService.updateHits()
