@@ -6,7 +6,6 @@ import com.bunbeauty.fooddelivery.data.repo.category.ICategoryRepository
 import com.bunbeauty.fooddelivery.data.repo.hit.IHitRepository
 import com.bunbeauty.fooddelivery.data.repo.menu_product.IMenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
-import com.bunbeauty.fooddelivery.service.menu_product.model.HitsCache
 
 class MenuProductService(
     private val menuProductRepository: IMenuProductRepository,
@@ -14,9 +13,6 @@ class MenuProductService(
     private val categoryRepository: ICategoryRepository,
     private val hitRepository: IHitRepository,
 ) : IMenuProductService {
-
-    @Volatile
-    private var hitCache: MutableMap<String, HitsCache> = mutableMapOf()
 
     override suspend fun createMenuProduct(postMenuProduct: PostMenuProduct, creatorUuid: String): GetMenuProduct? {
         val companyUuid = userRepository.getCompanyUuidByUserUuid(creatorUuid.toUuid()) ?: return null
@@ -63,7 +59,10 @@ class MenuProductService(
     }
 
     override suspend fun getMenuProductListByCompanyUuid(companyUuid: String): List<GetMenuProduct> {
-        val menuProductList = menuProductRepository.getMenuProductListByCompanyUuid(companyUuid.toUuid())
+        val menuProductList =
+            menuProductRepository.getMenuProductListByCompanyUuid(companyUuid.toUuid()).filter { menuProduct ->
+                menuProduct.isVisible
+            }
 
         val hits = hitRepository.getHitsByCompanyUuid(companyUuid)
         if (hits.isNotEmpty()) {
