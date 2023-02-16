@@ -60,6 +60,7 @@ class NewStatisticService(
             }.map { (_, statisticOrderProductList) ->
                 InsertStatisticProduct(
                     name = statisticOrderProductList.first().name,
+                    photoLink = statisticOrderProductList.first().photoLink,
                     productCount = statisticOrderProductList.size,
                     proceeds = statisticOrderProductList.sumOf { statisticOrderProduct ->
                         statisticOrderProduct.newPrice * statisticOrderProduct.count
