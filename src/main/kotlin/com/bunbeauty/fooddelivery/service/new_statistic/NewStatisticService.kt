@@ -38,7 +38,7 @@ class NewStatisticService(
         )
         statisticOrderList.forEach {
             it.statisticOrderProductList.forEach { p ->
-                println("product $p")
+                println("product count=${p.count} menuProductUuid=${p.menuProductUuid} name=${p.name} newPrice=${p.newPrice}")
             }
         }
 
