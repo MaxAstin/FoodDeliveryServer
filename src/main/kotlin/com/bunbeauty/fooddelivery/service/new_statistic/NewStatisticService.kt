@@ -36,6 +36,12 @@ class NewStatisticService(
             fromTime = fromTime.millis,
             toTime = toTime.millis,
         )
+        statisticOrderList.forEach {
+            it.statisticOrderProductList.forEach { p ->
+                println("product $p")
+            }
+        }
+
         val insertStatisticDay = toInsertStatisticDay(fromTime.millis, statisticOrderList, company)
         statisticRepository.insetStatisticDay(insertStatisticDay)
     }
