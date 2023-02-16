@@ -9,7 +9,7 @@ val statisticModule = module(createdAtStart = true) {
             orderRepository = get(),
             dateTimeService = get(),
             userRepository = get(),
-            cafeRepository = get()
+            cafeRepository = get(),
         )
     }
 }

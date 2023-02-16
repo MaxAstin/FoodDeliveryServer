@@ -8,6 +8,7 @@ import com.bunbeauty.fooddelivery.plugins.configureSockets
 import com.bunbeauty.fooddelivery.routing.configureRouting
 import com.bunbeauty.fooddelivery.service.init.IInitService
 import com.bunbeauty.fooddelivery.task.startUpdateHitsTask
+import com.bunbeauty.fooddelivery.task.startUpdateStatisticTask
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
@@ -49,6 +50,7 @@ fun main() {
                 deliveryModule,
                 addressModule,
                 statisticModule,
+                newStatisticModule,
                 dateTimeModule,
                 versionModule,
                 firebaseModule,
@@ -70,5 +72,6 @@ fun main() {
             //initService.initNewCompany(InitPapaKarloData.company)
         }
         startUpdateHitsTask()
+        startUpdateStatisticTask()
     }.start(wait = true)
 }

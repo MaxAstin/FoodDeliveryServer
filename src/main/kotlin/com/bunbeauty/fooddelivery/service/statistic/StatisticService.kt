@@ -4,7 +4,6 @@ import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.enums.StatisticPeriod
 import com.bunbeauty.fooddelivery.data.enums.StatisticPeriod.*
 import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
 import com.bunbeauty.fooddelivery.data.model.order.GetStatisticOrderProduct
 import com.bunbeauty.fooddelivery.data.model.order.cafe.GetStatisticOrder
 import com.bunbeauty.fooddelivery.data.model.statistic.GetProductStatistic
@@ -92,7 +91,9 @@ class StatisticService(
             coroutineScope {
                 cafeList.map { cafe ->
                     async {
-                        orderRepository.getStatisticOrderListByCafeUuid(cafe.uuid.toUuid(), startTimeMillis, endTimeMillis)
+                        orderRepository.getStatisticOrderListByCafeUuid(cafe.uuid.toUuid(),
+                            startTimeMillis,
+                            endTimeMillis)
                     }
                 }.awaitAll().flatten()
             }

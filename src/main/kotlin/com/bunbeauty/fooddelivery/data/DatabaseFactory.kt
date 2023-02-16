@@ -66,6 +66,12 @@ object DatabaseFactory {
 
             SchemaUtils.create(TestClientUserPhoneTable)
             SchemaUtils.createMissingTablesAndColumns(TestClientUserPhoneTable)
+
+            SchemaUtils.create(StatisticDayTable)
+            SchemaUtils.createMissingTablesAndColumns(StatisticDayTable)
+
+            SchemaUtils.create(StatisticDayProductTable)
+            SchemaUtils.createMissingTablesAndColumns(StatisticDayProductTable)
         }
     }
 

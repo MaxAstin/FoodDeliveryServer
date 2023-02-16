@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 data class GetCompany(
     val uuid: String,
     val name: String,
+    val offset: Int,
     val delivery: GetDelivery,
     val forceUpdateVersion: GetForceUpdateVersion,
     val payment: GetPayment

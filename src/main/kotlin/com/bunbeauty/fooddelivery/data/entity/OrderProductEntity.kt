@@ -1,6 +1,7 @@
 package com.bunbeauty.fooddelivery.data.entity
 
 import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
+import com.bunbeauty.fooddelivery.data.model.statistic.GetStatisticOrderProduct
 import com.bunbeauty.fooddelivery.data.table.OrderProductTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
@@ -40,5 +41,13 @@ class OrderProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         barcode = barcode,
         menuProduct = menuProduct.toMenuProduct(),
         orderUuid = order.uuid
+    )
+
+    fun toStatisticOrderProduct() = GetStatisticOrderProduct(
+        uuid = uuid,
+        count = count,
+        name = name,
+        newPrice = newPrice,
+        photoLink = photoLink,
     )
 }

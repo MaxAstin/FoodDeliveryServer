@@ -27,6 +27,7 @@ class CompanyEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     fun toCompany() = GetCompany(
         uuid = uuid,
         name = name,
+        offset = 3,
         delivery = GetDelivery(
             forFree = forFreeDelivery,
             cost = deliveryCost
