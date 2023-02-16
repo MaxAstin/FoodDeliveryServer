@@ -46,6 +46,7 @@ class OrderProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     fun toStatisticOrderProduct() = GetStatisticOrderProduct(
         uuid = uuid,
         count = count,
+        menuProductUuid = menuProduct.uuid,
         name = name,
         newPrice = newPrice,
         photoLink = photoLink,

@@ -56,12 +56,14 @@ class NewStatisticService(
             statisticProductList = statisticOrderList.flatMap { statisticOrder ->
                 statisticOrder.statisticOrderProductList
             }.groupBy { statisticOrderProduct ->
-                statisticOrderProduct.uuid
+                statisticOrderProduct.menuProductUuid
             }.map { (_, statisticOrderProductList) ->
                 InsertStatisticProduct(
                     name = statisticOrderProductList.first().name,
                     photoLink = statisticOrderProductList.first().photoLink,
-                    productCount = statisticOrderProductList.size,
+                    productCount = statisticOrderProductList.sumOf { statisticOrderProduct ->
+                        statisticOrderProduct.count
+                    },
                     proceeds = statisticOrderProductList.sumOf { statisticOrderProduct ->
                         statisticOrderProduct.newPrice * statisticOrderProduct.count
                     }
