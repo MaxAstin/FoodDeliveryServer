@@ -148,6 +148,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     fun toStatisticOrder() = GetStatisticOrder(
         uuid = uuid,
+        code = code,
         time = time,
         statisticOrderProductList = oderProducts.map { oderProductEntity ->
             oderProductEntity.toStatisticOrderProduct()
