@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.entity
 
-import com.bunbeauty.fooddelivery.data.table.StatisticDayProductTable
+import com.bunbeauty.fooddelivery.data.table.StatisticProductTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -9,28 +9,13 @@ import java.util.*
 class StatisticDayProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     val uuid: String = uuid.value.toString()
-    var name: String by StatisticDayProductTable.name
-    var photoLink: String by StatisticDayProductTable.photoLink
-    var productCount: Int by StatisticDayProductTable.productCount
-    var productProceeds: Int by StatisticDayProductTable.productProceeds
+    var name: String by StatisticProductTable.name
+    var photoLink: String by StatisticProductTable.photoLink
+    var productCount: Int by StatisticProductTable.productCount
+    var productProceeds: Int by StatisticProductTable.productProceeds
 
-    var statisticDay: StatisticDayEntity by StatisticDayEntity referencedOn StatisticDayProductTable.statisticDay
+    var statistic: StatisticEntity by StatisticEntity referencedOn StatisticProductTable.statistic
 
-    companion object : UUIDEntityClass<StatisticDayProductEntity>(StatisticDayProductTable)
+    companion object : UUIDEntityClass<StatisticDayProductEntity>(StatisticProductTable)
 
-//    fun toOrderProduct() = GetOrderProduct(
-//        uuid = uuid,
-//        count = count,
-//        name = name,
-//        newPrice = newPrice,
-//        oldPrice = oldPrice,
-//        utils = utils,
-//        nutrition = nutrition,
-//        description = description,
-//        comboDescription = comboDescription,
-//        photoLink = photoLink,
-//        barcode = barcode,
-//        menuProduct = menuProduct.toMenuProduct(),
-//        orderUuid = order.uuid
-//    )
 }

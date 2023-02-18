@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.data.model.statistic.insert
+package com.bunbeauty.fooddelivery.data.model.new_statistic.insert
 
 class InsertStatisticProduct(
     val name: String,
