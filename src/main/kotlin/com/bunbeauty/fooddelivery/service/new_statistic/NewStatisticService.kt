@@ -22,6 +22,8 @@ class NewStatisticService(
     suspend fun updateStatistic() {
         companyRepository.getCompanyList().forEach { company ->
             updateLastDayStatistic(company)
+            updateLastWeekStatistic(company)
+            updateLastMonthStatistic(company)
         }
 
         //TODO
@@ -29,10 +31,57 @@ class NewStatisticService(
     }
 
     private suspend fun updateLastDayStatistic(company: GetCompany) {
+        updateLastStatistic(
+            company = company,
+            periodType = PeriodType.DAY,
+            getFromTime = { toTime ->
+                toTime.minusDays(1)
+            }
+        )
+    }
+
+    private suspend fun updateLastWeekStatistic(company: GetCompany) {
+        updateLastStatistic(
+            company = company,
+            periodType = PeriodType.WEEK,
+            getFromTime = { toTime ->
+                toTime.run {
+                    if (dayOfWeek == 1) {
+                        minusDays(7)
+                    } else {
+                        minusDays(dayOfWeek - 1)
+                    }
+                }
+            }
+        )
+    }
+
+    private suspend fun updateLastMonthStatistic(company: GetCompany) {
+        updateLastStatistic(
+            company = company,
+            periodType = PeriodType.MONTH,
+            getFromTime = { toTime ->
+                toTime.run {
+                    if (dayOfMonth == 1) {
+                        minusMonths(1)
+                    } else {
+                        minusDays(dayOfMonth - 1)
+                    }
+                }
+            }
+        )
+    }
+
+    private suspend inline fun updateLastStatistic(
+        company: GetCompany,
+        periodType: PeriodType,
+        getFromTime: (DateTime) -> DateTime,
+    ) {
         val toTime = DateTime.now()
             .withZone(DateTimeZone.forOffsetHours(company.offset))
             .withTimeAtStartOfDay()
-        val fromTime = toTime.minusDays(1)
+        val fromTime = getFromTime(toTime)
+
         val statisticOrderList = orderStatisticRepository.getOrderListByCompanyUuid(
             companyUuid = company.uuid.toUuid(),
             fromTime = fromTime.millis,
@@ -41,13 +90,13 @@ class NewStatisticService(
 
         val getStatistic = statisticRepository.getStatisticByTimePeriodTypeCompany(
             time = fromTime.millis,
-            periodType = PeriodType.DAY,
+            periodType = periodType,
             companyUuid = company.uuid.toUuid(),
         )
         if (getStatistic == null) {
             val insertStatisticDay = InsertStatistic(
                 time = fromTime.millis,
-                periodType = PeriodType.DAY,
+                periodType = periodType,
                 orderCount = statisticOrderList.size,
                 orderProceeds = calculateOrderProceeds(statisticOrderList),
                 statisticProductList = calculateStatisticProductList(statisticOrderList),

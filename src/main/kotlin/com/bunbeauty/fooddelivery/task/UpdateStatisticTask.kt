@@ -19,7 +19,6 @@ fun Application.startUpdateStatisticTask() {
         now,
         now.withTimeAtStartOfDay().plusDays(1)
     ).seconds
-    println("secondsToTomorrow $secondsToTomorrow")
     Timer("Update statistic").scheduleAtFixedRate(
         delay = 20_000,//secondsToTomorrow * 1_000L,
         period = TimeUnit.HOURS.toMillis(24),
