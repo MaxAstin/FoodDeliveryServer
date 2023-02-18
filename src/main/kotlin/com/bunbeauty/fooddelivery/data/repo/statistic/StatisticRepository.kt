@@ -33,6 +33,7 @@ class StatisticRepository : IStatisticRepository {
     override suspend fun insetStatistic(insertStatistic: InsertStatistic) = query {
         val statisticEntity = StatisticEntity.new {
             time = insertStatistic.time
+            periodType = insertStatistic.periodType.name
             orderCount = insertStatistic.orderCount
             orderProceeds = insertStatistic.orderProceeds
             company = CompanyEntity[insertStatistic.companyUuid]
