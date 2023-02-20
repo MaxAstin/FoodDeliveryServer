@@ -7,7 +7,3 @@ class GetStatistic(
     val orderCount: Int,
     val orderProceeds: Int,
 )
-
-enum class PeriodType {
-    DAY, WEEK, MONTH
-}

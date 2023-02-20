@@ -2,8 +2,10 @@ package com.bunbeauty.fooddelivery.di
 
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.order.OrderStatisticRepository
-import com.bunbeauty.fooddelivery.data.repo.statistic.IStatisticRepository
-import com.bunbeauty.fooddelivery.data.repo.statistic.StatisticRepository
+import com.bunbeauty.fooddelivery.data.repo.statistic.CafeStatisticRepository
+import com.bunbeauty.fooddelivery.data.repo.statistic.ICompanyStatisticRepository
+import com.bunbeauty.fooddelivery.data.repo.statistic.CompanyStatisticRepository
+import com.bunbeauty.fooddelivery.data.repo.statistic.ICafeStatisticRepository
 import com.bunbeauty.fooddelivery.service.new_statistic.NewStatisticService
 import org.koin.dsl.module
 
@@ -12,13 +14,18 @@ val newStatisticModule = module {
         NewStatisticService(
             orderStatisticRepository = get(),
             companyRepository = get(),
-            statisticRepository = get(),
+            cafeRepository = get(),
+            companyStatisticRepository = get(),
+            cafeStatisticRepository = get(),
         )
     }
     single<IOrderStatisticRepository> {
         OrderStatisticRepository()
     }
-    single<IStatisticRepository> {
-        StatisticRepository()
+    single<ICompanyStatisticRepository> {
+        CompanyStatisticRepository()
+    }
+    single<ICafeStatisticRepository> {
+        CafeStatisticRepository()
     }
 }

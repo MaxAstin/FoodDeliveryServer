@@ -1,115 +1,179 @@
 package com.bunbeauty.fooddelivery.service.new_statistic
 
 import com.bunbeauty.fooddelivery.data.ext.toUuid
+import com.bunbeauty.fooddelivery.data.model.cafe.GetCafe
 import com.bunbeauty.fooddelivery.data.model.company.GetCompany
 import com.bunbeauty.fooddelivery.data.model.new_statistic.PeriodType
 import com.bunbeauty.fooddelivery.data.model.new_statistic.UpdateStatistic
-import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertStatistic
+import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertCafeStatistic
+import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertCompanyStatistic
 import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertStatisticProduct
 import com.bunbeauty.fooddelivery.data.model.statistic.GetStatisticOrder
+import com.bunbeauty.fooddelivery.data.repo.cafe.ICafeRepository
 import com.bunbeauty.fooddelivery.data.repo.company.ICompanyRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderStatisticRepository
-import com.bunbeauty.fooddelivery.data.repo.statistic.IStatisticRepository
+import com.bunbeauty.fooddelivery.data.repo.statistic.ICafeStatisticRepository
+import com.bunbeauty.fooddelivery.data.repo.statistic.ICompanyStatisticRepository
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 
 class NewStatisticService(
     private val orderStatisticRepository: IOrderStatisticRepository,
     private val companyRepository: ICompanyRepository,
-    private val statisticRepository: IStatisticRepository,
+    private val cafeRepository: ICafeRepository,
+    private val companyStatisticRepository: ICompanyStatisticRepository,
+    private val cafeStatisticRepository: ICafeStatisticRepository,
 ) {
 
     suspend fun updateStatistic() {
         companyRepository.getCompanyList().forEach { company ->
-            updateLastDayStatistic(company)
-            updateLastWeekStatistic(company)
-            updateLastMonthStatistic(company)
+            val toDateTime = getToDateTime(company.offset)
+            val dayPeriodFromDateTime = getDayPeriodFromDateTime(toDateTime)
+            val weekPeriodFromDateTime = getWeekPeriodFromDateTime(toDateTime)
+            val monthPeriodFromDateTime = getMonthPeriodFromDateTime(toDateTime)
+
+            updateCompanyStatistic(
+                company = company,
+                periodType = PeriodType.DAY,
+                fromDateTime = dayPeriodFromDateTime,
+                toDateTime = toDateTime,
+            )
+            updateCompanyStatistic(
+                company = company,
+                periodType = PeriodType.WEEK,
+                fromDateTime = weekPeriodFromDateTime,
+                toDateTime = toDateTime,
+            )
+            updateCompanyStatistic(
+                company = company,
+                periodType = PeriodType.MONTH,
+                fromDateTime = monthPeriodFromDateTime,
+                toDateTime = toDateTime,
+            )
+            cafeRepository.getCafeListByCompanyUuid(company.uuid.toUuid()).forEach { cafe ->
+                updateCafeStatistic(
+                    cafe = cafe,
+                    periodType = PeriodType.DAY,
+                    fromDateTime = dayPeriodFromDateTime,
+                    toDateTime = toDateTime,
+                )
+                updateCafeStatistic(
+                    cafe = cafe,
+                    periodType = PeriodType.WEEK,
+                    fromDateTime = weekPeriodFromDateTime,
+                    toDateTime = toDateTime,
+                )
+                updateCafeStatistic(
+                    cafe = cafe,
+                    periodType = PeriodType.MONTH,
+                    fromDateTime = monthPeriodFromDateTime,
+                    toDateTime = toDateTime,
+                )
+            }
         }
-
-        //TODO
-        //orderStatisticRepository.getOrderListByCompanyUuid()
     }
 
-    private suspend fun updateLastDayStatistic(company: GetCompany) {
-        updateLastStatistic(
-            company = company,
-            periodType = PeriodType.DAY,
-            getFromTime = { toTime ->
-                toTime.minusDays(1)
-            }
-        )
-    }
-
-    private suspend fun updateLastWeekStatistic(company: GetCompany) {
-        updateLastStatistic(
-            company = company,
-            periodType = PeriodType.WEEK,
-            getFromTime = { toTime ->
-                toTime.run {
-                    if (dayOfWeek == 1) {
-                        minusDays(7)
-                    } else {
-                        minusDays(dayOfWeek - 1)
-                    }
-                }
-            }
-        )
-    }
-
-    private suspend fun updateLastMonthStatistic(company: GetCompany) {
-        updateLastStatistic(
-            company = company,
-            periodType = PeriodType.MONTH,
-            getFromTime = { toTime ->
-                toTime.run {
-                    if (dayOfMonth == 1) {
-                        minusMonths(1)
-                    } else {
-                        minusDays(dayOfMonth - 1)
-                    }
-                }
-            }
-        )
-    }
-
-    private suspend inline fun updateLastStatistic(
+    private suspend inline fun updateCompanyStatistic(
         company: GetCompany,
         periodType: PeriodType,
-        getFromTime: (DateTime) -> DateTime,
+        fromDateTime: DateTime,
+        toDateTime: DateTime,
     ) {
-        val toTime = DateTime.now()
-            .withZone(DateTimeZone.forOffsetHours(company.offset))
-            .withTimeAtStartOfDay()
-        val fromTime = getFromTime(toTime)
-
         val statisticOrderList = orderStatisticRepository.getOrderListByCompanyUuid(
             companyUuid = company.uuid.toUuid(),
-            fromTime = fromTime.millis,
-            toTime = toTime.millis,
+            fromTime = fromDateTime.millis,
+            toTime = toDateTime.millis,
         )
 
-        val getStatistic = statisticRepository.getStatisticByTimePeriodTypeCompany(
-            time = fromTime.millis,
+        val getStatistic = companyStatisticRepository.getStatisticByTimePeriodTypeCompany(
+            time = fromDateTime.millis,
             periodType = periodType,
             companyUuid = company.uuid.toUuid(),
         )
         if (getStatistic == null) {
-            val insertStatisticDay = InsertStatistic(
-                time = fromTime.millis,
+            val insertCompanyStatisticDay = InsertCompanyStatistic(
+                time = fromDateTime.millis,
                 periodType = periodType,
                 orderCount = statisticOrderList.size,
                 orderProceeds = calculateOrderProceeds(statisticOrderList),
                 statisticProductList = calculateStatisticProductList(statisticOrderList),
                 companyUuid = company.uuid.toUuid(),
             )
-            statisticRepository.insetStatistic(insertStatisticDay)
+            companyStatisticRepository.insetStatistic(insertCompanyStatisticDay)
         } else {
             val updateStatistic = UpdateStatistic(
                 orderCount = statisticOrderList.size,
                 orderProceeds = calculateOrderProceeds(statisticOrderList),
                 statisticProductList = calculateStatisticProductList(statisticOrderList)
             )
-            statisticRepository.updateStatistic(getStatistic.uuid.toUuid(), updateStatistic)
+            companyStatisticRepository.updateStatistic(getStatistic.uuid.toUuid(), updateStatistic)
+        }
+    }
+
+    private suspend inline fun updateCafeStatistic(
+        cafe: GetCafe,
+        periodType: PeriodType,
+        fromDateTime: DateTime,
+        toDateTime: DateTime,
+    ) {
+        val statisticOrderList = orderStatisticRepository.getOrderListByCafeUuid(
+            cafeUuid = cafe.uuid.toUuid(),
+            fromTime = fromDateTime.millis,
+            toTime = toDateTime.millis,
+        )
+
+        val getStatistic = cafeStatisticRepository.getStatisticByTimePeriodTypeCafe(
+            time = fromDateTime.millis,
+            periodType = periodType,
+            cafeUuid = cafe.uuid.toUuid(),
+        )
+        if (getStatistic == null) {
+            val insertCompanyStatisticDay = InsertCafeStatistic(
+                time = fromDateTime.millis,
+                periodType = periodType,
+                orderCount = statisticOrderList.size,
+                orderProceeds = calculateOrderProceeds(statisticOrderList),
+                statisticProductList = calculateStatisticProductList(statisticOrderList),
+                cafeUuid = cafe.uuid.toUuid(),
+            )
+            cafeStatisticRepository.insetStatistic(insertCompanyStatisticDay)
+        } else {
+            val updateStatistic = UpdateStatistic(
+                orderCount = statisticOrderList.size,
+                orderProceeds = calculateOrderProceeds(statisticOrderList),
+                statisticProductList = calculateStatisticProductList(statisticOrderList)
+            )
+            cafeStatisticRepository.updateStatistic(getStatistic.uuid.toUuid(), updateStatistic)
+        }
+    }
+
+    private fun getToDateTime(offset: Int): DateTime {
+        return DateTime.now()
+            .withZone(DateTimeZone.forOffsetHours(offset))
+            .withTimeAtStartOfDay()
+    }
+
+    private fun getDayPeriodFromDateTime(toDateTime: DateTime): DateTime {
+        return toDateTime.minusDays(1)
+    }
+
+    private fun getWeekPeriodFromDateTime(toDateTime: DateTime): DateTime {
+        return toDateTime.run {
+            if (dayOfWeek == 1) {
+                minusDays(7)
+            } else {
+                minusDays(dayOfWeek - 1)
+            }
+        }
+    }
+
+    private fun getMonthPeriodFromDateTime(toDateTime: DateTime): DateTime {
+        return toDateTime.run {
+            if (dayOfMonth == 1) {
+                minusMonths(1)
+            } else {
+                minusDays(dayOfMonth - 1)
+            }
         }
     }
 

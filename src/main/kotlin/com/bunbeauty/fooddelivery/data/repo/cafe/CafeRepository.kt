@@ -6,6 +6,7 @@ import com.bunbeauty.fooddelivery.data.entity.CityEntity
 import com.bunbeauty.fooddelivery.data.model.cafe.GetCafe
 import com.bunbeauty.fooddelivery.data.model.cafe.InsertCafe
 import com.bunbeauty.fooddelivery.data.table.CafeTable
+import com.bunbeauty.fooddelivery.data.table.CityTable
 import java.util.*
 
 class CafeRepository : ICafeRepository {
@@ -28,6 +29,16 @@ class CafeRepository : ICafeRepository {
             CafeTable.city eq cityUuid
         }.map { cafeEntity ->
             cafeEntity.toCafe()
+        }.toList()
+    }
+
+    override suspend fun getCafeListByCompanyUuid(companyUuid: UUID): List<GetCafe> {
+        return CityEntity.find {
+            CityTable.company eq companyUuid
+        }.flatMap { cityEntity ->
+            cityEntity.cafes.map { cafeEntity ->
+                cafeEntity.toCafe()
+            }
         }.toList()
     }
 
