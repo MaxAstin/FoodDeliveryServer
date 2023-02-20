@@ -32,8 +32,8 @@ class CafeRepository : ICafeRepository {
         }.toList()
     }
 
-    override suspend fun getCafeListByCompanyUuid(companyUuid: UUID): List<GetCafe> {
-        return CityEntity.find {
+    override suspend fun getCafeListByCompanyUuid(companyUuid: UUID): List<GetCafe> = query {
+        CityEntity.find {
             CityTable.company eq companyUuid
         }.flatMap { cityEntity ->
             cityEntity.cafes.map { cafeEntity ->
