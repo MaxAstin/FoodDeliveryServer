@@ -72,6 +72,12 @@ object DatabaseFactory {
 
             SchemaUtils.create(CompanyStatisticProductTable)
             SchemaUtils.createMissingTablesAndColumns(CompanyStatisticProductTable)
+
+            SchemaUtils.create(CafeStatisticTable)
+            SchemaUtils.createMissingTablesAndColumns(CafeStatisticTable)
+
+            SchemaUtils.create(CafeStatisticProductTable)
+            SchemaUtils.createMissingTablesAndColumns(CafeStatisticProductTable)
         }
     }
 
