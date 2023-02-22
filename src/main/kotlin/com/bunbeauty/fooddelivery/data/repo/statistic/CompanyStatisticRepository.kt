@@ -11,6 +11,8 @@ import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertCompanyS
 import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertStatisticProduct
 import com.bunbeauty.fooddelivery.data.table.CompanyStatisticProductTable
 import com.bunbeauty.fooddelivery.data.table.CompanyStatisticTable
+import com.bunbeauty.fooddelivery.data.table.OrderTable
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import java.util.*
@@ -20,13 +22,13 @@ class CompanyStatisticRepository : ICompanyStatisticRepository {
     override suspend fun getStatisticListByTimePeriodTypeCompany(
         time: Long,
         periodType: PeriodType,
-        companyUuid: UUID
+        companyUuid: UUID,
     ): List<GetStatistic> = query {
         CompanyStatisticEntity.find {
             (CompanyStatisticTable.periodType eq periodType.name) and
                     (CompanyStatisticTable.time greaterEq time) and
                     (CompanyStatisticTable.company eq companyUuid)
-        }.map { companyStatisticEntity ->
+        }.orderBy(OrderTable.time to SortOrder.DESC).map { companyStatisticEntity ->
             companyStatisticEntity.toStatistic()
         }
     }

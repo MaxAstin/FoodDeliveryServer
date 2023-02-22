@@ -11,6 +11,8 @@ import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertCafeStat
 import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertStatisticProduct
 import com.bunbeauty.fooddelivery.data.table.CafeStatisticProductTable
 import com.bunbeauty.fooddelivery.data.table.CafeStatisticTable
+import com.bunbeauty.fooddelivery.data.table.OrderTable
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import java.util.*
@@ -26,7 +28,7 @@ class CafeStatisticRepository : ICafeStatisticRepository {
             (CafeStatisticTable.time greaterEq time) and
                     (CafeStatisticTable.periodType eq periodType.name) and
                     (CafeStatisticTable.cafe eq cafeUuid)
-        }.map { cafeStatisticEntity ->
+        }.orderBy(OrderTable.time to SortOrder.DESC).map { cafeStatisticEntity ->
             cafeStatisticEntity.toStatistic()
         }
     }
