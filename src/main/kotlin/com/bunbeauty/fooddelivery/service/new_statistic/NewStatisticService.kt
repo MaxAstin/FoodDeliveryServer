@@ -77,18 +77,6 @@ class NewStatisticService(
                 fromDateTime = monthPeriodFromDateTime,
                 toDateTime = toDateTime,
             )
-            //TODO remove
-            for (i in 1..24) {
-                val _fromDateTime = monthPeriodFromDateTime.minusMonths(i)
-                val _toDateTime = toDateTime.minusMonths(i)
-
-                updateCompanyStatistic(
-                    company = company,
-                    periodType = PeriodType.MONTH,
-                    fromDateTime = _fromDateTime,
-                    toDateTime = _toDateTime,
-                )
-            }
             cafeRepository.getCafeListByCompanyUuid(company.uuid.toUuid()).forEach { cafe ->
                 updateCafeStatistic(
                     cafe = cafe,
@@ -108,18 +96,6 @@ class NewStatisticService(
                     fromDateTime = monthPeriodFromDateTime,
                     toDateTime = toDateTime,
                 )
-                //TODO remove
-                for (i in 1..24) {
-                    val _fromDateTime = monthPeriodFromDateTime.minusMonths(i)
-                    val _toDateTime = toDateTime.minusMonths(i)
-
-                    updateCafeStatistic(
-                        cafe = cafe,
-                        periodType = PeriodType.MONTH,
-                        fromDateTime = _fromDateTime,
-                        toDateTime = _toDateTime,
-                    )
-                }
             }
         }
     }
