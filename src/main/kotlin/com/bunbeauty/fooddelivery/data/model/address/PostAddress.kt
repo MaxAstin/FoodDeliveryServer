@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.data.model.address
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PostAddress(
+class PostAddress(
     val house: String,
     val flat: String?,
     val entrance: String?,

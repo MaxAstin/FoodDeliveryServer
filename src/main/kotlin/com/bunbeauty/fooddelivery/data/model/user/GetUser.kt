@@ -5,7 +5,7 @@ import com.bunbeauty.fooddelivery.data.model.company.GetCompany
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetUser(
+class GetUser(
     val uuid: String,
     val username: String,
     val passwordHash: String,

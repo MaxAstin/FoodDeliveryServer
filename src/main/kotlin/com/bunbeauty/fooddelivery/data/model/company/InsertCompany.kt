@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.model.company
 
-data class InsertCompany(
+class InsertCompany(
     val name: String,
     val forFreeDelivery: Int,
     val deliveryCost: Int,

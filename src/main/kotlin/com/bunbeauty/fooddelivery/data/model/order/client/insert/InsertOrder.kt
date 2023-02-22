@@ -2,7 +2,7 @@ package com.bunbeauty.fooddelivery.data.model.order.client.insert
 
 import java.util.*
 
-data class InsertOrder(
+class InsertOrder(
     val time: Long,
     val isDelivery: Boolean,
     val code: String,

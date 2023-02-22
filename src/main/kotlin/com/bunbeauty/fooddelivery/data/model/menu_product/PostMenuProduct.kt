@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.data.model.menu_product
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PostMenuProduct(
+class PostMenuProduct(
     val name: String,
     val newPrice: Int,
     val oldPrice: Int?,

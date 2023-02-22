@@ -5,7 +5,7 @@ import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetCafeOrderDetails(
+class GetCafeOrderDetails(
     val uuid: String,
     val code: String,
     val status: String,

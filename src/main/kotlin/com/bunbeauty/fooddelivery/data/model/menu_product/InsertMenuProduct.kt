@@ -2,7 +2,7 @@ package com.bunbeauty.fooddelivery.data.model.menu_product
 
 import java.util.*
 
-data class InsertMenuProduct(
+class InsertMenuProduct(
     val name: String,
     val newPrice: Int,
     val oldPrice: Int?,

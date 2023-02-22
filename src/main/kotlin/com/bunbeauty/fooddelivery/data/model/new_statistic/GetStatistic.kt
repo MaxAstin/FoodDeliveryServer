@@ -1,5 +1,8 @@
 package com.bunbeauty.fooddelivery.data.model.new_statistic
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 class GetStatistic(
     val uuid: String,
     val time: Long,

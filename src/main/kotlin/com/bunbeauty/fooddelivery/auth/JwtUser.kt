@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.auth
 import com.bunbeauty.fooddelivery.data.enums.UserRole
 import io.ktor.server.auth.*
 
-data class JwtUser(
+class JwtUser(
     val uuid: String,
     val role: String,
 ) : Principal {

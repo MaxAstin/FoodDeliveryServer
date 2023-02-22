@@ -4,7 +4,7 @@ import com.bunbeauty.fooddelivery.data.model.street.GetStreet
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetAddress(
+class GetAddress(
     val uuid: String,
     val house: String,
     val flat: String?,

@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.data.model.cafe
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetCafe(
+class GetCafe(
     val uuid: String,
     val fromTime: Int,
     val toTime: Int,

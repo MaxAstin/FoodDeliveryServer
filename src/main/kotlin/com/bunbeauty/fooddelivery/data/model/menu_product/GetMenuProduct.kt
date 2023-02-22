@@ -4,7 +4,7 @@ import com.bunbeauty.fooddelivery.data.model.category.GetCategory
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetMenuProduct(
+class GetMenuProduct(
     val uuid: String,
     val name: String,
     val newPrice: Int,

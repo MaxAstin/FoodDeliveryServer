@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.init
 
-data class InitCompany(
+class InitCompany(
     val name: String,
     val forFreeDelivery: Int,
     val deliveryCost: Int,

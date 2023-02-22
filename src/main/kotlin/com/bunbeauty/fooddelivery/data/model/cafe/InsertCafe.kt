@@ -2,7 +2,7 @@ package com.bunbeauty.fooddelivery.data.model.cafe
 
 import java.util.UUID
 
-data class InsertCafe(
+class InsertCafe(
     val fromTime: Int,
     val toTime: Int,
     val phoneNumber: String,

@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.data.model.menu_product
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PatchMenuProduct(
+class PatchMenuProduct(
     val name: String? = null,
     val newPrice: Int? = null,
     val oldPrice: Int? = null,

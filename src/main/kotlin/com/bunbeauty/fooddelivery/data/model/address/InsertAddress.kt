@@ -2,7 +2,7 @@ package com.bunbeauty.fooddelivery.data.model.address
 
 import java.util.*
 
-data class InsertAddress(
+class InsertAddress(
     val house: String,
     val flat: String?,
     val entrance: String?,

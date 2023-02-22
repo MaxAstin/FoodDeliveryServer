@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.init
 
-data class InitCafe(
+class InitCafe(
     val fromTime: Int,
     val toTime: Int,
     val phoneNumber: String,

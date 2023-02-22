@@ -4,7 +4,7 @@ import com.bunbeauty.fooddelivery.data.model.company.GetCompany
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetCity(
+class GetCity(
     val uuid: String,
     val name: String,
     val timeZone: String,

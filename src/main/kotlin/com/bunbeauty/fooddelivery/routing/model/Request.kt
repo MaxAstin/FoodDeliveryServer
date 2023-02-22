@@ -2,6 +2,6 @@ package com.bunbeauty.fooddelivery.routing.model
 
 import com.bunbeauty.fooddelivery.auth.JwtUser
 
-data class Request(
+class Request(
     val jwtUser: JwtUser
 )

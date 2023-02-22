@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.data.model.statistic
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetStatistic(
+class GetStatistic(
     val period: String,
     val startPeriodTime: Long,
     val orderCount: Int,
