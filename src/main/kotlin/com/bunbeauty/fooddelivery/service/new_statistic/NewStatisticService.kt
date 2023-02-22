@@ -59,6 +59,14 @@ class NewStatisticService(
             val weekPeriodFromDateTime = getWeekPeriodFromDateTime(toDateTime)
             val monthPeriodFromDateTime = getMonthPeriodFromDateTime(toDateTime)
 
+            for (i in 1..16) {
+                updateCompanyStatistic(
+                    company = company,
+                    periodType = PeriodType.MONTH,
+                    fromDateTime = monthPeriodFromDateTime.minusMonths(i),
+                    toDateTime = monthPeriodFromDateTime.minusMonths(i - 1),
+                )
+            }
             updateCompanyStatistic(
                 company = company,
                 periodType = PeriodType.DAY,
@@ -96,6 +104,14 @@ class NewStatisticService(
                     fromDateTime = monthPeriodFromDateTime,
                     toDateTime = toDateTime,
                 )
+                for (i in 1..16) {
+                    updateCafeStatistic(
+                        cafe = cafe,
+                        periodType = PeriodType.MONTH,
+                        fromDateTime = monthPeriodFromDateTime.minusMonths(i),
+                        toDateTime = monthPeriodFromDateTime.minusMonths(i - 1),
+                    )
+                }
             }
         }
     }
