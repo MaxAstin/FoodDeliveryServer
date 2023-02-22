@@ -32,7 +32,7 @@ class NewStatisticService(
         val periodType = PeriodType.valueOf(period)
         val user = userRepository.getUserByUuid(userUuid.toUuid()) ?: return null
         val currentDateTime = getTodayDateTime(user.company.offset)
-        val startTimeMillis = currentDateTime.minusMonths(3)
+        val startTimeMillis = currentDateTime.minusMonths(24)
             .minusDays(currentDateTime.dayOfMonth - 1)
             .withTimeAtStartOfDay()
             .millis
@@ -77,6 +77,18 @@ class NewStatisticService(
                 fromDateTime = monthPeriodFromDateTime,
                 toDateTime = toDateTime,
             )
+            //TODO remove
+            for (i in 1..24) {
+                val _fromDateTime = monthPeriodFromDateTime.minusMonths(i)
+                val _toDateTime = toDateTime.minusMonths(i)
+
+                updateCompanyStatistic(
+                    company = company,
+                    periodType = PeriodType.MONTH,
+                    fromDateTime = _fromDateTime,
+                    toDateTime = _toDateTime,
+                )
+            }
             cafeRepository.getCafeListByCompanyUuid(company.uuid.toUuid()).forEach { cafe ->
                 updateCafeStatistic(
                     cafe = cafe,
@@ -96,6 +108,18 @@ class NewStatisticService(
                     fromDateTime = monthPeriodFromDateTime,
                     toDateTime = toDateTime,
                 )
+                //TODO remove
+                for (i in 1..24) {
+                    val _fromDateTime = monthPeriodFromDateTime.minusMonths(i)
+                    val _toDateTime = toDateTime.minusMonths(i)
+
+                    updateCafeStatistic(
+                        cafe = cafe,
+                        periodType = PeriodType.MONTH,
+                        fromDateTime = _fromDateTime,
+                        toDateTime = _toDateTime,
+                    )
+                }
             }
         }
     }
