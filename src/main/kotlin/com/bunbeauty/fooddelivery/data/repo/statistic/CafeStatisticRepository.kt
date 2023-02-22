@@ -28,7 +28,7 @@ class CafeStatisticRepository : ICafeStatisticRepository {
             (CafeStatisticTable.time greaterEq time) and
                     (CafeStatisticTable.periodType eq periodType.name) and
                     (CafeStatisticTable.cafe eq cafeUuid)
-        }.orderBy(OrderTable.time to SortOrder.DESC).map { cafeStatisticEntity ->
+        }.orderBy(CafeStatisticTable.time to SortOrder.DESC).map { cafeStatisticEntity ->
             cafeStatisticEntity.toStatistic()
         }
     }

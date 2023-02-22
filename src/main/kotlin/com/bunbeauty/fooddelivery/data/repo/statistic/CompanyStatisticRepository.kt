@@ -28,7 +28,7 @@ class CompanyStatisticRepository : ICompanyStatisticRepository {
             (CompanyStatisticTable.periodType eq periodType.name) and
                     (CompanyStatisticTable.time greaterEq time) and
                     (CompanyStatisticTable.company eq companyUuid)
-        }.orderBy(OrderTable.time to SortOrder.DESC).map { companyStatisticEntity ->
+        }.orderBy(CompanyStatisticTable.time to SortOrder.DESC).map { companyStatisticEntity ->
             companyStatisticEntity.toStatistic()
         }
     }
