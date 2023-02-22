@@ -8,9 +8,15 @@ import java.util.*
 
 interface ICompanyStatisticRepository {
 
-    suspend fun getStatisticByTimePeriodTypeCompany(
-        periodType: PeriodType,
+    suspend fun getStatisticListByTimePeriodTypeCompany(
         time: Long,
+        periodType: PeriodType,
+        companyUuid: UUID,
+    ): List<GetStatistic>
+
+    suspend fun getStatisticByTimePeriodTypeCompany(
+        time: Long,
+        periodType: PeriodType,
         companyUuid: UUID,
     ): GetStatistic?
 

@@ -6,6 +6,8 @@ import com.bunbeauty.fooddelivery.data.Constants.START_TIME_PARAMETER
 import com.bunbeauty.fooddelivery.routing.extension.manager
 import com.bunbeauty.fooddelivery.routing.extension.respondBad
 import com.bunbeauty.fooddelivery.routing.extension.respondOk
+import com.bunbeauty.fooddelivery.routing.extension.respondOkOrBad
+import com.bunbeauty.fooddelivery.service.new_statistic.NewStatisticService
 import com.bunbeauty.fooddelivery.service.statistic.StatisticService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -17,26 +19,34 @@ fun Application.configureStatisticRouting() {
     routing {
         authenticate {
             getStatistic()
+            getStatisticDetails()
         }
     }
 }
 
 fun Route.getStatistic() {
 
-    val statisticService: StatisticService by inject()
+    val statisticService: NewStatisticService by inject()
 
     get("/statistic") {
         manager { request ->
             val cafeUuid = call.parameters[CAFE_UUID_PARAMETER]
             val period = call.parameters[PERIOD_PARAMETER] ?: error("$PERIOD_PARAMETER is required")
-            val statisticList = statisticService.getStatisticList(request.jwtUser.uuid, cafeUuid, period)
-            if (statisticList == null) {
-                call.respondBad("Wrong parameters values")
-            } else {
-                call.respondOk(statisticList)
-            }
+            val statisticList = statisticService.getStatisticList(
+                userUuid = request.jwtUser.uuid,
+                cafeUuid = cafeUuid,
+                period = period
+            )
+            call.respondOkOrBad(statisticList)
         }
     }
+
+
+}
+
+fun Route.getStatisticDetails() {
+
+    val statisticService: StatisticService by inject()
 
     get("/statistic/details") {
         manager { request ->

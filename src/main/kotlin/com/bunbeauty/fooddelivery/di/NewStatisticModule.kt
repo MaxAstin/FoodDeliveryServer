@@ -17,6 +17,7 @@ val newStatisticModule = module {
             cafeRepository = get(),
             companyStatisticRepository = get(),
             cafeStatisticRepository = get(),
+            userRepository = get(),
         )
     }
     single<IOrderStatisticRepository> {

@@ -8,9 +8,15 @@ import java.util.*
 
 interface ICafeStatisticRepository {
 
-    suspend fun getStatisticByTimePeriodTypeCafe(
-        periodType: PeriodType,
+    suspend fun getStatisticListByTimePeriodTypeCompany(
         time: Long,
+        periodType: PeriodType,
+        cafeUuid: UUID,
+    ): List<GetStatistic>
+
+    suspend fun getStatisticByTimePeriodTypeCafe(
+        time: Long,
+        periodType: PeriodType,
         cafeUuid: UUID,
     ): GetStatistic?
 

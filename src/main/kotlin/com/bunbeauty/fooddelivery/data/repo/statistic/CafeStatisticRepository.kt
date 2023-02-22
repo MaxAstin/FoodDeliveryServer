@@ -17,9 +17,23 @@ import java.util.*
 
 class CafeStatisticRepository : ICafeStatisticRepository {
 
-    override suspend fun getStatisticByTimePeriodTypeCafe(
-        periodType: PeriodType,
+    override suspend fun getStatisticListByTimePeriodTypeCompany(
         time: Long,
+        periodType: PeriodType,
+        cafeUuid: UUID,
+    ): List<GetStatistic> = query {
+        CafeStatisticEntity.find {
+            (CafeStatisticTable.time greaterEq time) and
+                    (CafeStatisticTable.periodType eq periodType.name) and
+                    (CafeStatisticTable.cafe eq cafeUuid)
+        }.map { cafeStatisticEntity ->
+            cafeStatisticEntity.toStatistic()
+        }
+    }
+
+    override suspend fun getStatisticByTimePeriodTypeCafe(
+        time: Long,
+        periodType: PeriodType,
         cafeUuid: UUID,
     ): GetStatistic? = query {
         CafeStatisticEntity.find {

@@ -3,6 +3,7 @@ package com.bunbeauty.fooddelivery.service.new_statistic
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.cafe.GetCafe
 import com.bunbeauty.fooddelivery.data.model.company.GetCompany
+import com.bunbeauty.fooddelivery.data.model.new_statistic.GetStatistic
 import com.bunbeauty.fooddelivery.data.model.new_statistic.PeriodType
 import com.bunbeauty.fooddelivery.data.model.new_statistic.UpdateStatistic
 import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertCafeStatistic
@@ -14,6 +15,7 @@ import com.bunbeauty.fooddelivery.data.repo.company.ICompanyRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICafeStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICompanyStatisticRepository
+import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 
@@ -23,11 +25,36 @@ class NewStatisticService(
     private val cafeRepository: ICafeRepository,
     private val companyStatisticRepository: ICompanyStatisticRepository,
     private val cafeStatisticRepository: ICafeStatisticRepository,
+    private val userRepository: IUserRepository,
 ) {
+
+    suspend fun getStatisticList(userUuid: String, cafeUuid: String?, period: String): List<GetStatistic>? {
+        val periodType = PeriodType.valueOf(period)
+        val user = userRepository.getUserByUuid(userUuid.toUuid()) ?: return null
+        val currentDateTime = getTodayDateTime(user.company.offset)
+        val startTimeMillis = currentDateTime.minusMonths(3)
+            .minusDays(currentDateTime.dayOfMonth - 1)
+            .withTimeAtStartOfDay()
+            .millis
+
+        return if (cafeUuid == null) {
+            companyStatisticRepository.getStatisticListByTimePeriodTypeCompany(
+                time = startTimeMillis,
+                periodType = periodType,
+                companyUuid = user.company.uuid.toUuid(),
+            )
+        } else {
+            cafeStatisticRepository.getStatisticListByTimePeriodTypeCompany(
+                time = startTimeMillis,
+                periodType = periodType,
+                cafeUuid = cafeUuid.toUuid(),
+            )
+        }
+    }
 
     suspend fun updateStatistic() {
         companyRepository.getCompanyList().forEach { company ->
-            val toDateTime = getToDateTime(company.offset)
+            val toDateTime = getTodayDateTime(company.offset)
             val dayPeriodFromDateTime = getDayPeriodFromDateTime(toDateTime)
             val weekPeriodFromDateTime = getWeekPeriodFromDateTime(toDateTime)
             val monthPeriodFromDateTime = getMonthPeriodFromDateTime(toDateTime)
@@ -147,7 +174,7 @@ class NewStatisticService(
         }
     }
 
-    private fun getToDateTime(offset: Int): DateTime {
+    private fun getTodayDateTime(offset: Int): DateTime {
         return DateTime.now()
             .withZone(DateTimeZone.forOffsetHours(offset))
             .withTimeAtStartOfDay()

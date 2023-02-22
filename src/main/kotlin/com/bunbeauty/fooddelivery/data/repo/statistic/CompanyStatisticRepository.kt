@@ -17,9 +17,23 @@ import java.util.*
 
 class CompanyStatisticRepository : ICompanyStatisticRepository {
 
-    override suspend fun getStatisticByTimePeriodTypeCompany(
-        periodType: PeriodType,
+    override suspend fun getStatisticListByTimePeriodTypeCompany(
         time: Long,
+        periodType: PeriodType,
+        companyUuid: UUID
+    ): List<GetStatistic> = query {
+        CompanyStatisticEntity.find {
+            (CompanyStatisticTable.periodType eq periodType.name) and
+                    (CompanyStatisticTable.time greaterEq time) and
+                    (CompanyStatisticTable.company eq companyUuid)
+        }.map { companyStatisticEntity ->
+            companyStatisticEntity.toStatistic()
+        }
+    }
+
+    override suspend fun getStatisticByTimePeriodTypeCompany(
+        time: Long,
+        periodType: PeriodType,
         companyUuid: UUID,
     ): GetStatistic? = query {
         CompanyStatisticEntity.find {
