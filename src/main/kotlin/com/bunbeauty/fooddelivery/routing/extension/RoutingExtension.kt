@@ -85,31 +85,46 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.checkRights(
 }
 
 suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.managerWithBody(
+    errorMessage: String? = null,
     block: (BodyRequest<B>) -> G?,
 ) {
     manager { request ->
-        handleBody(request, block)
+        handleBody(request, errorMessage, block)
     }
 }
 
 suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.adminWithBody(
+    errorMessage: String? = null,
     block: (BodyRequest<B>) -> G?,
 ) {
     admin { request ->
-        handleBody(request, block)
+        handleBody(request, errorMessage, block)
     }
 }
 
 suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.clientWithBody(
+    errorMessage: String? = null,
     block: (BodyRequest<B>) -> G?,
 ) {
     client { request ->
-        handleBody(request, block)
+        handleBody(request, errorMessage, block)
+    }
+}
+
+suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.withBody(
+    errorMessage: String? = null,
+    block: (B) -> G?,
+) {
+    safely {
+        val bodyModel: B = call.receive()
+        val getModel: G? = block(bodyModel)
+        call.respondOkOrBad(model = getModel, errorMessage = errorMessage)
     }
 }
 
 suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.handleBody(
     request: Request,
+    errorMessage: String? = null,
     block: (BodyRequest<B>) -> G?,
 ) {
     val bodyModel: B = call.receive()
@@ -120,7 +135,7 @@ suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>
         )
     )
     if (getModel == null) {
-        call.respondBad("Something went wrong")
+        call.respondBad(errorMessage ?: "Something went wrong")
     } else {
         call.respondOk(getModel)
     }
@@ -179,9 +194,12 @@ suspend inline fun <reified T : Any> ApplicationCall.respondOk(model: T) {
     respond(HttpStatusCode.OK, model)
 }
 
-suspend inline fun <reified T : Any> ApplicationCall.respondOkOrBad(model: T?) {
+suspend inline fun <reified T : Any> ApplicationCall.respondOkOrBad(
+    model: T?,
+    errorMessage: String? = null,
+) {
     if (model == null) {
-        respond(HttpStatusCode.BadRequest, "Data not found")
+        respond(HttpStatusCode.BadRequest, errorMessage ?: "Data not found")
     } else {
         respondOk(model)
     }
