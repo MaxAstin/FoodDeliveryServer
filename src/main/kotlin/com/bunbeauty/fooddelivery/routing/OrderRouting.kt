@@ -18,6 +18,7 @@ import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.koin.ktor.ext.inject
 
@@ -167,7 +168,7 @@ fun Route.observeClientOrders() {
         clientSocket(
             block = { request ->
                 orderService.observeClientOrderUpdates(request.jwtUser.uuid).onEach { clientOrder ->
-                    outgoing.send(Frame.Text(json.encodeToString(GetClientOrder.serializer(), clientOrder)))
+                    outgoing.send(Frame.Text(json.encodeToString(clientOrder)))
                 }.launchIn(this)
             },
             closeBlock = { request ->
@@ -185,8 +186,8 @@ fun Route.observeClientOrdersV2() {
     webSocket("/client/order/v2/subscribe") {
         clientSocket(
             block = { request ->
-                orderService.observeClientOrderUpdates(request.jwtUser.uuid).onEach { clientOrder ->
-                    outgoing.send(Frame.Text(json.encodeToString(GetClientOrder.serializer(), clientOrder)))
+                orderService.observeClientOrderUpdatesV2(request.jwtUser.uuid).onEach { clientOrder ->
+                    outgoing.send(Frame.Text(json.encodeToString(clientOrder)))
                 }.launchIn(this)
             },
             closeBlock = { request ->
@@ -206,7 +207,7 @@ fun Route.observeManagerOrders() {
             block = {
                 val cafeUuid = call.parameters[CAFE_UUID_PARAMETER] ?: error("$CAFE_UUID_PARAMETER is required")
                 orderService.observeCafeOrderUpdates(cafeUuid).onEach { cafeOrder ->
-                    outgoing.send(Frame.Text(json.encodeToString(GetCafeOrder.serializer(), cafeOrder)))
+                    outgoing.send(Frame.Text(json.encodeToString(cafeOrder)))
                 }.launchIn(this)
             },
             closeBlock = {
