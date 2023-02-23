@@ -3,14 +3,11 @@ package com.bunbeauty.fooddelivery.routing
 import com.bunbeauty.fooddelivery.data.model.user.GetUser
 import com.bunbeauty.fooddelivery.data.model.user.PostUser
 import com.bunbeauty.fooddelivery.data.model.user.PostUserAuth
-import com.bunbeauty.fooddelivery.routing.extension.adminWithBody
-import com.bunbeauty.fooddelivery.routing.extension.respondBad
-import com.bunbeauty.fooddelivery.routing.extension.respondOk
-import com.bunbeauty.fooddelivery.routing.extension.safely
+import com.bunbeauty.fooddelivery.data.model.user.UserAuthResponse
+import com.bunbeauty.fooddelivery.routing.extension.*
 import com.bunbeauty.fooddelivery.service.user.IUserService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
@@ -30,14 +27,8 @@ fun Routing.userLogin() {
     val userService: IUserService by inject()
 
     post("/user/login") {
-        safely {
-            val postUserAuth: PostUserAuth = call.receive()
-            val userAuthResponse = userService.login(postUserAuth)
-            if (userAuthResponse == null) {
-                call.respondBad("Unable to log in with provided credentials")
-            } else {
-                call.respondOk(userAuthResponse)
-            }
+        withBody<PostUserAuth, UserAuthResponse>(errorMessage = "Unable to log in with provided credentials") { body ->
+            userService.login(body)
         }
     }
 }

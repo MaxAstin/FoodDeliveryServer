@@ -17,5 +17,4 @@ fun Application.configureRouting() {
     configureStatisticRouting()
     configureVersionRouting()
     configurePaymentRouting()
-    configureDefaultRouting()
 }

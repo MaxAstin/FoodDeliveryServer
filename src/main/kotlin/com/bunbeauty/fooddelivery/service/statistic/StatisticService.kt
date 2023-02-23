@@ -25,27 +25,6 @@ class StatisticService(
     private val cafeRepository: ICafeRepository,
 ) {
 
-    suspend fun getStatisticList(userUuid: String, cafeUuid: String?, period: String): List<GetStatistic>? {
-        val statisticPeriod = StatisticPeriod.values().find { statisticPeriod ->
-            statisticPeriod.name == period
-        } ?: return null
-        val currentDateTime = DateTime.now()
-        val startTimeMillis = currentDateTime.minusMonths(3)
-            .minusDays(currentDateTime.dayOfMonth - 1)
-            .withTimeAtStartOfDay()
-            .millis
-        val endTimeMillis = currentDateTime.millis
-
-        val cafeOrderList = getCafeOrderList(
-            userUuid = userUuid,
-            cafeUuid = cafeUuid,
-            startTimeMillis = startTimeMillis,
-            endTimeMillis = endTimeMillis,
-        ) ?: return null
-
-        return mapToStatisticList(cafeOrderList, getTimestampConverter(statisticPeriod))
-    }
-
     suspend fun getStatisticDetails(
         userUuid: String,
         cafeUuid: String?,
