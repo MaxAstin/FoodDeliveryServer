@@ -199,7 +199,7 @@ class OrderService(
         clientSessionHandler.emitNewValue(getClientOrder?.clientUserUuid, getClientOrder)
 
         val getClientOrderUpdate = orderRepository.getClientOrderUpdateByUuid(orderUuid.toUuid())
-        clientSessionHandlerV2.emitNewValue(getCafeOrder?.cafeUuid, getClientOrderUpdate)
+        clientSessionHandlerV2.emitNewValue(getClientOrderUpdate?.clientUserUuid, getClientOrderUpdate)
 
         return getCafeOrder
     }
@@ -222,6 +222,7 @@ class OrderService(
 
     override fun clientDisconnect(clientUserUuid: String) {
         clientSessionHandler.disconnect(clientUserUuid)
+        clientSessionHandlerV2.disconnect(clientUserUuid)
     }
 
     override fun userDisconnect(cafeUuid: String) {

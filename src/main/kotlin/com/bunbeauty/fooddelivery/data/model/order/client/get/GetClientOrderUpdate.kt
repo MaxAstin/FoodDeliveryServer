@@ -5,5 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 class GetClientOrderUpdate(
     val uuid: String,
-    val status: String
+    val status: String,
+    val clientUserUuid: String
 )
