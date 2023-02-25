@@ -14,7 +14,8 @@ class OrderStatisticRepository : IOrderStatisticRepository {
             OrderEntity.find {
                 (OrderTable.cafe eq cafeUuid) and
                         (OrderTable.time greater fromTime) and
-                        (OrderTable.time less toTime)
+                        (OrderTable.time less toTime) and
+                        (OrderTable.status eq "DELIVERED")
             }.map { orderEntity ->
                 orderEntity.toStatisticOrder()
             }
