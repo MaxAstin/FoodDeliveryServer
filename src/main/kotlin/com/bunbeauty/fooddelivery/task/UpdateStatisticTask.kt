@@ -20,7 +20,7 @@ fun Application.startUpdateStatisticTask() {
         now.withTimeAtStartOfDay().plusDays(1)
     ).seconds
     Timer("Update statistic").scheduleAtFixedRate(
-        delay = secondsToTomorrow * 1_000L,
+        delay = 10_000,//secondsToTomorrow * 1_000L,
         period = TimeUnit.HOURS.toMillis(24),
     ) {
         launch {
