@@ -59,8 +59,10 @@ class MenuProductService(
     }
 
     override suspend fun getMenuProductListByCompanyUuid(companyUuid: String): List<GetMenuProduct> {
-        val menuProductList = menuProductRepository.getMenuProductListByCompanyUuid(companyUuid.toUuid())
-
+        val menuProductList =
+            menuProductRepository.getMenuProductListByCompanyUuid(companyUuid.toUuid()).filter { menuProduct ->
+                menuProduct.isVisible
+            }
         val hits = hitRepository.getHitsByCompanyUuid(companyUuid)
         if (hits.isNotEmpty()) {
             val hitsCategory = categoryRepository.getHitsCategory()
