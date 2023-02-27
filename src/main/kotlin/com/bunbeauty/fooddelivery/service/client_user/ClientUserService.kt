@@ -129,7 +129,7 @@ class ClientUserService(
     }
 
     suspend fun sendCode(phoneNumber: String): String? {
-        return ""
+        return TODO()
     }
 
     suspend fun isCodeForTestPhone(postClientCode: PostClientCode): Boolean {

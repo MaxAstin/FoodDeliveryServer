@@ -10,6 +10,7 @@ val hitModule = module(createdAtStart = true) {
     single<IHitService> {
         HitService(
             companyRepository = get(),
+            menuProductRepository = get(),
             orderRepository = get(),
             hitRepository = get(),
         )

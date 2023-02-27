@@ -5,6 +5,7 @@ import com.bunbeauty.fooddelivery.routing.model.Request
 import io.ktor.server.auth.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import java.sql.DriverManager.println
 
@@ -28,12 +29,13 @@ suspend inline fun DefaultWebSocketServerSession.managerSocket(
     }
 }
 
+@OptIn(ExperimentalCoroutinesApi::class)
 suspend inline fun DefaultWebSocketServerSession.socket(
     block: (Request) -> Unit,
     crossinline closeBlock: (Request) -> Unit,
     checkBlock: (JwtUser) -> Boolean,
 ) {
-    val jwtUser = call.authentication.principal as? JwtUser
+    val jwtUser = call.authentication.principal() as? JwtUser
     if (jwtUser != null) {
         val request = Request(jwtUser)
         try {

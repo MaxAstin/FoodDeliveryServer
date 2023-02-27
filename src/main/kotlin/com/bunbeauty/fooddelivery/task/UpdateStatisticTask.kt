@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.task
 
-import com.bunbeauty.fooddelivery.service.new_statistic.NewStatisticService
+import com.bunbeauty.fooddelivery.service.statistic.StatisticService
 import io.ktor.server.application.*
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime
@@ -12,7 +12,7 @@ import kotlin.concurrent.scheduleAtFixedRate
 
 fun Application.startUpdateStatisticTask() {
 
-    val newStatisticService: NewStatisticService by inject()
+    val statisticService: StatisticService by inject()
 
     val now = DateTime.now()
     val secondsToTomorrow = Seconds.secondsBetween(
@@ -24,7 +24,7 @@ fun Application.startUpdateStatisticTask() {
         period = TimeUnit.HOURS.toMillis(24),
     ) {
         launch {
-            newStatisticService.updateStatistic()
+            statisticService.updateStatistic()
         }
     }
 }

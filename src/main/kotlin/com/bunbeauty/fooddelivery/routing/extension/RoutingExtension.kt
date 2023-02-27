@@ -71,7 +71,7 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.checkRights(
     checkBlock: (JwtUser) -> Boolean,
 ) {
     safely {
-        val jwtUser = call.authentication.principal as? JwtUser
+        val jwtUser = call.authentication.principal() as? JwtUser
         if (jwtUser == null) {
             call.respond(HttpStatusCode.Unauthorized)
         } else {

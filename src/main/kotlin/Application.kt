@@ -6,7 +6,6 @@ import com.bunbeauty.fooddelivery.di.*
 import com.bunbeauty.fooddelivery.plugins.configureSerialization
 import com.bunbeauty.fooddelivery.plugins.configureSockets
 import com.bunbeauty.fooddelivery.routing.configureRouting
-import com.bunbeauty.fooddelivery.service.init.IInitService
 import com.bunbeauty.fooddelivery.task.startUpdateHitsTask
 import com.bunbeauty.fooddelivery.task.startUpdateStatisticTask
 import com.google.auth.oauth2.GoogleCredentials
@@ -17,7 +16,6 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import kotlinx.coroutines.launch
 import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 import java.io.InputStream
@@ -34,7 +32,6 @@ fun main() {
         configureSerialization()
         install(Koin) {
             modules(
-                initModule,
                 dataModule,
                 authModule,
                 userModule,
@@ -50,7 +47,6 @@ fun main() {
                 deliveryModule,
                 addressModule,
                 statisticModule,
-                newStatisticModule,
                 dateTimeModule,
                 versionModule,
                 firebaseModule,
@@ -65,12 +61,6 @@ fun main() {
             }
         }
         configureRouting()
-
-        val initService: IInitService by inject()
-        launch {
-            initService.initDataBase()
-            //initService.initNewCompany(InitPapaKarloData.company)
-        }
         startUpdateHitsTask()
         startUpdateStatisticTask()
     }.start(wait = true)

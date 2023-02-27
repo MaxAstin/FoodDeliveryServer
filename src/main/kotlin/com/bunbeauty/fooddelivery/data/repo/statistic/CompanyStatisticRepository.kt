@@ -11,10 +11,7 @@ import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertCompanyS
 import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertStatisticProduct
 import com.bunbeauty.fooddelivery.data.table.CompanyStatisticProductTable
 import com.bunbeauty.fooddelivery.data.table.CompanyStatisticTable
-import com.bunbeauty.fooddelivery.data.table.OrderTable
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.*
 import java.util.*
 
 class CompanyStatisticRepository : ICompanyStatisticRepository {
@@ -59,8 +56,10 @@ class CompanyStatisticRepository : ICompanyStatisticRepository {
     }
 
     override suspend fun updateStatistic(statisticUuid: UUID, updateStatistic: UpdateStatistic): GetStatistic? = query {
-        CompanyStatisticProductTable.deleteWhere {
-            CompanyStatisticProductTable.companyStatistic eq statisticUuid
+        CompanyStatisticProductTable.deleteWhere { sqlBuilder ->
+            sqlBuilder.run {
+                companyStatistic eq statisticUuid
+            }
         }
 
         CompanyStatisticEntity.findById(statisticUuid)?.also { statisticEntity ->

@@ -11,9 +11,8 @@ import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertCafeStat
 import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertStatisticProduct
 import com.bunbeauty.fooddelivery.data.table.CafeStatisticProductTable
 import com.bunbeauty.fooddelivery.data.table.CafeStatisticTable
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
 class CafeStatisticRepository : ICafeStatisticRepository {
@@ -57,9 +56,11 @@ class CafeStatisticRepository : ICafeStatisticRepository {
         cafeStatisticEntity.toStatistic()
     }
 
-    override suspend fun updateStatistic(statisticUuid: UUID, updateStatistic: UpdateStatistic): GetStatistic? = query {
-        CafeStatisticProductTable.deleteWhere {
-            CafeStatisticProductTable.cafeStatistic eq statisticUuid
+    override suspend fun updateStatistic(statisticUuid: UUID, updateStatistic: UpdateStatistic): GetStatistic? =  transaction {
+        CafeStatisticProductTable.deleteWhere { sqlBuilder ->
+            sqlBuilder.run {
+                cafeStatistic eq statisticUuid
+            }
         }
 
         CafeStatisticEntity.findById(statisticUuid)?.also { statisticEntity ->
