@@ -10,7 +10,7 @@ class ApplicationTest {
 
     @Test
     fun testHashing() {
-        val value = "920855"
+        val value = "secretPassword"
         val hash = String(Bcrypt.hash(value, BCrypt.MIN_COST))
         println(hash)
         val isVerified = verify(value, "hash".toByteArray())
