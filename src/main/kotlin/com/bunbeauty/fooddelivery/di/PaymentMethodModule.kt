@@ -8,7 +8,7 @@ import org.koin.dsl.module
 
 val paymentMethodModule = module(createdAtStart = true) {
 
-    single<IPaymentMethodService> {
+    factory<IPaymentMethodService> {
         PaymentMethodService(
             paymentMethodRepository = get()
         )
