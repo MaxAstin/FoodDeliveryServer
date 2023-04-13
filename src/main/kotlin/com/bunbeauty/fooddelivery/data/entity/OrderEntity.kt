@@ -1,5 +1,6 @@
 package com.bunbeauty.fooddelivery.data.entity
 
+import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.model.order.GetOrderAddress
 import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrder
@@ -36,6 +37,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var cafe: CafeEntity by CafeEntity referencedOn OrderTable.cafe
     var company: CompanyEntity by CompanyEntity referencedOn OrderTable.company
     var clientUser: ClientUserEntity by ClientUserEntity referencedOn OrderTable.clientUser
+
     val oderProducts: SizedIterable<OrderProductEntity> by OrderProductEntity referrersOn OrderProductTable.order
 
     companion object : UUIDEntityClass<OrderEntity>(OrderTable)

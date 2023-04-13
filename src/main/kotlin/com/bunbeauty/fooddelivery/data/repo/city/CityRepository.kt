@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.data.repo.city
 import com.bunbeauty.fooddelivery.data.Constants
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.CityEntity
-import com.bunbeauty.fooddelivery.data.entity.CompanyEntity
+import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.model.city.GetCity
 import com.bunbeauty.fooddelivery.data.model.city.InsertCity
 import com.bunbeauty.fooddelivery.data.table.CityTable

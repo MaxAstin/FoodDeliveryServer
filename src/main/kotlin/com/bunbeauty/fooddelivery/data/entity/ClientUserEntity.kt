@@ -1,5 +1,6 @@
 package com.bunbeauty.fooddelivery.data.entity
 
+import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.model.client_user.GetCafeClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.data.table.AddressTable

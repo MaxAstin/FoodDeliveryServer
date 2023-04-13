@@ -2,7 +2,7 @@ import com.bunbeauty.fooddelivery.auth.IJwtService
 import com.bunbeauty.fooddelivery.data.Constants.FB_ADMIN_KEY
 import com.bunbeauty.fooddelivery.data.Constants.PORT
 import com.bunbeauty.fooddelivery.data.DatabaseFactory
-import com.bunbeauty.fooddelivery.di.*
+import com.bunbeauty.fooddelivery.di.configureKoin
 import com.bunbeauty.fooddelivery.plugins.configureSerialization
 import com.bunbeauty.fooddelivery.plugins.configureSockets
 import com.bunbeauty.fooddelivery.routing.configureRouting
@@ -17,7 +17,6 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import org.koin.ktor.ext.inject
-import org.koin.ktor.plugin.Koin
 import java.io.InputStream
 
 fun main() {
@@ -30,30 +29,7 @@ fun main() {
         FirebaseApp.initializeApp(options)
         configureSockets()
         configureSerialization()
-        install(Koin) {
-            modules(
-                dataModule,
-                authModule,
-                userModule,
-                clientUserModule,
-                companyModule,
-                orderModule,
-                cityModule,
-                cafeModule,
-                streetModule,
-                categoryModule,
-                menuProductModule,
-                hitModule,
-                deliveryModule,
-                addressModule,
-                statisticModule,
-                dateTimeModule,
-                versionModule,
-                firebaseModule,
-                paymentModule,
-                requestModule
-            )
-        }
+        configureKoin()
         val jwtService: IJwtService by inject()
         install(Authentication) {
             jwt {

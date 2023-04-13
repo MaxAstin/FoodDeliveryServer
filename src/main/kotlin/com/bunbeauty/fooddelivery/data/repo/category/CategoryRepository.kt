@@ -1,10 +1,9 @@
 package com.bunbeauty.fooddelivery.data.repo.category
 
-import com.bunbeauty.fooddelivery.data.Constants
 import com.bunbeauty.fooddelivery.data.Constants.HITS_CATEGORY_NAME
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.CategoryEntity
-import com.bunbeauty.fooddelivery.data.entity.CompanyEntity
+import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.model.category.GetCategory
 import com.bunbeauty.fooddelivery.data.model.category.InsertCategory
 import com.bunbeauty.fooddelivery.data.model.category.UpdateCategory

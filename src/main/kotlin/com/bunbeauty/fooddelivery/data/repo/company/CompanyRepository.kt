@@ -2,7 +2,7 @@ package com.bunbeauty.fooddelivery.data.repo.company
 
 import com.bunbeauty.fooddelivery.data.Constants
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.CompanyEntity
+import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.model.company.GetCompany
 import com.bunbeauty.fooddelivery.data.model.company.InsertCompany
 import com.bunbeauty.fooddelivery.data.model.company.UpdateCompany

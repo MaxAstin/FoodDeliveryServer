@@ -14,6 +14,7 @@ class UserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var username: String by UserTable.username
     var passwordHash: String by UserTable.passwordHash
     var role: UserRole by UserTable.role
+
     var city: CityEntity by CityEntity referencedOn UserTable.city
 
     companion object : UUIDEntityClass<UserEntity>(UserTable)

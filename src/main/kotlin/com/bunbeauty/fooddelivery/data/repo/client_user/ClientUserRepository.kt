@@ -2,6 +2,7 @@ package com.bunbeauty.fooddelivery.data.repo.client_user
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.*
+import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientSettings
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.InsertClientUser

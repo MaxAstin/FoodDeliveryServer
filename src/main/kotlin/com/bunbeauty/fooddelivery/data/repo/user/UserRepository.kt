@@ -2,7 +2,6 @@ package com.bunbeauty.fooddelivery.data.repo.user
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.CityEntity
-import com.bunbeauty.fooddelivery.data.entity.CompanyEntity
 import com.bunbeauty.fooddelivery.data.entity.UserEntity
 import com.bunbeauty.fooddelivery.data.model.user.GetUser
 import com.bunbeauty.fooddelivery.data.model.user.InsertUser

@@ -1,5 +1,6 @@
 package com.bunbeauty.fooddelivery.data.entity
 
+import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.model.category.GetCategory
 import com.bunbeauty.fooddelivery.data.table.CategoryTable
 import org.jetbrains.exposed.dao.UUIDEntity

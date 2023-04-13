@@ -1,15 +1,13 @@
-package com.bunbeauty.fooddelivery.data.entity
+package com.bunbeauty.fooddelivery.data.entity.company
 
 import com.bunbeauty.fooddelivery.data.model.company.GetCompany
 import com.bunbeauty.fooddelivery.data.model.company.GetForceUpdateVersion
 import com.bunbeauty.fooddelivery.data.model.company.GetPayment
 import com.bunbeauty.fooddelivery.data.model.delivery.GetDelivery
-import com.bunbeauty.fooddelivery.data.table.CityTable
 import com.bunbeauty.fooddelivery.data.table.CompanyTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.sql.SizedIterable
 import java.util.*
 
 class CompanyEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
