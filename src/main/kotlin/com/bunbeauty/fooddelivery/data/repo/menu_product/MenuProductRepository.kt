@@ -39,7 +39,11 @@ class MenuProductRepository : IMenuProductRepository {
         MenuProductEntity.findById(menuProductUuid)?.apply {
             name = updateMenuProduct.name ?: name
             newPrice = updateMenuProduct.newPrice ?: newPrice
-            oldPrice = updateMenuProduct.oldPrice ?: oldPrice
+            oldPrice = if (updateMenuProduct.oldPrice == 0) {
+                null
+            } else {
+                updateMenuProduct.oldPrice ?: oldPrice
+            }
             utils = updateMenuProduct.utils ?: utils
             nutrition = updateMenuProduct.nutrition ?: nutrition
             description = updateMenuProduct.description ?: description
