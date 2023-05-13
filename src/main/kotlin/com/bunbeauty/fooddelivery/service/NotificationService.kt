@@ -8,7 +8,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.Notification
 
-private const val NEWS_NOTIFICATION_PREFIX = "NEWS"
+private const val NEWS_NOTIFICATION_PREFIX = "NEWS_"
 
 class NotificationService(
     private val userRepository: IUserRepository,
@@ -26,7 +26,7 @@ class NotificationService(
                         .setBody(postNotification.body)
                         .build()
                 )
-                .setTopic("$NEWS_NOTIFICATION_PREFIX $companyUuid")
+                .setTopic("$NEWS_NOTIFICATION_PREFIX$companyUuid")
                 .build()
         )
     }
