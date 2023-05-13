@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.task
 
-import com.bunbeauty.fooddelivery.service.statistic.StatisticService
+import com.bunbeauty.fooddelivery.service.StatisticService
 import io.ktor.server.application.*
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime

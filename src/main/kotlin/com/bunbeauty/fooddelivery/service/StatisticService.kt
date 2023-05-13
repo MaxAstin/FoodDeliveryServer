@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.service.statistic
+package com.bunbeauty.fooddelivery.service
 
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.cafe.GetCafe

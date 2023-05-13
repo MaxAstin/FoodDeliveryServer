@@ -6,7 +6,7 @@ import com.bunbeauty.fooddelivery.data.repo.statistic.CafeStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICompanyStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.CompanyStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICafeStatisticRepository
-import com.bunbeauty.fooddelivery.service.statistic.StatisticService
+import com.bunbeauty.fooddelivery.service.StatisticService
 import org.koin.dsl.module
 
 val statisticModule = module {

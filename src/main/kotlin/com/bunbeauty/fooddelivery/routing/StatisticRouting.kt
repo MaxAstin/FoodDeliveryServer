@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.routing
 import com.bunbeauty.fooddelivery.data.Constants.CAFE_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.PERIOD_PARAMETER
 import com.bunbeauty.fooddelivery.routing.extension.*
-import com.bunbeauty.fooddelivery.service.statistic.StatisticService
+import com.bunbeauty.fooddelivery.service.StatisticService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
