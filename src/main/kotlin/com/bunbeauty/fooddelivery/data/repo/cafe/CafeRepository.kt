@@ -7,7 +7,7 @@ import com.bunbeauty.fooddelivery.data.model.cafe.GetCafe
 import com.bunbeauty.fooddelivery.data.model.cafe.InsertCafe
 import com.bunbeauty.fooddelivery.data.table.CafeTable
 import com.bunbeauty.fooddelivery.data.table.CityTable
-import java.util.*
+import java.util.UUID
 
 class CafeRepository : ICafeRepository {
 

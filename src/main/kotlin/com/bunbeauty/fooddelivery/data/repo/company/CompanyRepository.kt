@@ -7,7 +7,7 @@ import com.bunbeauty.fooddelivery.data.model.company.GetCompany
 import com.bunbeauty.fooddelivery.data.model.company.InsertCompany
 import com.bunbeauty.fooddelivery.data.model.company.UpdateCompany
 import com.bunbeauty.fooddelivery.data.table.CompanyTable
-import java.util.*
+import java.util.UUID
 
 class CompanyRepository : ICompanyRepository {
 

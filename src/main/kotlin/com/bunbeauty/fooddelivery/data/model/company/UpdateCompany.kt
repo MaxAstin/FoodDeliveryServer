@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.model.company
 
-import java.util.*
+import java.util.UUID
 
 class UpdateCompany(
     val uuid: UUID,

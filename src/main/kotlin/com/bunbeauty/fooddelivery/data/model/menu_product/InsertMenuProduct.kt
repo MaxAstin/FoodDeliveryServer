@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.model.menu_product
 
-import java.util.*
+import java.util.UUID
 
 class InsertMenuProduct(
     val name: String,

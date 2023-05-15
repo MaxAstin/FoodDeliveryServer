@@ -6,7 +6,7 @@ import com.bunbeauty.fooddelivery.data.model.cafe.GetCafe
 import com.bunbeauty.fooddelivery.data.model.street.GetStreet
 import com.bunbeauty.fooddelivery.data.model.street.InsertStreet
 import com.bunbeauty.fooddelivery.data.table.StreetTable
-import java.util.*
+import java.util.UUID
 
 class StreetRepository : IStreetRepository {
 

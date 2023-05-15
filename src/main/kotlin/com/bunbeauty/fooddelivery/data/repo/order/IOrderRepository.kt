@@ -9,7 +9,7 @@ import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderUpda
 import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
 import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrder
 import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrderV2
-import java.util.*
+import java.util.UUID
 
 interface IOrderRepository {
 

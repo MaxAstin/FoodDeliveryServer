@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.data.repo.menu_product
 import com.bunbeauty.fooddelivery.data.model.menu_product.GetMenuProduct
 import com.bunbeauty.fooddelivery.data.model.menu_product.InsertMenuProduct
 import com.bunbeauty.fooddelivery.data.model.menu_product.UpdateMenuProduct
-import java.util.*
+import java.util.UUID
 
 interface IMenuProductRepository {
 

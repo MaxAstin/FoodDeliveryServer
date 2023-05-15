@@ -4,7 +4,7 @@ import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.company.PaymentMethodEntity
 import com.bunbeauty.fooddelivery.data.model.company.payment_method.GetPaymentMethod
 import com.bunbeauty.fooddelivery.data.table.PaymentMethodTable
-import java.util.*
+import java.util.UUID
 
 class PaymentMethodRepository: IPaymentMethodRepository {
 

@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.data.model.order.client.insert
 
 import kotlinx.serialization.Serializable
-import java.util.*
+import java.util.UUID
 
 class InsertOrderV2(
     val time: Long,

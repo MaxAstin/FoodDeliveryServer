@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.model.client_user
 
-import java.util.*
+import java.util.UUID
 
 class InsertClientUser(
     val phoneNumber: String,

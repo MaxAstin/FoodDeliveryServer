@@ -26,6 +26,7 @@ fun Application.configureKoin() {
             firebaseModule,
             paymentModule,
             paymentMethodModule,
+            linkModule,
             notificationModule,
             requestModule,
         )

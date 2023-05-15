@@ -2,7 +2,7 @@ package com.bunbeauty.fooddelivery.data.repo.city
 
 import com.bunbeauty.fooddelivery.data.model.city.GetCity
 import com.bunbeauty.fooddelivery.data.model.city.InsertCity
-import java.util.*
+import java.util.UUID
 
 interface ICityRepository {
 

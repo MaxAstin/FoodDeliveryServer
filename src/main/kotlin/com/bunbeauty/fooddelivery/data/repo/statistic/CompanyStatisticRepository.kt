@@ -12,7 +12,7 @@ import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertStatisti
 import com.bunbeauty.fooddelivery.data.table.CompanyStatisticProductTable
 import com.bunbeauty.fooddelivery.data.table.CompanyStatisticTable
 import org.jetbrains.exposed.sql.*
-import java.util.*
+import java.util.UUID
 
 class CompanyStatisticRepository : ICompanyStatisticRepository {
 

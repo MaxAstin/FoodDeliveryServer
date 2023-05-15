@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.model.street
 
-import java.util.*
+import java.util.UUID
 
 class InsertStreet(
     val name: String,

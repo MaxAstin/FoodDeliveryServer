@@ -2,7 +2,7 @@ package com.bunbeauty.fooddelivery.data.repo.user
 
 import com.bunbeauty.fooddelivery.data.model.user.GetUser
 import com.bunbeauty.fooddelivery.data.model.user.InsertUser
-import java.util.*
+import java.util.UUID
 
 interface IUserRepository {
 

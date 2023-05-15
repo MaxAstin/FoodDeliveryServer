@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.data.repo.order
 
 import com.bunbeauty.fooddelivery.data.model.statistic.GetStatisticOrder
-import java.util.*
+import java.util.UUID
 
 interface IOrderStatisticRepository {
 

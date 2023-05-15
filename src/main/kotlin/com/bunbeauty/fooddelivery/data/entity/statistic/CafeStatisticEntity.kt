@@ -7,7 +7,7 @@ import com.bunbeauty.fooddelivery.data.table.CafeStatisticTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.*
+import java.util.UUID
 
 class CafeStatisticEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 

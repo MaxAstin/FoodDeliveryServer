@@ -8,7 +8,7 @@ import com.bunbeauty.fooddelivery.data.model.category.GetCategory
 import com.bunbeauty.fooddelivery.data.model.category.InsertCategory
 import com.bunbeauty.fooddelivery.data.model.category.UpdateCategory
 import com.bunbeauty.fooddelivery.data.table.CategoryTable
-import java.util.*
+import java.util.UUID
 
 class CategoryRepository : ICategoryRepository {
 

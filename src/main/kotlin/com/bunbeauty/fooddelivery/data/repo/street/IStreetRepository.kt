@@ -2,7 +2,7 @@ package com.bunbeauty.fooddelivery.data.repo.street
 
 import com.bunbeauty.fooddelivery.data.model.street.GetStreet
 import com.bunbeauty.fooddelivery.data.model.street.InsertStreet
-import java.util.*
+import java.util.UUID
 
 interface IStreetRepository {
 

@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.data.model.new_statistic.insert
 
 import com.bunbeauty.fooddelivery.data.model.new_statistic.PeriodType
-import java.util.*
+import java.util.UUID
 
 class InsertCompanyStatistic(
     val time: Long,

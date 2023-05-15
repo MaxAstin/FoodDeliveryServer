@@ -7,7 +7,7 @@ import com.bunbeauty.fooddelivery.data.entity.StreetEntity
 import com.bunbeauty.fooddelivery.data.model.address.GetAddress
 import com.bunbeauty.fooddelivery.data.model.address.InsertAddress
 import com.bunbeauty.fooddelivery.data.table.AddressTable
-import java.util.*
+import java.util.UUID
 
 class AddressRepository : IAddressRepository {
 

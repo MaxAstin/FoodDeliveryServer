@@ -6,7 +6,7 @@ import com.bunbeauty.fooddelivery.data.entity.UserEntity
 import com.bunbeauty.fooddelivery.data.model.user.GetUser
 import com.bunbeauty.fooddelivery.data.model.user.InsertUser
 import com.bunbeauty.fooddelivery.data.table.UserTable
-import java.util.*
+import java.util.UUID
 
 class UserRepository : IUserRepository {
 

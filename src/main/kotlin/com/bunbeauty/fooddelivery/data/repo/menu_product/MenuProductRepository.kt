@@ -9,7 +9,7 @@ import com.bunbeauty.fooddelivery.data.model.menu_product.InsertMenuProduct
 import com.bunbeauty.fooddelivery.data.model.menu_product.UpdateMenuProduct
 import com.bunbeauty.fooddelivery.data.table.MenuProductTable
 import org.jetbrains.exposed.sql.SizedCollection
-import java.util.*
+import java.util.UUID
 
 class MenuProductRepository : IMenuProductRepository {
 

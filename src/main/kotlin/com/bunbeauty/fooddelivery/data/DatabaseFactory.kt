@@ -81,6 +81,9 @@ object DatabaseFactory {
 
             SchemaUtils.create(PaymentMethodTable)
             SchemaUtils.createMissingTablesAndColumns(PaymentMethodTable)
+
+            SchemaUtils.create(LinkTable)
+            SchemaUtils.createMissingTablesAndColumns(LinkTable)
         }
     }
 

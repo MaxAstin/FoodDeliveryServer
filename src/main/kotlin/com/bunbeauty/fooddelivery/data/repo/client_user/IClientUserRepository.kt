@@ -5,7 +5,7 @@ import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.InsertClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.UpdateClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.login.*
-import java.util.*
+import java.util.UUID
 
 interface IClientUserRepository {
 

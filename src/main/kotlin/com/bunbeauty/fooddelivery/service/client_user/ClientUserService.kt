@@ -8,7 +8,7 @@ import com.bunbeauty.fooddelivery.data.model.client_user.login.*
 import com.bunbeauty.fooddelivery.data.repo.client_user.IClientUserRepository
 import com.google.firebase.auth.FirebaseAuth
 import org.joda.time.DateTime
-import java.util.*
+import java.util.UUID
 
 class ClientUserService(
     private val firebaseAuth: FirebaseAuth,

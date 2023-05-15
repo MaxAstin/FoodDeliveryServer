@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.model.address
 
-import java.util.*
+import java.util.UUID
 
 class InsertAddress(
     val house: String,

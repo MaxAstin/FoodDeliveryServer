@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.model.category
 
-import java.util.*
+import java.util.UUID
 
 class InsertCategory(
     val name: String,

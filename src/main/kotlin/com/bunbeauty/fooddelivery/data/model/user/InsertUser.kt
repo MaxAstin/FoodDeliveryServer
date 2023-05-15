@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.data.model.user
 
 import com.bunbeauty.fooddelivery.data.enums.UserRole
-import java.util.*
+import java.util.UUID
 
 class InsertUser(
     val username: String,

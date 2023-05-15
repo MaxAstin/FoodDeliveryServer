@@ -13,7 +13,7 @@ import com.bunbeauty.fooddelivery.data.table.CafeStatisticProductTable
 import com.bunbeauty.fooddelivery.data.table.CafeStatisticTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.util.*
+import java.util.UUID
 
 class CafeStatisticRepository : ICafeStatisticRepository {
 

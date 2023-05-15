@@ -11,7 +11,7 @@ import com.bunbeauty.fooddelivery.data.model.client_user.login.*
 import com.bunbeauty.fooddelivery.data.table.ClientUserTable
 import com.bunbeauty.fooddelivery.data.table.TestClientUserPhoneTable
 import org.jetbrains.exposed.sql.and
-import java.util.*
+import java.util.UUID
 
 class ClientUserRepository : IClientUserRepository {
 

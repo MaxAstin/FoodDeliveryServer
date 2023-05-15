@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.model.city
 
-import java.util.*
+import java.util.UUID
 
 class InsertCity(
     val name: String,

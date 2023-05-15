@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.data.repo.category
 import com.bunbeauty.fooddelivery.data.model.category.GetCategory
 import com.bunbeauty.fooddelivery.data.model.category.InsertCategory
 import com.bunbeauty.fooddelivery.data.model.category.UpdateCategory
-import java.util.*
+import java.util.UUID
 
 interface ICategoryRepository {
 

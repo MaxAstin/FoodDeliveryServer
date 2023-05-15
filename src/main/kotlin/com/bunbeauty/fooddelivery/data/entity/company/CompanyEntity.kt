@@ -8,7 +8,7 @@ import com.bunbeauty.fooddelivery.data.table.CompanyTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.*
+import java.util.UUID
 
 class CompanyEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 

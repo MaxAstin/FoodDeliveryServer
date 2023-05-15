@@ -15,7 +15,7 @@ import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrderV2
 import com.bunbeauty.fooddelivery.data.table.OrderTable
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
-import java.util.*
+import java.util.UUID
 
 class OrderRepository : IOrderRepository {
 

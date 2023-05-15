@@ -4,7 +4,7 @@ import com.bunbeauty.fooddelivery.data.table.CompanyStatisticProductTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.*
+import java.util.UUID
 
 class CompanyStatisticProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 

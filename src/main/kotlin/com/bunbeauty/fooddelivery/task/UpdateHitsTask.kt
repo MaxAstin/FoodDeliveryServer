@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.task
 import com.bunbeauty.fooddelivery.service.hit.IHitService
 import io.ktor.server.application.*
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Timer
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.scheduleAtFixedRate
 import org.koin.ktor.ext.inject

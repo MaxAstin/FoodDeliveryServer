@@ -4,7 +4,7 @@ import com.bunbeauty.fooddelivery.data.model.new_statistic.GetStatistic
 import com.bunbeauty.fooddelivery.data.model.new_statistic.PeriodType
 import com.bunbeauty.fooddelivery.data.model.new_statistic.UpdateStatistic
 import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertCafeStatistic
-import java.util.*
+import java.util.UUID
 
 interface ICafeStatisticRepository {
 

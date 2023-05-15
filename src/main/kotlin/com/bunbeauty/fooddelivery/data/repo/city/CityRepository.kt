@@ -8,7 +8,7 @@ import com.bunbeauty.fooddelivery.data.model.city.GetCity
 import com.bunbeauty.fooddelivery.data.model.city.InsertCity
 import com.bunbeauty.fooddelivery.data.table.CityTable
 import org.jetbrains.exposed.sql.and
-import java.util.*
+import java.util.UUID
 
 class CityRepository : ICityRepository {
 

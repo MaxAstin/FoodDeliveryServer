@@ -5,7 +5,7 @@ import com.bunbeauty.fooddelivery.data.entity.OrderEntity
 import com.bunbeauty.fooddelivery.data.model.statistic.GetStatisticOrder
 import com.bunbeauty.fooddelivery.data.table.OrderTable
 import org.jetbrains.exposed.sql.and
-import java.util.*
+import java.util.UUID
 
 class OrderStatisticRepository : IOrderStatisticRepository {
 
