@@ -6,14 +6,16 @@ import com.toxicbakery.bcrypt.Bcrypt.verify
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class ApplicationTest {
+class EncryptionTest {
 
     @Test
-    fun testHashing() {
-        val value = "secretPassword"
+    fun testBcryptHashVerification() {
+        val value = "secret"
+
         val hash = String(Bcrypt.hash(value, BCrypt.MIN_COST))
         println(hash)
-        val isVerified = verify(value, "hash".toByteArray())
+        val isVerified = verify(value, hash.toByteArray())
+
         assertTrue(isVerified)
     }
 
