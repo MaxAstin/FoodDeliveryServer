@@ -70,6 +70,7 @@ class OrderRepository : IOrderRepository {
             deferredTime = insertOrder.deferredTime
             status = insertOrder.status
             deliveryCost = insertOrder.deliveryCost
+            paymentMethod = insertOrder.paymentMethod
             cafe = CafeEntity[insertOrder.cafeUuid]
             company = CompanyEntity[insertOrder.companyUuid]
             clientUser = ClientUserEntity[insertOrder.clientUserUuid]

@@ -34,6 +34,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var deferredTime: Long? by OrderTable.deferredTime
     var status: String by OrderTable.status
     var deliveryCost: Int? by OrderTable.deliveryCost
+    var paymentMethod: String? by OrderTable.paymentMethod
     var cafe: CafeEntity by CafeEntity referencedOn OrderTable.cafe
     var company: CompanyEntity by CompanyEntity referencedOn OrderTable.company
     var clientUser: ClientUserEntity by ClientUserEntity referencedOn OrderTable.clientUser
@@ -82,6 +83,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         deliveryCost = deliveryCost,
         oldTotalCost = calculateOldTotalCost(),
         newTotalCost = calculateNewTotalCost(),
+        paymentMethod = paymentMethod,
         clientUserUuid = clientUser.uuid,
         oderProductList = oderProducts.map { oderProductEntity ->
             oderProductEntity.toOrderProduct()
@@ -140,6 +142,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         deliveryCost = deliveryCost,
         oldTotalCost = calculateOldTotalCost(),
         newTotalCost = calculateNewTotalCost(),
+        paymentMethod = paymentMethod,
         clientUser = clientUser.toCafeUser(),
         cafeUuid = cafe.uuid,
         oderProductList = oderProducts.map { oderProductEntity ->

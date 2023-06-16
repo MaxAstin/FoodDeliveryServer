@@ -21,6 +21,7 @@ class GetCafeOrderDetailsV2(
     val deliveryCost: Int?,
     val oldTotalCost: Int?,
     val newTotalCost: Int,
+    val paymentMethod: String?,
     val oderProductList: List<GetOrderProduct>,
-    val availableStatusList: List<String>
+    val availableStatusList: List<String>,
 )

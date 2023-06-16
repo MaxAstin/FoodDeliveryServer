@@ -12,6 +12,7 @@ class InsertOrderV2(
     val deferredTime: Long?,
     val status: String,
     val deliveryCost: Int?,
+    val paymentMethod: String?,
     val cafeUuid: UUID,
     val companyUuid: UUID,
     val clientUserUuid: UUID,

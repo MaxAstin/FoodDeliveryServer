@@ -138,6 +138,7 @@ class OrderService(
             deferredTime = deferredTime,
             status = OrderStatus.NOT_ACCEPTED.name,
             deliveryCost = deliveryCost,
+            paymentMethod = postOrder.paymentMethod,
             cafeUuid = cafeUuid.toUuid(),
             companyUuid = company.uuid.toUuid(),
             clientUserUuid = clientUserUuid.toUuid(),
