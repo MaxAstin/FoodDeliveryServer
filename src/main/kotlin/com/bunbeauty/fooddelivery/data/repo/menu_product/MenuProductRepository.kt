@@ -60,7 +60,6 @@ class MenuProductRepository : IMenuProductRepository {
             } else {
                 updateMenuProduct.comboDescription ?: comboDescription
             }
-            comboDescription = updateMenuProduct.comboDescription ?: comboDescription
             photoLink = updateMenuProduct.photoLink ?: photoLink
             barcode = updateMenuProduct.barcode ?: barcode
             isVisible = updateMenuProduct.isVisible ?: isVisible
