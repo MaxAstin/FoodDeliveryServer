@@ -44,18 +44,18 @@ class MenuProductRepository : IMenuProductRepository {
             } else {
                 updateMenuProduct.oldPrice ?: oldPrice
             }
-            utils = if (nutrition == 0) {
+            utils = if (utils == "" && nutrition == 0) {
                 null
             } else {
                 updateMenuProduct.utils ?: utils
             }
-            nutrition = if (nutrition == 0) {
+            nutrition = if (utils == "" && nutrition == 0) {
                 null
             } else {
                 updateMenuProduct.nutrition ?: nutrition
             }
             description = updateMenuProduct.description ?: description
-            comboDescription = if (updateMenuProduct.comboDescription?.isBlank() == true) {
+            comboDescription = if (updateMenuProduct.comboDescription == "") {
                 null
             } else {
                 updateMenuProduct.comboDescription ?: comboDescription
