@@ -44,9 +44,22 @@ class MenuProductRepository : IMenuProductRepository {
             } else {
                 updateMenuProduct.oldPrice ?: oldPrice
             }
-            utils = updateMenuProduct.utils ?: utils
-            nutrition = updateMenuProduct.nutrition ?: nutrition
+            utils = if (nutrition == 0) {
+                null
+            } else {
+                updateMenuProduct.utils ?: utils
+            }
+            nutrition = if (nutrition == 0) {
+                null
+            } else {
+                updateMenuProduct.nutrition ?: nutrition
+            }
             description = updateMenuProduct.description ?: description
+            comboDescription = if (updateMenuProduct.comboDescription?.isBlank() == true) {
+                null
+            } else {
+                updateMenuProduct.comboDescription ?: comboDescription
+            }
             comboDescription = updateMenuProduct.comboDescription ?: comboDescription
             photoLink = updateMenuProduct.photoLink ?: photoLink
             barcode = updateMenuProduct.barcode ?: barcode
