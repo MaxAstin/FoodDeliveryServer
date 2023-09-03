@@ -25,7 +25,7 @@ fun Application.configureMenuProductRouting() {
     }
 }
 
-fun Routing.getAllMenuProducts() {
+private fun Routing.getAllMenuProducts() {
 
     val menuProductService: IMenuProductService by inject()
 
@@ -38,7 +38,7 @@ fun Routing.getAllMenuProducts() {
     }
 }
 
-fun Route.postMenuProduct() {
+private fun Route.postMenuProduct() {
 
     val menuProductService: IMenuProductService by inject()
 
@@ -49,7 +49,7 @@ fun Route.postMenuProduct() {
     }
 }
 
-fun Route.patchMenuProduct() {
+private fun Route.patchMenuProduct() {
 
     val menuProductService: IMenuProductService by inject()
 

@@ -28,6 +28,7 @@ fun Application.configureKoin() {
             paymentMethodModule,
             linkModule,
             notificationModule,
+            discountModule,
             requestModule,
         )
     }

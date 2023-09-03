@@ -2,10 +2,9 @@ package com.bunbeauty.fooddelivery.service.company
 
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.company.*
-import com.bunbeauty.fooddelivery.data.repo.company.ICompanyRepository
+import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 
-class CompanyService(private val companyRepository: ICompanyRepository) :
-    ICompanyService {
+class CompanyService(private val companyRepository: CompanyRepository) : ICompanyService {
 
     override suspend fun createCompany(postCompany: PostCompany): GetCompany {
         if ((postCompany.percentDiscount ?: 0) > 99) {

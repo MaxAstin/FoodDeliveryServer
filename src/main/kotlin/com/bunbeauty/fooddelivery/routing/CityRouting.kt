@@ -22,7 +22,7 @@ fun Application.configureCityRouting() {
     }
 }
 
-fun Routing.getAllCities() {
+private fun Routing.getAllCities() {
 
     val cityService: ICityService by inject()
 
@@ -35,7 +35,7 @@ fun Routing.getAllCities() {
     }
 }
 
-fun Route.postCity() {
+private fun Route.postCity() {
 
     val cityService: ICityService by inject()
 

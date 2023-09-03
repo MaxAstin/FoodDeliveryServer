@@ -29,7 +29,7 @@ fun Application.configureClientUserRouting() {
     }
 }
 
-fun Routing.clientLogin() {
+private fun Routing.clientLogin() {
 
     val clientUserService: IClientUserService by inject()
 
@@ -46,7 +46,7 @@ fun Routing.clientLogin() {
     }
 }
 
-fun Route.sendCode() {
+private fun Route.sendCode() {
 
     val clientUserService: IClientUserService by inject()
     val requestService: IRequestService by inject()
@@ -60,7 +60,7 @@ fun Route.sendCode() {
     }
 }
 
-fun Route.checkCode() {
+private fun Route.checkCode() {
 
     val clientUserService: IClientUserService by inject()
 
@@ -71,7 +71,7 @@ fun Route.checkCode() {
     }
 }
 
-fun Route.createTestClientUserPhone() {
+private fun Route.createTestClientUserPhone() {
 
     val clientUserService: IClientUserService by inject()
 
@@ -82,7 +82,7 @@ fun Route.createTestClientUserPhone() {
     }
 }
 
-fun Route.getTestClientUserPhones() {
+private fun Route.getTestClientUserPhones() {
 
     val clientUserService: IClientUserService by inject()
 
@@ -94,7 +94,7 @@ fun Route.getTestClientUserPhones() {
     }
 }
 
-fun Route.getClient() {
+private fun Route.getClient() {
 
     val clientUserService: IClientUserService by inject()
 
@@ -106,7 +106,7 @@ fun Route.getClient() {
     }
 }
 
-fun Route.getClientSettings() {
+private fun Route.getClientSettings() {
 
     val clientUserService: IClientUserService by inject()
 
@@ -118,7 +118,7 @@ fun Route.getClientSettings() {
     }
 }
 
-fun Route.patchClientUser() {
+private fun Route.patchClientUser() {
 
     val clientUserService: IClientUserService by inject()
 
@@ -135,7 +135,7 @@ fun Route.patchClientUser() {
     }
 }
 
-fun Route.patchClientSettings() {
+private fun Route.patchClientSettings() {
 
     val clientUserService: IClientUserService by inject()
 

@@ -22,7 +22,7 @@ fun Application.configureUserRouting() {
     }
 }
 
-fun Routing.userLogin() {
+private fun Routing.userLogin() {
 
     val userService: IUserService by inject()
 
@@ -33,7 +33,7 @@ fun Routing.userLogin() {
     }
 }
 
-fun Route.createUser() {
+private fun Route.createUser() {
 
     val userService: IUserService by inject()
 

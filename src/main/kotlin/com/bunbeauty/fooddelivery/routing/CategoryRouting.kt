@@ -25,7 +25,7 @@ fun Application.configureCategoryRouting() {
     }
 }
 
-fun Routing.getCategories() {
+private fun Routing.getCategories() {
 
     val categoryService: ICategoryService by inject()
 
@@ -38,7 +38,7 @@ fun Routing.getCategories() {
     }
 }
 
-fun Route.postCategory() {
+private fun Route.postCategory() {
 
     val categoryService: ICategoryService by inject()
 
@@ -49,7 +49,7 @@ fun Route.postCategory() {
     }
 }
 
-fun Route.patchCategory() {
+private fun Route.patchCategory() {
 
     val categoryService: ICategoryService by inject()
 

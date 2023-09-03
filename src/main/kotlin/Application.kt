@@ -22,22 +22,26 @@ import java.io.InputStream
 fun main() {
     DatabaseFactory.init()
     embeddedServer(Netty, port = System.getenv(PORT).toInt()) {
-        val inputStream: InputStream = System.getenv(FB_ADMIN_KEY).byteInputStream()
-        val options = FirebaseOptions.builder()
-            .setCredentials(GoogleCredentials.fromStream(inputStream))
-            .build()
-        FirebaseApp.initializeApp(options)
-        configureSockets()
-        configureSerialization()
-        configureKoin()
-        val jwtService: IJwtService by inject()
-        install(Authentication) {
-            jwt {
-                jwtService.configureAuth(this)
-            }
-        }
-        configureRouting()
-        startUpdateHitsTask()
-        startUpdateStatisticTask()
+        configureApp()
     }.start(wait = true)
+}
+
+private fun Application.configureApp() {
+    val inputStream: InputStream = System.getenv(FB_ADMIN_KEY).byteInputStream()
+    val options = FirebaseOptions.builder()
+        .setCredentials(GoogleCredentials.fromStream(inputStream))
+        .build()
+    FirebaseApp.initializeApp(options)
+    configureSockets()
+    configureSerialization()
+    configureKoin()
+    val jwtService: IJwtService by inject()
+    install(Authentication) {
+        jwt {
+            jwtService.configureAuth(this)
+        }
+    }
+    configureRouting()
+    startUpdateHitsTask()
+    startUpdateStatisticTask()
 }

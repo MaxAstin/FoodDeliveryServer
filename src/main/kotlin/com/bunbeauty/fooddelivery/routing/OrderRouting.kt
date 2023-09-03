@@ -42,7 +42,7 @@ fun Application.configureOrderRouting() {
     }
 }
 
-fun Route.getCafeOrders() {
+private fun Route.getCafeOrders() {
 
     val orderService: IOrderService by inject()
 
@@ -55,7 +55,7 @@ fun Route.getCafeOrders() {
     }
 }
 
-fun Route.getCafeOrderDetails() {
+private fun Route.getCafeOrderDetails() {
 
     val orderService: IOrderService by inject()
 
@@ -68,7 +68,7 @@ fun Route.getCafeOrderDetails() {
     }
 }
 
-fun Route.getCafeOrderDetailsV2() {
+private fun Route.getCafeOrderDetailsV2() {
 
     val orderService: IOrderService by inject()
 
@@ -81,7 +81,7 @@ fun Route.getCafeOrderDetailsV2() {
     }
 }
 
-fun Route.getClientOrders() {
+private fun Route.getClientOrders() {
 
     val orderService: IOrderService by inject()
 
@@ -94,7 +94,7 @@ fun Route.getClientOrders() {
     }
 }
 
-fun Route.getClientOrdersV2() {
+private fun Route.getClientOrdersV2() {
 
     val orderService: IOrderService by inject()
 
@@ -108,7 +108,7 @@ fun Route.getClientOrdersV2() {
     }
 }
 
-fun Route.postOrder() {
+private fun Route.postOrder() {
 
     val orderService: IOrderService by inject()
 
@@ -122,7 +122,7 @@ fun Route.postOrder() {
     }
 }
 
-fun Route.postOrderV2() {
+private fun Route.postOrderV2() {
 
     val orderService: IOrderService by inject()
 
@@ -136,7 +136,7 @@ fun Route.postOrderV2() {
     }
 }
 
-fun Route.patchOrder() {
+private fun Route.patchOrder() {
 
     val orderService: IOrderService by inject()
 
@@ -148,7 +148,7 @@ fun Route.patchOrder() {
     }
 }
 
-fun Route.deleteOrder() {
+private fun Route.deleteOrder() {
 
     val orderService: IOrderService by inject()
 
@@ -159,7 +159,7 @@ fun Route.deleteOrder() {
     }
 }
 
-fun Route.observeClientOrders() {
+private fun Route.observeClientOrders() {
 
     val orderService: IOrderService by inject()
     val json: Json by inject()
@@ -178,7 +178,7 @@ fun Route.observeClientOrders() {
     }
 }
 
-fun Route.observeClientOrdersV2() {
+private fun Route.observeClientOrdersV2() {
 
     val orderService: IOrderService by inject()
     val json: Json by inject()
@@ -197,7 +197,7 @@ fun Route.observeClientOrdersV2() {
     }
 }
 
-fun Route.observeManagerOrders() {
+private fun Route.observeManagerOrders() {
 
     val orderService: IOrderService by inject()
     val json: Json by inject()

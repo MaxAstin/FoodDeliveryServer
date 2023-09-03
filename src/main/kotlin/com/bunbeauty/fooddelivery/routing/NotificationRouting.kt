@@ -17,7 +17,7 @@ fun Application.configureNotificationRouting() {
     }
 }
 
-fun Route.postNotification() {
+private fun Route.postNotification() {
 
     val notificationService: NotificationService by inject()
 

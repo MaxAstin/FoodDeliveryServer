@@ -22,7 +22,7 @@ fun Application.configureCafeRouting() {
     }
 }
 
-fun Routing.getCafesByCityUuid() {
+private fun Routing.getCafesByCityUuid() {
 
     val cafeService: ICafeService by inject()
 
@@ -35,7 +35,7 @@ fun Routing.getCafesByCityUuid() {
     }
 }
 
-fun Route.postCafe() {
+private fun Route.postCafe() {
 
     val cafeService: ICafeService by inject()
 

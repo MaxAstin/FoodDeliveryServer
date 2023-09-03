@@ -10,8 +10,8 @@ import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertCafeStat
 import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertCompanyStatistic
 import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertStatisticProduct
 import com.bunbeauty.fooddelivery.data.model.statistic.GetStatisticOrder
+import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.data.repo.cafe.ICafeRepository
-import com.bunbeauty.fooddelivery.data.repo.company.ICompanyRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICafeStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICompanyStatisticRepository
@@ -21,7 +21,7 @@ import org.joda.time.DateTimeZone
 
 class StatisticService(
     private val orderStatisticRepository: IOrderStatisticRepository,
-    private val companyRepository: ICompanyRepository,
+    private val companyRepository: CompanyRepository,
     private val cafeRepository: ICafeRepository,
     private val companyStatisticRepository: ICompanyStatisticRepository,
     private val cafeStatisticRepository: ICafeStatisticRepository,

@@ -22,7 +22,7 @@ fun Application.configureAddressRouting() {
     }
 }
 
-fun Route.getAddresses() {
+private fun Route.getAddresses() {
 
     val addressService: IAddressService by inject()
 
@@ -35,7 +35,7 @@ fun Route.getAddresses() {
     }
 }
 
-fun Route.postAddress() {
+private fun Route.postAddress() {
 
     val addressService: IAddressService by inject()
 

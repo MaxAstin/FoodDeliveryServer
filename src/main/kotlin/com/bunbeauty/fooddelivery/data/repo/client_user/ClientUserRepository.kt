@@ -70,9 +70,7 @@ class ClientUserRepository : IClientUserRepository {
     }
 
     override suspend fun getClientSettingsByUuid(uuid: UUID): GetClientSettings? = query {
-        ClientSettingsEntity.findById(uuid)?.let { clientSettingsEntity ->
-            clientSettingsEntity.toClientSetting()
-        }
+        ClientSettingsEntity.findById(uuid)?.toClientSetting()
     }
 
     override suspend fun insertClientUser(insertClientUser: InsertClientUser): GetClientUser = query {

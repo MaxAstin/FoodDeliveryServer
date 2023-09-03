@@ -15,7 +15,7 @@ fun Application.configureVersionRouting() {
     }
 }
 
-fun Routing.getForceUpdateVersion() {
+private fun Routing.getForceUpdateVersion() {
 
     val versionService: IVersionService by inject()
 

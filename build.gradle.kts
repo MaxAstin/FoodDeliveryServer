@@ -30,7 +30,7 @@ repositories {
 tasks.create("stage").dependsOn("installDist")
 
 tasks.test {
-    useJUnitPlatform()
+    useJUnit()
 }
 
 dependencies {

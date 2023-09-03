@@ -19,7 +19,7 @@ fun Application.configureStatisticRouting() {
     }
 }
 
-fun Route.getStatistic() {
+private fun Route.getStatistic() {
 
     val statisticService: StatisticService by inject()
 
@@ -37,7 +37,7 @@ fun Route.getStatistic() {
     }
 }
 
-fun Route.getStatisticDetails() {
+private fun Route.getStatisticDetails() {
 
     get("/statistic/details") {
         manager {

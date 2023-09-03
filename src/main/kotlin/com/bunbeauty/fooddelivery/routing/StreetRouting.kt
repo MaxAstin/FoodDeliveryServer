@@ -22,7 +22,7 @@ fun Application.configureStreetRouting() {
     }
 }
 
-fun Routing.getStreetsByCityUuid() {
+private fun Routing.getStreetsByCityUuid() {
 
     val streetService: IStreetService by inject()
 
@@ -35,7 +35,7 @@ fun Routing.getStreetsByCityUuid() {
     }
 }
 
-fun Route.postStreet() {
+private fun Route.postStreet() {
 
     val streetService: IStreetService by inject()
 

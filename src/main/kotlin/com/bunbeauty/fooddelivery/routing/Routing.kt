@@ -20,4 +20,5 @@ fun Application.configureRouting() {
     configurePaymentMethodRouting()
     configureLinkRouting()
     configureNotificationRouting()
+    configureDiscountRouting()
 }

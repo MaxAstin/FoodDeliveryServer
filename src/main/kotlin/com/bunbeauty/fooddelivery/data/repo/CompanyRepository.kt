@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.data.repo.company
+package com.bunbeauty.fooddelivery.data.repo
 
 import com.bunbeauty.fooddelivery.data.Constants
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
@@ -9,9 +9,9 @@ import com.bunbeauty.fooddelivery.data.model.company.UpdateCompany
 import com.bunbeauty.fooddelivery.data.table.CompanyTable
 import java.util.UUID
 
-class CompanyRepository : ICompanyRepository {
+class CompanyRepository {
 
-    override suspend fun insertCompany(insertCompany: InsertCompany): GetCompany = query {
+    suspend fun insertCompany(insertCompany: InsertCompany): GetCompany = query {
         CompanyEntity.new {
             name = insertCompany.name
             forFreeDelivery = insertCompany.forFreeDelivery
@@ -23,7 +23,7 @@ class CompanyRepository : ICompanyRepository {
         }.toCompany()
     }
 
-    override suspend fun updateCompany(updateCompany: UpdateCompany): GetCompany? = query {
+    suspend fun updateCompany(updateCompany: UpdateCompany): GetCompany? = query {
         CompanyEntity.findById(updateCompany.uuid)?.apply {
             name = updateCompany.name ?: name
             forFreeDelivery = updateCompany.forFreeDelivery ?: forFreeDelivery
@@ -35,17 +35,17 @@ class CompanyRepository : ICompanyRepository {
         }?.toCompany()
     }
 
-    override suspend fun getCompanyByUuid(uuid: UUID): GetCompany? = query {
+    suspend fun getCompanyByUuid(uuid: UUID): GetCompany? = query {
         CompanyEntity.findById(uuid)?.toCompany()
     }
 
-    override suspend fun getCompanyByName(name: String): GetCompany? = query {
+    suspend fun getCompanyByName(name: String): GetCompany? = query {
         CompanyEntity.find {
             CompanyTable.name eq Constants.MAIN_COMPANY_NAME
         }.singleOrNull()?.toCompany()
     }
 
-    override suspend fun getCompanyList(): List<GetCompany> = query {
+    suspend fun getCompanyList(): List<GetCompany> = query {
         CompanyEntity.all().map { companyEntity ->
             companyEntity.toCompany()
         }

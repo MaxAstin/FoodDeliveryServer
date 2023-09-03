@@ -21,7 +21,7 @@ fun Application.configureCompanyRouting() {
     }
 }
 
-fun Route.createCompany() {
+private fun Route.createCompany() {
 
     val companyService: ICompanyService by inject()
 
@@ -32,7 +32,7 @@ fun Route.createCompany() {
     }
 }
 
-fun Route.changeCompany() {
+private fun Route.changeCompany() {
 
     val companyService: ICompanyService by inject()
 

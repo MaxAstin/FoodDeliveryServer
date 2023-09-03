@@ -18,7 +18,7 @@ fun Application.configurePaymentRouting() {
     }
 }
 
-fun Route.getPayment() {
+private fun Route.getPayment() {
 
     val paymentService: IPaymentService by inject()
 

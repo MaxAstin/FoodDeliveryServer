@@ -5,7 +5,7 @@ import com.bunbeauty.fooddelivery.data.model.menu_product.GetMenuProduct
 import com.bunbeauty.fooddelivery.data.model.order.GetOrderAddress
 import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
 import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
-import com.bunbeauty.fooddelivery.data.repo.company.ICompanyRepository
+import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.data.repo.hit.IHitRepository
 import com.bunbeauty.fooddelivery.data.repo.menu_product.IMenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
@@ -20,7 +20,7 @@ import kotlin.test.assertContentEquals
 class HitServiceTests {
 
     @MockK
-    private lateinit var companyRepository: ICompanyRepository
+    private lateinit var companyRepository: CompanyRepository
 
     @MockK
     private lateinit var menuProductRepository: IMenuProductRepository

@@ -16,7 +16,7 @@ fun Application.configureLinkRouting() {
     }
 }
 
-fun Routing.getLinks() {
+private fun Routing.getLinks() {
 
     val linkService: LinkService by inject()
 

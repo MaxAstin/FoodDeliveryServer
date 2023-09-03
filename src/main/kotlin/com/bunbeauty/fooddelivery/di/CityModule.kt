@@ -7,10 +7,6 @@ import com.bunbeauty.fooddelivery.service.city.ICityService
 import org.koin.dsl.module
 
 val cityModule = module(createdAtStart = true) {
-    single<ICityService> {
-        CityService(
-            cityRepository = get()
-        )
-    }
+    single<ICityService> { CityService(cityRepository = get()) }
     single<ICityRepository> { CityRepository() }
 }
