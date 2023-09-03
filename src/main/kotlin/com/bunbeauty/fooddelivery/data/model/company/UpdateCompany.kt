@@ -8,4 +8,5 @@ class UpdateCompany(
     val forFreeDelivery: Int? = null,
     val deliveryCost: Int? = null,
     val forceUpdateVersion: Int? = null,
+    val percentDiscount: Int? = null,
 )

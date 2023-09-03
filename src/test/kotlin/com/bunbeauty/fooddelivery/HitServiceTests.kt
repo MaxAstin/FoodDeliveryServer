@@ -108,6 +108,7 @@ class HitServiceTests {
             oldTotalCost = 250,
             newTotalCost = 245,
             paymentMethod = null,
+            percentDiscount = null,
             clientUserUuid = "",
             oderProductList = orderProductList,
         )

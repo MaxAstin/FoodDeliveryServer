@@ -17,6 +17,9 @@ class CompanyRepository : ICompanyRepository {
             forFreeDelivery = insertCompany.forFreeDelivery
             deliveryCost = insertCompany.deliveryCost
             forceUpdateVersion = insertCompany.forceUpdateVersion
+            percentDiscount = insertCompany.percentDiscount?.takeIf { percentDiscount ->
+                percentDiscount != 0
+            }
         }.toCompany()
     }
 
@@ -26,6 +29,9 @@ class CompanyRepository : ICompanyRepository {
             forFreeDelivery = updateCompany.forFreeDelivery ?: forFreeDelivery
             deliveryCost = updateCompany.deliveryCost ?: deliveryCost
             forceUpdateVersion = updateCompany.forceUpdateVersion ?: forceUpdateVersion
+            percentDiscount = (updateCompany.percentDiscount ?: percentDiscount).takeIf { percentDiscount ->
+                percentDiscount != 0
+            }
         }?.toCompany()
     }
 

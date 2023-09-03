@@ -35,6 +35,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var status: String by OrderTable.status
     var deliveryCost: Int? by OrderTable.deliveryCost
     var paymentMethod: String? by OrderTable.paymentMethod
+    var percentDiscount: Int? by OrderTable.percentDiscount
     var cafe: CafeEntity by CafeEntity referencedOn OrderTable.cafe
     var company: CompanyEntity by CompanyEntity referencedOn OrderTable.company
     var clientUser: ClientUserEntity by ClientUserEntity referencedOn OrderTable.clientUser
@@ -84,6 +85,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         oldTotalCost = calculateOldTotalCost(),
         newTotalCost = calculateNewTotalCost(),
         paymentMethod = paymentMethod,
+        percentDiscount = percentDiscount,
         clientUserUuid = clientUser.uuid,
         oderProductList = oderProducts.map { oderProductEntity ->
             oderProductEntity.toOrderProduct()
@@ -193,15 +195,18 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     }
 
     private fun calculateNewTotalCost(): Int {
-        return oderProducts.sumOf { orderProductEntity ->
+        val oderProductsSumCost = oderProducts.sumOf { orderProductEntity ->
             orderProductEntity.count * orderProductEntity.newPrice
-        } + (deliveryCost ?: 0)
+        }
+        val discountMultiplier = (100 - (percentDiscount ?: 0)) / 100.0
+
+        return (oderProductsSumCost * discountMultiplier).toInt() + (deliveryCost ?: 0)
     }
 
     private fun calculateOldTotalCost(): Int? {
         val isOldTotalCostEnabled = oderProducts.any { orderProductEntity ->
             orderProductEntity.oldPrice != null
-        }
+        } || percentDiscount != null
         return if (isOldTotalCostEnabled) {
             oderProducts.sumOf { orderProductEntity ->
                 orderProductEntity.count * (orderProductEntity.oldPrice ?: orderProductEntity.newPrice)

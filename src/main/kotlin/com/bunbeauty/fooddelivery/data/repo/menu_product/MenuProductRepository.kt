@@ -39,26 +39,18 @@ class MenuProductRepository : IMenuProductRepository {
         MenuProductEntity.findById(menuProductUuid)?.apply {
             name = updateMenuProduct.name ?: name
             newPrice = updateMenuProduct.newPrice ?: newPrice
-            oldPrice = if (updateMenuProduct.oldPrice == 0) {
-                null
-            } else {
-                updateMenuProduct.oldPrice ?: oldPrice
+            oldPrice = (updateMenuProduct.oldPrice ?: oldPrice)?.takeIf { oldPrice ->
+                oldPrice != 0
             }
-            utils = if (utils == "" && nutrition == 0) {
-                null
-            } else {
-                updateMenuProduct.utils ?: utils
+            utils = (updateMenuProduct.utils ?: utils)?.takeIf { utils ->
+                utils.isNotEmpty() && (updateMenuProduct.nutrition ?: nutrition) != 0
             }
-            nutrition = if (utils == "" && nutrition == 0) {
-                null
-            } else {
-                updateMenuProduct.nutrition ?: nutrition
+            nutrition = (updateMenuProduct.nutrition ?: nutrition)?.takeIf { nutrition ->
+                ((updateMenuProduct.utils ?: utils)?.isNotEmpty() == true) && nutrition != 0
             }
             description = updateMenuProduct.description ?: description
-            comboDescription = if (updateMenuProduct.comboDescription == "") {
-                null
-            } else {
-                updateMenuProduct.comboDescription ?: comboDescription
+            comboDescription = (updateMenuProduct.comboDescription ?: comboDescription)?.takeIf { comboDescription ->
+                comboDescription.isNotEmpty()
             }
             photoLink = updateMenuProduct.photoLink ?: photoLink
             barcode = updateMenuProduct.barcode ?: barcode

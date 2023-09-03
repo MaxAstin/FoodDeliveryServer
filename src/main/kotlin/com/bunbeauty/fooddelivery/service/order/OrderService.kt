@@ -121,6 +121,11 @@ class OrderService(
             }
         }
 
+        val percentDiscount = company.percentDiscount?.takeIf {
+            val orderCount = orderRepository.getOrderCountByUserUuid(clientUserUuid.toUuid())
+            orderCount == 0L
+        }
+
         val insertOrder = InsertOrderV2(
             time = currentMillis,
             isDelivery = postOrder.isDelivery,
@@ -139,6 +144,7 @@ class OrderService(
             status = OrderStatus.NOT_ACCEPTED.name,
             deliveryCost = deliveryCost,
             paymentMethod = postOrder.paymentMethod,
+            percentDiscount = percentDiscount,
             cafeUuid = cafeUuid.toUuid(),
             companyUuid = company.uuid.toUuid(),
             clientUserUuid = clientUserUuid.toUuid(),

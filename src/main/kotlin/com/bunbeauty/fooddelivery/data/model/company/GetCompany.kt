@@ -10,5 +10,6 @@ class GetCompany(
     val offset: Int,
     val delivery: GetDelivery,
     val forceUpdateVersion: GetForceUpdateVersion,
-    val payment: GetPayment
+    val payment: GetPayment,
+    val percentDiscount: Int?,
 )

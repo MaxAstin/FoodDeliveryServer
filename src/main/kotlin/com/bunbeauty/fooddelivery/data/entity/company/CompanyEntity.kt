@@ -19,6 +19,7 @@ class CompanyEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var forceUpdateVersion: Int by CompanyTable.forceUpdateVersion
     var paymentPhoneNumber: String? by CompanyTable.paymentPhoneNumber
     var paymentCardNumber: String? by CompanyTable.paymentCardNumber
+    var percentDiscount: Int? by CompanyTable.percentDiscount
 
     companion object : UUIDEntityClass<CompanyEntity>(CompanyTable)
 
@@ -37,5 +38,6 @@ class CompanyEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
             phoneNumber = paymentPhoneNumber,
             cardNumber = paymentCardNumber
         ),
+        percentDiscount = percentDiscount,
     )
 }

@@ -13,6 +13,7 @@ class InsertOrderV2(
     val status: String,
     val deliveryCost: Int?,
     val paymentMethod: String?,
+    val percentDiscount: Int?,
     val cafeUuid: UUID,
     val companyUuid: UUID,
     val clientUserUuid: UUID,

@@ -71,6 +71,7 @@ class OrderRepository : IOrderRepository {
             status = insertOrder.status
             deliveryCost = insertOrder.deliveryCost
             paymentMethod = insertOrder.paymentMethod
+            percentDiscount = insertOrder.percentDiscount
             cafe = CafeEntity[insertOrder.cafeUuid]
             company = CompanyEntity[insertOrder.companyUuid]
             clientUser = ClientUserEntity[insertOrder.clientUserUuid]
@@ -120,6 +121,12 @@ class OrderRepository : IOrderRepository {
             .map { orderEntity ->
                 orderEntity.toClientOrder()
             }
+    }
+
+    override suspend fun getOrderCountByUserUuid(userUuid: UUID): Long = query {
+        OrderEntity.find {
+            (OrderTable.clientUser eq userUuid)
+        }.count()
     }
 
     override suspend fun getOrderListByUserUuidV2(userUuid: UUID, count: Int?): List<GetClientOrderV2> = query {

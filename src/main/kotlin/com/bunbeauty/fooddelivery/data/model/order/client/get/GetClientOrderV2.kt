@@ -19,6 +19,7 @@ class GetClientOrderV2(
     val oldTotalCost: Int?,
     val newTotalCost: Int,
     val paymentMethod: String?,
+    val percentDiscount: Int?,
     val clientUserUuid: String,
     val oderProductList: List<GetOrderProduct>,
 )
