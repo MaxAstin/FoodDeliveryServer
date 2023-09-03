@@ -5,15 +5,17 @@ val serialization_json_version: String by project
 val exposed_version: String by project
 val hikari_version: String by project
 val postgres_version: String by project
+val h2_version: String by project
 val koin_version: String by project
 val bcrypt_version: String by project
 val firebase_admin_version: String by project
 val joda_time_version: String by project
 val mockk_version: String by project
+val junit_version: String by project
 
 plugins {
-    kotlin("jvm") version "1.8.10"
-    kotlin("plugin.serialization") version "1.8.10"
+    kotlin("jvm") version "1.8.22"
+    kotlin("plugin.serialization") version "1.8.22"
     application
 }
 
@@ -38,9 +40,6 @@ dependencies {
     implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
-    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
-
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_json_version")
 
     // Database
@@ -49,6 +48,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation("com.zaxxer:HikariCP:$hikari_version")
     implementation("org.postgresql:postgresql:$postgres_version")
+    testImplementation("com.h2database:h2:$h2_version")
 
     // DI
     implementation("io.insert-koin:koin-ktor:$koin_version")
@@ -64,5 +64,7 @@ dependencies {
 
     // Test
     testImplementation("io.mockk:mockk:$mockk_version")
+    implementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 
 }

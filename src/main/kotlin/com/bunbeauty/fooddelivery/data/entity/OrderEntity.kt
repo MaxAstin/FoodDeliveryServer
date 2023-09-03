@@ -198,9 +198,9 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         val oderProductsSumCost = oderProducts.sumOf { orderProductEntity ->
             orderProductEntity.count * orderProductEntity.newPrice
         }
-        val discountMultiplier = (100 - (percentDiscount ?: 0)) / 100.0
+        val discount = (oderProductsSumCost * (percentDiscount ?: 0) / 100.0).toInt()
 
-        return (oderProductsSumCost * discountMultiplier).toInt() + (deliveryCost ?: 0)
+        return oderProductsSumCost - discount + (deliveryCost ?: 0)
     }
 
     private fun calculateOldTotalCost(): Int? {

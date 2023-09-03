@@ -13,8 +13,8 @@ import com.bunbeauty.fooddelivery.service.hit.HitService
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.BeforeTest
 import kotlin.test.assertContentEquals
 
 class HitServiceTests {
