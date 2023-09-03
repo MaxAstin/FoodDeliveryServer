@@ -14,8 +14,8 @@ val mockk_version: String by project
 val junit_version: String by project
 
 plugins {
-    kotlin("jvm") version "1.8.22"
-    kotlin("plugin.serialization") version "1.8.22"
+    kotlin("jvm") version "1.9.10"
+    kotlin("plugin.serialization") version "1.9.10"
     application
 }
 
@@ -28,6 +28,10 @@ repositories {
 }
 
 tasks.create("stage").dependsOn("installDist")
+
+tasks.test {
+    useJUnitPlatform()
+}
 
 dependencies {
     implementation("io.ktor:ktor-server-core:$ktor_version")
@@ -48,7 +52,6 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation("com.zaxxer:HikariCP:$hikari_version")
     implementation("org.postgresql:postgresql:$postgres_version")
-    testImplementation("com.h2database:h2:$h2_version")
 
     // DI
     implementation("io.insert-koin:koin-ktor:$koin_version")
@@ -64,7 +67,6 @@ dependencies {
 
     // Test
     testImplementation("io.mockk:mockk:$mockk_version")
-    implementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+    testImplementation(kotlin("test"))
 
 }

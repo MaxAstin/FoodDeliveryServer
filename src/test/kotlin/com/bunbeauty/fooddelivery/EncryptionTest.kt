@@ -3,10 +3,8 @@ package com.bunbeauty.fooddelivery
 import at.favre.lib.crypto.bcrypt.BCrypt
 import com.toxicbakery.bcrypt.Bcrypt
 import com.toxicbakery.bcrypt.Bcrypt.verify
-import io.ktor.utils.io.core.*
-import org.junit.Assert.assertTrue
-import org.junit.Test
-import java.sql.DriverManager.println
+import kotlin.test.Test
+import kotlin.test.assertTrue
 
 class EncryptionTest {
 
