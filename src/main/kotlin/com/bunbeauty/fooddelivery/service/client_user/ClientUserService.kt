@@ -42,23 +42,6 @@ class ClientUserService(
         }
     }
 
-    override suspend fun sendCode(postClientCodeRequest: PostClientCodeRequest): GetClientUserLoginSessionUuid? {
-        return if (isRequestForTestPhone(postClientCodeRequest)) {
-            GetClientUserLoginSessionUuid(
-                uuid = UUID.randomUUID().toString()
-            )
-        } else {
-            sendCode(postClientCodeRequest.phoneNumber)?.let { code ->
-                val insertClientUserLoginSession = InsertClientUserLoginSession(
-                    phoneNumber = postClientCodeRequest.phoneNumber,
-                    time = DateTime.now().millis,
-                    code = code
-                )
-                clientUserRepository.insertClientUserLoginSession(insertClientUserLoginSession)
-            }
-        }
-    }
-
     override suspend fun checkCode(postClientCode: PostClientCode): ClientAuthResponse? {
         return if ((isCodeForTestPhone(postClientCode) && isCodeActualForTestPhone(postClientCode))
             || isCodeActual(postClientCode)
@@ -126,10 +109,6 @@ class ClientUserService(
 
     suspend fun isRequestForTestPhone(postClientCodeRequest: PostClientCodeRequest): Boolean {
         return isForTestPhone(postClientCodeRequest.phoneNumber)
-    }
-
-    suspend fun sendCode(phoneNumber: String): String? {
-        return TODO()
     }
 
     suspend fun isCodeForTestPhone(postClientCode: PostClientCode): Boolean {

@@ -12,6 +12,7 @@ val firebase_admin_version: String by project
 val joda_time_version: String by project
 val mockk_version: String by project
 val junit_version: String by project
+val otp_version: String by project
 
 plugins {
     kotlin("jvm") version "1.9.10"
@@ -42,6 +43,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("io.ktor:ktor-server-auth:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_json_version")
@@ -64,6 +66,10 @@ dependencies {
 
     // DateTime
     implementation("joda-time:joda-time:$joda_time_version")
+
+    // OTP
+    implementation("dev.turingcomplete:kotlin-onetimepassword:$otp_version")
+    implementation("io.ktor:ktor-client-okhttp-jvm:2.2.4")
 
     // Test
     testImplementation("io.mockk:mockk:$mockk_version")

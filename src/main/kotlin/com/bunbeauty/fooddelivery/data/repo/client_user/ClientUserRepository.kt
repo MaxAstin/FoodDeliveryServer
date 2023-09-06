@@ -15,13 +15,13 @@ import java.util.UUID
 
 class ClientUserRepository : IClientUserRepository {
 
-    override suspend fun insertClientUserLoginSession(insertClientUserLoginSession: InsertClientUserLoginSession): GetClientUserLoginSessionUuid =
+    override suspend fun insertClientUserLoginSession(insertClientUserLoginSession: InsertAuthSession): GetAuthSessionUuid =
         query {
             ClientUserLoginSessionEntity.new {
                 phoneNumber = insertClientUserLoginSession.phoneNumber
                 time = insertClientUserLoginSession.time
                 code = insertClientUserLoginSession.code
-            }.toClientUserLoginSession()
+            }.toGetAuthSessionUuid()
         }
 
     override suspend fun getClientUserLoginSessionByUuid(uuid: UUID): GetClientUserLoginSession? = query {

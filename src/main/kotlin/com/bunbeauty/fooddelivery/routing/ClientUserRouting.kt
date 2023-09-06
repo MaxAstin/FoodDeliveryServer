@@ -17,7 +17,6 @@ fun Application.configureClientUserRouting() {
         clientLogin()
 
         authenticate {
-            sendCode()
             checkCode()
             createTestClientUserPhone()
             getTestClientUserPhones()
@@ -41,20 +40,6 @@ private fun Routing.clientLogin() {
                 call.respondBad("Unable to log in with provided credentials")
             } else {
                 call.respondOk(clientAuthResponse)
-            }
-        }
-    }
-}
-
-private fun Route.sendCode() {
-
-    val clientUserService: IClientUserService by inject()
-    val requestService: IRequestService by inject()
-
-    post("/client/code_request") {
-        limitRequestNumber(requestService) {
-            clientWithBody<PostClientCodeRequest, GetClientUserLoginSessionUuid> { bodyRequest ->
-                clientUserService.sendCode(bodyRequest.body)
             }
         }
     }

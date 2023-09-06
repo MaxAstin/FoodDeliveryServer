@@ -9,7 +9,7 @@ import java.util.UUID
 
 interface IClientUserRepository {
 
-    suspend fun insertClientUserLoginSession(insertClientUserLoginSession: InsertClientUserLoginSession): GetClientUserLoginSessionUuid
+    suspend fun insertClientUserLoginSession(insertClientUserLoginSession: InsertAuthSession): GetAuthSessionUuid
     suspend fun getClientUserLoginSessionByUuid(uuid: UUID): GetClientUserLoginSession?
     suspend fun insertTestClientUserPhone(insertTestClientUserPhone: InsertTestClientUserPhone): GetTestClientUserPhone
     suspend fun getTestClientUserPhoneByPhoneNumber(phoneNumber: String): GetTestClientUserPhone?

@@ -13,7 +13,9 @@ class RequestRepository : IRequestRepository {
     override suspend fun getLastDayRequestByIpAndName(ip: String, name: String, startDayMillis: Long): GetRequest? =
         query {
             RequestEntity.find {
-                (RequestTable.ip eq ip) and (RequestTable.name eq name) and (RequestTable.time greater startDayMillis)
+                (RequestTable.ip eq ip) and
+                        (RequestTable.name eq name) and
+                        (RequestTable.time greater startDayMillis)
             }.orderBy(RequestTable.time to SortOrder.DESC)
                 .firstOrNull()
                 ?.toRequest()
@@ -21,7 +23,9 @@ class RequestRepository : IRequestRepository {
 
     override suspend fun getDayRequestCountByIpAndName(ip: String, name: String, startDayMillis: Long): Long = query {
         RequestEntity.find {
-            (RequestTable.ip eq ip) and (RequestTable.name eq name) and (RequestTable.time greater startDayMillis)
+            (RequestTable.ip eq ip) and
+                    (RequestTable.name eq name) and
+                    (RequestTable.time greater startDayMillis)
         }.count()
     }
 

@@ -30,6 +30,8 @@ fun Application.configureKoin() {
             notificationModule,
             discountModule,
             requestModule,
+            authorizationModule,
+            networkModule,
         )
     }
 }

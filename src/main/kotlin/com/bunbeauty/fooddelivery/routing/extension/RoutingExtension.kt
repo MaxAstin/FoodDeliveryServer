@@ -3,10 +3,8 @@ package com.bunbeauty.fooddelivery.routing.extension
 import com.bunbeauty.fooddelivery.auth.JwtUser
 import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.ext.toListWrapper
-import com.bunbeauty.fooddelivery.data.model.request.RequestAvailability
 import com.bunbeauty.fooddelivery.routing.model.BodyRequest
 import com.bunbeauty.fooddelivery.routing.model.Request
-import com.bunbeauty.fooddelivery.service.ip.IRequestService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -153,24 +151,8 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.adminDelete(deleteBloc
     }
 }
 
-suspend inline fun PipelineContext<Unit, ApplicationCall>.limitRequestNumber(
-    requestService: IRequestService,
-    block: () -> Unit,
-) {
-    val ip = getIp()
-    println("ip = $ip")
-    when (val requestAvailability = requestService.isRequestAvailable(ip, call.request.path())) {
-        is RequestAvailability.Available -> {
-            block()
-        }
-        is RequestAvailability.NotAvailable -> {
-            call.respondBad("Request is not available for more ${requestAvailability.seconds} seconds")
-        }
-    }
-}
-
-fun PipelineContext<Unit, ApplicationCall>.getIp(): String {
-    return context::class.memberProperties
+val PipelineContext<Unit, ApplicationCall>.clientIp: String
+    get() = context::class.memberProperties
         .find { memberProperty ->
             memberProperty.name == "call"
         }?.let { callProperty ->
@@ -183,8 +165,7 @@ fun PipelineContext<Unit, ApplicationCall>.getIp(): String {
                 .toString()
             val regex = Regex("\\d{0,3}\\.\\d{0,3}\\.\\d{0,3}\\.\\d{0,3}")
             regex.find(ip)?.value
-        } ?: ""
-}
+        } ?: error("Can't get client IP")
 
 suspend inline fun ApplicationCall.respondOk() {
     respond(HttpStatusCode.OK)

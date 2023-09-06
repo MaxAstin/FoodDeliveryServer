@@ -1,8 +1,7 @@
 package com.bunbeauty.fooddelivery.data.entity
 
-import com.bunbeauty.fooddelivery.data.model.client_user.login.GetClientUserLoginSessionUuid
+import com.bunbeauty.fooddelivery.data.model.client_user.login.GetAuthSessionUuid
 import com.bunbeauty.fooddelivery.data.model.client_user.login.GetClientUserLoginSession
-import com.bunbeauty.fooddelivery.data.table.AddressTable
 import com.bunbeauty.fooddelivery.data.table.ClientUserLoginSessionTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
@@ -18,7 +17,7 @@ class ClientUserLoginSessionEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     companion object : UUIDEntityClass<ClientUserLoginSessionEntity>(ClientUserLoginSessionTable)
 
-    fun toClientUserLoginSession() = GetClientUserLoginSessionUuid(
+    fun toGetAuthSessionUuid() = GetAuthSessionUuid(
         uuid = uuid
     )
 

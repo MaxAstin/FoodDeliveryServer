@@ -7,14 +7,14 @@ import com.bunbeauty.fooddelivery.data.model.request.RequestAvailability
 import com.bunbeauty.fooddelivery.data.repo.request.IRequestRepository
 import org.joda.time.DateTime
 
-class RequestService(private val requestRepository: IRequestRepository) : IRequestService {
+class RequestService(private val requestRepository: IRequestRepository) {
 
     /**
         Request ([requestName]) is available for concrete [ip] in 2 cases:
          - more than [REQUEST_LIMIT_TIMEOUT] milliseconds have passed since the last request
          - less than [CONSECUTIVE_REQUESTS_LIMIT] requests in a day
      */
-    override suspend fun isRequestAvailable(ip: String, requestName: String): RequestAvailability {
+    suspend fun isRequestAvailable(ip: String, requestName: String): RequestAvailability {
         val startDayMillis = DateTime.now().withTimeAtStartOfDay().millis
         val lastRequestTime = requestRepository.getLastDayRequestByIpAndName(ip, requestName, startDayMillis)?.time ?: 0L
         val currentTimeMillis = DateTime.now().millis

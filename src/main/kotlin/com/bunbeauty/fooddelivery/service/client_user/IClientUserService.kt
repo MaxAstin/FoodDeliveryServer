@@ -6,7 +6,6 @@ import com.bunbeauty.fooddelivery.data.model.client_user.login.*
 interface IClientUserService {
 
     suspend fun login(clientUserAuth: PostClientUserAuth): ClientAuthResponse?
-    suspend fun sendCode(postClientCodeRequest: PostClientCodeRequest): GetClientUserLoginSessionUuid?
     suspend fun checkCode(postClientCode: PostClientCode): ClientAuthResponse?
     suspend fun createTestClientUserPhone(postTestClientUserPhone: PostTestClientUserPhone): GetTestClientUserPhone
     suspend fun getTestClientUserPhoneList(): List<GetTestClientUserPhone>

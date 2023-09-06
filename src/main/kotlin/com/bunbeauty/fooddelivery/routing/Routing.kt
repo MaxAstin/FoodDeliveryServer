@@ -21,4 +21,5 @@ fun Application.configureRouting() {
     configureLinkRouting()
     configureNotificationRouting()
     configureDiscountRouting()
+    configureAuthorizationRouting()
 }
