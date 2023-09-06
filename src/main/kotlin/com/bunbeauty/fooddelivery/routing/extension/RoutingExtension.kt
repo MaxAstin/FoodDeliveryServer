@@ -35,10 +35,11 @@ suspend inline fun ApplicationCall.handleParameters(
 }
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(block: () -> Unit) {
-    println("request " + context.request.path())
+    println("request ${context.request.path()}")
     try {
         block()
     } catch (exception: Exception) {
+        println("Exception: ${exception.message}")
         call.respondBad("Exception: ${exception.message}")
         exception.printStackTrace()
     }

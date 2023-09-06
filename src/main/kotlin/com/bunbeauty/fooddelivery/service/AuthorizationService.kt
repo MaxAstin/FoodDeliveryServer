@@ -61,12 +61,16 @@ class AuthorizationService(
 
                 when(apiResult) {
                     is ApiResult.Success -> {
-                        val insertAuthSession = InsertAuthSession(
-                            phoneNumber = postClientCodeRequest.phoneNumber,
-                            time = currentMillis,
-                            code = otpCode
-                        )
-                        return authorizationRepository.insertAuthSession(insertAuthSession)
+                        if (apiResult.data.success) {
+                            val insertAuthSession = InsertAuthSession(
+                                phoneNumber = postClientCodeRequest.phoneNumber,
+                                time = currentMillis,
+                                code = otpCode
+                            )
+                            return authorizationRepository.insertAuthSession(insertAuthSession)
+                        } else {
+                            error("Auth service error: ${apiResult.data.message}")
+                        }
                     }
                     is ApiResult.Error -> error("Something went wrong: ${apiResult.throwable.message}")
                 }
