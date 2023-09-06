@@ -5,6 +5,7 @@ import com.bunbeauty.fooddelivery.data.model.client_user.login.GetAuthSessionUui
 import com.bunbeauty.fooddelivery.data.model.client_user.login.PostClientCodeRequest
 import com.bunbeauty.fooddelivery.routing.extension.clientIp
 import com.bunbeauty.fooddelivery.routing.extension.clientWithBody
+import com.bunbeauty.fooddelivery.routing.extension.withBody
 import com.bunbeauty.fooddelivery.service.AuthorizationService
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
@@ -22,12 +23,12 @@ private fun Routing.sendCode() {
     val authorizationService: AuthorizationService by inject()
 
     post("/client/code_request") {
-        clientWithBody<PostClientCodeRequest, GetAuthSessionUuid> { bodyRequest ->
+        withBody<PostClientCodeRequest, GetAuthSessionUuid> { postClientCodeRequest ->
             val companyUuid = call.parameters[Constants.COMPANY_UUID_PARAMETER]
                 ?: error("${Constants.COMPANY_UUID_PARAMETER} is required")
             authorizationService.sendCode(
                 companyUuid = companyUuid,
-                postClientCodeRequest = bodyRequest.body,
+                postClientCodeRequest = postClientCodeRequest,
                 clientIp = clientIp
             )
         }
