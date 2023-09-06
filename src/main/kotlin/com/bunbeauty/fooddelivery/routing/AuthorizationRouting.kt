@@ -29,7 +29,7 @@ private fun Routing.sendCode() {
             authorizationService.sendCode(
                 companyUuid = companyUuid,
                 postClientCodeRequest = postClientCodeRequest,
-                clientIp = clientIp
+                clientIp = "1.1.1.1"// TODO get back clientIp
             )
         }
     }
