@@ -14,8 +14,8 @@ import org.koin.dsl.module
 private const val AUTH_API_EMAIL_KEY = "AUTH_API_EMAIL_KEY"
 private const val AUTH_API_KEY = "AUTH_API_KEY"
 
-val authApiEmail = System.getenv(AUTH_API_EMAIL_KEY)
-val authApiKey = System.getenv(AUTH_API_KEY)
+private val authApiEmail = System.getenv(AUTH_API_EMAIL_KEY)
+private val authApiKey = System.getenv(AUTH_API_KEY)
 
 val networkModule = module(createdAtStart = true) {
     factory {  NetworkService(get()) }
@@ -33,6 +33,12 @@ val networkModule = module(createdAtStart = true) {
             }
 
             install(DefaultRequest) {
+                println("\n")
+                println("======================================")
+                println("authApiEmail $authApiEmail")
+                println("authApiKey $authApiKey")
+                println("======================================")
+                println("\n")
                 host = "$authApiEmail:$authApiKey@gate.smsaero.ru/v2"
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
 
