@@ -43,12 +43,7 @@ class NetworkService(private val client: HttpClient) {
         networkCall: () -> HttpResponse
     ): ApiResult<R> {
         return try {
-            val call = networkCall()
-            println("request.url = ${call.request.url}")
-            println("attributes = ${call.request.attributes}")
-            println("method = ${call.request.method}")
-            println("headers = ${call.request.content.headers}")
-            ApiResult.Success(call.body())
+            ApiResult.Success(networkCall().body())
         } catch (exception: ClientRequestException) {
             ApiResult.Error(exception)
         } catch (exception: Throwable) {
