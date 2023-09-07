@@ -53,13 +53,14 @@ class AuthorizationService(
 
                 val company = companyRepository.getCompanyByUuid(companyUuid.toUuid()) ?: error("Company not found")
 
-                val apiResult = networkService.sendSms(
-                    phoneNumber = postClientCodeRequest.phoneNumber,
-                    sign = DEFAULT_SIGN,
-                    text = "$otpCode $MESSAGE_TEXT ${company.name}",
-                )
+                val apiResult = networkService.getAuth()
+//                    networkService.sendSms(
+//                        phoneNumber = postClientCodeRequest.phoneNumber,
+//                        sign = DEFAULT_SIGN,
+//                        text = "$otpCode $MESSAGE_TEXT ${company.name}",
+//                    )
 
-                when(apiResult) {
+                when (apiResult) {
                     is ApiResult.Success -> {
                         if (apiResult.data.success) {
                             val insertAuthSession = InsertAuthSession(
@@ -72,6 +73,7 @@ class AuthorizationService(
                             error("Auth service error: ${apiResult.data.message}")
                         }
                     }
+
                     is ApiResult.Error -> error("Something went wrong: ${apiResult.throwable.message}")
                 }
             }

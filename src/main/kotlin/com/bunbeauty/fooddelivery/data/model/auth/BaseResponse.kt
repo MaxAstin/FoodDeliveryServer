@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class SendSmsResponse(
+class BaseResponse(
     @SerialName("success")
     val success: Boolean,
     @SerialName("message")

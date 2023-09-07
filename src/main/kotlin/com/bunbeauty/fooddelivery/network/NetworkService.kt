@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.network
 
-import com.bunbeauty.fooddelivery.data.model.auth.SendSmsResponse
+import com.bunbeauty.fooddelivery.data.model.auth.BaseResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
@@ -10,7 +10,7 @@ import io.ktor.http.*
 
 class NetworkService(private val client: HttpClient) {
 
-    suspend fun sendSms(phoneNumber: String, sign: String, text: String): ApiResult<SendSmsResponse> {
+    suspend fun sendSms(phoneNumber: String, sign: String, text: String): ApiResult<BaseResponse> {
         return getData(
             path = "sms/send",
             parameters = mapOf(
@@ -19,6 +19,10 @@ class NetworkService(private val client: HttpClient) {
                 "text" to text,
             )
         )
+    }
+
+    suspend fun getAuth(): ApiResult<BaseResponse> {
+        return getData(path = "auth")
     }
 
     private suspend inline fun <reified R> getData(
