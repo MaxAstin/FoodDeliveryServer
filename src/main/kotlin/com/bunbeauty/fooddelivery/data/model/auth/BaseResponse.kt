@@ -8,5 +8,5 @@ class BaseResponse(
     @SerialName("success")
     val success: Boolean,
     @SerialName("message")
-    val message: String,
+    val message: String?,
 )
