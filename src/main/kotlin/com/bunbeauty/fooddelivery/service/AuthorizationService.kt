@@ -31,6 +31,7 @@ class AuthorizationService(
         val config = HmacOneTimePasswordConfig(codeDigits = CODE_LENGTH, hmacAlgorithm = HmacAlgorithm.SHA1)
         HmacOneTimePasswordGenerator(secret, config)
     }
+
     private val phoneNumberRegex by lazy {
         Regex("^[+]?7[0-9]{10}$")
     }
@@ -42,12 +43,10 @@ class AuthorizationService(
     ): GetAuthSessionUuid {
         when (val availability = requestService.isRequestAvailable(clientIp, SEND_CODE_OPERATION_NAME)) {
             RequestAvailability.Available -> {
-                if (!phoneNumberRegex.matches(postClientCodeRequest.phoneNumber)) {
-                    error("Invalid phone number")
-                }
+                validatePhoneNumber(postClientCodeRequest.phoneNumber)
 
                 val testClientUserPhone = authorizationRepository.getTestNumber(postClientCodeRequest.phoneNumber)
-                val phoneNumber =  testClientUserPhone?.phoneNumber ?: postClientCodeRequest.phoneNumber
+                val phoneNumber = testClientUserPhone?.phoneNumber ?: postClientCodeRequest.phoneNumber
                 val currentMillis = DateTime.now().millis
                 val code = testClientUserPhone?.code ?: otpGenerator.generate(currentMillis)
                 val apiResult = if (testClientUserPhone == null) {
@@ -87,6 +86,7 @@ class AuthorizationService(
     }
 
     suspend fun createTestClientUserPhone(postTestClientUserPhone: PostTestClientUserPhone): GetTestClientUserPhone {
+        validatePhoneNumber(postTestClientUserPhone.phoneNumber)
         return authorizationRepository.insertTestClientUserPhone(
             InsertTestClientUserPhone(
                 phoneNumber = postTestClientUserPhone.phoneNumber,
@@ -97,6 +97,12 @@ class AuthorizationService(
 
     suspend fun getTestClientUserPhoneList(): List<GetTestClientUserPhone> {
         return authorizationRepository.getTestClientUserPhoneList()
+    }
+
+    private fun validatePhoneNumber(phoneNumber: String) {
+        if (!phoneNumberRegex.matches(phoneNumber)) {
+            error("Invalid phone number")
+        }
     }
 
     private suspend fun getSmsText(otpCode: String, companyUuid: String): String {
