@@ -16,24 +16,6 @@ import java.sql.DriverManager.println
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
-suspend inline fun ApplicationCall.handleParameters(
-    vararg parameterNameList: String,
-    block: (Map<String, String>) -> Unit,
-) {
-    val nullParameterName = parameterNameList.find { parameterName ->
-        parameters[parameterName] == null
-    }
-    if (nullParameterName == null) {
-        val nonNullableParameters: List<String> = parameterNameList.mapNotNull { parameterName ->
-            parameters[parameterName]
-        }
-        val parameterMap = parameterNameList.zip(nonNullableParameters).toMap()
-        block(parameterMap)
-    } else {
-        respondBad("Parameter $nullParameterName is required")
-    }
-}
-
 suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(block: () -> Unit) {
     println("request ${context.request.path()}")
     try {
@@ -53,10 +35,21 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.manager(
     }
 }
 
-suspend inline fun PipelineContext<Unit, ApplicationCall>.admin(block: (Request) -> Unit) {
-    checkRights(block) { jwtUser ->
-        jwtUser.isAdmin()
-    }
+suspend inline fun <reified R> PipelineContext<Unit, ApplicationCall>.admin(
+    errorMessage: String? = null,
+    block: (Request) -> R,
+) {
+    checkRights(
+        block = { request ->
+            call.respondOkOrBad(
+                model = block(request),
+                errorMessage = errorMessage
+            )
+        },
+        checkBlock = { jwtUser ->
+            jwtUser.isAdmin()
+        }
+    )
 }
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.client(block: (Request) -> Unit) {
@@ -83,61 +76,60 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.checkRights(
     }
 }
 
-suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.managerWithBody(
+suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>.managerWithBody(
     errorMessage: String? = null,
-    block: (BodyRequest<B>) -> G?,
+    block: (BodyRequest<B>) -> R?,
 ) {
     manager { request ->
-        handleBody(request, errorMessage, block)
+        handleRequestWithBody(request, errorMessage, block)
     }
 }
 
-suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.adminWithBody(
+suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>.adminWithBody(
     errorMessage: String? = null,
-    block: (BodyRequest<B>) -> G?,
+    block: (BodyRequest<B>) -> R?,
 ) {
     admin { request ->
-        handleBody(request, errorMessage, block)
+        handleRequestWithBody(request, errorMessage, block)
     }
 }
 
-suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.clientWithBody(
+suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>.clientWithBody(
     errorMessage: String? = null,
-    block: (BodyRequest<B>) -> G?,
+    block: (BodyRequest<B>) -> R?,
 ) {
     client { request ->
-        handleBody(request, errorMessage, block)
+        handleRequestWithBody(request, errorMessage, block)
     }
 }
 
-suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.withBody(
+suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>.withBody(
     errorMessage: String? = null,
-    block: (B) -> G?,
+    block: (B) -> R?,
 ) {
     safely {
         val bodyModel: B = call.receive()
-        val getModel: G? = block(bodyModel)
+        val getModel: R? = block(bodyModel)
         call.respondOkOrBad(model = getModel, errorMessage = errorMessage)
     }
 }
 
-suspend inline fun <reified B, reified G> PipelineContext<Unit, ApplicationCall>.handleBody(
+suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>.handleRequestWithBody(
     request: Request,
     errorMessage: String? = null,
-    block: (BodyRequest<B>) -> G?,
+    block: (BodyRequest<B>) -> R?,
 ) {
-    val bodyModel: B = call.receive()
-    val getModel: G? = block(
+    val body: B = call.receive()
+    val result: R? = block(
         BodyRequest(
             request = request,
-            body = bodyModel
+            body = body
         )
     )
-    if (getModel == null) {
-        call.respondBad(errorMessage ?: "Something went wrong")
-    } else {
-        call.respondOk(getModel)
-    }
+    call.respondOkOrBad(
+        model = result,
+        errorMessage = errorMessage ?: "Something went wrong"
+    )
 }
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.adminDelete(deleteBlock: (String) -> Any?) {
@@ -166,7 +158,7 @@ val PipelineContext<Unit, ApplicationCall>.clientIp: String
                 .toString()
             val regex = Regex("\\d{0,3}\\.\\d{0,3}\\.\\d{0,3}\\.\\d{0,3}")
             regex.find(ip)?.value
-        } ?: error("Can't get client IP")
+        } ?: "0.0.0.0"
 
 suspend inline fun ApplicationCall.respondOk() {
     respond(HttpStatusCode.OK)
@@ -181,7 +173,7 @@ suspend inline fun <reified T : Any> ApplicationCall.respondOkOrBad(
     errorMessage: String? = null,
 ) {
     if (model == null) {
-        respond(HttpStatusCode.BadRequest, errorMessage ?: "Data not found")
+        respondBad(errorMessage ?: "Data not found")
     } else {
         respondOk(model)
     }

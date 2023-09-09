@@ -60,19 +60,6 @@ class ClientUserService(
         }
     }
 
-    override suspend fun createTestClientUserPhone(postTestClientUserPhone: PostTestClientUserPhone): GetTestClientUserPhone {
-        return clientUserRepository.insertTestClientUserPhone(
-            InsertTestClientUserPhone(
-                phoneNumber = postTestClientUserPhone.phoneNumber,
-                code = postTestClientUserPhone.code
-            )
-        )
-    }
-
-    override suspend fun getTestClientUserPhoneList(): List<GetTestClientUserPhone> {
-        return clientUserRepository.getTestClientUserPhoneList()
-    }
-
     override suspend fun getClientUserByUuid(clientUserUuid: String): GetClientUser? {
         return clientUserRepository.getClientUserByUuid(clientUserUuid.toUuid())
     }

@@ -28,24 +28,10 @@ class ClientUserRepository : IClientUserRepository {
         ClientUserLoginSessionEntity.findById(uuid)?.toClientUserLoginSessionWithCode()
     }
 
-    override suspend fun insertTestClientUserPhone(insertTestClientUserPhone: InsertTestClientUserPhone): GetTestClientUserPhone =
-        query {
-            TestClientUserPhoneEntity.new {
-                phoneNumber = insertTestClientUserPhone.phoneNumber
-                code = insertTestClientUserPhone.code
-            }.toTestClientUserPhone()
-        }
-
     override suspend fun getTestClientUserPhoneByPhoneNumber(phoneNumber: String): GetTestClientUserPhone? = query {
         TestClientUserPhoneEntity.find {
             TestClientUserPhoneTable.phoneNumber eq phoneNumber
         }.firstOrNull()?.toTestClientUserPhone()
-    }
-
-    override suspend fun getTestClientUserPhoneList(): List<GetTestClientUserPhone> = query {
-        TestClientUserPhoneEntity.all().map { testClientUserPhoneEntity ->
-            testClientUserPhoneEntity.toTestClientUserPhone()
-        }
     }
 
     override suspend fun getClientUserByPhoneNumberAndCompayUuid(

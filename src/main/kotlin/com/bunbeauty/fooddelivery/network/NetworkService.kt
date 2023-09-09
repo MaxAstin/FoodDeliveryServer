@@ -21,6 +21,17 @@ class NetworkService(private val client: HttpClient) {
         )
     }
 
+    suspend fun testSendSms(phoneNumber: String, sign: String, text: String): ApiResult<BaseResponse> {
+        return getData(
+            path = "sms/testsend",
+            parameters = mapOf(
+                "number" to phoneNumber,
+                "sign" to sign,
+                "text" to text,
+            )
+        )
+    }
+
     suspend fun getAuth(): ApiResult<BaseResponse> {
         return getData(path = "auth")
     }

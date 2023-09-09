@@ -7,8 +7,6 @@ interface IClientUserService {
 
     suspend fun login(clientUserAuth: PostClientUserAuth): ClientAuthResponse?
     suspend fun checkCode(postClientCode: PostClientCode): ClientAuthResponse?
-    suspend fun createTestClientUserPhone(postTestClientUserPhone: PostTestClientUserPhone): GetTestClientUserPhone
-    suspend fun getTestClientUserPhoneList(): List<GetTestClientUserPhone>
     suspend fun getClientUserByUuid(clientUserUuid: String): GetClientUser?
     suspend fun getClientSettingsByUuid(clientUserUuid: String): GetClientSettings?
     suspend fun updateClientUserByUuid(clientUserUuid: String, patchClientUser: PatchClientUserSettings): GetClientUser?

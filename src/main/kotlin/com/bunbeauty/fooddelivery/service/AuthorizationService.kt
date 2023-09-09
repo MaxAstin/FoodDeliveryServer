@@ -1,9 +1,7 @@
 package com.bunbeauty.fooddelivery.service
 
 import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.client_user.login.GetAuthSessionUuid
-import com.bunbeauty.fooddelivery.data.model.client_user.login.InsertAuthSession
-import com.bunbeauty.fooddelivery.data.model.client_user.login.PostClientCodeRequest
+import com.bunbeauty.fooddelivery.data.model.client_user.login.*
 import com.bunbeauty.fooddelivery.data.model.request.RequestAvailability
 import com.bunbeauty.fooddelivery.data.repo.AuthorizationRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
@@ -48,25 +46,31 @@ class AuthorizationService(
                     error("Invalid phone number")
                 }
 
+                val testClientUserPhone = authorizationRepository.getTestNumber(postClientCodeRequest.phoneNumber)
+                val phoneNumber =  testClientUserPhone?.phoneNumber ?: postClientCodeRequest.phoneNumber
                 val currentMillis = DateTime.now().millis
-                val otpCode = otpGenerator.generate(currentMillis)
-
-                val company = companyRepository.getCompanyByUuid(companyUuid.toUuid()) ?: error("Company not found")
-
-                val apiResult = networkService.getAuth()
-//                    networkService.sendSms(
-//                        phoneNumber = postClientCodeRequest.phoneNumber,
-//                        sign = DEFAULT_SIGN,
-//                        text = "$otpCode $MESSAGE_TEXT ${company.name}",
-//                    )
+                val code = testClientUserPhone?.code ?: otpGenerator.generate(currentMillis)
+                val apiResult = if (testClientUserPhone == null) {
+                    networkService.sendSms(
+                        phoneNumber = phoneNumber,
+                        sign = DEFAULT_SIGN,
+                        text = getSmsText(code, companyUuid),
+                    )
+                } else {
+                    networkService.testSendSms(
+                        phoneNumber = phoneNumber,
+                        sign = DEFAULT_SIGN,
+                        text = getSmsText(code, companyUuid),
+                    )
+                }
 
                 when (apiResult) {
                     is ApiResult.Success -> {
                         if (apiResult.data.success) {
                             val insertAuthSession = InsertAuthSession(
-                                phoneNumber = postClientCodeRequest.phoneNumber,
+                                phoneNumber = phoneNumber,
                                 time = currentMillis,
-                                code = otpCode
+                                code = code
                             )
                             return authorizationRepository.insertAuthSession(insertAuthSession)
                         } else {
@@ -80,6 +84,24 @@ class AuthorizationService(
 
             is RequestAvailability.NotAvailable -> error("Too many requests. Please wait ${availability.seconds} s")
         }
+    }
+
+    suspend fun createTestClientUserPhone(postTestClientUserPhone: PostTestClientUserPhone): GetTestClientUserPhone {
+        return authorizationRepository.insertTestClientUserPhone(
+            InsertTestClientUserPhone(
+                phoneNumber = postTestClientUserPhone.phoneNumber,
+                code = postTestClientUserPhone.code
+            )
+        )
+    }
+
+    suspend fun getTestClientUserPhoneList(): List<GetTestClientUserPhone> {
+        return authorizationRepository.getTestClientUserPhoneList()
+    }
+
+    private suspend fun getSmsText(otpCode: String, companyUuid: String): String {
+        val company = companyRepository.getCompanyByUuid(companyUuid.toUuid()) ?: error("Company not found")
+        return "$otpCode $MESSAGE_TEXT ${company.name}"
     }
 
 }

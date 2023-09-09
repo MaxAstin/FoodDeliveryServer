@@ -2,12 +2,16 @@ package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants
 import com.bunbeauty.fooddelivery.data.model.client_user.login.GetAuthSessionUuid
+import com.bunbeauty.fooddelivery.data.model.client_user.login.GetTestClientUserPhone
 import com.bunbeauty.fooddelivery.data.model.client_user.login.PostClientCodeRequest
+import com.bunbeauty.fooddelivery.data.model.client_user.login.PostTestClientUserPhone
+import com.bunbeauty.fooddelivery.routing.extension.admin
+import com.bunbeauty.fooddelivery.routing.extension.adminWithBody
 import com.bunbeauty.fooddelivery.routing.extension.clientIp
-import com.bunbeauty.fooddelivery.routing.extension.clientWithBody
 import com.bunbeauty.fooddelivery.routing.extension.withBody
 import com.bunbeauty.fooddelivery.service.AuthorizationService
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
@@ -15,6 +19,10 @@ fun Application.configureAuthorizationRouting() {
 
     routing {
         sendCode()
+        authenticate {
+            postTestClientUserPhone()
+            getTestClientUserPhones()
+        }
     }
 }
 
@@ -29,9 +37,30 @@ private fun Routing.sendCode() {
             authorizationService.sendCode(
                 companyUuid = companyUuid,
                 postClientCodeRequest = postClientCodeRequest,
-                clientIp = "1.1.1.1"// TODO get back clientIp
+                clientIp = clientIp
             )
         }
     }
+}
 
+private fun Route.postTestClientUserPhone() {
+
+    val authorizationService: AuthorizationService by inject()
+
+    post("/test_phone") {
+        adminWithBody<PostTestClientUserPhone, GetTestClientUserPhone> { bodyRequest ->
+            authorizationService.createTestClientUserPhone(bodyRequest.body)
+        }
+    }
+}
+
+private fun Route.getTestClientUserPhones() {
+
+    val authorizationService: AuthorizationService by inject()
+
+    get("/test_phone") {
+        admin {
+            authorizationService.getTestClientUserPhoneList()
+        }
+    }
 }
