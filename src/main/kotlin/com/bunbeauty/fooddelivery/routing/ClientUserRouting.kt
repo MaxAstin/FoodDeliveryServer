@@ -1,10 +1,11 @@
 package com.bunbeauty.fooddelivery.routing
 
-import com.bunbeauty.fooddelivery.data.model.client_user.*
-import com.bunbeauty.fooddelivery.data.model.client_user.login.*
+import com.bunbeauty.fooddelivery.data.model.client_user.GetClientSettings
+import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
+import com.bunbeauty.fooddelivery.data.model.client_user.PatchClientUserSettings
+import com.bunbeauty.fooddelivery.data.model.client_user.PostClientUserAuth
 import com.bunbeauty.fooddelivery.routing.extension.*
 import com.bunbeauty.fooddelivery.service.client_user.IClientUserService
-import com.bunbeauty.fooddelivery.service.ip.IRequestService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
@@ -17,7 +18,6 @@ fun Application.configureClientUserRouting() {
         clientLogin()
 
         authenticate {
-            checkCode()
             getClient()
             getClientSettings()
             patchClientUser()
@@ -39,17 +39,6 @@ private fun Routing.clientLogin() {
             } else {
                 call.respondOk(clientAuthResponse)
             }
-        }
-    }
-}
-
-private fun Route.checkCode() {
-
-    val clientUserService: IClientUserService by inject()
-
-    post("/client/code") {
-        clientWithBody<PostClientCode, ClientAuthResponse> { bodyRequest ->
-            clientUserService.checkCode(bodyRequest.body)
         }
     }
 }

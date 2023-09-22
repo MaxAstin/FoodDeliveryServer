@@ -1,38 +1,18 @@
 package com.bunbeauty.fooddelivery.data.repo.client_user
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.*
+import com.bunbeauty.fooddelivery.data.entity.ClientSettingsEntity
+import com.bunbeauty.fooddelivery.data.entity.ClientUserEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientSettings
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.InsertClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.UpdateClientUser
-import com.bunbeauty.fooddelivery.data.model.client_user.login.*
 import com.bunbeauty.fooddelivery.data.table.ClientUserTable
-import com.bunbeauty.fooddelivery.data.table.TestClientUserPhoneTable
 import org.jetbrains.exposed.sql.and
-import java.util.UUID
+import java.util.*
 
 class ClientUserRepository : IClientUserRepository {
-
-    override suspend fun insertClientUserLoginSession(insertClientUserLoginSession: InsertAuthSession): GetAuthSessionUuid =
-        query {
-            ClientUserLoginSessionEntity.new {
-                phoneNumber = insertClientUserLoginSession.phoneNumber
-                time = insertClientUserLoginSession.time
-                code = insertClientUserLoginSession.code
-            }.toGetAuthSessionUuid()
-        }
-
-    override suspend fun getClientUserLoginSessionByUuid(uuid: UUID): GetClientUserLoginSession? = query {
-        ClientUserLoginSessionEntity.findById(uuid)?.toClientUserLoginSessionWithCode()
-    }
-
-    override suspend fun getTestClientUserPhoneByPhoneNumber(phoneNumber: String): GetTestClientUserPhone? = query {
-        TestClientUserPhoneEntity.find {
-            TestClientUserPhoneTable.phoneNumber eq phoneNumber
-        }.firstOrNull()?.toTestClientUserPhone()
-    }
 
     override suspend fun getClientUserByPhoneNumberAndCompayUuid(
         phoneNumber: String,

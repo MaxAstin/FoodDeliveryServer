@@ -8,7 +8,6 @@ object Constants {
     const val PORT = "PORT"
     const val FB_ADMIN_KEY = "FB_ADMIN_KEY"
     const val JWT_SECRET = "JWT_SECRET"
-    const val MAIN_ADMIN_PASSWORD = "MAIN_ADMIN_PASSWORD"
 
     // DATABASE
     const val JDBC_POSTGRESQL_PREFIX = "jdbc:postgresql://"
@@ -22,7 +21,6 @@ object Constants {
     const val CAFE_UUID_PARAMETER = "cafeUuid"
     const val UUID_PARAMETER = "uuid"
     const val PERIOD_PARAMETER = "period"
-    const val START_TIME_PARAMETER = "startTime"
     const val COUNT_PARAMETER = "count"
 
     // CODE
@@ -33,7 +31,6 @@ object Constants {
 
     // TIME
     const val ORDER_HISTORY_DAY_COUNT = 2
-    const val CLIENT_USER_LOGIN_SESSION_TIMEOUT = 2 * 60 * 1000L
 
     // REQUEST
     const val REQUEST_LIMIT_TIMEOUT = 60 * 1000L
@@ -47,7 +44,6 @@ object Constants {
     // INIT DB
     const val MAIN_COMPANY_NAME = "BunBeauty"
     const val MAIN_CITY_NAME = "Дубна"
-    const val MAIN_ADMIN_USERNAME = "mainAdmin"
 
     // NOTIFICATION KEYS
     const val ORDER_KOD_KEY = "orderCode"

@@ -3,9 +3,10 @@ package com.bunbeauty.fooddelivery.data.model.client_user.login
 import kotlinx.serialization.Serializable
 
 @Serializable
-class GetClientUserLoginSession(
+class GetAuthSession(
     val uuid: String,
     val phoneNumber: String,
     val time: Long,
-    val code: String,
+    val isConfirmed: Boolean,
+    val companyUuid: String,
 )

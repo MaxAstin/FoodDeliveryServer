@@ -11,6 +11,8 @@ val authorizationModule = module(createdAtStart = true) {
             authorizationRepository = get(),
             companyRepository = get(),
             networkService = get(),
+            clientUserRepository = get(),
+            jwtService = get(),
         )
     }
     single { AuthorizationRepository() }
