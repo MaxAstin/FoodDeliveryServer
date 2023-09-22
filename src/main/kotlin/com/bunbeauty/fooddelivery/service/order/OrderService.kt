@@ -23,8 +23,8 @@ import com.bunbeauty.fooddelivery.data.model.order.client.patch.PatchOrder
 import com.bunbeauty.fooddelivery.data.model.order.client.post.PostOrder
 import com.bunbeauty.fooddelivery.data.model.order.client.post.PostOrderProduct
 import com.bunbeauty.fooddelivery.data.model.order.client.post.PostOrderV2
+import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.cafe.ICafeRepository
-import com.bunbeauty.fooddelivery.data.repo.client_user.IClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.menu_product.IMenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.data.repo.street.IStreetRepository
@@ -37,7 +37,7 @@ import org.joda.time.DateTime
 class OrderService(
     private val orderRepository: IOrderRepository,
     private val streetRepository: IStreetRepository,
-    private val clientUserRepository: IClientUserRepository,
+    private val clientUserRepository: ClientUserRepository,
     private val menuProductRepository: IMenuProductRepository,
     private val cafeRepository: ICafeRepository,
     private val firebaseMessaging: FirebaseMessaging,

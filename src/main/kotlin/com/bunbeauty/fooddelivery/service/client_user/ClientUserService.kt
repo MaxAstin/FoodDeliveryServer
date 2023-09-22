@@ -3,19 +3,19 @@ package com.bunbeauty.fooddelivery.service.client_user
 import com.bunbeauty.fooddelivery.auth.IJwtService
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.client_user.*
-import com.bunbeauty.fooddelivery.data.repo.client_user.IClientUserRepository
+import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.google.firebase.auth.FirebaseAuth
 
 class ClientUserService(
     private val firebaseAuth: FirebaseAuth,
-    private val clientUserRepository: IClientUserRepository,
+    private val clientUserRepository: ClientUserRepository,
     private val jwtService: IJwtService,
 ) : IClientUserService {
 
     override suspend fun login(clientUserAuth: PostClientUserAuth): ClientAuthResponse? {
         val firebaseUser = firebaseAuth.getUser(clientUserAuth.firebaseUuid)
         return if (firebaseUser.phoneNumber == clientUserAuth.phoneNumber) {
-            var getClientUser = clientUserRepository.getClientUserByPhoneNumberAndCompayUuid(
+            var getClientUser = clientUserRepository.getClientUserByPhoneNumberAndCompanyUuid(
                 clientUserAuth.phoneNumber,
                 clientUserAuth.companyUuid.toUuid()
             )

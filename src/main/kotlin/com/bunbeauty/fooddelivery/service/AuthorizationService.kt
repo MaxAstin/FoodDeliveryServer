@@ -8,8 +8,8 @@ import com.bunbeauty.fooddelivery.data.model.client_user.InsertClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.login.*
 import com.bunbeauty.fooddelivery.data.model.request.RequestAvailability
 import com.bunbeauty.fooddelivery.data.repo.AuthorizationRepository
+import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
-import com.bunbeauty.fooddelivery.data.repo.client_user.ClientUserRepository
 import com.bunbeauty.fooddelivery.network.ApiResult
 import com.bunbeauty.fooddelivery.network.NetworkService
 import com.bunbeauty.fooddelivery.service.ip.RequestService
@@ -126,7 +126,7 @@ class AuthorizationService(
             )
         )
 
-        val clientUser = clientUserRepository.getClientUserByPhoneNumberAndCompayUuid(
+        val clientUser = clientUserRepository.getClientUserByPhoneNumberAndCompanyUuid(
             authSession.phoneNumber,
             authSession.companyUuid.toUuid(),
         ) ?: registerClientUser(authSession)

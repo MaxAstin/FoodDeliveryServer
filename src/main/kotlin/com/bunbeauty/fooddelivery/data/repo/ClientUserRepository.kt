@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.data.repo.client_user
+package com.bunbeauty.fooddelivery.data.repo
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.ClientSettingsEntity
@@ -12,9 +12,9 @@ import com.bunbeauty.fooddelivery.data.table.ClientUserTable
 import org.jetbrains.exposed.sql.and
 import java.util.*
 
-class ClientUserRepository : IClientUserRepository {
+class ClientUserRepository {
 
-    override suspend fun getClientUserByPhoneNumberAndCompayUuid(
+    suspend fun getClientUserByPhoneNumberAndCompanyUuid(
         phoneNumber: String,
         companyUuid: UUID,
     ): GetClientUser? = query {
@@ -25,7 +25,7 @@ class ClientUserRepository : IClientUserRepository {
         }.singleOrNull()?.toClientUser()
     }
 
-    override suspend fun getClientUserByUuid(uuid: UUID): GetClientUser? = query {
+    suspend fun getClientUserByUuid(uuid: UUID): GetClientUser? = query {
         ClientUserEntity.findById(uuid)?.let { clientUserEntity ->
             if (clientUserEntity.isActive) {
                 clientUserEntity.toClientUser()
@@ -35,11 +35,11 @@ class ClientUserRepository : IClientUserRepository {
         }
     }
 
-    override suspend fun getClientSettingsByUuid(uuid: UUID): GetClientSettings? = query {
+    suspend fun getClientSettingsByUuid(uuid: UUID): GetClientSettings? = query {
         ClientSettingsEntity.findById(uuid)?.toClientSetting()
     }
 
-    override suspend fun insertClientUser(insertClientUser: InsertClientUser): GetClientUser = query {
+    suspend fun insertClientUser(insertClientUser: InsertClientUser): GetClientUser = query {
         ClientUserEntity.new {
             phoneNumber = insertClientUser.phoneNumber
             email = insertClientUser.email
@@ -47,7 +47,7 @@ class ClientUserRepository : IClientUserRepository {
         }.toClientUser()
     }
 
-    override suspend fun updateClientUserByUuid(updateClientUser: UpdateClientUser): GetClientUser? = query {
+    suspend fun updateClientUserByUuid(updateClientUser: UpdateClientUser): GetClientUser? = query {
         ClientUserEntity.findById(updateClientUser.uuid)?.let { clientUserEntity ->
             if (clientUserEntity.isActive) {
                 clientUserEntity.apply {
@@ -64,7 +64,7 @@ class ClientUserRepository : IClientUserRepository {
         }
     }
 
-    override suspend fun updateClientUserSettingsByUuid(updateClientUser: UpdateClientUser): GetClientSettings? = query {
+    suspend fun updateClientUserSettingsByUuid(updateClientUser: UpdateClientUser): GetClientSettings? = query {
         ClientSettingsEntity.findById(updateClientUser.uuid)?.let { clientSettingsEntity ->
             if (clientSettingsEntity.isActive) {
                 clientSettingsEntity.apply {
