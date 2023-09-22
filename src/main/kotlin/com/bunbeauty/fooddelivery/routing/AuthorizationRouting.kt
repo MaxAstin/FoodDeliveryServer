@@ -60,6 +60,7 @@ private fun Routing.resendCode() {
         safely {
             val uuid = call.parameters[Constants.UUID_PARAMETER] ?: error("${Constants.UUID_PARAMETER} is required")
             authorizationService.resendCode(uuid, clientIp)
+            call.respondOk()
         }
     }
 }
