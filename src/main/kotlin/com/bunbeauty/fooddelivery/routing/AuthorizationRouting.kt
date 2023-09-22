@@ -3,10 +3,7 @@ package com.bunbeauty.fooddelivery.routing
 import com.bunbeauty.fooddelivery.data.Constants
 import com.bunbeauty.fooddelivery.data.model.client_user.ClientAuthResponse
 import com.bunbeauty.fooddelivery.data.model.client_user.login.*
-import com.bunbeauty.fooddelivery.routing.extension.admin
-import com.bunbeauty.fooddelivery.routing.extension.adminWithBody
-import com.bunbeauty.fooddelivery.routing.extension.clientIp
-import com.bunbeauty.fooddelivery.routing.extension.withBody
+import com.bunbeauty.fooddelivery.routing.extension.*
 import com.bunbeauty.fooddelivery.service.AuthorizationService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -18,6 +15,7 @@ fun Application.configureAuthorizationRouting() {
     routing {
         sendCode()
         checkCode()
+        resendCode()
         authenticate {
             postTestClientUserPhone()
             getTestClientUserPhones()
@@ -50,6 +48,18 @@ private fun Routing.checkCode() {
         withBody<PutClientCode, ClientAuthResponse> { putClientCode ->
             val uuid = call.parameters[Constants.UUID_PARAMETER] ?: error("${Constants.UUID_PARAMETER} is required")
             authorizationService.checkCode(uuid, putClientCode)
+        }
+    }
+}
+
+private fun Routing.resendCode() {
+
+    val authorizationService: AuthorizationService by inject()
+
+    put("/client/code_resend") {
+        safely {
+            val uuid = call.parameters[Constants.UUID_PARAMETER] ?: error("${Constants.UUID_PARAMETER} is required")
+            authorizationService.resendCode(uuid, clientIp)
         }
     }
 }

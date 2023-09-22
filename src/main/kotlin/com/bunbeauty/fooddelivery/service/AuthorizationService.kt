@@ -53,7 +53,8 @@ class AuthorizationService(
             RequestAvailability.Available -> {
                 validatePhoneNumber(postClientCodeRequest.phoneNumber)
 
-                val testClientUserPhone = authorizationRepository.getTestClientUserPhone(postClientCodeRequest.phoneNumber)
+                val testClientUserPhone =
+                    authorizationRepository.getTestClientUserPhone(postClientCodeRequest.phoneNumber)
                 val phoneNumber = testClientUserPhone?.phoneNumber ?: postClientCodeRequest.phoneNumber
                 val currentMillis = DateTime.now().millis
                 val code = testClientUserPhone?.code ?: otpGenerator.generate(currentMillis)
@@ -136,6 +137,61 @@ class AuthorizationService(
             token = token,
             userUuid = clientUser.uuid
         )
+    }
+
+    suspend fun resendCode(uuid: String, clientIp: String) {
+        when (val availability = requestService.isRequestAvailable(clientIp, SEND_CODE_OPERATION_NAME)) {
+            RequestAvailability.Available -> {
+                val authSession = authorizationRepository.getAuthSessionByUuid(uuid.toUuid())
+                    ?: error("AuthSession with id = $uuid was not found")
+
+                val currentMillis = DateTime.now().millis
+                if (currentMillis - authSession.time > AUTH_SESSION_TIMEOUT) {
+                    error("Auth session timout")
+                }
+
+                if (authSession.isConfirmed) {
+                    error("Phone number is already confirmed")
+                }
+
+                val testClientUserPhone = authorizationRepository.getTestClientUserPhone(authSession.phoneNumber)
+                val phoneNumber = testClientUserPhone?.phoneNumber ?: authSession.phoneNumber
+                val code = testClientUserPhone?.code ?: otpGenerator.generate(currentMillis)
+                val apiResult = if (testClientUserPhone == null) {
+                    networkService.sendSms(
+                        phoneNumber = phoneNumber,
+                        sign = DEFAULT_SIGN,
+                        text = getSmsText(code, authSession.companyUuid),
+                    )
+                } else {
+                    networkService.testSendSms(
+                        phoneNumber = phoneNumber,
+                        sign = DEFAULT_SIGN,
+                        text = getSmsText(code, authSession.companyUuid),
+                    )
+                }
+
+                when (apiResult) {
+                    is ApiResult.Success -> {
+                        if (apiResult.data.success) {
+                            val updateAuthSession = UpdateAuthSession(
+                                uuid = authSession.uuid.toUuid(),
+                                phoneNumber = authSession.phoneNumber,
+                                time = currentMillis,
+                                isConfirmed = false,
+                            )
+                            authorizationRepository.updateAuthSession(updateAuthSession)
+                        } else {
+                            error("Auth service error: ${apiResult.data.message}")
+                        }
+                    }
+
+                    is ApiResult.Error -> error("Something went wrong: ${apiResult.throwable.message}")
+                }
+            }
+
+            is RequestAvailability.NotAvailable -> error("Too many requests. Please wait ${availability.seconds} s")
+        }
     }
 
     suspend fun createTestClientUserPhone(postTestClientUserPhone: PostTestClientUserPhone): GetTestClientUserPhone {
