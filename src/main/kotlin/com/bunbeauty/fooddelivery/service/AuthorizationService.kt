@@ -47,7 +47,7 @@ class AuthorizationService(
     }
 
     private val phoneNumberRegex by lazy {
-        Regex("^[+]?7[0-9]{10}$")
+        Regex("^\\+7[0-9]{10}$")
     }
 
     suspend fun sendCode(
@@ -159,17 +159,13 @@ class AuthorizationService(
                 val authSession = authorizationRepository.getAuthSessionByUuid(uuid.toUuid())
                     ?: notFoundByUuidError(ClientAuthSessionEntity::class, uuid)
 
-                val currentMillis = DateTime.now().millis
-                if (currentMillis - authSession.time > AUTH_SESSION_TIMEOUT) {
-                    authSessionTimoutError()
-                }
-
                 if (authSession.isConfirmed) {
                     alreadyConfirmedError()
                 }
 
                 val testClientUserPhone = authorizationRepository.getTestClientUserPhone(authSession.phoneNumber)
                 val phoneNumber = testClientUserPhone?.phoneNumber ?: authSession.phoneNumber
+                val currentMillis = DateTime.now().millis
                 val code = testClientUserPhone?.code ?: otpGenerator.generate(currentMillis)
                 val apiResult = if (testClientUserPhone == null) {
                     networkService.sendSms(
@@ -190,6 +186,7 @@ class AuthorizationService(
                         if (apiResult.data.success) {
                             val updateAuthSession = UpdateAuthSession(
                                 uuid = authSession.uuid.toUuid(),
+                                attemptsLeft = INITIAL_ATTEMPTS_COUNT,
                                 time = currentMillis,
                             )
                             authorizationRepository.updateAuthSession(updateAuthSession)
