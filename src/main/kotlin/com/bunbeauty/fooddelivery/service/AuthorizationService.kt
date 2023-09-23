@@ -208,6 +208,11 @@ class AuthorizationService(
 
     suspend fun createTestClientUserPhone(postTestClientUserPhone: PostTestClientUserPhone): GetTestClientUserPhone {
         validatePhoneNumber(postTestClientUserPhone.phoneNumber)
+
+        if (postTestClientUserPhone.code.length != CODE_LENGTH) {
+            codeLengthError()
+        }
+
         return authorizationRepository.insertTestClientUserPhone(
             InsertTestClientUserPhone(
                 phoneNumber = postTestClientUserPhone.phoneNumber,
@@ -263,6 +268,10 @@ class AuthorizationService(
 
     private fun alreadyConfirmedError(): Nothing {
         error("Phone number is already confirmed")
+    }
+
+    private fun codeLengthError(): Nothing {
+        error("Code length must be $CODE_LENGTH")
     }
 
 }
