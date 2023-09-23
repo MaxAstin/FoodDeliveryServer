@@ -28,7 +28,7 @@ private fun Routing.sendCode() {
     val authorizationService: AuthorizationService by inject()
 
     post("/client/code_request") {
-        withBody<PostClientCodeRequest, GetAuthSessionUuid> { postClientCodeRequest ->
+        withBody<PostClientCodeRequest, GetClientAuthSessionUuid> { postClientCodeRequest ->
             val companyUuid = call.parameters[Constants.COMPANY_UUID_PARAMETER]
                 ?: error("${Constants.COMPANY_UUID_PARAMETER} is required")
             authorizationService.sendCode(

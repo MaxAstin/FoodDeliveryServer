@@ -4,7 +4,8 @@ import java.util.*
 
 class UpdateAuthSession(
     val uuid: UUID,
-    val phoneNumber: String,
-    val time: Long,
-    val isConfirmed: Boolean,
+    val phoneNumber: String? = null,
+    val time: Long? = null,
+    val attemptsLeft: Int? = null,
+    val isConfirmed: Boolean? = null,
 )

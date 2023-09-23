@@ -1,6 +1,8 @@
 package com.bunbeauty.fooddelivery.service
 
 import com.bunbeauty.fooddelivery.auth.IJwtService
+import com.bunbeauty.fooddelivery.data.entity.ClientAuthSessionEntity
+import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.client_user.ClientAuthResponse
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
@@ -10,6 +12,9 @@ import com.bunbeauty.fooddelivery.data.model.request.RequestAvailability
 import com.bunbeauty.fooddelivery.data.repo.AuthorizationRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
+import com.bunbeauty.fooddelivery.error.notFoundByUuidError
+import com.bunbeauty.fooddelivery.error.somethingWentWrongError
+import com.bunbeauty.fooddelivery.error.tooManyRequestsError
 import com.bunbeauty.fooddelivery.network.ApiResult
 import com.bunbeauty.fooddelivery.network.NetworkService
 import com.bunbeauty.fooddelivery.service.ip.RequestService
@@ -24,6 +29,7 @@ private const val AUTH_SECRET_KEY = "AUTH_SECRET_KEY"
 private const val DEFAULT_SIGN = "SMS Aero"
 private const val MESSAGE_TEXT = "ваш код подтверждения для приложения"
 private const val AUTH_SESSION_TIMEOUT = 5 * 60 * 1_000L // 5 min
+private const val INITIAL_ATTEMPTS_COUNT = 3
 
 class AuthorizationService(
     private val requestService: RequestService,
@@ -48,7 +54,7 @@ class AuthorizationService(
         companyUuid: String,
         postClientCodeRequest: PostClientCodeRequest,
         clientIp: String,
-    ): GetAuthSessionUuid {
+    ): GetClientAuthSessionUuid {
         when (val availability = requestService.isRequestAvailable(clientIp, SEND_CODE_OPERATION_NAME)) {
             RequestAvailability.Available -> {
                 validatePhoneNumber(postClientCodeRequest.phoneNumber)
@@ -78,26 +84,31 @@ class AuthorizationService(
                             val insertAuthSession = InsertAuthSession(
                                 phoneNumber = phoneNumber,
                                 time = currentMillis,
+                                attemptsLeft = INITIAL_ATTEMPTS_COUNT,
                                 isConfirmed = false,
                                 companyUuid = companyUuid.toUuid(),
                             )
                             return authorizationRepository.insertAuthSession(insertAuthSession)
                         } else {
-                            error("Auth service error: ${apiResult.data.message}")
+                            authServiceError(apiResult.data.message)
                         }
                     }
 
-                    is ApiResult.Error -> error("Something went wrong: ${apiResult.throwable.message}")
+                    is ApiResult.Error -> somethingWentWrongError(apiResult.throwable)
                 }
             }
 
-            is RequestAvailability.NotAvailable -> error("Too many requests. Please wait ${availability.seconds} s")
+            is RequestAvailability.NotAvailable -> tooManyRequestsError(availability.seconds)
         }
     }
 
     suspend fun checkCode(uuid: String, putClientCode: PutClientCode): ClientAuthResponse {
         val authSession = authorizationRepository.getAuthSessionByUuid(uuid.toUuid())
-            ?: error("AuthSession with id = $uuid was not found")
+            ?: notFoundByUuidError(ClientAuthSessionEntity::class, uuid)
+
+        if (authSession.attemptsLeft == 0) {
+            noAttemptsError()
+        }
 
         val testClientUserPhone = authorizationRepository.getTestClientUserPhone(authSession.phoneNumber)
         val isCodeValid = if (testClientUserPhone == null) {
@@ -106,23 +117,26 @@ class AuthorizationService(
             putClientCode.code == testClientUserPhone.code
         }
         if (!isCodeValid) {
-            error("Invalid code")
+            val updateAuthSession = UpdateAuthSession(
+                uuid = authSession.uuid.toUuid(),
+                attemptsLeft = authSession.attemptsLeft - 1,
+            )
+            authorizationRepository.updateAuthSession(updateAuthSession)
+            invalidCodeError()
         }
 
         val currentMillis = DateTime.now().millis
         if (currentMillis - authSession.time > AUTH_SESSION_TIMEOUT) {
-            error("Auth session timout")
+            authSessionTimoutError()
         }
 
         if (authSession.isConfirmed) {
-            error("Phone number is already confirmed")
+            alreadyConfirmedError()
         }
 
         authorizationRepository.updateAuthSession(
             UpdateAuthSession(
                 uuid = authSession.uuid.toUuid(),
-                phoneNumber = authSession.phoneNumber,
-                time = authSession.time,
                 isConfirmed = true,
             )
         )
@@ -143,15 +157,15 @@ class AuthorizationService(
         when (val availability = requestService.isRequestAvailable(clientIp, SEND_CODE_OPERATION_NAME)) {
             RequestAvailability.Available -> {
                 val authSession = authorizationRepository.getAuthSessionByUuid(uuid.toUuid())
-                    ?: error("AuthSession with id = $uuid was not found")
+                    ?: notFoundByUuidError(ClientAuthSessionEntity::class, uuid)
 
                 val currentMillis = DateTime.now().millis
                 if (currentMillis - authSession.time > AUTH_SESSION_TIMEOUT) {
-                    error("Auth session timout")
+                    authSessionTimoutError()
                 }
 
                 if (authSession.isConfirmed) {
-                    error("Phone number is already confirmed")
+                    alreadyConfirmedError()
                 }
 
                 val testClientUserPhone = authorizationRepository.getTestClientUserPhone(authSession.phoneNumber)
@@ -176,21 +190,19 @@ class AuthorizationService(
                         if (apiResult.data.success) {
                             val updateAuthSession = UpdateAuthSession(
                                 uuid = authSession.uuid.toUuid(),
-                                phoneNumber = authSession.phoneNumber,
                                 time = currentMillis,
-                                isConfirmed = false,
                             )
                             authorizationRepository.updateAuthSession(updateAuthSession)
                         } else {
-                            error("Auth service error: ${apiResult.data.message}")
+                            authServiceError(apiResult.data.message)
                         }
                     }
 
-                    is ApiResult.Error -> error("Something went wrong: ${apiResult.throwable.message}")
+                    is ApiResult.Error -> somethingWentWrongError(apiResult)
                 }
             }
 
-            is RequestAvailability.NotAvailable -> error("Too many requests. Please wait ${availability.seconds} s")
+            is RequestAvailability.NotAvailable -> tooManyRequestsError(availability.seconds)
         }
     }
 
@@ -208,7 +220,7 @@ class AuthorizationService(
         return authorizationRepository.getTestClientUserPhoneList()
     }
 
-    private suspend fun registerClientUser(authSession: GetAuthSession): GetClientUser {
+    private suspend fun registerClientUser(authSession: GetClientAuthSession): GetClientUser {
         val insertClientUser = InsertClientUser(
             phoneNumber = authSession.phoneNumber,
             email = null,
@@ -219,13 +231,38 @@ class AuthorizationService(
 
     private fun validatePhoneNumber(phoneNumber: String) {
         if (!phoneNumberRegex.matches(phoneNumber)) {
-            error("Invalid phone number")
+            invalidPhoneNumberError()
         }
     }
 
     private suspend fun getSmsText(otpCode: String, companyUuid: String): String {
-        val company = companyRepository.getCompanyByUuid(companyUuid.toUuid()) ?: error("Company not found")
+        val company = companyRepository.getCompanyByUuid(companyUuid.toUuid())
+            ?: notFoundByUuidError(CompanyEntity::class, companyUuid)
         return "$otpCode $MESSAGE_TEXT ${company.name}"
+    }
+
+    private fun invalidPhoneNumberError(): Nothing {
+        error("Invalid phone number")
+    }
+
+    private fun authServiceError(message: String?): Nothing {
+        error("Auth service error: $message")
+    }
+
+    private fun noAttemptsError(): Nothing {
+        error("There are no attempts left")
+    }
+
+    private fun invalidCodeError(): Nothing {
+        error("Invalid code")
+    }
+
+    private fun authSessionTimoutError(): Nothing {
+        error("Auth session timout")
+    }
+
+    private fun alreadyConfirmedError(): Nothing {
+        error("Phone number is already confirmed")
     }
 
 }
