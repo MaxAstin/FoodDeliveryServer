@@ -3,6 +3,7 @@ package com.bunbeauty.fooddelivery.routing.extension
 import com.bunbeauty.fooddelivery.auth.JwtUser
 import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.ext.toListWrapper
+import com.bunbeauty.fooddelivery.error.ExceptionWithCode
 import com.bunbeauty.fooddelivery.routing.model.BodyRequest
 import com.bunbeauty.fooddelivery.routing.model.Request
 import io.ktor.http.*
@@ -20,7 +21,17 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(block: () -> Un
         block()
     } catch (exception: Exception) {
         println("Exception: ${exception.message}")
-        call.respondBad("Exception: ${exception.message}")
+
+        when (exception) {
+            is ExceptionWithCode -> {
+                call.respond(HttpStatusCode(exception.code, ""), exception.message)
+            }
+
+            else -> {
+                call.respondBad("Exception: ${exception.message}")
+            }
+        }
+
         exception.printStackTrace()
     }
 }
@@ -143,10 +154,7 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.adminDelete(deleteBloc
 }
 
 val PipelineContext<Unit, ApplicationCall>.clientIp: String
-    get() {
-        println("remoteAddress ${call.request.origin.remoteAddress}")
-        return call.request.origin.remoteAddress
-    }
+    get() = call.request.origin.remoteAddress
 
 suspend inline fun ApplicationCall.respondOk() {
     respond(HttpStatusCode.OK)

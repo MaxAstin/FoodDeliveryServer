@@ -8,13 +8,11 @@ import com.bunbeauty.fooddelivery.data.model.client_user.ClientAuthResponse
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.InsertClientUser
 import com.bunbeauty.fooddelivery.data.model.client_user.login.*
-import com.bunbeauty.fooddelivery.data.model.request.RequestAvailability
 import com.bunbeauty.fooddelivery.data.repo.AuthorizationRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.error.notFoundByUuidError
 import com.bunbeauty.fooddelivery.error.somethingWentWrongError
-import com.bunbeauty.fooddelivery.error.tooManyRequestsError
 import com.bunbeauty.fooddelivery.network.ApiResult
 import com.bunbeauty.fooddelivery.network.NetworkService
 import com.bunbeauty.fooddelivery.service.ip.RequestService
@@ -55,50 +53,45 @@ class AuthorizationService(
         postClientCodeRequest: PostClientCodeRequest,
         clientIp: String,
     ): GetClientAuthSessionUuid {
-        when (val availability = requestService.isRequestAvailable(clientIp, SEND_CODE_OPERATION_NAME)) {
-            RequestAvailability.Available -> {
-                validatePhoneNumber(postClientCodeRequest.phoneNumber)
+        requestService.checkRequestAvailablity(clientIp, SEND_CODE_OPERATION_NAME)
 
-                val testClientUserPhone =
-                    authorizationRepository.getTestClientUserPhone(postClientCodeRequest.phoneNumber)
-                val phoneNumber = testClientUserPhone?.phoneNumber ?: postClientCodeRequest.phoneNumber
-                val currentMillis = DateTime.now().millis
-                val code = testClientUserPhone?.code ?: otpGenerator.generate(currentMillis)
-                val apiResult = if (testClientUserPhone == null) {
-                    networkService.sendSms(
+        validatePhoneNumber(postClientCodeRequest.phoneNumber)
+
+        val testClientUserPhone = authorizationRepository.getTestClientUserPhone(postClientCodeRequest.phoneNumber)
+        val phoneNumber = testClientUserPhone?.phoneNumber ?: postClientCodeRequest.phoneNumber
+        val currentMillis = DateTime.now().millis
+        val code = testClientUserPhone?.code ?: otpGenerator.generate(currentMillis)
+        val apiResult = if (testClientUserPhone == null) {
+            networkService.sendSms(
+                phoneNumber = phoneNumber,
+                sign = DEFAULT_SIGN,
+                text = getSmsText(code, companyUuid),
+            )
+        } else {
+            networkService.testSendSms(
+                phoneNumber = phoneNumber,
+                sign = DEFAULT_SIGN,
+                text = getSmsText(code, companyUuid),
+            )
+        }
+
+        when (apiResult) {
+            is ApiResult.Success -> {
+                if (apiResult.data.success) {
+                    val insertAuthSession = InsertAuthSession(
                         phoneNumber = phoneNumber,
-                        sign = DEFAULT_SIGN,
-                        text = getSmsText(code, companyUuid),
+                        time = currentMillis,
+                        attemptsLeft = INITIAL_ATTEMPTS_COUNT,
+                        isConfirmed = false,
+                        companyUuid = companyUuid.toUuid(),
                     )
+                    return authorizationRepository.insertAuthSession(insertAuthSession)
                 } else {
-                    networkService.testSendSms(
-                        phoneNumber = phoneNumber,
-                        sign = DEFAULT_SIGN,
-                        text = getSmsText(code, companyUuid),
-                    )
-                }
-
-                when (apiResult) {
-                    is ApiResult.Success -> {
-                        if (apiResult.data.success) {
-                            val insertAuthSession = InsertAuthSession(
-                                phoneNumber = phoneNumber,
-                                time = currentMillis,
-                                attemptsLeft = INITIAL_ATTEMPTS_COUNT,
-                                isConfirmed = false,
-                                companyUuid = companyUuid.toUuid(),
-                            )
-                            return authorizationRepository.insertAuthSession(insertAuthSession)
-                        } else {
-                            authServiceError(apiResult.data.message)
-                        }
-                    }
-
-                    is ApiResult.Error -> somethingWentWrongError(apiResult.throwable)
+                    authServiceError(apiResult.data.message)
                 }
             }
 
-            is RequestAvailability.NotAvailable -> tooManyRequestsError(availability.seconds)
+            is ApiResult.Error -> somethingWentWrongError(apiResult.throwable)
         }
     }
 
@@ -154,52 +147,48 @@ class AuthorizationService(
     }
 
     suspend fun resendCode(uuid: String, clientIp: String) {
-        when (val availability = requestService.isRequestAvailable(clientIp, SEND_CODE_OPERATION_NAME)) {
-            RequestAvailability.Available -> {
-                val authSession = authorizationRepository.getAuthSessionByUuid(uuid.toUuid())
-                    ?: notFoundByUuidError(ClientAuthSessionEntity::class, uuid)
+        requestService.checkRequestAvailablity(clientIp, SEND_CODE_OPERATION_NAME)
 
-                if (authSession.isConfirmed) {
-                    alreadyConfirmedError()
-                }
+        val authSession = authorizationRepository.getAuthSessionByUuid(uuid.toUuid())
+            ?: notFoundByUuidError(ClientAuthSessionEntity::class, uuid)
 
-                val testClientUserPhone = authorizationRepository.getTestClientUserPhone(authSession.phoneNumber)
-                val phoneNumber = testClientUserPhone?.phoneNumber ?: authSession.phoneNumber
-                val currentMillis = DateTime.now().millis
-                val code = testClientUserPhone?.code ?: otpGenerator.generate(currentMillis)
-                val apiResult = if (testClientUserPhone == null) {
-                    networkService.sendSms(
-                        phoneNumber = phoneNumber,
-                        sign = DEFAULT_SIGN,
-                        text = getSmsText(code, authSession.companyUuid),
+        if (authSession.isConfirmed) {
+            alreadyConfirmedError()
+        }
+
+        val testClientUserPhone = authorizationRepository.getTestClientUserPhone(authSession.phoneNumber)
+        val phoneNumber = testClientUserPhone?.phoneNumber ?: authSession.phoneNumber
+        val currentMillis = DateTime.now().millis
+        val code = testClientUserPhone?.code ?: otpGenerator.generate(currentMillis)
+        val apiResult = if (testClientUserPhone == null) {
+            networkService.sendSms(
+                phoneNumber = phoneNumber,
+                sign = DEFAULT_SIGN,
+                text = getSmsText(code, authSession.companyUuid),
+            )
+        } else {
+            networkService.testSendSms(
+                phoneNumber = phoneNumber,
+                sign = DEFAULT_SIGN,
+                text = getSmsText(code, authSession.companyUuid),
+            )
+        }
+
+        when (apiResult) {
+            is ApiResult.Success -> {
+                if (apiResult.data.success) {
+                    val updateAuthSession = UpdateAuthSession(
+                        uuid = authSession.uuid.toUuid(),
+                        attemptsLeft = INITIAL_ATTEMPTS_COUNT,
+                        time = currentMillis,
                     )
+                    authorizationRepository.updateAuthSession(updateAuthSession)
                 } else {
-                    networkService.testSendSms(
-                        phoneNumber = phoneNumber,
-                        sign = DEFAULT_SIGN,
-                        text = getSmsText(code, authSession.companyUuid),
-                    )
-                }
-
-                when (apiResult) {
-                    is ApiResult.Success -> {
-                        if (apiResult.data.success) {
-                            val updateAuthSession = UpdateAuthSession(
-                                uuid = authSession.uuid.toUuid(),
-                                attemptsLeft = INITIAL_ATTEMPTS_COUNT,
-                                time = currentMillis,
-                            )
-                            authorizationRepository.updateAuthSession(updateAuthSession)
-                        } else {
-                            authServiceError(apiResult.data.message)
-                        }
-                    }
-
-                    is ApiResult.Error -> somethingWentWrongError(apiResult)
+                    authServiceError(apiResult.data.message)
                 }
             }
 
-            is RequestAvailability.NotAvailable -> tooManyRequestsError(availability.seconds)
+            is ApiResult.Error -> somethingWentWrongError(apiResult)
         }
     }
 

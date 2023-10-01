@@ -10,22 +10,20 @@ import org.jetbrains.exposed.sql.and
 
 class RequestRepository : IRequestRepository {
 
-    override suspend fun getLastDayRequestByIpAndName(ip: String, name: String, startDayMillis: Long): GetRequest? =
+    override suspend fun getLastRequestByIpAndName(ip: String, name: String): GetRequest? =
         query {
             RequestEntity.find {
                 (RequestTable.ip eq ip) and
-                        (RequestTable.name eq name) and
-                        (RequestTable.time greater startDayMillis)
+                        (RequestTable.name eq name)
             }.orderBy(RequestTable.time to SortOrder.DESC)
                 .firstOrNull()
                 ?.toRequest()
         }
 
-    override suspend fun getDayRequestCountByIpAndName(ip: String, name: String, startDayMillis: Long): Long = query {
+    override suspend fun getRequestCountByIpAndName(ip: String, name: String): Long = query {
         RequestEntity.find {
             (RequestTable.ip eq ip) and
-                    (RequestTable.name eq name) and
-                    (RequestTable.time greater startDayMillis)
+                    (RequestTable.name eq name)
         }.count()
     }
 
