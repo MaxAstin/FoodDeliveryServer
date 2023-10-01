@@ -8,13 +8,11 @@ import com.bunbeauty.fooddelivery.routing.model.Request
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.netty.*
+import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.util.pipeline.*
 import java.sql.DriverManager.println
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.jvm.isAccessible
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(block: () -> Unit) {
     println("request ${context.request.path()}")
@@ -145,20 +143,10 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.adminDelete(deleteBloc
 }
 
 val PipelineContext<Unit, ApplicationCall>.clientIp: String
-    get() = context::class.memberProperties
-        .find { memberProperty ->
-            memberProperty.name == "call"
-        }?.let { callProperty ->
-            callProperty.isAccessible = true
-            val ip = (callProperty.getter.call(context) as NettyApplicationCall).request
-                .context
-                .pipeline()
-                .channel()
-                .remoteAddress()
-                .toString()
-            val regex = Regex("\\d{0,3}\\.\\d{0,3}\\.\\d{0,3}\\.\\d{0,3}")
-            regex.find(ip)?.value
-        } ?: "0.0.0.0"
+    get() {
+        println("remoteAddress ${call.request.origin.remoteAddress}")
+        return call.request.origin.remoteAddress
+    }
 
 suspend inline fun ApplicationCall.respondOk() {
     respond(HttpStatusCode.OK)
