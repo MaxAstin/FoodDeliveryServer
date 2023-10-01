@@ -53,7 +53,7 @@ class AuthorizationService(
         postClientCodeRequest: PostClientCodeRequest,
         clientIp: String,
     ): GetClientAuthSessionUuid {
-        requestService.checkRequestAvailablity(clientIp, SEND_CODE_OPERATION_NAME)
+        requestService.checkRequestAvailability(clientIp, SEND_CODE_OPERATION_NAME)
 
         validatePhoneNumber(postClientCodeRequest.phoneNumber)
 
@@ -147,7 +147,7 @@ class AuthorizationService(
     }
 
     suspend fun resendCode(uuid: String, clientIp: String) {
-        requestService.checkRequestAvailablity(clientIp, SEND_CODE_OPERATION_NAME)
+        requestService.checkRequestAvailability(clientIp, SEND_CODE_OPERATION_NAME)
 
         val authSession = authorizationRepository.getAuthSessionByUuid(uuid.toUuid())
             ?: notFoundByUuidError(ClientAuthSessionEntity::class, uuid)

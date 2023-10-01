@@ -2,6 +2,7 @@ package com.bunbeauty.fooddelivery.service.ip
 
 import com.bunbeauty.fooddelivery.data.Constants.DAY_REQUEST_LIMIT
 import com.bunbeauty.fooddelivery.data.Constants.REQUIRED_TIME_BETWEEN_REQUESTS
+import com.bunbeauty.fooddelivery.data.model.request.InsertRequest
 import com.bunbeauty.fooddelivery.data.repo.request.IRequestRepository
 import com.bunbeauty.fooddelivery.error.errorWithCode
 import org.joda.time.DateTime
@@ -16,7 +17,7 @@ class RequestService(private val requestRepository: IRequestRepository) {
          - exception if the time since the last request with the same [requestName] for the same [ip] was made less than [REQUIRED_TIME_BETWEEN_REQUESTS] ago
          - exception if the count of requests with the same [requestName] for the same [ip] was made equal to or more than [DAY_REQUEST_LIMIT] times
      */
-    suspend fun checkRequestAvailablity(ip: String, requestName: String) {
+    suspend fun checkRequestAvailability(ip: String, requestName: String) {
         println("isRequestAvailable requestName: $requestName ip: $ip")
 
         val currentTimeMillis = DateTime.now().millis
@@ -31,6 +32,14 @@ class RequestService(private val requestRepository: IRequestRepository) {
         if (requestCount >= DAY_REQUEST_LIMIT) {
             tooManyRequestsError()
         }
+
+        requestRepository.insertRequest(
+            InsertRequest(
+                ip = ip,
+                name = requestName,
+                time = currentTimeMillis
+            )
+        )
     }
 
     private fun tooManyRequestsError(seconds: Int? = null): Nothing {
