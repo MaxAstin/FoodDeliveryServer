@@ -11,6 +11,7 @@ import com.bunbeauty.fooddelivery.data.model.client_user.login.*
 import com.bunbeauty.fooddelivery.data.repo.AuthorizationRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
+import com.bunbeauty.fooddelivery.error.errorWithCode
 import com.bunbeauty.fooddelivery.error.notFoundByUuidError
 import com.bunbeauty.fooddelivery.error.somethingWentWrongError
 import com.bunbeauty.fooddelivery.network.ApiResult
@@ -241,15 +242,15 @@ class AuthorizationService(
     }
 
     private fun noAttemptsError(): Nothing {
-        error("There are no attempts left")
+        errorWithCode(message = "There are no attempts left", code = 801)
     }
 
     private fun invalidCodeError(): Nothing {
-        error("Invalid code")
+        errorWithCode(message = "Invalid code", code = 802)
     }
 
     private fun authSessionTimoutError(): Nothing {
-        error("Auth session timout")
+        errorWithCode(message = "Auth session timout", code = 803)
     }
 
     private fun alreadyConfirmedError(): Nothing {
