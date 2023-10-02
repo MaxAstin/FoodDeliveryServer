@@ -8,4 +8,5 @@ interface IRequestRepository {
     suspend fun getLastRequestByIpAndName(ip: String, name: String): GetRequest?
     suspend fun getRequestCountByIpAndName(ip: String, name: String): Long
     suspend fun insertRequest(insertRequest: InsertRequest): GetRequest
+    suspend fun deleteAll()
 }

@@ -42,6 +42,10 @@ class RequestService(private val requestRepository: IRequestRepository) {
         )
     }
 
+    suspend fun clearRequests() {
+        requestRepository.deleteAll()
+    }
+
     private fun tooManyRequestsError(seconds: Int? = null): Nothing {
         var message = "Too many requests. Please wait"
         if (seconds != null) {

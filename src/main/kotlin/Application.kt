@@ -6,8 +6,7 @@ import com.bunbeauty.fooddelivery.di.configureKoin
 import com.bunbeauty.fooddelivery.plugins.configureSerialization
 import com.bunbeauty.fooddelivery.plugins.configureSockets
 import com.bunbeauty.fooddelivery.routing.configureRouting
-import com.bunbeauty.fooddelivery.task.startUpdateHitsTask
-import com.bunbeauty.fooddelivery.task.startUpdateStatisticTask
+import com.bunbeauty.fooddelivery.task.scheduleTasks
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
@@ -42,6 +41,5 @@ private fun Application.configureApp() {
         }
     }
     configureRouting()
-    startUpdateHitsTask()
-    startUpdateStatisticTask()
+    scheduleTasks()
 }

@@ -34,4 +34,10 @@ class RequestRepository : IRequestRepository {
             time = insertRequest.time
         }.toRequest()
     }
+
+    override suspend fun deleteAll() {
+        RequestEntity.all().forEach { requestEntity ->
+            requestEntity.delete()
+        }
+    }
 }
