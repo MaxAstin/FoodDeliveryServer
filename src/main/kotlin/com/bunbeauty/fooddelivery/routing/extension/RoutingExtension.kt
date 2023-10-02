@@ -20,11 +20,15 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(block: () -> Un
     try {
         block()
     } catch (exception: Exception) {
-        println("Exception: ${exception.message}")
-
         when (exception) {
             is ExceptionWithCode -> {
-                call.respond(HttpStatusCode(exception.code, ""), exception.message)
+                call.respond(
+                    HttpStatusCode(
+                        value = exception.code,
+                        description = exception.message
+                    ),
+                    exception.message
+                )
             }
 
             else -> {
@@ -32,6 +36,7 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(block: () -> Un
             }
         }
 
+        println("Exception: ${exception.message}")
         exception.printStackTrace()
     }
 }
