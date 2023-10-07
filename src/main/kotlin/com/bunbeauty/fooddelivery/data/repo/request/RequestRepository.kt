@@ -35,7 +35,7 @@ class RequestRepository : IRequestRepository {
         }.toRequest()
     }
 
-    override suspend fun deleteAll() {
+    override suspend fun deleteAll() = query {
         RequestEntity.all().forEach { requestEntity ->
             requestEntity.delete()
         }
