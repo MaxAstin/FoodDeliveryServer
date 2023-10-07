@@ -15,12 +15,12 @@ fun Application.scheduleUpdateStatisticTask() {
     val statisticService: StatisticService by inject()
 
     val now = DateTime.now()
-    val secondsToTomorrow = Seconds.secondsBetween(
+    val secondsUntilTomorrow = Seconds.secondsBetween(
         now,
         now.withTimeAtStartOfDay().plusDays(1)
     ).seconds
     Timer("Update statistic").scheduleAtFixedRate(
-        delay = secondsToTomorrow * 1_000L,
+        delay = secondsUntilTomorrow * 1_000L,
         period = TimeUnit.HOURS.toMillis(24),
     ) {
         launch {
