@@ -15,7 +15,7 @@ import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.SizedIterable
-import java.util.UUID
+import java.util.*
 
 class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
@@ -144,6 +144,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         deliveryCost = deliveryCost,
         oldTotalCost = calculateOldTotalCost(),
         newTotalCost = calculateNewTotalCost(),
+        percentDiscount = percentDiscount,
         paymentMethod = paymentMethod,
         clientUser = clientUser.toCafeUser(),
         cafeUuid = cafe.uuid,
