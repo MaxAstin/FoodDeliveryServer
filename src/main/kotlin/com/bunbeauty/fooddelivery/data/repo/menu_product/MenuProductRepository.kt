@@ -2,18 +2,18 @@ package com.bunbeauty.fooddelivery.data.repo.menu_product
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.CategoryEntity
-import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.entity.MenuProductEntity
+import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.model.menu_product.GetMenuProduct
 import com.bunbeauty.fooddelivery.data.model.menu_product.InsertMenuProduct
 import com.bunbeauty.fooddelivery.data.model.menu_product.UpdateMenuProduct
 import com.bunbeauty.fooddelivery.data.table.MenuProductTable
 import org.jetbrains.exposed.sql.SizedCollection
-import java.util.UUID
+import java.util.*
 
-class MenuProductRepository : IMenuProductRepository {
+class MenuProductRepository {
 
-    override suspend fun insertMenuProduct(insertMenuProduct: InsertMenuProduct): GetMenuProduct = query {
+    suspend fun insertMenuProduct(insertMenuProduct: InsertMenuProduct): GetMenuProduct = query {
         MenuProductEntity.new {
             name = insertMenuProduct.name
             newPrice = insertMenuProduct.newPrice
@@ -32,7 +32,7 @@ class MenuProductRepository : IMenuProductRepository {
         }.toMenuProduct()
     }
 
-    override suspend fun updateMenuProduct(
+    suspend fun updateMenuProduct(
         menuProductUuid: UUID,
         updateMenuProduct: UpdateMenuProduct,
     ): GetMenuProduct? = query {
@@ -63,7 +63,7 @@ class MenuProductRepository : IMenuProductRepository {
         }?.toMenuProduct()
     }
 
-    override suspend fun getMenuProductListByCompanyUuid(companyUuid: UUID): List<GetMenuProduct> = query {
+    suspend fun getMenuProductListByCompanyUuid(companyUuid: UUID): List<GetMenuProduct> = query {
         MenuProductEntity.find {
             MenuProductTable.company eq companyUuid
         }.map { menuProductEntity ->
@@ -71,7 +71,7 @@ class MenuProductRepository : IMenuProductRepository {
         }.toList()
     }
 
-    override suspend fun getMenuProductByUuid(uuid: UUID): GetMenuProduct? = query {
+    suspend fun getMenuProductByUuid(uuid: UUID): GetMenuProduct? = query {
         MenuProductEntity.findById(uuid)?.toMenuProduct()
     }
 }

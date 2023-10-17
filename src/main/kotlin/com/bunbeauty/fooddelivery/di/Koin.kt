@@ -32,6 +32,7 @@ fun Application.configureKoin() {
             requestModule,
             authorizationModule,
             networkModule,
+            recommendationModule,
         )
     }
 }

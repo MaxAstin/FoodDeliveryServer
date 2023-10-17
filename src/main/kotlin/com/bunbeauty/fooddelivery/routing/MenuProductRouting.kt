@@ -5,6 +5,7 @@ import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.model.menu_product.GetMenuProduct
 import com.bunbeauty.fooddelivery.data.model.menu_product.PatchMenuProduct
 import com.bunbeauty.fooddelivery.data.model.menu_product.PostMenuProduct
+import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import com.bunbeauty.fooddelivery.routing.extension.respondOk
 import com.bunbeauty.fooddelivery.routing.extension.safely
@@ -31,7 +32,7 @@ private fun Routing.getAllMenuProducts() {
 
     get("/menu_product") {
         safely {
-            val companyUuid = call.parameters[COMPANY_UUID_PARAMETER] ?: error("$COMPANY_UUID_PARAMETER is required")
+            val companyUuid = call.getParameter(COMPANY_UUID_PARAMETER)
             val menuProductList = menuProductService.getMenuProductListByCompanyUuid(companyUuid)
             call.respondOk(menuProductList)
         }

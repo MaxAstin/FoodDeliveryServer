@@ -7,7 +7,7 @@ import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
 import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.data.repo.hit.IHitRepository
-import com.bunbeauty.fooddelivery.data.repo.menu_product.IMenuProductRepository
+import com.bunbeauty.fooddelivery.data.repo.menu_product.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.service.hit.HitService
 import io.mockk.MockKAnnotations
@@ -23,7 +23,7 @@ class HitServiceTests {
     private lateinit var companyRepository: CompanyRepository
 
     @MockK
-    private lateinit var menuProductRepository: IMenuProductRepository
+    private lateinit var menuProductRepository: MenuProductRepository
 
     @MockK
     private lateinit var orderRepository: IOrderRepository

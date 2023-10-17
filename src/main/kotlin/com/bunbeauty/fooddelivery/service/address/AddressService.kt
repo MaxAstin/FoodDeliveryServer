@@ -19,7 +19,6 @@ class AddressService(
     override suspend fun createAddress(userUuid: String, postAddress: PostAddress): GetAddress {
         val street = streetRepository.getStreetByUuid(postAddress.streetUuid.toUuid())
             ?: error("Street with id = ${postAddress.streetUuid} was not found")
-        street.cityUuid
         val city = cityRepository.getCityByUuid(street.cityUuid.toUuid())
             ?: error("City with id = ${street.cityUuid} was not found")
         val clientUser = clientUserRepository.getClientUserByUuid(userUuid.toUuid())

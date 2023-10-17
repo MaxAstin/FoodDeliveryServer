@@ -16,3 +16,7 @@ fun somethingWentWrongError(throwable: Throwable): Nothing {
 fun notFoundByUuidError(entity: KClass<*>, uuid: String): Nothing {
     error("${entity.simpleName} with uuid = $uuid was not found")
 }
+
+fun parameterIsRequiredError(parameterName: String): Nothing {
+    error("Parameter $parameterName is required")
+}

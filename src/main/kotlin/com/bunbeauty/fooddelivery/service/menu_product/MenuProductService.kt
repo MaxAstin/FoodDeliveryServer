@@ -4,11 +4,11 @@ import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.menu_product.*
 import com.bunbeauty.fooddelivery.data.repo.category.ICategoryRepository
 import com.bunbeauty.fooddelivery.data.repo.hit.IHitRepository
-import com.bunbeauty.fooddelivery.data.repo.menu_product.IMenuProductRepository
+import com.bunbeauty.fooddelivery.data.repo.menu_product.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
 
 class MenuProductService(
-    private val menuProductRepository: IMenuProductRepository,
+    private val menuProductRepository: MenuProductRepository,
     private val userRepository: IUserRepository,
     private val categoryRepository: ICategoryRepository,
     private val hitRepository: IHitRepository,
