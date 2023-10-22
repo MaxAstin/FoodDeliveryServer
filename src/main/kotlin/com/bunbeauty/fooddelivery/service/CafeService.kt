@@ -10,7 +10,7 @@ class CafeService(private val cafeRepository: CafeRepository) {
         val insertCafe = InsertCafe(
             fromTime = postCafe.fromTime,
             toTime = postCafe.toTime,
-            phoneNumber = postCafe.phoneNumber,
+            phone = postCafe.phone,
             latitude = postCafe.latitude,
             longitude = postCafe.longitude,
             address = postCafe.address,
@@ -29,7 +29,7 @@ class CafeService(private val cafeRepository: CafeRepository) {
         val updateCafe = UpdateCafe(
             fromTime = patchCafe.fromTime,
             toTime = patchCafe.toTime,
-            phoneNumber = patchCafe.phoneNumber,
+            phone = patchCafe.phone,
             latitude = patchCafe.latitude,
             longitude = patchCafe.longitude,
             address = patchCafe.address,

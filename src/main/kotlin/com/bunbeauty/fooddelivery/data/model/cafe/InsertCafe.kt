@@ -1,11 +1,11 @@
 package com.bunbeauty.fooddelivery.data.model.cafe
 
-import java.util.UUID
+import java.util.*
 
 class InsertCafe(
     val fromTime: Int,
     val toTime: Int,
-    val phoneNumber: String,
+    val phone: String,
     val latitude: Double,
     val longitude: Double,
     val address: String,
