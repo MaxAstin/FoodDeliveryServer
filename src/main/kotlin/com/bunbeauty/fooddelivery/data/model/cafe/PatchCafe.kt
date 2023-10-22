@@ -4,11 +4,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class PatchCafe(
-    val fromTime: Int?,
-    val toTime: Int?,
-    val phoneNumber: String?,
-    val latitude: Double?,
-    val longitude: Double?,
-    val address: String?,
-    val isVisible: Boolean?,
+    val fromTime: Int? = null,
+    val toTime: Int? = null,
+    val phoneNumber: String? = null,
+    val latitude: Double? = null,
+    val longitude: Double? = null,
+    val address: String? = null,
+    val isVisible: Boolean? = null,
 )
