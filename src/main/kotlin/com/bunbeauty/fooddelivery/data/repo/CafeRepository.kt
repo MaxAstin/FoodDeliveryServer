@@ -51,13 +51,13 @@ class CafeRepository {
 
     suspend fun updateCafe(cafeUuid: UUID, updateCafe: UpdateCafe): GetCafe? = query {
         CafeEntity.findById(cafeUuid)?.apply {
-            fromTime = updateCafe.fromTime
-            toTime = updateCafe.toTime
-            phoneNumber = updateCafe.phoneNumber
-            latitude = updateCafe.latitude
-            longitude = updateCafe.longitude
-            address = updateCafe.address
-            isVisible = updateCafe.isVisible
+            fromTime = updateCafe.fromTime ?: fromTime
+            toTime = updateCafe.toTime ?: toTime
+            phoneNumber = updateCafe.phoneNumber ?: phoneNumber
+            latitude = updateCafe.latitude ?: latitude
+            longitude = updateCafe.longitude ?: longitude
+            address = updateCafe.address ?: address
+            isVisible = updateCafe.isVisible ?: isVisible
         }?.toCafe()
     }
 
