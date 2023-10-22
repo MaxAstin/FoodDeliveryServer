@@ -23,8 +23,8 @@ import com.bunbeauty.fooddelivery.data.model.order.client.patch.PatchOrder
 import com.bunbeauty.fooddelivery.data.model.order.client.post.PostOrder
 import com.bunbeauty.fooddelivery.data.model.order.client.post.PostOrderProduct
 import com.bunbeauty.fooddelivery.data.model.order.client.post.PostOrderV2
+import com.bunbeauty.fooddelivery.data.repo.CafeRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
-import com.bunbeauty.fooddelivery.data.repo.cafe.ICafeRepository
 import com.bunbeauty.fooddelivery.data.repo.menu_product.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.data.repo.street.IStreetRepository
@@ -39,14 +39,14 @@ class OrderService(
     private val streetRepository: IStreetRepository,
     private val clientUserRepository: ClientUserRepository,
     private val menuProductRepository: MenuProductRepository,
-    private val cafeRepository: ICafeRepository,
+    private val cafeRepository: CafeRepository,
     private val firebaseMessaging: FirebaseMessaging,
 ) : IOrderService {
 
-    val codesCount = CODE_LETTERS.length * CODE_NUMBER_COUNT
-    val cafeSessionHandler: SessionHandler<GetCafeOrder> = SessionHandler()
-    val clientSessionHandler: SessionHandler<GetClientOrder> = SessionHandler()
-    val clientSessionHandlerV2: SessionHandler<GetClientOrderUpdate> = SessionHandler()
+    private val codesCount = CODE_LETTERS.length * CODE_NUMBER_COUNT
+    private val cafeSessionHandler: SessionHandler<GetCafeOrder> = SessionHandler()
+    private val clientSessionHandler: SessionHandler<GetClientOrder> = SessionHandler()
+    private val clientSessionHandlerV2: SessionHandler<GetClientOrderUpdate> = SessionHandler()
 
     override suspend fun createOrder(clientUserUuid: String, postOrder: PostOrder): GetClientOrder? {
         val currentMillis = DateTime.now().millis
