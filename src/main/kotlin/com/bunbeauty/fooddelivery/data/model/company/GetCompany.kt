@@ -12,4 +12,5 @@ class GetCompany(
     val forceUpdateVersion: GetForceUpdateVersion,
     val payment: GetPayment,
     val percentDiscount: Int?,
+    val maxVisibleRecommendationCount: Int,
 )

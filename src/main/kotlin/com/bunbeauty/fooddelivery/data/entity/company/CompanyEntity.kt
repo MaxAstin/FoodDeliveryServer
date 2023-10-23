@@ -8,7 +8,7 @@ import com.bunbeauty.fooddelivery.data.table.CompanyTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.UUID
+import java.util.*
 
 class CompanyEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
@@ -20,6 +20,7 @@ class CompanyEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var paymentPhoneNumber: String? by CompanyTable.paymentPhoneNumber
     var paymentCardNumber: String? by CompanyTable.paymentCardNumber
     var percentDiscount: Int? by CompanyTable.percentDiscount
+    var maxVisibleRecommendationCount: Int by CompanyTable.maxVisibleRecommendationCount
 
     companion object : UUIDEntityClass<CompanyEntity>(CompanyTable)
 
@@ -39,5 +40,6 @@ class CompanyEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
             cardNumber = paymentCardNumber
         ),
         percentDiscount = percentDiscount,
+        maxVisibleRecommendationCount = maxVisibleRecommendationCount,
     )
 }

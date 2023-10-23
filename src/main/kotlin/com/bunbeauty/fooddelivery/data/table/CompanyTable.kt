@@ -11,5 +11,6 @@ object CompanyTable : UUIDTable() {
     val paymentPhoneNumber = varchar("paymentPhoneNumber", 512).nullable()
     val paymentCardNumber = varchar("paymentCardNumber", 512).nullable()
     val percentDiscount = integer("percentDiscount").nullable()
+    val maxVisibleRecommendationCount = integer("maxVisibleRecommendationCount").default(4)
 
 }

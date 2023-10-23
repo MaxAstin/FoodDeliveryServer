@@ -29,8 +29,8 @@ private fun Routing.getRecommendations() {
     get("/recommendation") {
         safely {
             val companyUuid = call.getParameter(Constants.COMPANY_UUID_PARAMETER)
-            val menuProductList = recommendationService.getRecommendationListByCompanyUuid(companyUuid)
-            call.respondOk(menuProductList)
+            val recommendationData = recommendationService.getRecommendationDataByCompanyUuid(companyUuid)
+            call.respondOk(recommendationData)
         }
     }
 }

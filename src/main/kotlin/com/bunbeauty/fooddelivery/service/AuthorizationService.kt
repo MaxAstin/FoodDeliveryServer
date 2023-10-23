@@ -1,8 +1,6 @@
 package com.bunbeauty.fooddelivery.service
 
 import com.bunbeauty.fooddelivery.auth.IJwtService
-import com.bunbeauty.fooddelivery.data.entity.ClientAuthSessionEntity
-import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.ext.toUuid
 import com.bunbeauty.fooddelivery.data.model.client_user.ClientAuthResponse
 import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
@@ -12,7 +10,7 @@ import com.bunbeauty.fooddelivery.data.repo.AuthorizationRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.error.errorWithCode
-import com.bunbeauty.fooddelivery.error.notFoundByUuidError
+import com.bunbeauty.fooddelivery.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.error.somethingWentWrongError
 import com.bunbeauty.fooddelivery.network.ApiResult
 import com.bunbeauty.fooddelivery.network.NetworkService
@@ -98,7 +96,7 @@ class AuthorizationService(
 
     suspend fun checkCode(uuid: String, putClientCode: PutClientCode): ClientAuthResponse {
         val authSession = authorizationRepository.getAuthSessionByUuid(uuid.toUuid())
-            ?: notFoundByUuidError(ClientAuthSessionEntity::class, uuid)
+            .orThrowNotFoundByUuidError(uuid)
 
         if (authSession.attemptsLeft == 0) {
             noAttemptsError()
@@ -151,7 +149,7 @@ class AuthorizationService(
         requestService.checkRequestAvailability(clientIp, SEND_CODE_OPERATION_NAME)
 
         val authSession = authorizationRepository.getAuthSessionByUuid(uuid.toUuid())
-            ?: notFoundByUuidError(ClientAuthSessionEntity::class, uuid)
+            .orThrowNotFoundByUuidError(uuid)
 
         if (authSession.isConfirmed) {
             alreadyConfirmedError()
@@ -229,7 +227,7 @@ class AuthorizationService(
 
     private suspend fun getSmsText(otpCode: String, companyUuid: String): String {
         val company = companyRepository.getCompanyByUuid(companyUuid.toUuid())
-            ?: notFoundByUuidError(CompanyEntity::class, companyUuid)
+            .orThrowNotFoundByUuidError(companyUuid)
         return "$otpCode $MESSAGE_TEXT ${company.name}"
     }
 

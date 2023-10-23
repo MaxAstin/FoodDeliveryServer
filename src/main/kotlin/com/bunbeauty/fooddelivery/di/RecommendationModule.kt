@@ -7,6 +7,7 @@ import org.koin.dsl.module
 val recommendationModule = module(createdAtStart = true) {
     factory {
         RecommendationService(
+            companyRepository = get(),
             recommendationRepository = get(),
             menuProductRepository = get(),
         )
