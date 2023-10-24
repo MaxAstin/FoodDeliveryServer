@@ -7,7 +7,6 @@ import org.koin.dsl.module
 val nonWorkingDayModule = module(createdAtStart = true) {
     factory {
         NonWorkingDayService(
-            cafeRepository = get(),
             nonWorkingDayRepository = get()
         )
     }
