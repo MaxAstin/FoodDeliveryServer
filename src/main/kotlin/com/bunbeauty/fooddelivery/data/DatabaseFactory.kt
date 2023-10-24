@@ -87,6 +87,9 @@ object DatabaseFactory {
 
             SchemaUtils.create(RecommendationTable)
             SchemaUtils.createMissingTablesAndColumns(RecommendationTable)
+
+            SchemaUtils.create(NonWorkingDayTable)
+            SchemaUtils.createMissingTablesAndColumns(NonWorkingDayTable)
         }
     }
 

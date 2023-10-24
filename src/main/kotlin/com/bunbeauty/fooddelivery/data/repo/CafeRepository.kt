@@ -25,6 +25,10 @@ class CafeRepository {
         }.toCafe()
     }
 
+    suspend fun getCafeByUuid(cafeUuid: UUID): GetCafe? = query {
+        CafeEntity.findById(cafeUuid)?.toCafe()
+    }
+
     suspend fun getCafeListByCityUuid(cityUuid: UUID): List<GetCafe> = query {
         CafeEntity.find {
             CafeTable.city eq cityUuid

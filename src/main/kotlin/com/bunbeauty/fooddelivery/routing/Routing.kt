@@ -23,4 +23,5 @@ fun Application.configureRouting() {
     configureDiscountRouting()
     configureAuthorizationRouting()
     configureRecommendationRouting()
+    configureNonWorkingDayRouting()
 }
