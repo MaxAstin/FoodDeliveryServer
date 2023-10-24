@@ -13,6 +13,7 @@ class NonWorkingDayService(
 
     suspend fun getNonWorkingDayListByCafeUuid(cafeUuid: String): List<GetNonWorkingDay> {
         val startOfDayMillis = DateTime.now().withTimeAtStartOfDay().millis
+        println("startOfDayMillis $startOfDayMillis")
 
         return nonWorkingDayRepository.getNonWorkingDayListByCafeUuidAndTimestamp(
             cafeUuid = cafeUuid.toUuid(),
