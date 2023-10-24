@@ -16,7 +16,7 @@ class NonWorkingDayRepository {
         query {
             NonWorkingDayEntity.find {
                 (NonWorkingDayTable.cafe eq cafeUuid) and
-                        (NonWorkingDayTable.timestamp greater timestamp)
+                        (NonWorkingDayTable.timestamp greaterEq timestamp)
             }.orderBy(NonWorkingDayTable.timestamp to SortOrder.DESC)
                 .map { nonWorkingDayEntity ->
                     nonWorkingDayEntity.toNonWorkingDay()
