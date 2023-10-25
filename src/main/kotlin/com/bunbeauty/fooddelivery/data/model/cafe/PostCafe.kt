@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 class PostCafe(
     val fromTime: Int,
     val toTime: Int,
+    val offset: Int,
     val phone: String,
     val latitude: Double,
     val longitude: Double,

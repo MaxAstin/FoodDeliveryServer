@@ -16,6 +16,7 @@ class CafeRepository {
         CafeEntity.new {
             fromTime = insertCafe.fromTime
             toTime = insertCafe.toTime
+            offset = insertCafe.offset
             phoneNumber = insertCafe.phone
             latitude = insertCafe.latitude
             longitude = insertCafe.longitude
@@ -57,6 +58,7 @@ class CafeRepository {
         CafeEntity.findById(cafeUuid)?.apply {
             fromTime = updateCafe.fromTime ?: fromTime
             toTime = updateCafe.toTime ?: toTime
+            offset = updateCafe.offset ?: offset
             phoneNumber = updateCafe.phone ?: phoneNumber
             latitude = updateCafe.latitude ?: latitude
             longitude = updateCafe.longitude ?: longitude

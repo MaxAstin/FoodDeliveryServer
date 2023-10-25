@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 class PatchCafe(
     val fromTime: Int? = null,
     val toTime: Int? = null,
+    val offset: Int? = null,
     val phone: String? = null,
     val latitude: Double? = null,
     val longitude: Double? = null,

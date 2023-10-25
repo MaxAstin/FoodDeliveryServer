@@ -5,6 +5,7 @@ import java.util.*
 class InsertCafe(
     val fromTime: Int,
     val toTime: Int,
+    val offset: Int,
     val phone: String,
     val latitude: Double,
     val longitude: Double,

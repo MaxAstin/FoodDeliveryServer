@@ -6,6 +6,7 @@ object CafeTable : UUIDTable() {
 
     val fromTime = integer("fromTime")
     val toTime = integer("toTime")
+    val offset = integer("offset").default(0)
     val phoneNumber = varchar("phone", 512)
     val latitude = double("latitude")
     val longitude = double("longitude")
