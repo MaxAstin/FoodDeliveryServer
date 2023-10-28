@@ -31,4 +31,10 @@ class NonWorkingDayRepository {
 
         nonWorkingDayEntity.toNonWorkingDay()
     }
+
+    suspend fun deleteNonWorkingDay(uuid: UUID): GetNonWorkingDay? = query {
+        NonWorkingDayEntity.findById(uuid)?.apply {
+            delete()
+        }?.toNonWorkingDay()
+    }
 }

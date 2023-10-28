@@ -28,4 +28,8 @@ class NonWorkingDayService(
         return nonWorkingDayRepository.insertNonWorkingDay(insertNonWorkingDay)
     }
 
+    suspend fun deleteNonWorkingDayByUuid(uuid: String): GetNonWorkingDay? {
+        return nonWorkingDayRepository.deleteNonWorkingDay(uuid.toUuid())
+    }
+
 }

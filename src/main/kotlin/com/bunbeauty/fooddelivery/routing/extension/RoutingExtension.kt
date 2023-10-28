@@ -146,16 +146,28 @@ suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>
     )
 }
 
-suspend inline fun PipelineContext<Unit, ApplicationCall>.adminDelete(deleteBlock: (String) -> Any?) {
+suspend inline fun <reified R>  PipelineContext<Unit, ApplicationCall>.adminDelete(
+    deleteBlock: (String) -> R?
+) {
     admin {
-        val orderUuid = call.parameters[UUID_PARAMETER] ?: error("$UUID_PARAMETER is required")
-        val deletedObject = deleteBlock(orderUuid)
-        if (deletedObject == null) {
-            call.respondNotFound()
-        } else {
-            call.respondOk()
-        }
+        delete(deleteBlock)
     }
+}
+
+suspend inline fun <reified R> PipelineContext<Unit, ApplicationCall>.managerDelete(
+    deleteBlock: (String) -> R?
+) {
+    manager {
+        delete(deleteBlock)
+    }
+}
+
+suspend inline fun <reified R> PipelineContext<Unit, ApplicationCall>.delete(
+    deleteBlock: (String) -> R?
+) {
+    val uuid = call.getParameter(UUID_PARAMETER)
+    val result = deleteBlock(uuid)
+    call.respondOkOrBad(model = result)
 }
 
 val PipelineContext<Unit, ApplicationCall>.clientIp: String
