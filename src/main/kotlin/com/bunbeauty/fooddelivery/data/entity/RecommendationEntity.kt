@@ -1,7 +1,6 @@
 package com.bunbeauty.fooddelivery.data.entity
 
 import com.bunbeauty.fooddelivery.data.model.recommendation.GetRecommendation
-import com.bunbeauty.fooddelivery.data.table.MenuProductTable
 import com.bunbeauty.fooddelivery.data.table.RecommendationTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
@@ -11,7 +10,7 @@ import java.util.*
 class RecommendationEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     val uuid: String = uuid.value.toString()
-    var isVisible: Boolean by MenuProductTable.isVisible
+    var isVisible: Boolean by RecommendationTable.isVisible
 
     var menuProduct: MenuProductEntity by MenuProductEntity referencedOn RecommendationTable.menuProduct
 
