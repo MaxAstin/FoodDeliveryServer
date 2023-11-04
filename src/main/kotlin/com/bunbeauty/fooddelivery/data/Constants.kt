@@ -38,12 +38,8 @@ object Constants {
 
     // HITS
     const val HITS_CATEGORY_NAME = "Хиты"
-    const val HITS_COUNT = 5
+    const val HITS_COUNT = 6
     const val HITS_ORDER_DAY_COUNT = 30
-
-    // INIT DB
-    const val MAIN_COMPANY_NAME = "BunBeauty"
-    const val MAIN_CITY_NAME = "Дубна"
 
     // NOTIFICATION KEYS
     const val ORDER_KOD_KEY = "orderCode"
