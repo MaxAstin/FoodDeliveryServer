@@ -11,6 +11,8 @@ class NonWorkingDayEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     val uuid: String = uuid.value.toString()
     var timestamp: Long by NonWorkingDayTable.timestamp
+    var isVisible: Boolean by NonWorkingDayTable.isVisible
+
     var cafe: CafeEntity by CafeEntity referencedOn NonWorkingDayTable.cafe
 
     companion object : UUIDEntityClass<NonWorkingDayEntity>(NonWorkingDayTable)
@@ -18,6 +20,7 @@ class NonWorkingDayEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     fun toNonWorkingDay() = GetNonWorkingDay(
         uuid = uuid,
         timestamp = timestamp,
+        isVisible = isVisible,
         cafeUuid = cafe.uuid,
     )
 
