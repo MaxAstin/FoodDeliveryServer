@@ -3,9 +3,9 @@ package com.bunbeauty.fooddelivery.data.repo
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.MenuProductEntity
 import com.bunbeauty.fooddelivery.data.entity.RecommendationEntity
-import com.bunbeauty.fooddelivery.data.model.recommendation.GetRecommendation
-import com.bunbeauty.fooddelivery.data.model.recommendation.InsertRecommendation
 import com.bunbeauty.fooddelivery.data.table.RecommendationTable
+import com.bunbeauty.fooddelivery.domain.model.recommendation.GetRecommendation
+import com.bunbeauty.fooddelivery.domain.model.recommendation.InsertRecommendation
 import java.util.*
 
 class RecommendationRepository {

@@ -1,11 +1,11 @@
 package com.bunbeauty.fooddelivery.service.menu_product
 
-import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.menu_product.*
 import com.bunbeauty.fooddelivery.data.repo.category.ICategoryRepository
 import com.bunbeauty.fooddelivery.data.repo.hit.IHitRepository
 import com.bunbeauty.fooddelivery.data.repo.menu_product.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
+import com.bunbeauty.fooddelivery.domain.model.menu_product.*
+import com.bunbeauty.fooddelivery.domain.toUuid
 
 class MenuProductService(
     private val menuProductRepository: MenuProductRepository,

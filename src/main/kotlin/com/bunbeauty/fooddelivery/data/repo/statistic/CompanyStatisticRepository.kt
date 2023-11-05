@@ -4,15 +4,17 @@ import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.entity.statistic.CompanyStatisticEntity
 import com.bunbeauty.fooddelivery.data.entity.statistic.CompanyStatisticProductEntity
-import com.bunbeauty.fooddelivery.data.model.new_statistic.GetStatistic
-import com.bunbeauty.fooddelivery.data.model.new_statistic.PeriodType
-import com.bunbeauty.fooddelivery.data.model.new_statistic.UpdateStatistic
-import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertCompanyStatistic
-import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertStatisticProduct
 import com.bunbeauty.fooddelivery.data.table.CompanyStatisticProductTable
 import com.bunbeauty.fooddelivery.data.table.CompanyStatisticTable
-import org.jetbrains.exposed.sql.*
-import java.util.UUID
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.GetStatistic
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.PeriodType
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.UpdateStatistic
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.insert.InsertCompanyStatistic
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.insert.InsertStatisticProduct
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
+import java.util.*
 
 class CompanyStatisticRepository : ICompanyStatisticRepository {
 

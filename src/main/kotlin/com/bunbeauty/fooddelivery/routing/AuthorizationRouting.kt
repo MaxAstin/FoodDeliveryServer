@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants
-import com.bunbeauty.fooddelivery.data.model.client_user.ClientAuthResponse
-import com.bunbeauty.fooddelivery.data.model.client_user.login.*
+import com.bunbeauty.fooddelivery.domain.model.client_user.ClientAuthResponse
+import com.bunbeauty.fooddelivery.domain.model.client_user.login.*
 import com.bunbeauty.fooddelivery.routing.extension.*
 import com.bunbeauty.fooddelivery.service.AuthorizationService
 import io.ktor.server.application.*

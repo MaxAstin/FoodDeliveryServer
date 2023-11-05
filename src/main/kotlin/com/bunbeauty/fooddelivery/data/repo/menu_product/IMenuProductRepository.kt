@@ -1,9 +1,9 @@
 package com.bunbeauty.fooddelivery.data.repo.menu_product
 
-import com.bunbeauty.fooddelivery.data.model.menu_product.GetMenuProduct
-import com.bunbeauty.fooddelivery.data.model.menu_product.InsertMenuProduct
-import com.bunbeauty.fooddelivery.data.model.menu_product.UpdateMenuProduct
-import java.util.UUID
+import com.bunbeauty.fooddelivery.domain.model.menu_product.GetMenuProduct
+import com.bunbeauty.fooddelivery.domain.model.menu_product.InsertMenuProduct
+import com.bunbeauty.fooddelivery.domain.model.menu_product.UpdateMenuProduct
+import java.util.*
 
 interface IMenuProductRepository {
 

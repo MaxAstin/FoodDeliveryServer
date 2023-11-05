@@ -1,10 +1,10 @@
 package com.bunbeauty.fooddelivery.service.street
 
-import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.street.GetStreet
-import com.bunbeauty.fooddelivery.data.model.street.InsertStreet
-import com.bunbeauty.fooddelivery.data.model.street.PostStreet
 import com.bunbeauty.fooddelivery.data.repo.street.IStreetRepository
+import com.bunbeauty.fooddelivery.domain.model.street.GetStreet
+import com.bunbeauty.fooddelivery.domain.model.street.InsertStreet
+import com.bunbeauty.fooddelivery.domain.model.street.PostStreet
+import com.bunbeauty.fooddelivery.domain.toUuid
 
 class StreetService(private val streetRepository: IStreetRepository) : IStreetService {
 

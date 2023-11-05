@@ -1,12 +1,12 @@
 package com.bunbeauty.fooddelivery.data.entity
 
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.data.model.category.GetCategory
 import com.bunbeauty.fooddelivery.data.table.CategoryTable
+import com.bunbeauty.fooddelivery.domain.model.category.GetCategory
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.UUID
+import java.util.*
 
 class CategoryEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 

@@ -3,9 +3,10 @@ package com.bunbeauty.fooddelivery.data.repo
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.CafeEntity
 import com.bunbeauty.fooddelivery.data.entity.NonWorkingDayEntity
-import com.bunbeauty.fooddelivery.data.model.non_working_day.GetNonWorkingDay
-import com.bunbeauty.fooddelivery.data.model.non_working_day.InsertNonWorkingDay
 import com.bunbeauty.fooddelivery.data.table.NonWorkingDayTable
+import com.bunbeauty.fooddelivery.domain.model.non_working_day.GetNonWorkingDay
+import com.bunbeauty.fooddelivery.domain.model.non_working_day.InsertNonWorkingDay
+import com.bunbeauty.fooddelivery.domain.model.non_working_day.UpdateNonWorkingDay
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import java.util.*
@@ -32,9 +33,12 @@ class NonWorkingDayRepository {
         nonWorkingDayEntity.toNonWorkingDay()
     }
 
-    suspend fun deleteNonWorkingDay(uuid: UUID): GetNonWorkingDay? = query {
+    suspend fun updateNonWorkingDay(
+        uuid: UUID,
+        updateNonWorkingDay: UpdateNonWorkingDay,
+    ): GetNonWorkingDay? = query {
         NonWorkingDayEntity.findById(uuid)?.apply {
-            delete()
+            isVisible = updateNonWorkingDay.isVisible ?: isVisible
         }?.toNonWorkingDay()
     }
 }

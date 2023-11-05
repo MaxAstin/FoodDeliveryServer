@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.service.client_user
 
-import com.bunbeauty.fooddelivery.data.model.client_user.*
+import com.bunbeauty.fooddelivery.domain.model.client_user.*
 
 interface IClientUserService {
 

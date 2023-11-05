@@ -1,13 +1,13 @@
 package com.bunbeauty.fooddelivery.data.entity
 
-import com.bunbeauty.fooddelivery.data.model.order.cafe.GetStatisticOrder
 import com.bunbeauty.fooddelivery.data.table.OrderProductTable
 import com.bunbeauty.fooddelivery.data.table.OrderTable
+import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetStatisticOrder
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.SizedIterable
-import java.util.UUID
+import java.util.*
 
 class StatisticOrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 

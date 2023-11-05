@@ -3,12 +3,12 @@ package com.bunbeauty.fooddelivery.service.hit
 import com.bunbeauty.fooddelivery.data.Constants
 import com.bunbeauty.fooddelivery.data.Constants.HITS_COUNT
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
-import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.data.repo.hit.IHitRepository
 import com.bunbeauty.fooddelivery.data.repo.menu_product.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
+import com.bunbeauty.fooddelivery.domain.model.order.client.get.GetClientOrderV2
+import com.bunbeauty.fooddelivery.domain.toUuid
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.joda.time.DateTime

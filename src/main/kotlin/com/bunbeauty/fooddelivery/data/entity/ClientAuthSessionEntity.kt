@@ -1,9 +1,9 @@
 package com.bunbeauty.fooddelivery.data.entity
 
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.data.model.client_user.login.GetClientAuthSession
-import com.bunbeauty.fooddelivery.data.model.client_user.login.GetClientAuthSessionUuid
 import com.bunbeauty.fooddelivery.data.table.ClientAuthSessionTable
+import com.bunbeauty.fooddelivery.domain.model.client_user.login.GetClientAuthSession
+import com.bunbeauty.fooddelivery.domain.model.client_user.login.GetClientAuthSessionUuid
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

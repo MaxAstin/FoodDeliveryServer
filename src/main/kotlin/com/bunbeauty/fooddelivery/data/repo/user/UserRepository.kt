@@ -3,10 +3,10 @@ package com.bunbeauty.fooddelivery.data.repo.user
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.CityEntity
 import com.bunbeauty.fooddelivery.data.entity.UserEntity
-import com.bunbeauty.fooddelivery.data.model.user.GetUser
-import com.bunbeauty.fooddelivery.data.model.user.InsertUser
 import com.bunbeauty.fooddelivery.data.table.UserTable
-import java.util.UUID
+import com.bunbeauty.fooddelivery.domain.model.user.GetUser
+import com.bunbeauty.fooddelivery.domain.model.user.InsertUser
+import java.util.*
 
 class UserRepository : IUserRepository {
 

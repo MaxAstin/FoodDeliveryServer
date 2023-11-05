@@ -3,11 +3,11 @@ package com.bunbeauty.fooddelivery.data.repo
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.CafeEntity
 import com.bunbeauty.fooddelivery.data.entity.CityEntity
-import com.bunbeauty.fooddelivery.data.model.cafe.GetCafe
-import com.bunbeauty.fooddelivery.data.model.cafe.InsertCafe
-import com.bunbeauty.fooddelivery.data.model.cafe.UpdateCafe
 import com.bunbeauty.fooddelivery.data.table.CafeTable
 import com.bunbeauty.fooddelivery.data.table.CityTable
+import com.bunbeauty.fooddelivery.domain.model.cafe.GetCafe
+import com.bunbeauty.fooddelivery.domain.model.cafe.InsertCafe
+import com.bunbeauty.fooddelivery.domain.model.cafe.UpdateCafe
 import java.util.*
 
 class CafeRepository {

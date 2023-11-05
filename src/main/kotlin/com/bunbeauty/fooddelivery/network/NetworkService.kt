@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.network
 
-import com.bunbeauty.fooddelivery.data.model.auth.BaseResponse
+import com.bunbeauty.fooddelivery.domain.model.auth.BaseResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*

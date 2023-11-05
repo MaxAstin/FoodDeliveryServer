@@ -1,14 +1,14 @@
 package com.bunbeauty.fooddelivery
 
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
-import com.bunbeauty.fooddelivery.data.model.menu_product.GetMenuProduct
-import com.bunbeauty.fooddelivery.data.model.order.GetOrderAddress
-import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
-import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.data.repo.hit.IHitRepository
 import com.bunbeauty.fooddelivery.data.repo.menu_product.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
+import com.bunbeauty.fooddelivery.domain.model.menu_product.GetMenuProduct
+import com.bunbeauty.fooddelivery.domain.model.order.GetOrderAddress
+import com.bunbeauty.fooddelivery.domain.model.order.GetOrderProduct
+import com.bunbeauty.fooddelivery.domain.model.order.client.get.GetClientOrderV2
 import com.bunbeauty.fooddelivery.service.hit.HitService
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs

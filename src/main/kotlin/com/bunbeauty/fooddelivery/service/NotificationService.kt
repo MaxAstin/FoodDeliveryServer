@@ -1,9 +1,8 @@
 package com.bunbeauty.fooddelivery.service
 
-import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.notification.PostNotification
 import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
-import com.bunbeauty.fooddelivery.data.repo.user.UserRepository
+import com.bunbeauty.fooddelivery.domain.model.notification.PostNotification
+import com.bunbeauty.fooddelivery.domain.toUuid
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.Notification

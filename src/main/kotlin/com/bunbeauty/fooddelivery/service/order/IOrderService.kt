@@ -1,14 +1,14 @@
 package com.bunbeauty.fooddelivery.service.order
 
-import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrder
-import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetails
-import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetailsV2
-import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrder
-import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderUpdate
-import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
-import com.bunbeauty.fooddelivery.data.model.order.client.patch.PatchOrder
-import com.bunbeauty.fooddelivery.data.model.order.client.post.PostOrder
-import com.bunbeauty.fooddelivery.data.model.order.client.post.PostOrderV2
+import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetCafeOrder
+import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetCafeOrderDetails
+import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetCafeOrderDetailsV2
+import com.bunbeauty.fooddelivery.domain.model.order.client.get.GetClientOrder
+import com.bunbeauty.fooddelivery.domain.model.order.client.get.GetClientOrderUpdate
+import com.bunbeauty.fooddelivery.domain.model.order.client.get.GetClientOrderV2
+import com.bunbeauty.fooddelivery.domain.model.order.client.patch.PatchOrder
+import com.bunbeauty.fooddelivery.domain.model.order.client.post.PostOrder
+import com.bunbeauty.fooddelivery.domain.model.order.client.post.PostOrderV2
 import kotlinx.coroutines.flow.Flow
 
 interface IOrderService {

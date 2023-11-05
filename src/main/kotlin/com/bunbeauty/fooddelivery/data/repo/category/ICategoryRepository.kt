@@ -1,9 +1,9 @@
 package com.bunbeauty.fooddelivery.data.repo.category
 
-import com.bunbeauty.fooddelivery.data.model.category.GetCategory
-import com.bunbeauty.fooddelivery.data.model.category.InsertCategory
-import com.bunbeauty.fooddelivery.data.model.category.UpdateCategory
-import java.util.UUID
+import com.bunbeauty.fooddelivery.domain.model.category.GetCategory
+import com.bunbeauty.fooddelivery.domain.model.category.InsertCategory
+import com.bunbeauty.fooddelivery.domain.model.category.UpdateCategory
+import java.util.*
 
 interface ICategoryRepository {
 

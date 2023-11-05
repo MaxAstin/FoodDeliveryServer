@@ -1,10 +1,8 @@
 package com.bunbeauty.fooddelivery.service
 
-import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.non_working_day.GetNonWorkingDay
-import com.bunbeauty.fooddelivery.data.model.non_working_day.InsertNonWorkingDay
-import com.bunbeauty.fooddelivery.data.model.non_working_day.PostNonWorkingDay
 import com.bunbeauty.fooddelivery.data.repo.NonWorkingDayRepository
+import com.bunbeauty.fooddelivery.domain.model.non_working_day.*
+import com.bunbeauty.fooddelivery.domain.toUuid
 import org.joda.time.DateTime
 
 class NonWorkingDayService(
@@ -28,8 +26,13 @@ class NonWorkingDayService(
         return nonWorkingDayRepository.insertNonWorkingDay(insertNonWorkingDay)
     }
 
-    suspend fun deleteNonWorkingDayByUuid(uuid: String): GetNonWorkingDay? {
-        return nonWorkingDayRepository.deleteNonWorkingDay(uuid.toUuid())
+    suspend fun updateNonWorkingDayByUuid(uuid: String, patchNonWorkingDay: PatchNonWorkingDay): GetNonWorkingDay? {
+        return nonWorkingDayRepository.updateNonWorkingDay(
+            uuid = uuid.toUuid(),
+            updateNonWorkingDay = UpdateNonWorkingDay(
+                isVisible = patchNonWorkingDay.isVisible
+            ),
+        )
     }
 
 }

@@ -1,10 +1,10 @@
 package com.bunbeauty.fooddelivery.data.entity.company
 
-import com.bunbeauty.fooddelivery.data.model.company.GetCompany
-import com.bunbeauty.fooddelivery.data.model.company.GetForceUpdateVersion
-import com.bunbeauty.fooddelivery.data.model.company.GetPayment
-import com.bunbeauty.fooddelivery.data.model.delivery.GetDelivery
 import com.bunbeauty.fooddelivery.data.table.CompanyTable
+import com.bunbeauty.fooddelivery.domain.model.company.GetCompany
+import com.bunbeauty.fooddelivery.domain.model.company.delivery.GetDelivery
+import com.bunbeauty.fooddelivery.domain.model.company.payment_method.GetPayment
+import com.bunbeauty.fooddelivery.domain.model.company.update_version.GetForceUpdateVersion
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

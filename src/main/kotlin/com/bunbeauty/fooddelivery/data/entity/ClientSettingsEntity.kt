@@ -1,11 +1,11 @@
 package com.bunbeauty.fooddelivery.data.entity
 
-import com.bunbeauty.fooddelivery.data.model.client_user.GetClientSettings
 import com.bunbeauty.fooddelivery.data.table.ClientUserTable
+import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientSettings
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.UUID
+import java.util.*
 
 class ClientSettingsEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 

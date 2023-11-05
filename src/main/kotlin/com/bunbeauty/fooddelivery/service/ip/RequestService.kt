@@ -2,9 +2,9 @@ package com.bunbeauty.fooddelivery.service.ip
 
 import com.bunbeauty.fooddelivery.data.Constants.DAY_REQUEST_LIMIT
 import com.bunbeauty.fooddelivery.data.Constants.REQUIRED_TIME_BETWEEN_REQUESTS
-import com.bunbeauty.fooddelivery.data.model.request.InsertRequest
 import com.bunbeauty.fooddelivery.data.repo.request.IRequestRepository
-import com.bunbeauty.fooddelivery.error.errorWithCode
+import com.bunbeauty.fooddelivery.domain.error.errorWithCode
+import com.bunbeauty.fooddelivery.domain.model.request.InsertRequest
 import org.joda.time.DateTime
 
 class RequestService(private val requestRepository: IRequestRepository) {

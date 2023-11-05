@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.CITY_UUID_PARAMETER
-import com.bunbeauty.fooddelivery.data.model.street.GetStreet
-import com.bunbeauty.fooddelivery.data.model.street.PostStreet
+import com.bunbeauty.fooddelivery.domain.model.street.GetStreet
+import com.bunbeauty.fooddelivery.domain.model.street.PostStreet
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import com.bunbeauty.fooddelivery.routing.extension.respondOk
 import com.bunbeauty.fooddelivery.routing.extension.safely

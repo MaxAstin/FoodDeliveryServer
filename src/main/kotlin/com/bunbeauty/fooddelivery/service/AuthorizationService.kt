@@ -1,17 +1,17 @@
 package com.bunbeauty.fooddelivery.service
 
 import com.bunbeauty.fooddelivery.auth.IJwtService
-import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.client_user.ClientAuthResponse
-import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
-import com.bunbeauty.fooddelivery.data.model.client_user.InsertClientUser
-import com.bunbeauty.fooddelivery.data.model.client_user.login.*
 import com.bunbeauty.fooddelivery.data.repo.AuthorizationRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
-import com.bunbeauty.fooddelivery.error.errorWithCode
-import com.bunbeauty.fooddelivery.error.orThrowNotFoundByUuidError
-import com.bunbeauty.fooddelivery.error.somethingWentWrongError
+import com.bunbeauty.fooddelivery.domain.error.errorWithCode
+import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
+import com.bunbeauty.fooddelivery.domain.error.somethingWentWrongError
+import com.bunbeauty.fooddelivery.domain.model.client_user.ClientAuthResponse
+import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientUser
+import com.bunbeauty.fooddelivery.domain.model.client_user.InsertClientUser
+import com.bunbeauty.fooddelivery.domain.model.client_user.login.*
+import com.bunbeauty.fooddelivery.domain.toUuid
 import com.bunbeauty.fooddelivery.network.ApiResult
 import com.bunbeauty.fooddelivery.network.NetworkService
 import com.bunbeauty.fooddelivery.service.ip.RequestService

@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.service.city
 
-import com.bunbeauty.fooddelivery.data.model.city.GetCity
-import com.bunbeauty.fooddelivery.data.model.city.PostCity
+import com.bunbeauty.fooddelivery.domain.model.city.GetCity
+import com.bunbeauty.fooddelivery.domain.model.city.PostCity
 
 interface ICityService {
 

@@ -2,9 +2,9 @@ package com.bunbeauty.fooddelivery.data.repo
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.data.model.company.GetCompany
-import com.bunbeauty.fooddelivery.data.model.company.InsertCompany
-import com.bunbeauty.fooddelivery.data.model.company.UpdateCompany
+import com.bunbeauty.fooddelivery.domain.model.company.GetCompany
+import com.bunbeauty.fooddelivery.domain.model.company.InsertCompany
+import com.bunbeauty.fooddelivery.domain.model.company.UpdateCompany
 import java.util.*
 
 class CompanyRepository {

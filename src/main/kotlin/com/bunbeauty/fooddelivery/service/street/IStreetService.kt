@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.service.street
 
-import com.bunbeauty.fooddelivery.data.model.street.GetStreet
-import com.bunbeauty.fooddelivery.data.model.street.PostStreet
+import com.bunbeauty.fooddelivery.domain.model.street.GetStreet
+import com.bunbeauty.fooddelivery.domain.model.street.PostStreet
 
 interface IStreetService {
 

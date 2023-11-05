@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.data.entity
 
-import com.bunbeauty.fooddelivery.data.model.cafe.GetCafe
 import com.bunbeauty.fooddelivery.data.table.CafeTable
 import com.bunbeauty.fooddelivery.data.table.StreetTable
+import com.bunbeauty.fooddelivery.domain.model.cafe.GetCafe
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

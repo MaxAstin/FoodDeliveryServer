@@ -2,9 +2,9 @@ package com.bunbeauty.fooddelivery.data.repo.request
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.RequestEntity
-import com.bunbeauty.fooddelivery.data.model.request.GetRequest
-import com.bunbeauty.fooddelivery.data.model.request.InsertRequest
 import com.bunbeauty.fooddelivery.data.table.RequestTable
+import com.bunbeauty.fooddelivery.domain.model.request.GetRequest
+import com.bunbeauty.fooddelivery.domain.model.request.InsertRequest
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 

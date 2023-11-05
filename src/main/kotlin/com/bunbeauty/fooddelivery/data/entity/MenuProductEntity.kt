@@ -1,14 +1,14 @@
 package com.bunbeauty.fooddelivery.data.entity
 
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.data.model.menu_product.GetMenuProduct
 import com.bunbeauty.fooddelivery.data.table.MenuProductCategoryTable
 import com.bunbeauty.fooddelivery.data.table.MenuProductTable
+import com.bunbeauty.fooddelivery.domain.model.menu_product.GetMenuProduct
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.SizedIterable
-import java.util.UUID
+import java.util.*
 
 class MenuProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 

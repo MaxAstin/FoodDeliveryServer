@@ -4,10 +4,10 @@ import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.AddressEntity
 import com.bunbeauty.fooddelivery.data.entity.ClientUserEntity
 import com.bunbeauty.fooddelivery.data.entity.StreetEntity
-import com.bunbeauty.fooddelivery.data.model.address.GetAddress
-import com.bunbeauty.fooddelivery.data.model.address.InsertAddress
 import com.bunbeauty.fooddelivery.data.table.AddressTable
-import java.util.UUID
+import com.bunbeauty.fooddelivery.domain.model.address.GetAddress
+import com.bunbeauty.fooddelivery.domain.model.address.InsertAddress
+import java.util.*
 
 class AddressRepository : IAddressRepository {
 

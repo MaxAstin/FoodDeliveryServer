@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants
-import com.bunbeauty.fooddelivery.data.model.address.GetAddress
-import com.bunbeauty.fooddelivery.data.model.address.PostAddress
+import com.bunbeauty.fooddelivery.domain.model.address.GetAddress
+import com.bunbeauty.fooddelivery.domain.model.address.PostAddress
 import com.bunbeauty.fooddelivery.routing.extension.client
 import com.bunbeauty.fooddelivery.routing.extension.clientWithBody
 import com.bunbeauty.fooddelivery.routing.extension.respondOk

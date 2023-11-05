@@ -1,12 +1,13 @@
 package com.bunbeauty.fooddelivery.data.repo.street
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.*
-import com.bunbeauty.fooddelivery.data.model.cafe.GetCafe
-import com.bunbeauty.fooddelivery.data.model.street.GetStreet
-import com.bunbeauty.fooddelivery.data.model.street.InsertStreet
-import com.bunbeauty.fooddelivery.data.table.StreetTable
-import java.util.UUID
+import com.bunbeauty.fooddelivery.data.entity.AddressEntity
+import com.bunbeauty.fooddelivery.data.entity.CafeEntity
+import com.bunbeauty.fooddelivery.data.entity.CityEntity
+import com.bunbeauty.fooddelivery.data.entity.StreetEntity
+import com.bunbeauty.fooddelivery.domain.model.street.GetStreet
+import com.bunbeauty.fooddelivery.domain.model.street.InsertStreet
+import java.util.*
 
 class StreetRepository : IStreetRepository {
 

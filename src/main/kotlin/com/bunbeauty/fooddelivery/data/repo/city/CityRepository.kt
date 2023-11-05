@@ -3,9 +3,9 @@ package com.bunbeauty.fooddelivery.data.repo.city
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.CityEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.data.model.city.GetCity
-import com.bunbeauty.fooddelivery.data.model.city.InsertCity
 import com.bunbeauty.fooddelivery.data.table.CityTable
+import com.bunbeauty.fooddelivery.domain.model.city.GetCity
+import com.bunbeauty.fooddelivery.domain.model.city.InsertCity
 import java.util.*
 
 class CityRepository : ICityRepository {

@@ -1,10 +1,11 @@
 package com.bunbeauty.fooddelivery.routing
 
-import com.bunbeauty.fooddelivery.data.model.user.GetUser
-import com.bunbeauty.fooddelivery.data.model.user.PostUser
-import com.bunbeauty.fooddelivery.data.model.user.PostUserAuth
-import com.bunbeauty.fooddelivery.data.model.user.UserAuthResponse
-import com.bunbeauty.fooddelivery.routing.extension.*
+import com.bunbeauty.fooddelivery.domain.model.user.GetUser
+import com.bunbeauty.fooddelivery.domain.model.user.PostUser
+import com.bunbeauty.fooddelivery.domain.model.user.PostUserAuth
+import com.bunbeauty.fooddelivery.domain.model.user.UserAuthResponse
+import com.bunbeauty.fooddelivery.routing.extension.adminWithBody
+import com.bunbeauty.fooddelivery.routing.extension.withBody
 import com.bunbeauty.fooddelivery.service.user.IUserService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*

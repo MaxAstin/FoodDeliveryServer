@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.routing
 
-import com.bunbeauty.fooddelivery.data.model.notification.PostNotification
+import com.bunbeauty.fooddelivery.domain.model.notification.PostNotification
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import com.bunbeauty.fooddelivery.service.NotificationService
 import io.ktor.server.application.*

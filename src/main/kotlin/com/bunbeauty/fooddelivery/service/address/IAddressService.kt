@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.service.address
 
-import com.bunbeauty.fooddelivery.data.model.address.GetAddress
-import com.bunbeauty.fooddelivery.data.model.address.PostAddress
+import com.bunbeauty.fooddelivery.domain.model.address.GetAddress
+import com.bunbeauty.fooddelivery.domain.model.address.PostAddress
 
 interface IAddressService {
 

@@ -1,13 +1,13 @@
 package com.bunbeauty.fooddelivery.data.entity.statistic
 
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.data.model.new_statistic.GetStatistic
-import com.bunbeauty.fooddelivery.data.model.new_statistic.PeriodType
 import com.bunbeauty.fooddelivery.data.table.CompanyStatisticTable
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.GetStatistic
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.PeriodType
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.UUID
+import java.util.*
 
 class CompanyStatisticEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 

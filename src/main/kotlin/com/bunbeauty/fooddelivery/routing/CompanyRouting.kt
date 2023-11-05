@@ -1,9 +1,9 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.COMPANY_UUID_PARAMETER
-import com.bunbeauty.fooddelivery.data.model.company.GetCompany
-import com.bunbeauty.fooddelivery.data.model.company.PatchCompany
-import com.bunbeauty.fooddelivery.data.model.company.PostCompany
+import com.bunbeauty.fooddelivery.domain.model.company.GetCompany
+import com.bunbeauty.fooddelivery.domain.model.company.PatchCompany
+import com.bunbeauty.fooddelivery.domain.model.company.PostCompany
 import com.bunbeauty.fooddelivery.routing.extension.adminWithBody
 import com.bunbeauty.fooddelivery.service.company.ICompanyService
 import io.ktor.server.application.*

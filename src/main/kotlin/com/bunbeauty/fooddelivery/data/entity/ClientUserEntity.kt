@@ -1,16 +1,16 @@
 package com.bunbeauty.fooddelivery.data.entity
 
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.data.model.client_user.GetCafeClientUser
-import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.data.table.AddressTable
 import com.bunbeauty.fooddelivery.data.table.ClientUserTable
 import com.bunbeauty.fooddelivery.data.table.OrderTable
+import com.bunbeauty.fooddelivery.domain.model.client_user.GetCafeClientUser
+import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientUser
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.SizedIterable
-import java.util.UUID
+import java.util.*
 
 class ClientUserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 

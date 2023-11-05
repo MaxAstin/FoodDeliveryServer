@@ -1,9 +1,9 @@
 package com.bunbeauty.fooddelivery.service.category
 
-import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.category.*
 import com.bunbeauty.fooddelivery.data.repo.category.ICategoryRepository
 import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
+import com.bunbeauty.fooddelivery.domain.model.category.*
+import com.bunbeauty.fooddelivery.domain.toUuid
 
 class CategoryService(
     private val categoryRepository: ICategoryRepository,

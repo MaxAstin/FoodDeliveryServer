@@ -1,13 +1,13 @@
 package com.bunbeauty.fooddelivery.service.address
 
-import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.address.GetAddress
-import com.bunbeauty.fooddelivery.data.model.address.InsertAddress
-import com.bunbeauty.fooddelivery.data.model.address.PostAddress
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.address.IAddressRepository
 import com.bunbeauty.fooddelivery.data.repo.city.ICityRepository
 import com.bunbeauty.fooddelivery.data.repo.street.IStreetRepository
+import com.bunbeauty.fooddelivery.domain.model.address.GetAddress
+import com.bunbeauty.fooddelivery.domain.model.address.InsertAddress
+import com.bunbeauty.fooddelivery.domain.model.address.PostAddress
+import com.bunbeauty.fooddelivery.domain.toUuid
 
 class AddressService(
     private val addressRepository: IAddressRepository,

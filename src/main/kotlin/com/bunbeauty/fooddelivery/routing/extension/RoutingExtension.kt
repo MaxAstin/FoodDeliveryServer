@@ -2,8 +2,8 @@ package com.bunbeauty.fooddelivery.routing.extension
 
 import com.bunbeauty.fooddelivery.auth.JwtUser
 import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
-import com.bunbeauty.fooddelivery.data.ext.toListWrapper
-import com.bunbeauty.fooddelivery.error.ExceptionWithCode
+import com.bunbeauty.fooddelivery.domain.error.ExceptionWithCode
+import com.bunbeauty.fooddelivery.domain.toListWrapper
 import com.bunbeauty.fooddelivery.routing.model.BodyRequest
 import com.bunbeauty.fooddelivery.routing.model.Request
 import io.ktor.http.*

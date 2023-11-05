@@ -4,11 +4,11 @@ import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.ClientSettingsEntity
 import com.bunbeauty.fooddelivery.data.entity.ClientUserEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.data.model.client_user.GetClientSettings
-import com.bunbeauty.fooddelivery.data.model.client_user.GetClientUser
-import com.bunbeauty.fooddelivery.data.model.client_user.InsertClientUser
-import com.bunbeauty.fooddelivery.data.model.client_user.UpdateClientUser
 import com.bunbeauty.fooddelivery.data.table.ClientUserTable
+import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientSettings
+import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientUser
+import com.bunbeauty.fooddelivery.domain.model.client_user.InsertClientUser
+import com.bunbeauty.fooddelivery.domain.model.client_user.UpdateClientUser
 import org.jetbrains.exposed.sql.and
 import java.util.*
 

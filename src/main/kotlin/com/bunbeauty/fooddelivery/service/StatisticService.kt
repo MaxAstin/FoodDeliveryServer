@@ -1,21 +1,21 @@
 package com.bunbeauty.fooddelivery.service
 
-import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.cafe.GetCafe
-import com.bunbeauty.fooddelivery.data.model.company.GetCompany
-import com.bunbeauty.fooddelivery.data.model.new_statistic.GetStatistic
-import com.bunbeauty.fooddelivery.data.model.new_statistic.PeriodType
-import com.bunbeauty.fooddelivery.data.model.new_statistic.UpdateStatistic
-import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertCafeStatistic
-import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertCompanyStatistic
-import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertStatisticProduct
-import com.bunbeauty.fooddelivery.data.model.statistic.GetStatisticOrder
 import com.bunbeauty.fooddelivery.data.repo.CafeRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICafeStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICompanyStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
+import com.bunbeauty.fooddelivery.domain.model.cafe.GetCafe
+import com.bunbeauty.fooddelivery.domain.model.company.GetCompany
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.GetStatistic
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.PeriodType
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.UpdateStatistic
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.insert.InsertCafeStatistic
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.insert.InsertCompanyStatistic
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.insert.InsertStatisticProduct
+import com.bunbeauty.fooddelivery.domain.model.statistic.GetStatisticOrder
+import com.bunbeauty.fooddelivery.domain.toUuid
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 

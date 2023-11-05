@@ -1,12 +1,12 @@
 package com.bunbeauty.fooddelivery.data.entity
 
-import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
-import com.bunbeauty.fooddelivery.data.model.statistic.GetStatisticOrderProduct
 import com.bunbeauty.fooddelivery.data.table.OrderProductTable
+import com.bunbeauty.fooddelivery.domain.model.order.GetOrderProduct
+import com.bunbeauty.fooddelivery.domain.model.statistic.GetStatisticOrderProduct
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.UUID
+import java.util.*
 
 class OrderProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 

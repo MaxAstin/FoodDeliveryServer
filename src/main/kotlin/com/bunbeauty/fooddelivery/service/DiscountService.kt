@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.service
 
-import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.company.GetDiscount
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
+import com.bunbeauty.fooddelivery.domain.model.company.discount.GetDiscount
+import com.bunbeauty.fooddelivery.domain.toUuid
 
 class DiscountService(private val companyRepository: CompanyRepository) {
 

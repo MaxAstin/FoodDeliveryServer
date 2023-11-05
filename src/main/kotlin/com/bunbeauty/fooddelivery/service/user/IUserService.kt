@@ -1,9 +1,9 @@
 package com.bunbeauty.fooddelivery.service.user
 
-import com.bunbeauty.fooddelivery.data.model.user.UserAuthResponse
-import com.bunbeauty.fooddelivery.data.model.user.GetUser
-import com.bunbeauty.fooddelivery.data.model.user.PostUserAuth
-import com.bunbeauty.fooddelivery.data.model.user.PostUser
+import com.bunbeauty.fooddelivery.domain.model.user.GetUser
+import com.bunbeauty.fooddelivery.domain.model.user.PostUser
+import com.bunbeauty.fooddelivery.domain.model.user.PostUserAuth
+import com.bunbeauty.fooddelivery.domain.model.user.UserAuthResponse
 
 interface IUserService {
 

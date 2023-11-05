@@ -1,12 +1,12 @@
 package com.bunbeauty.fooddelivery.data.entity
 
 import com.bunbeauty.fooddelivery.data.enums.UserRole
-import com.bunbeauty.fooddelivery.data.model.user.GetUser
 import com.bunbeauty.fooddelivery.data.table.UserTable
+import com.bunbeauty.fooddelivery.domain.model.user.GetUser
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.UUID
+import java.util.*
 
 class UserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 

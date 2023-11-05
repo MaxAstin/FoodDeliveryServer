@@ -1,11 +1,11 @@
 package com.bunbeauty.fooddelivery.data.entity
 
-import com.bunbeauty.fooddelivery.data.model.street.GetStreet
 import com.bunbeauty.fooddelivery.data.table.StreetTable
+import com.bunbeauty.fooddelivery.domain.model.street.GetStreet
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.UUID
+import java.util.*
 
 class StreetEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 

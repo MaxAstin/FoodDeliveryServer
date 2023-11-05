@@ -1,9 +1,9 @@
 package com.bunbeauty.fooddelivery.service.client_user
 
 import com.bunbeauty.fooddelivery.auth.IJwtService
-import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.client_user.*
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
+import com.bunbeauty.fooddelivery.domain.model.client_user.*
+import com.bunbeauty.fooddelivery.domain.toUuid
 import com.google.firebase.auth.FirebaseAuth
 
 class ClientUserService(

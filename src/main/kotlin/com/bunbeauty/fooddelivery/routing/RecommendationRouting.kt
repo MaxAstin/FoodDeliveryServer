@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants
-import com.bunbeauty.fooddelivery.data.model.recommendation.GetRecommendation
-import com.bunbeauty.fooddelivery.data.model.recommendation.PostRecommendation
+import com.bunbeauty.fooddelivery.domain.model.recommendation.GetRecommendation
+import com.bunbeauty.fooddelivery.domain.model.recommendation.PostRecommendation
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import com.bunbeauty.fooddelivery.routing.extension.respondOk

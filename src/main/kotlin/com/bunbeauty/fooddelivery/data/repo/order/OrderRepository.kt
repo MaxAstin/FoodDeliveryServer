@@ -3,19 +3,19 @@ package com.bunbeauty.fooddelivery.data.repo.order
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.*
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrder
-import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetails
-import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetailsV2
-import com.bunbeauty.fooddelivery.data.model.order.cafe.GetStatisticOrder
-import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrder
-import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderUpdate
-import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
-import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrder
-import com.bunbeauty.fooddelivery.data.model.order.client.insert.InsertOrderV2
 import com.bunbeauty.fooddelivery.data.table.OrderTable
+import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetCafeOrder
+import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetCafeOrderDetails
+import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetCafeOrderDetailsV2
+import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetStatisticOrder
+import com.bunbeauty.fooddelivery.domain.model.order.client.get.GetClientOrder
+import com.bunbeauty.fooddelivery.domain.model.order.client.get.GetClientOrderUpdate
+import com.bunbeauty.fooddelivery.domain.model.order.client.get.GetClientOrderV2
+import com.bunbeauty.fooddelivery.domain.model.order.client.insert.InsertOrder
+import com.bunbeauty.fooddelivery.domain.model.order.client.insert.InsertOrderV2
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
-import java.util.UUID
+import java.util.*
 
 class OrderRepository : IOrderRepository {
 

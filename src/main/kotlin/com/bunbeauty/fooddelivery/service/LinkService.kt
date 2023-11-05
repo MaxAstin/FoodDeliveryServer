@@ -1,10 +1,8 @@
 package com.bunbeauty.fooddelivery.service
 
-import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.company.link.GetLink
-import com.bunbeauty.fooddelivery.data.model.company.payment_method.GetPaymentMethod
 import com.bunbeauty.fooddelivery.data.repo.LinkRepository
-import com.bunbeauty.fooddelivery.data.repo.payment_method.IPaymentMethodRepository
+import com.bunbeauty.fooddelivery.domain.model.company.link.GetLink
+import com.bunbeauty.fooddelivery.domain.toUuid
 
 class LinkService(
     private val linkRepository: LinkRepository

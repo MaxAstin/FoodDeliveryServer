@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.service.delivery
 
-import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.delivery.GetDelivery
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
+import com.bunbeauty.fooddelivery.domain.model.company.delivery.GetDelivery
+import com.bunbeauty.fooddelivery.domain.toUuid
 
 class DeliveryService(private val companyRepository: CompanyRepository) : IDeliveryService {
 

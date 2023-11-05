@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.data.entity
 
-import com.bunbeauty.fooddelivery.data.model.recommendation.GetRecommendation
 import com.bunbeauty.fooddelivery.data.table.RecommendationTable
+import com.bunbeauty.fooddelivery.domain.model.recommendation.GetRecommendation
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

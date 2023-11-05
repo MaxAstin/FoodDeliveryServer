@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.service
 
-import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.cafe.*
 import com.bunbeauty.fooddelivery.data.repo.CafeRepository
+import com.bunbeauty.fooddelivery.domain.model.cafe.*
+import com.bunbeauty.fooddelivery.domain.toUuid
 
 class CafeService(private val cafeRepository: CafeRepository) {
 

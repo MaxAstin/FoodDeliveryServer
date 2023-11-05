@@ -4,8 +4,8 @@ import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.ClientAuthSessionEntity
 import com.bunbeauty.fooddelivery.data.entity.TestClientUserPhoneEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.data.model.client_user.login.*
 import com.bunbeauty.fooddelivery.data.table.TestClientUserPhoneTable
+import com.bunbeauty.fooddelivery.domain.model.client_user.login.*
 import java.util.*
 
 class AuthorizationRepository {

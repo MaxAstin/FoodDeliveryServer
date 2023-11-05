@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.service.category
 
-import com.bunbeauty.fooddelivery.data.model.category.GetCategory
-import com.bunbeauty.fooddelivery.data.model.category.PatchCategory
-import com.bunbeauty.fooddelivery.data.model.category.PostCategory
+import com.bunbeauty.fooddelivery.domain.model.category.GetCategory
+import com.bunbeauty.fooddelivery.domain.model.category.PatchCategory
+import com.bunbeauty.fooddelivery.domain.model.category.PostCategory
 
 interface ICategoryService {
 

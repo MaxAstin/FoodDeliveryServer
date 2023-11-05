@@ -2,15 +2,15 @@ package com.bunbeauty.fooddelivery.data.entity
 
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
-import com.bunbeauty.fooddelivery.data.model.order.GetOrderAddress
-import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrder
-import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetails
-import com.bunbeauty.fooddelivery.data.model.order.cafe.GetCafeOrderDetailsV2
-import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrder
-import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
-import com.bunbeauty.fooddelivery.data.model.statistic.GetStatisticOrder
 import com.bunbeauty.fooddelivery.data.table.OrderProductTable
 import com.bunbeauty.fooddelivery.data.table.OrderTable
+import com.bunbeauty.fooddelivery.domain.model.order.GetOrderAddress
+import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetCafeOrder
+import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetCafeOrderDetails
+import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetCafeOrderDetailsV2
+import com.bunbeauty.fooddelivery.domain.model.order.client.get.GetClientOrder
+import com.bunbeauty.fooddelivery.domain.model.order.client.get.GetClientOrderV2
+import com.bunbeauty.fooddelivery.domain.model.statistic.GetStatisticOrder
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

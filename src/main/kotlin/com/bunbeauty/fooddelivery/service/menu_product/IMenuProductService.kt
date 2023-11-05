@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.service.menu_product
 
-import com.bunbeauty.fooddelivery.data.model.menu_product.GetMenuProduct
-import com.bunbeauty.fooddelivery.data.model.menu_product.PatchMenuProduct
-import com.bunbeauty.fooddelivery.data.model.menu_product.PostMenuProduct
+import com.bunbeauty.fooddelivery.domain.model.menu_product.GetMenuProduct
+import com.bunbeauty.fooddelivery.domain.model.menu_product.PatchMenuProduct
+import com.bunbeauty.fooddelivery.domain.model.menu_product.PostMenuProduct
 
 interface IMenuProductService {
 

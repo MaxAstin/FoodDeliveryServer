@@ -1,11 +1,11 @@
 package com.bunbeauty.fooddelivery.data.entity
 
-import com.bunbeauty.fooddelivery.data.model.address.GetAddress
 import com.bunbeauty.fooddelivery.data.table.AddressTable
+import com.bunbeauty.fooddelivery.domain.model.address.GetAddress
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.UUID
+import java.util.*
 
 class AddressEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 

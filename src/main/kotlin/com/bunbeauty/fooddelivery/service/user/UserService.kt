@@ -3,13 +3,9 @@ package com.bunbeauty.fooddelivery.service.user
 import at.favre.lib.crypto.bcrypt.BCrypt.MIN_COST
 import com.bunbeauty.fooddelivery.auth.IJwtService
 import com.bunbeauty.fooddelivery.data.enums.UserRole
-import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.user.UserAuthResponse
-import com.bunbeauty.fooddelivery.data.model.user.GetUser
-import com.bunbeauty.fooddelivery.data.model.user.InsertUser
-import com.bunbeauty.fooddelivery.data.model.user.PostUserAuth
-import com.bunbeauty.fooddelivery.data.model.user.PostUser
 import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
+import com.bunbeauty.fooddelivery.domain.model.user.*
+import com.bunbeauty.fooddelivery.domain.toUuid
 import com.toxicbakery.bcrypt.Bcrypt
 import com.toxicbakery.bcrypt.Bcrypt.verify
 
