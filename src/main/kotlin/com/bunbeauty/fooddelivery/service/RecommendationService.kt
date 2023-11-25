@@ -20,7 +20,11 @@ class RecommendationService(
         val company = companyRepository.getCompanyByUuid(companyUuid.toUuid()).orThrowNotFoundByUuidError(companyUuid)
         val menuProductList = menuProductRepository.getMenuProductListByCompanyUuid(companyUuid.toUuid())
         val recommendationList = menuProductList.mapNotNull { menuProduct ->
-            recommendationRepository.getRecommendationByMenuProductUuid(menuProduct.uuid.toUuid())
+            recommendationRepository.getRecommendationByMenuProductUuid(
+                menuProductUuid = menuProduct.uuid.toUuid()
+            )?.let { recommendation ->
+                recommendation.copy(isVisible = recommendation.isVisible && menuProduct.isVisible)
+            }
         }
         return GetRecommendationData(
             maxVisibleCount = company.maxVisibleRecommendationCount,
