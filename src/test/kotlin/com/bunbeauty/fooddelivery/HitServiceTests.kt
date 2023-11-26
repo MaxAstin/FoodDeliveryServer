@@ -143,6 +143,7 @@ class HitServiceTests {
                 photoLink = "",
                 barcode = 0,
                 categories = mutableListOf(),
+                isRecommended = false,
                 isVisible = true,
             ),
             orderUuid = "",

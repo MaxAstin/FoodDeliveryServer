@@ -15,6 +15,7 @@ class GetMenuProduct(
     val comboDescription: String?,
     val photoLink: String,
     val barcode: Int,
+    val isRecommended: Boolean,
     val categories: MutableList<GetCategory>,
     val isVisible: Boolean,
 )

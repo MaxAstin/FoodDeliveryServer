@@ -22,6 +22,7 @@ class MenuProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var comboDescription: String? by MenuProductTable.comboDescription
     var photoLink: String by MenuProductTable.photoLink
     var barcode: Int by MenuProductTable.barcode
+    var isRecommended: Boolean by MenuProductTable.isRecommended
     var isVisible: Boolean by MenuProductTable.isVisible
     var company: CompanyEntity by CompanyEntity referencedOn MenuProductTable.company
     var categories: SizedIterable<CategoryEntity> by CategoryEntity via MenuProductCategoryTable
@@ -39,6 +40,7 @@ class MenuProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         comboDescription = comboDescription,
         photoLink = photoLink,
         barcode = barcode,
+        isRecommended = isRecommended,
         categories = categories.map { categoryEntity ->
             categoryEntity.toCategory()
         }.toMutableList(),

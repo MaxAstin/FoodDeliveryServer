@@ -13,6 +13,7 @@ object MenuProductTable : UUIDTable() {
     val comboDescription = varchar("comboDescription", 512).nullable()
     val photoLink = varchar("photoLink", 512)
     val barcode = integer("barcode")
+    val isRecommended = bool("isRecommended").default(false)
     val isVisible = bool("isVisible")
 
     val company = reference("company", CompanyTable)
