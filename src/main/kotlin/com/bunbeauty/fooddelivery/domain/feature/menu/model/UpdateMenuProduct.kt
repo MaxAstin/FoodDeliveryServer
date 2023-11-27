@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.domain.model.menu_product
+package com.bunbeauty.fooddelivery.domain.feature.menu.model
 
 import java.util.*
 

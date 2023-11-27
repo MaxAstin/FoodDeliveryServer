@@ -1,12 +1,11 @@
 package com.bunbeauty.fooddelivery.di
 
-import com.bunbeauty.fooddelivery.data.repo.menu_product.MenuProductRepository
-import com.bunbeauty.fooddelivery.service.menu_product.IMenuProductService
-import com.bunbeauty.fooddelivery.service.menu_product.MenuProductService
+import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
+import com.bunbeauty.fooddelivery.domain.feature.menu.service.MenuProductService
 import org.koin.dsl.module
 
 val menuProductModule = module(createdAtStart = true) {
-    factory<IMenuProductService> {
+    factory {
         MenuProductService(
             menuProductRepository = get(),
             userRepository = get(),

@@ -2,14 +2,14 @@ package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.COMPANY_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
-import com.bunbeauty.fooddelivery.domain.model.menu_product.GetMenuProduct
-import com.bunbeauty.fooddelivery.domain.model.menu_product.PatchMenuProduct
-import com.bunbeauty.fooddelivery.domain.model.menu_product.PostMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.GetMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.PatchMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.PostMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.service.MenuProductService
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import com.bunbeauty.fooddelivery.routing.extension.respondOk
 import com.bunbeauty.fooddelivery.routing.extension.safely
-import com.bunbeauty.fooddelivery.service.menu_product.IMenuProductService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
@@ -28,7 +28,7 @@ fun Application.configureMenuProductRouting() {
 
 private fun Routing.getAllMenuProducts() {
 
-    val menuProductService: IMenuProductService by inject()
+    val menuProductService: MenuProductService by inject()
 
     get("/menu_product") {
         safely {
@@ -41,7 +41,7 @@ private fun Routing.getAllMenuProducts() {
 
 private fun Route.postMenuProduct() {
 
-    val menuProductService: IMenuProductService by inject()
+    val menuProductService: MenuProductService by inject()
 
     post("/menu_product") {
         managerWithBody<PostMenuProduct, GetMenuProduct> { bodyRequest ->
@@ -52,11 +52,11 @@ private fun Route.postMenuProduct() {
 
 private fun Route.patchMenuProduct() {
 
-    val menuProductService: IMenuProductService by inject()
+    val menuProductService: MenuProductService by inject()
 
     patch("/menu_product") {
         managerWithBody<PatchMenuProduct, GetMenuProduct> { bodyRequest ->
-            val menuProductUuid = call.parameters[UUID_PARAMETER] ?: error("$UUID_PARAMETER is required")
+            val menuProductUuid = call.getParameter(UUID_PARAMETER)
             menuProductService.updateMenuProduct(menuProductUuid, bodyRequest.body)
         }
     }

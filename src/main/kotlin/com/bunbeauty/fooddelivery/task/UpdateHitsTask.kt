@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.task
 
-import com.bunbeauty.fooddelivery.service.hit.IHitService
+import com.bunbeauty.fooddelivery.domain.feature.menu.service.HitService
 import io.ktor.server.application.*
 import kotlinx.coroutines.launch
 import org.koin.ktor.ext.inject
@@ -10,7 +10,7 @@ import kotlin.concurrent.scheduleAtFixedRate
 
 fun Application.scheduleUpdateHitsTask() {
 
-    val hitService: IHitService by inject()
+    val hitService: HitService by inject()
 
     Timer("Update hits").scheduleAtFixedRate(
         delay = 5_000L,

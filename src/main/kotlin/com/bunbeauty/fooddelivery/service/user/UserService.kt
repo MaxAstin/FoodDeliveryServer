@@ -3,13 +3,16 @@ package com.bunbeauty.fooddelivery.service.user
 import at.favre.lib.crypto.bcrypt.BCrypt.MIN_COST
 import com.bunbeauty.fooddelivery.auth.IJwtService
 import com.bunbeauty.fooddelivery.data.enums.UserRole
-import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
+import com.bunbeauty.fooddelivery.data.repo.UserRepository
 import com.bunbeauty.fooddelivery.domain.model.user.*
 import com.bunbeauty.fooddelivery.domain.toUuid
 import com.toxicbakery.bcrypt.Bcrypt
 import com.toxicbakery.bcrypt.Bcrypt.verify
 
-class UserService(private val userRepository: IUserRepository, private val jwtService: IJwtService) : IUserService {
+class UserService(
+    private val userRepository: UserRepository,
+    private val jwtService: IJwtService,
+) : IUserService {
 
     override suspend fun createUser(postUser: PostUser): GetUser {
         val passwordHash = String(Bcrypt.hash(postUser.password, MIN_COST))
@@ -33,9 +36,11 @@ class UserService(private val userRepository: IUserRepository, private val jwtSe
                     companyUuid = user.company.uuid
                 )
             } else {
-                println("Incorrect password ${postUserAuth.password} " +
-                        "password hash [${String(Bcrypt.hash(postUserAuth.password, MIN_COST))}] " +
-                        "actual hash [${user.passwordHash}]")
+                println(
+                    "Incorrect password ${postUserAuth.password} " +
+                            "password hash [${String(Bcrypt.hash(postUserAuth.password, MIN_COST))}] " +
+                            "actual hash [${user.passwordHash}]"
+                )
                 null
             }
         }

@@ -1,9 +1,11 @@
-package com.bunbeauty.fooddelivery.domain.model.menu_product
+package com.bunbeauty.fooddelivery.domain.feature.menu.model
 
+import com.bunbeauty.fooddelivery.domain.model.category.GetCategory
 import kotlinx.serialization.Serializable
 
 @Serializable
-class PostMenuProduct(
+class GetMenuProduct(
+    val uuid: String,
     val name: String,
     val newPrice: Int,
     val oldPrice: Int?,
@@ -13,6 +15,7 @@ class PostMenuProduct(
     val comboDescription: String?,
     val photoLink: String,
     val barcode: Int,
-    val categoryUuids: List<String>,
+    val isRecommended: Boolean,
+    val categories: List<GetCategory>,
     val isVisible: Boolean,
 )

@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.service
 
-import com.bunbeauty.fooddelivery.data.repo.user.IUserRepository
+import com.bunbeauty.fooddelivery.data.repo.UserRepository
 import com.bunbeauty.fooddelivery.domain.model.notification.PostNotification
 import com.bunbeauty.fooddelivery.domain.toUuid
 import com.google.firebase.messaging.FirebaseMessaging
@@ -10,7 +10,7 @@ import com.google.firebase.messaging.Notification
 private const val NEWS_NOTIFICATION_PREFIX = "NEWS_"
 
 class NotificationService(
-    private val userRepository: IUserRepository,
+    private val userRepository: UserRepository,
     private val firebaseMessaging: FirebaseMessaging,
 ) {
 

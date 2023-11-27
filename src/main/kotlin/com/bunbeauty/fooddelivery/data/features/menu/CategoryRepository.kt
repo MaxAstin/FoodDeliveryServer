@@ -1,42 +1,42 @@
-package com.bunbeauty.fooddelivery.data.repo.category
+package com.bunbeauty.fooddelivery.data.features.menu
 
 import com.bunbeauty.fooddelivery.data.Constants.HITS_CATEGORY_NAME
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.CategoryEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
+import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapCategoryEntity
 import com.bunbeauty.fooddelivery.data.table.CategoryTable
-import com.bunbeauty.fooddelivery.domain.model.category.GetCategory
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.Category
 import com.bunbeauty.fooddelivery.domain.model.category.InsertCategory
 import com.bunbeauty.fooddelivery.domain.model.category.UpdateCategory
 import java.util.*
 
-class CategoryRepository : ICategoryRepository {
+class CategoryRepository {
 
-    override suspend fun insertCategory(category: InsertCategory): GetCategory = query {
+    suspend fun insertCategory(category: InsertCategory): Category = query {
         CategoryEntity.new {
             name = category.name
             priority = category.priority
             company = CompanyEntity[category.companyUuid]
-        }.toCategory()
+        }.mapCategoryEntity()
     }
 
-    override suspend fun updateCategory(categoryUuid: UUID, category: UpdateCategory): GetCategory? = query {
+    suspend fun updateCategory(categoryUuid: UUID, category: UpdateCategory): Category? = query {
         CategoryEntity.findById(categoryUuid)?.apply {
             name = category.name ?: name
             priority = category.priority ?: priority
-        }?.toCategory()
+        }?.mapCategoryEntity()
     }
 
-    override suspend fun getCategoryListByCompanyUuid(companyUuid: UUID): List<GetCategory> = query {
+    suspend fun getCategoryListByCompanyUuid(companyUuid: UUID): List<Category> = query {
         CategoryEntity.find {
             CategoryTable.company eq companyUuid
-        }.map { categoryEntity ->
-            categoryEntity.toCategory()
-        }.toList()
+        }.map(mapCategoryEntity)
+            .toList()
     }
 
-    override fun getHitsCategory(): GetCategory {
-        return GetCategory(
+    fun getHitsCategory(): Category {
+        return Category(
             uuid = "",
             name = HITS_CATEGORY_NAME,
             priority = 1

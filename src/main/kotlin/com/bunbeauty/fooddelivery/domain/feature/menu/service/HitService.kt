@@ -1,11 +1,11 @@
-package com.bunbeauty.fooddelivery.service.hit
+package com.bunbeauty.fooddelivery.domain.feature.menu.service
 
 import com.bunbeauty.fooddelivery.data.Constants
 import com.bunbeauty.fooddelivery.data.Constants.HITS_COUNT
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
+import com.bunbeauty.fooddelivery.data.features.menu.HitRepository
+import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
-import com.bunbeauty.fooddelivery.data.repo.hit.IHitRepository
-import com.bunbeauty.fooddelivery.data.repo.menu_product.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.domain.model.order.client.get.GetClientOrderV2
 import com.bunbeauty.fooddelivery.domain.toUuid
@@ -17,10 +17,10 @@ class HitService(
     private val companyRepository: CompanyRepository,
     private val menuProductRepository: MenuProductRepository,
     private val orderRepository: IOrderRepository,
-    private val hitRepository: IHitRepository,
-) : IHitService {
+    private val hitRepository: HitRepository,
+) {
 
-    override suspend fun updateHits() = coroutineScope {
+    suspend fun updateHits() = coroutineScope {
         val monthBeforeMillis = DateTime.now()
             .withTimeAtStartOfDay()
             .minusDays(Constants.HITS_ORDER_DAY_COUNT)

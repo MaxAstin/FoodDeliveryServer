@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.service
 
+import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.data.repo.RecommendationRepository
-import com.bunbeauty.fooddelivery.data.repo.menu_product.MenuProductRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.model.recommendation.GetRecommendation
 import com.bunbeauty.fooddelivery.domain.model.recommendation.GetRecommendationData

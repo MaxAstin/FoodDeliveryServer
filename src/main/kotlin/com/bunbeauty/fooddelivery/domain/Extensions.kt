@@ -8,3 +8,7 @@ fun <T : Any> List<T>.toListWrapper(): ListWrapper<T> {
 }
 
 fun String.toUuid(): UUID = UUID.fromString(this)
+
+val mapUuid: String.() -> UUID = {
+    UUID.fromString(this)
+}

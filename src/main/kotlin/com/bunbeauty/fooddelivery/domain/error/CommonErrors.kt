@@ -17,6 +17,10 @@ fun notFoundByUuidError(entity: KClass<*>, uuid: String): Nothing {
     error("${entity.simpleName} with uuid = $uuid was not found")
 }
 
+fun notFoundByUserUuidError(entity: KClass<*>, userUuid: String): Nothing {
+    error("${entity.simpleName} with userUuid = $userUuid was not found")
+}
+
 fun parameterIsRequiredError(parameterName: String): Nothing {
     error("Parameter $parameterName is required")
 }

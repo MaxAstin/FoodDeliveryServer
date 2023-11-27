@@ -1,19 +1,20 @@
-package com.bunbeauty.fooddelivery.data.repo.menu_product
+package com.bunbeauty.fooddelivery.data.features.menu
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.CategoryEntity
 import com.bunbeauty.fooddelivery.data.entity.MenuProductEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
+import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapMenuProductEntity
 import com.bunbeauty.fooddelivery.data.table.MenuProductTable
-import com.bunbeauty.fooddelivery.domain.model.menu_product.GetMenuProduct
-import com.bunbeauty.fooddelivery.domain.model.menu_product.InsertMenuProduct
-import com.bunbeauty.fooddelivery.domain.model.menu_product.UpdateMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.InsertMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.MenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.UpdateMenuProduct
 import org.jetbrains.exposed.sql.SizedCollection
 import java.util.*
 
 class MenuProductRepository {
 
-    suspend fun insertMenuProduct(insertMenuProduct: InsertMenuProduct): GetMenuProduct = query {
+    suspend fun insertMenuProduct(insertMenuProduct: InsertMenuProduct): MenuProduct = query {
         MenuProductEntity.new {
             name = insertMenuProduct.name
             newPrice = insertMenuProduct.newPrice
@@ -29,13 +30,13 @@ class MenuProductRepository {
             categories = SizedCollection(insertMenuProduct.categoryUuids.map { categoryUuid ->
                 CategoryEntity[categoryUuid]
             })
-        }.toMenuProduct()
+        }.mapMenuProductEntity()
     }
 
     suspend fun updateMenuProduct(
         menuProductUuid: UUID,
         updateMenuProduct: UpdateMenuProduct,
-    ): GetMenuProduct? = query {
+    ): MenuProduct? = query {
         MenuProductEntity.findById(menuProductUuid)?.apply {
             name = updateMenuProduct.name ?: name
             newPrice = updateMenuProduct.newPrice ?: newPrice
@@ -60,18 +61,17 @@ class MenuProductRepository {
                     CategoryEntity[categoryUuid]
                 })
             }
-        }?.toMenuProduct()
+        }?.mapMenuProductEntity()
     }
 
-    suspend fun getMenuProductListByCompanyUuid(companyUuid: UUID): List<GetMenuProduct> = query {
+    suspend fun getMenuProductListByCompanyUuid(companyUuid: UUID): List<MenuProduct> = query {
         MenuProductEntity.find {
             MenuProductTable.company eq companyUuid
-        }.map { menuProductEntity ->
-            menuProductEntity.toMenuProduct()
-        }.toList()
+        }.map(mapMenuProductEntity)
+            .toList()
     }
 
-    suspend fun getMenuProductByUuid(uuid: UUID): GetMenuProduct? = query {
-        MenuProductEntity.findById(uuid)?.toMenuProduct()
+    suspend fun getMenuProductByUuid(uuid: UUID): MenuProduct? = query {
+        MenuProductEntity.findById(uuid)?.mapMenuProductEntity()
     }
 }
