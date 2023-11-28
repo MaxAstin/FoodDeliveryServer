@@ -6,7 +6,7 @@ import com.bunbeauty.fooddelivery.domain.model.user.PostUserAuth
 import com.bunbeauty.fooddelivery.domain.model.user.UserAuthResponse
 import com.bunbeauty.fooddelivery.routing.extension.adminWithBody
 import com.bunbeauty.fooddelivery.routing.extension.withBody
-import com.bunbeauty.fooddelivery.service.user.IUserService
+import com.bunbeauty.fooddelivery.service.user.UserService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
@@ -25,7 +25,7 @@ fun Application.configureUserRouting() {
 
 private fun Routing.userLogin() {
 
-    val userService: IUserService by inject()
+    val userService: UserService by inject()
 
     post("/user/login") {
         withBody<PostUserAuth, UserAuthResponse>(errorMessage = "Unable to log in with provided credentials") { body ->
@@ -36,7 +36,7 @@ private fun Routing.userLogin() {
 
 private fun Route.createUser() {
 
-    val userService: IUserService by inject()
+    val userService: UserService by inject()
 
     post("/user") {
         adminWithBody<PostUser, GetUser> { bodyRequest ->
