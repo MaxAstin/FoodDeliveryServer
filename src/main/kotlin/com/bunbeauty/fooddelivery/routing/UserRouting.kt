@@ -6,7 +6,7 @@ import com.bunbeauty.fooddelivery.domain.model.user.PostUserAuth
 import com.bunbeauty.fooddelivery.domain.model.user.UserAuthResponse
 import com.bunbeauty.fooddelivery.routing.extension.adminWithBody
 import com.bunbeauty.fooddelivery.routing.extension.withBody
-import com.bunbeauty.fooddelivery.service.user.UserService
+import com.bunbeauty.fooddelivery.service.UserService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*

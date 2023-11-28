@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.service.user
+package com.bunbeauty.fooddelivery.service
 
 import at.favre.lib.crypto.bcrypt.BCrypt.MIN_COST
 import com.bunbeauty.fooddelivery.auth.IJwtService
@@ -12,9 +12,9 @@ import com.toxicbakery.bcrypt.Bcrypt.verify
 class UserService(
     private val userRepository: UserRepository,
     private val jwtService: IJwtService,
-) : IUserService {
+) {
 
-    override suspend fun createUser(postUser: PostUser): GetUser {
+    suspend fun createUser(postUser: PostUser): GetUser {
         val passwordHash = String(Bcrypt.hash(postUser.password, MIN_COST))
         val insertUser = InsertUser(
             username = postUser.username.lowercase(),
@@ -26,7 +26,7 @@ class UserService(
         return userRepository.insertUser(insertUser)
     }
 
-    override suspend fun login(postUserAuth: PostUserAuth): UserAuthResponse? {
+    suspend fun login(postUserAuth: PostUserAuth): UserAuthResponse? {
         return userRepository.getUserByUsername(postUserAuth.username.lowercase())?.let { user ->
             if (verify(postUserAuth.password, user.passwordHash.toByteArray())) {
                 val token = jwtService.generateToken(user)
