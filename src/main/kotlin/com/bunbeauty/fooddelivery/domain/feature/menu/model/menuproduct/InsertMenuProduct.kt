@@ -1,7 +1,8 @@
-package com.bunbeauty.fooddelivery.domain.feature.menu.model
+package com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct
 
-data class MenuProduct(
-    val uuid: String,
+import java.util.*
+
+class InsertMenuProduct(
     val name: String,
     val newPrice: Int,
     val oldPrice: Int?,
@@ -11,7 +12,7 @@ data class MenuProduct(
     val comboDescription: String?,
     val photoLink: String,
     val barcode: Int,
-    val isRecommended: Boolean,
-    val categories: List<Category>,
+    val companyUuid: UUID,
+    val categoryUuids: List<UUID>,
     val isVisible: Boolean,
 )

@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.domain.feature.menu.model
+package com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct
 
 import kotlinx.serialization.Serializable
 

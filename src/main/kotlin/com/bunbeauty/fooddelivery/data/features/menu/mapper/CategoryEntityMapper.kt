@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.data.features.menu.mapper
 
-import com.bunbeauty.fooddelivery.data.entity.CategoryEntity
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.Category
+import com.bunbeauty.fooddelivery.data.entity.menu.CategoryEntity
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.category.Category
 
 val mapCategoryEntity: CategoryEntity.() -> Category = {
     Category(

@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.domain.feature.menu.mapper
 
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.InsertMenuProduct
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.PostMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.InsertMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.PostMenuProduct
 import com.bunbeauty.fooddelivery.domain.mapUuid
 import java.util.*
 

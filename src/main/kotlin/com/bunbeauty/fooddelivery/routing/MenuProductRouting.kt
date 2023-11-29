@@ -2,9 +2,9 @@ package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.COMPANY_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.GetMenuProduct
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.PatchMenuProduct
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.PostMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.PatchMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.PostMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.service.MenuProductService
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody

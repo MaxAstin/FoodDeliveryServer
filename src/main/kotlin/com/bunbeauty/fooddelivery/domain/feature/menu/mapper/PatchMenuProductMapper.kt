@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.domain.feature.menu.mapper
 
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.PatchMenuProduct
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.UpdateMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.PatchMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.UpdateMenuProduct
 import com.bunbeauty.fooddelivery.domain.mapUuid
 
 val mapPatchMenuProduct: PatchMenuProduct.() -> UpdateMenuProduct = {

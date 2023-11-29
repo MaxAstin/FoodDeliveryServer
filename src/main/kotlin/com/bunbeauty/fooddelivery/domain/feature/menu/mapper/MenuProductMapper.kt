@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.domain.feature.menu.mapper
 
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.GetMenuProduct
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.MenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProduct
 
 val mapMenuProduct: MenuProduct.() -> GetMenuProduct = {
     GetMenuProduct(
@@ -16,7 +16,8 @@ val mapMenuProduct: MenuProduct.() -> GetMenuProduct = {
         photoLink = photoLink,
         barcode = barcode,
         isRecommended = isRecommended,
-        categories = categories.map(mapCategory),
         isVisible = isVisible,
+        categories = categories.map(mapCategory),
+        additionGroups = additionGroups.map(mapAdditionGroup),
     )
 }

@@ -8,9 +8,9 @@ import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUserUuidError
 import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPatchMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPostMenuProduct
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.GetMenuProduct
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.PatchMenuProduct
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.PostMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.PatchMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.PostMenuProduct
 import com.bunbeauty.fooddelivery.domain.toUuid
 
 class MenuProductService(

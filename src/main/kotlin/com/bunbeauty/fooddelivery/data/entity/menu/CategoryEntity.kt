@@ -1,8 +1,8 @@
-package com.bunbeauty.fooddelivery.data.entity
+package com.bunbeauty.fooddelivery.data.entity.menu
 
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.data.table.CategoryTable
-import com.bunbeauty.fooddelivery.domain.model.category.GetCategory
+import com.bunbeauty.fooddelivery.data.table.menu.CategoryTable
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.category.GetCategory
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

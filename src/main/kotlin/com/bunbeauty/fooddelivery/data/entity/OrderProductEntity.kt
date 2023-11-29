@@ -1,5 +1,6 @@
 package com.bunbeauty.fooddelivery.data.entity
 
+import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductEntity
 import com.bunbeauty.fooddelivery.data.table.OrderProductTable
 import com.bunbeauty.fooddelivery.domain.model.order.GetOrderProduct
 import com.bunbeauty.fooddelivery.domain.model.statistic.GetStatisticOrderProduct

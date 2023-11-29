@@ -7,6 +7,7 @@ import com.bunbeauty.fooddelivery.data.Constants.JDBC_DRIVER
 import com.bunbeauty.fooddelivery.data.Constants.JDBC_POSTGRESQL_PREFIX
 import com.bunbeauty.fooddelivery.data.Constants.POSTGRES_PREFIX
 import com.bunbeauty.fooddelivery.data.table.*
+import com.bunbeauty.fooddelivery.data.table.menu.*
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers.IO
@@ -90,6 +91,12 @@ object DatabaseFactory {
 
             SchemaUtils.create(NonWorkingDayTable)
             SchemaUtils.createMissingTablesAndColumns(NonWorkingDayTable)
+
+            SchemaUtils.create(AdditionGroupTable)
+            SchemaUtils.createMissingTablesAndColumns(AdditionGroupTable)
+
+            SchemaUtils.create(AdditionTable)
+            SchemaUtils.createMissingTablesAndColumns(AdditionTable)
         }
     }
 

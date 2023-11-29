@@ -5,7 +5,7 @@ import com.bunbeauty.fooddelivery.data.features.menu.HitRepository
 import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.GetMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.service.HitService
 import com.bunbeauty.fooddelivery.domain.model.order.GetOrderAddress
 import com.bunbeauty.fooddelivery.domain.model.order.GetOrderProduct
@@ -142,9 +142,10 @@ class HitServiceTests {
                 comboDescription = "",
                 photoLink = "",
                 barcode = 0,
-                categories = mutableListOf(),
                 isRecommended = false,
                 isVisible = true,
+                categories = listOf(),
+                additionGroups = listOf(),
             ),
             orderUuid = "",
         )

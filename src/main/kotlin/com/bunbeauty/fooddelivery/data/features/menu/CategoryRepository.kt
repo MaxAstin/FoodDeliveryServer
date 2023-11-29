@@ -2,13 +2,13 @@ package com.bunbeauty.fooddelivery.data.features.menu
 
 import com.bunbeauty.fooddelivery.data.Constants.HITS_CATEGORY_NAME
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.CategoryEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
+import com.bunbeauty.fooddelivery.data.entity.menu.CategoryEntity
 import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapCategoryEntity
-import com.bunbeauty.fooddelivery.data.table.CategoryTable
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.Category
-import com.bunbeauty.fooddelivery.domain.model.category.InsertCategory
-import com.bunbeauty.fooddelivery.domain.model.category.UpdateCategory
+import com.bunbeauty.fooddelivery.data.table.menu.CategoryTable
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.category.Category
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.category.InsertCategory
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.category.UpdateCategory
 import java.util.*
 
 class CategoryRepository {

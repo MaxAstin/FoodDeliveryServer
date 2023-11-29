@@ -1,14 +1,14 @@
 package com.bunbeauty.fooddelivery.data.features.menu
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.CategoryEntity
-import com.bunbeauty.fooddelivery.data.entity.MenuProductEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
+import com.bunbeauty.fooddelivery.data.entity.menu.CategoryEntity
+import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductEntity
 import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapMenuProductEntity
-import com.bunbeauty.fooddelivery.data.table.MenuProductTable
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.InsertMenuProduct
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.MenuProduct
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.UpdateMenuProduct
+import com.bunbeauty.fooddelivery.data.table.menu.MenuProductTable
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.InsertMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.UpdateMenuProduct
 import org.jetbrains.exposed.sql.SizedCollection
 import java.util.*
 

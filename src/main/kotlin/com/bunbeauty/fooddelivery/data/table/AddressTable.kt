@@ -9,8 +9,9 @@ object AddressTable : UUIDTable() {
     val entrance = varchar("entrance", 512).nullable()
     val floor = varchar("floor", 512).nullable()
     val comment = varchar("comment", 512).nullable()
+    val isVisible = bool("isVisible")
+
     val street = reference("street", StreetTable)
     val clientUser = reference("clientUser", ClientUserTable)
-    val isVisible = bool("isVisible")
 
 }

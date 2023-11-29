@@ -1,5 +1,6 @@
-package com.bunbeauty.fooddelivery.data.table
+package com.bunbeauty.fooddelivery.data.table.menu
 
+import com.bunbeauty.fooddelivery.data.table.CompanyTable
 import org.jetbrains.exposed.dao.id.UUIDTable
 
 object MenuProductTable : UUIDTable() {
