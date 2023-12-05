@@ -49,6 +49,10 @@ class OrderService(
     private val clientSessionHandlerV2: SessionHandler<GetClientOrderUpdate> = SessionHandler()
 
     override suspend fun createOrder(clientUserUuid: String, postOrder: PostOrder): GetClientOrder? {
+        if (postOrder.orderProducts.isEmpty()) {
+            return null
+        }
+
         val currentMillis = DateTime.now().millis
         val cafeUuid = if (postOrder.isDelivery) {
             val addressUuid = postOrder.addressUuid?.toUuid()
@@ -102,7 +106,10 @@ class OrderService(
     }
 
     override suspend fun createOrder(clientUserUuid: String, postOrder: PostOrderV2): GetClientOrderV2? {
-        val currentMillis = DateTime.now().millis
+        if (postOrder.orderProducts.isEmpty()) {
+            return null
+        }
+
         val cafeUuid = if (postOrder.isDelivery) {
             streetRepository.getStreetByAddressUuid(postOrder.address.uuid.toUuid())?.cafeUuid
         } else {
@@ -126,6 +133,7 @@ class OrderService(
             orderCount == 0L
         }
 
+        val currentMillis = DateTime.now().millis
         val insertOrder = InsertOrderV2(
             time = currentMillis,
             isDelivery = postOrder.isDelivery,
