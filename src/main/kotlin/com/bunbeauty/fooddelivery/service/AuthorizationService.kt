@@ -1,7 +1,8 @@
 package com.bunbeauty.fooddelivery.service
 
 import com.bunbeauty.fooddelivery.auth.IJwtService
-import com.bunbeauty.fooddelivery.data.repo.AuthorizationRepository
+import com.bunbeauty.fooddelivery.data.features.auth.AuthNetworkDataSource
+import com.bunbeauty.fooddelivery.data.features.auth.AuthorizationRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.domain.error.errorWithCode
@@ -13,7 +14,6 @@ import com.bunbeauty.fooddelivery.domain.model.client_user.InsertClientUser
 import com.bunbeauty.fooddelivery.domain.model.client_user.login.*
 import com.bunbeauty.fooddelivery.domain.toUuid
 import com.bunbeauty.fooddelivery.network.ApiResult
-import com.bunbeauty.fooddelivery.network.NetworkService
 import com.bunbeauty.fooddelivery.service.ip.RequestService
 import dev.turingcomplete.kotlinonetimepassword.HmacAlgorithm
 import dev.turingcomplete.kotlinonetimepassword.HmacOneTimePasswordConfig
@@ -32,7 +32,7 @@ class AuthorizationService(
     private val requestService: RequestService,
     private val authorizationRepository: AuthorizationRepository,
     private val companyRepository: CompanyRepository,
-    private val networkService: NetworkService,
+    private val authNetworkDataSource: AuthNetworkDataSource,
     private val clientUserRepository: ClientUserRepository,
     private val jwtService: IJwtService,
 ) {
@@ -61,13 +61,13 @@ class AuthorizationService(
         val currentMillis = DateTime.now().millis
         val code = testClientUserPhone?.code ?: otpGenerator.generate(currentMillis)
         val apiResult = if (testClientUserPhone == null) {
-            networkService.sendSms(
+            authNetworkDataSource.sendSms(
                 phoneNumber = phoneNumber,
                 sign = DEFAULT_SIGN,
                 text = getSmsText(code, companyUuid),
             )
         } else {
-            networkService.testSendSms(
+            authNetworkDataSource.testSendSms(
                 phoneNumber = phoneNumber,
                 sign = DEFAULT_SIGN,
                 text = getSmsText(code, companyUuid),
@@ -160,13 +160,13 @@ class AuthorizationService(
         val currentMillis = DateTime.now().millis
         val code = testClientUserPhone?.code ?: otpGenerator.generate(currentMillis)
         val apiResult = if (testClientUserPhone == null) {
-            networkService.sendSms(
+            authNetworkDataSource.sendSms(
                 phoneNumber = phoneNumber,
                 sign = DEFAULT_SIGN,
                 text = getSmsText(code, authSession.companyUuid),
             )
         } else {
-            networkService.testSendSms(
+            authNetworkDataSource.testSendSms(
                 phoneNumber = phoneNumber,
                 sign = DEFAULT_SIGN,
                 text = getSmsText(code, authSession.companyUuid),

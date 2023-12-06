@@ -31,7 +31,6 @@ fun Application.configureKoin() {
             discountModule,
             requestModule,
             authorizationModule,
-            networkModule,
             recommendationModule,
             nonWorkingDayModule,
         )

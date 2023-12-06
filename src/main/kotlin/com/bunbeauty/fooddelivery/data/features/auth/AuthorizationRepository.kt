@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.data.repo
+package com.bunbeauty.fooddelivery.data.features.auth
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.ClientAuthSessionEntity
