@@ -1,6 +1,5 @@
 package com.bunbeauty.fooddelivery.data.features.address
 
-import com.bunbeauty.fooddelivery.data.features.address.mapper.mapAddressEntity
 import com.bunbeauty.fooddelivery.data.features.address.mapper.mapSuggestionsResponse
 import com.bunbeauty.fooddelivery.data.features.address.remotemodel.AddressRequestBody
 import com.bunbeauty.fooddelivery.domain.feature.address.model.Address
@@ -19,14 +18,13 @@ class AddressRepository(
 
     suspend fun insertAddress(insertAddress: InsertAddress): Address {
         return addressDao.insertAddress(insertAddress)
-            .mapAddressEntity()
     }
 
     suspend fun getAddressListByUserUuidAndCityUuid(userUuid: String, cityUuid: String): List<Address> {
         return addressDao.getAddressListByUserUuidAndCityUuid(
             userUuid = userUuid.toUuid(),
             cityUuid = cityUuid.toUuid()
-        ).map(mapAddressEntity)
+        )
     }
 
     suspend fun getStreetSuggestionList(query: String, city: City): List<Suggestion> {
