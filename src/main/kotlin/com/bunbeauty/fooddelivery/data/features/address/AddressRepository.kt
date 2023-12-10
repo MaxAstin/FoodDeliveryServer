@@ -4,6 +4,7 @@ import com.bunbeauty.fooddelivery.data.features.address.mapper.mapAddressEntity
 import com.bunbeauty.fooddelivery.data.features.address.mapper.mapSuggestionsResponse
 import com.bunbeauty.fooddelivery.data.features.address.remotemodel.AddressRequestBody
 import com.bunbeauty.fooddelivery.domain.feature.address.model.Address
+import com.bunbeauty.fooddelivery.domain.feature.address.model.Suggestion
 import com.bunbeauty.fooddelivery.domain.feature.city.City
 import com.bunbeauty.fooddelivery.domain.model.address.InsertAddress
 import com.bunbeauty.fooddelivery.network.getDataOrNull
@@ -28,7 +29,7 @@ class AddressRepository(
             }.map(mapAddressEntity)
     }
 
-    suspend fun getStreetSuggestionList(query: String, city: City): List<String> {
+    suspend fun getStreetSuggestionList(query: String, city: City): List<Suggestion> {
         return addressNetworkDataSource.requestAddressSuggestions(
             AddressRequestBody(
                 query = query,

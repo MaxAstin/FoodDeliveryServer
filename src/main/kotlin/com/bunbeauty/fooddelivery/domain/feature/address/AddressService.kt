@@ -8,6 +8,8 @@ import com.bunbeauty.fooddelivery.domain.error.noAccessToCompanyError
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.address.mapper.mapAddress
 import com.bunbeauty.fooddelivery.domain.feature.address.mapper.mapPostAddress
+import com.bunbeauty.fooddelivery.domain.feature.address.mapper.mapSuggestion
+import com.bunbeauty.fooddelivery.domain.feature.address.model.GetSuggestion
 import com.bunbeauty.fooddelivery.domain.model.address.GetAddress
 import com.bunbeauty.fooddelivery.domain.model.address.PostAddress
 import com.bunbeauty.fooddelivery.domain.toUuid
@@ -40,9 +42,12 @@ class AddressService(
         ).map(mapAddress)
     }
 
-    suspend fun getStreetSuggestionList(query: String, cityUuid: String): List<String> {
-        val city = cityRepository.getCityByUuid(cityUuid.toUuid()).orThrowNotFoundByUuidError(cityUuid)
+    suspend fun getStreetSuggestionList(query: String, cityUuid: String): List<GetSuggestion> {
+        val city = cityRepository.getCityByUuid(cityUuid.toUuid())
+            .orThrowNotFoundByUuidError(cityUuid)
+
         return addressRepository.getStreetSuggestionList(query, city)
+            .map(mapSuggestion)
     }
 
 }
