@@ -8,10 +8,14 @@ suspend inline fun <reified R> safeCall(
     networkCall: () -> HttpResponse
 ): ApiResult<R> {
     return try {
-        ApiResult.Success(networkCall().body())
+        ApiResult.Success<R>(networkCall().body()).also {
+            println("ApiResult.Success")
+        }
     } catch (exception: ClientRequestException) {
+        println("ClientRequestException ${exception.message}")
         ApiResult.Error(exception)
     } catch (exception: Throwable) {
+        println("Throwable ${exception.message}")
         ApiResult.Error(exception)
     }
 }

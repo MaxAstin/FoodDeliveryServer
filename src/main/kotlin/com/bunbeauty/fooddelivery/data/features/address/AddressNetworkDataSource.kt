@@ -9,7 +9,7 @@ import io.ktor.client.*
 class AddressNetworkDataSource(private val client: HttpClient) {
 
     suspend fun requestAddressSuggestions(addressRequestBody: AddressRequestBody): ApiResult<SuggestionsResponse> {
-        return client.postData(
+        return client.postData<SuggestionsResponse>(
             path = "address",
             body = addressRequestBody
         )
