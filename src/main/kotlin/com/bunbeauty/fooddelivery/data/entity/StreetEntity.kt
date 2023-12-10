@@ -1,6 +1,5 @@
 package com.bunbeauty.fooddelivery.data.entity
 
-import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.table.StreetTable
 import com.bunbeauty.fooddelivery.domain.model.street.GetStreet
 import org.jetbrains.exposed.dao.UUIDEntity
@@ -14,8 +13,6 @@ class StreetEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var name: String by StreetTable.name
     var cafe: CafeEntity by CafeEntity referencedOn StreetTable.cafe
     var isVisible: Boolean by StreetTable.isVisible
-
-    val company: CompanyEntity = cafe.city.company
 
     companion object : UUIDEntityClass<StreetEntity>(StreetTable)
 
