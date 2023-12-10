@@ -23,11 +23,10 @@ class AddressRepository(
     }
 
     suspend fun getAddressListByUserUuidAndCityUuid(userUuid: String, cityUuid: String): List<Address> {
-        return addressDao.getAddressListByUserUuid(userUuid = userUuid.toUuid())
-            .map(mapAddressEntity)
-            .filter { addressEntity ->
-                addressEntity.street.cityUuid == cityUuid
-            }
+        return addressDao.getAddressListByUserUuidAndCityUuid(
+            userUuid = userUuid.toUuid(),
+            cityUuid = cityUuid.toUuid()
+        ).map(mapAddressEntity)
     }
 
     suspend fun getStreetSuggestionList(query: String, city: City): List<Suggestion> {

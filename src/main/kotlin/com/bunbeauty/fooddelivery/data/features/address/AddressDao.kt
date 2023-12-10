@@ -23,9 +23,11 @@ class AddressDao {
         }
     }
 
-    suspend fun getAddressListByUserUuid(userUuid: UUID): List<AddressEntity> = query {
+    suspend fun getAddressListByUserUuidAndCityUuid(userUuid: UUID, cityUuid: UUID): List<AddressEntity> = query {
         AddressEntity.find {
             AddressTable.clientUser eq userUuid
+        }.filter {addressEntity ->
+            addressEntity.street.cafe.city.id.value == cityUuid
         }.toList()
     }
 
