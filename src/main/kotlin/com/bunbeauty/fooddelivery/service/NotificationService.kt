@@ -1,6 +1,7 @@
 package com.bunbeauty.fooddelivery.service
 
 import com.bunbeauty.fooddelivery.data.repo.UserRepository
+import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.model.notification.PostNotification
 import com.bunbeauty.fooddelivery.domain.toUuid
 import com.google.firebase.messaging.FirebaseMessaging
@@ -14,8 +15,9 @@ class NotificationService(
     private val firebaseMessaging: FirebaseMessaging,
 ) {
 
-    suspend fun sendNotification(userUuid: String, postNotification: PostNotification): String? {
-        val user = userRepository.getUserByUuid(userUuid.toUuid()) ?: return null
+    suspend fun sendNotification(userUuid: String, postNotification: PostNotification): String {
+        val user = userRepository.getUserByUuid(userUuid.toUuid())
+            .orThrowNotFoundByUuidError(userUuid)
         val companyUuid = user.company.uuid
         return firebaseMessaging.send(
             Message.builder()

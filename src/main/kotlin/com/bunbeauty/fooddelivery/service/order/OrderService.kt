@@ -7,11 +7,11 @@ import com.bunbeauty.fooddelivery.data.Constants.CODE_NUMBER_STEP
 import com.bunbeauty.fooddelivery.data.Constants.ORDER_HISTORY_DAY_COUNT
 import com.bunbeauty.fooddelivery.data.Constants.ORDER_KOD_KEY
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
+import com.bunbeauty.fooddelivery.data.features.address.StreetRepository
 import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.repo.CafeRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
-import com.bunbeauty.fooddelivery.data.repo.street.IStreetRepository
 import com.bunbeauty.fooddelivery.data.session.SessionHandler
 import com.bunbeauty.fooddelivery.domain.model.company.GetCompany
 import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetCafeOrder
@@ -36,7 +36,7 @@ import org.joda.time.DateTime
 
 class OrderService(
     private val orderRepository: IOrderRepository,
-    private val streetRepository: IStreetRepository,
+    private val streetRepository: StreetRepository,
     private val clientUserRepository: ClientUserRepository,
     private val menuProductRepository: MenuProductRepository,
     private val cafeRepository: CafeRepository,

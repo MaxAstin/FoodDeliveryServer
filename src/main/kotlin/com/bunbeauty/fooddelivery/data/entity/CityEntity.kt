@@ -26,7 +26,6 @@ class CityEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         uuid = uuid,
         name = name,
         timeZone = timeZone,
-        company = company.toCompany(),
         isVisible = isVisible,
     )
 }

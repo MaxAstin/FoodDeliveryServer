@@ -50,7 +50,7 @@ private fun Route.getCafeOrders() {
         manager {
             val cafeUuid = call.parameters[CAFE_UUID_PARAMETER] ?: error("$CAFE_UUID_PARAMETER is required")
             val orderList = orderService.getOrderListByCafeUuid(cafeUuid)
-            call.respondOk(orderList)
+            call.respondOkWithList(orderList)
         }
     }
 }
@@ -89,7 +89,7 @@ private fun Route.getClientOrders() {
         client { request ->
             val count = call.parameters[COUNT_PARAMETER]?.toIntOrNull()
             val orderList = orderService.getOrderListByUserUuid(request.jwtUser.uuid, count)
-            call.respondOk(orderList)
+            call.respondOkWithList(orderList)
         }
     }
 }
@@ -103,7 +103,7 @@ private fun Route.getClientOrdersV2() {
             val count = call.parameters[COUNT_PARAMETER]?.toIntOrNull()
             val uuid = call.parameters[UUID_PARAMETER]
             val orderList = orderService.getOrderListByUserUuidV2(request.jwtUser.uuid, count, uuid)
-            call.respondOk(orderList)
+            call.respondOkWithList(orderList)
         }
     }
 }

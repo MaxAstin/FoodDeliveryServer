@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.domain.model.auth
+package com.bunbeauty.fooddelivery.data.features.auth.remotemodel
 
 import kotlinx.serialization.Serializable
 

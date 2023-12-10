@@ -1,17 +1,16 @@
-package com.bunbeauty.fooddelivery.data.repo.address
+package com.bunbeauty.fooddelivery.data.features.address
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.AddressEntity
 import com.bunbeauty.fooddelivery.data.entity.ClientUserEntity
 import com.bunbeauty.fooddelivery.data.entity.StreetEntity
 import com.bunbeauty.fooddelivery.data.table.AddressTable
-import com.bunbeauty.fooddelivery.domain.model.address.GetAddress
 import com.bunbeauty.fooddelivery.domain.model.address.InsertAddress
 import java.util.*
 
-class AddressRepository : IAddressRepository {
+class AddressDao {
 
-    override suspend fun insertAddress(insertAddress: InsertAddress): GetAddress = query {
+    suspend fun insertAddress(insertAddress: InsertAddress): AddressEntity = query {
         AddressEntity.new {
             house = insertAddress.house
             flat = insertAddress.flat
@@ -21,16 +20,13 @@ class AddressRepository : IAddressRepository {
             street = StreetEntity[insertAddress.streetUuid]
             clientUser = ClientUserEntity[insertAddress.clientUserUuid]
             isVisible = insertAddress.isVisible
-        }.toAddress()
-    }
-
-    override suspend fun getAddressListByUserUuidAndCityUuid(userUuid: UUID, cityUuid: UUID): List<GetAddress> = query {
-        AddressEntity.find {
-            AddressTable.clientUser eq userUuid
-        }.filter { addressEntity ->
-            addressEntity.street.cafe.city.id.value == cityUuid
-        }.map { addressEntity ->
-            addressEntity.toAddress()
         }
     }
+
+    suspend fun getAddressListByUserUuid(userUuid: UUID): List<AddressEntity> = query {
+        AddressEntity.find {
+            AddressTable.clientUser eq userUuid
+        }.toList()
+    }
+
 }

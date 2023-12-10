@@ -1,33 +1,32 @@
-package com.bunbeauty.fooddelivery.data.repo.city
+package com.bunbeauty.fooddelivery.data.features.city
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.CityEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
+import com.bunbeauty.fooddelivery.data.features.city.mapper.mapCityEntity
 import com.bunbeauty.fooddelivery.data.table.CityTable
-import com.bunbeauty.fooddelivery.domain.model.city.GetCity
+import com.bunbeauty.fooddelivery.domain.feature.city.City
 import com.bunbeauty.fooddelivery.domain.model.city.InsertCity
 import java.util.*
 
-class CityRepository : ICityRepository {
+class CityRepository {
 
-    override suspend fun insertCity(insertCity: InsertCity): GetCity = query {
+    suspend fun insertCity(insertCity: InsertCity): City = query {
         CityEntity.new {
             name = insertCity.name
             timeZone = insertCity.timeZone
             company = CompanyEntity[insertCity.company]
             isVisible = insertCity.isVisible
-        }.toCity()
+        }.mapCityEntity()
     }
 
-    override suspend fun getCityListByCompanyUuid(companyUuid: UUID): List<GetCity> = query {
+    suspend fun getCityListByCompanyUuid(companyUuid: UUID): List<City> = query {
         CityEntity.find {
             CityTable.company eq companyUuid
-        }.map { cityEntity ->
-            cityEntity.toCity()
-        }.toList()
+        }.map(mapCityEntity).toList()
     }
 
-    override suspend fun getCityByUuid(cityUuid: UUID): GetCity? = query {
-        CityEntity.findById(cityUuid)?.toCity()
+    suspend fun getCityByUuid(cityUuid: UUID): City? = query {
+        CityEntity.findById(cityUuid)?.mapCityEntity()
     }
 }

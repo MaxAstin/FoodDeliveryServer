@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.features.auth
 
-import com.bunbeauty.fooddelivery.domain.model.auth.BaseResponse
+import com.bunbeauty.fooddelivery.data.features.auth.remotemodel.BaseResponse
 import com.bunbeauty.fooddelivery.network.ApiResult
 import com.bunbeauty.fooddelivery.network.getData
 import io.ktor.client.*

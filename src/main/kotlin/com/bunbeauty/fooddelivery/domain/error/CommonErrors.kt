@@ -24,3 +24,7 @@ fun notFoundByUserUuidError(entity: KClass<*>, userUuid: String): Nothing {
 fun parameterIsRequiredError(parameterName: String): Nothing {
     error("Parameter $parameterName is required")
 }
+
+fun noAccessToCompanyError(companyUuid: String): Nothing {
+    error("User doesn't has access to this company - $companyUuid")
+}

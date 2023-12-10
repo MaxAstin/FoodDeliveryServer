@@ -21,6 +21,17 @@ private const val AUTH_HTTP_CLIENT = "AUTH_HTTP_CLIENT"
 private val authApiUsername = System.getenv(AUTH_API_EMAIL_KEY)
 private val authApiPassword = System.getenv(AUTH_API_KEY)
 
+val module =  module(createdAtStart = true) {
+    factory {
+        Json {
+            prettyPrint = true
+            isLenient = true
+            ignoreUnknownKeys = true
+            encodeDefaults = true
+        }
+    }
+}
+
 val authorizationModule = module(createdAtStart = true) {
 
     single { AuthorizationRepository() }
@@ -30,14 +41,7 @@ val authorizationModule = module(createdAtStart = true) {
     single(named(AUTH_HTTP_CLIENT)) {
         HttpClient(OkHttp.create()) {
             install(ContentNegotiation) {
-                json(
-                    Json {
-                        prettyPrint = true
-                        isLenient = true
-                        ignoreUnknownKeys = true
-                        encodeDefaults = true
-                    }
-                )
+                json(get())
             }
 
             install(DefaultRequest) {

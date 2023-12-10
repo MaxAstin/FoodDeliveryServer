@@ -33,3 +33,23 @@ suspend inline fun <reified R> HttpClient.getData(
         }
     }
 }
+
+suspend inline fun <reified R> HttpClient.postData(
+    path: String,
+    body: Any,
+    parameters: Map<String, Any> = mapOf(),
+): ApiResult<R> {
+    return safeCall {
+        post {
+            buildRequest(
+                path = path,
+                parameters = parameters,
+                body = body,
+            )
+        }
+    }
+}
+
+fun <T> ApiResult<T>.getDataOrNull(): T? {
+    return (this as? ApiResult.Success)?.data
+}

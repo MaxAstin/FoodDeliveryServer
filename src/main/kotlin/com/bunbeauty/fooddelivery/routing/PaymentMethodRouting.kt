@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants
-import com.bunbeauty.fooddelivery.routing.extension.respondOk
+import com.bunbeauty.fooddelivery.routing.extension.respondOkWithList
 import com.bunbeauty.fooddelivery.routing.extension.safely
 import com.bunbeauty.fooddelivery.service.payment_method.IPaymentMethodService
 import io.ktor.server.application.*
@@ -23,7 +23,7 @@ private fun Routing.getPaymentMethods() {
         safely {
             val companyUuid = call.parameters[Constants.COMPANY_UUID_PARAMETER] ?: error("${Constants.COMPANY_UUID_PARAMETER} is required")
             val paymentMethodList = paymentMethodService.getPaymentMethodByCompanyUuid(companyUuid)
-            call.respondOk(paymentMethodList)
+            call.respondOkWithList(paymentMethodList)
         }
     }
 }

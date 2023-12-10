@@ -31,7 +31,7 @@ private fun Routing.getCafesByCityUuid() {
         safely {
             val cityUuid = call.getParameter(CITY_UUID_PARAMETER)
             val cafeList = cafeService.getCafeListByCityUuid(cityUuid)
-            call.respondOk(cafeList)
+            call.respondOkWithList(cafeList)
         }
     }
 }

@@ -8,7 +8,7 @@ import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.PostMenu
 import com.bunbeauty.fooddelivery.domain.feature.menu.service.MenuProductService
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
-import com.bunbeauty.fooddelivery.routing.extension.respondOk
+import com.bunbeauty.fooddelivery.routing.extension.respondOkWithList
 import com.bunbeauty.fooddelivery.routing.extension.safely
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -34,7 +34,7 @@ private fun Routing.getAllMenuProducts() {
         safely {
             val companyUuid = call.getParameter(COMPANY_UUID_PARAMETER)
             val menuProductList = menuProductService.getMenuProductListByCompanyUuid(companyUuid)
-            call.respondOk(menuProductList)
+            call.respondOkWithList(menuProductList)
         }
     }
 }

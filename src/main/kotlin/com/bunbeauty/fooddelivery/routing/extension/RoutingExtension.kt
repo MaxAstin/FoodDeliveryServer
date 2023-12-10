@@ -41,34 +41,17 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(block: () -> Un
     }
 }
 
-suspend inline fun PipelineContext<Unit, ApplicationCall>.manager(
-    block: (Request) -> Unit,
-) {
-    checkRights(block) { jwtUser ->
-        jwtUser.isManager()
+suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getWithResult(block: () -> R) {
+    safely {
+        val result = block()
+        call.respondOk(result)
     }
 }
 
-suspend inline fun <reified R> PipelineContext<Unit, ApplicationCall>.admin(
-    errorMessage: String? = null,
-    block: (Request) -> R,
-) {
-    checkRights(
-        block = { request ->
-            call.respondOkOrBad(
-                model = block(request),
-                errorMessage = errorMessage
-            )
-        },
-        checkBlock = { jwtUser ->
-            jwtUser.isAdmin()
-        }
-    )
-}
-
-suspend inline fun PipelineContext<Unit, ApplicationCall>.client(block: (Request) -> Unit) {
-    checkRights(block) { jwtUser ->
-        jwtUser.isClient()
+suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getWithListResult(block: () -> List<R>) {
+    safely {
+        val result = block()
+        call.respondOkWithList(result)
     }
 }
 
@@ -87,33 +70,6 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.checkRights(
                 call.respond(HttpStatusCode.Forbidden)
             }
         }
-    }
-}
-
-suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>.managerWithBody(
-    errorMessage: String? = null,
-    block: (BodyRequest<B>) -> R?,
-) {
-    manager { request ->
-        handleRequestWithBody(request, errorMessage, block)
-    }
-}
-
-suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>.adminWithBody(
-    errorMessage: String? = null,
-    block: (BodyRequest<B>) -> R?,
-) {
-    admin { request ->
-        handleRequestWithBody(request, errorMessage, block)
-    }
-}
-
-suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>.clientWithBody(
-    errorMessage: String? = null,
-    block: (BodyRequest<B>) -> R?,
-) {
-    client { request ->
-        handleRequestWithBody(request, errorMessage, block)
     }
 }
 
@@ -146,24 +102,8 @@ suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>
     )
 }
 
-suspend inline fun <reified R>  PipelineContext<Unit, ApplicationCall>.adminDelete(
-    deleteBlock: (String) -> R?
-) {
-    admin {
-        delete(deleteBlock)
-    }
-}
-
-suspend inline fun <reified R> PipelineContext<Unit, ApplicationCall>.managerDelete(
-    deleteBlock: (String) -> R?
-) {
-    manager {
-        delete(deleteBlock)
-    }
-}
-
 suspend inline fun <reified R> PipelineContext<Unit, ApplicationCall>.delete(
-    deleteBlock: (String) -> R?
+    deleteBlock: (String) -> R?,
 ) {
     val uuid = call.getParameter(UUID_PARAMETER)
     val result = deleteBlock(uuid)
@@ -192,7 +132,7 @@ suspend inline fun <reified T : Any> ApplicationCall.respondOkOrBad(
     }
 }
 
-suspend inline fun <reified T : Any> ApplicationCall.respondOk(list: List<T>) {
+suspend inline fun <reified T : Any> ApplicationCall.respondOkWithList(list: List<T>) {
     respond(HttpStatusCode.OK, list.toListWrapper())
 }
 

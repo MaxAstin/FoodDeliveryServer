@@ -6,6 +6,7 @@ import com.bunbeauty.fooddelivery.data.repo.UserRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICafeStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICompanyStatisticRepository
+import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.model.cafe.GetCafe
 import com.bunbeauty.fooddelivery.domain.model.company.GetCompany
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.GetStatistic
@@ -28,9 +29,10 @@ class StatisticService(
     private val userRepository: UserRepository,
 ) {
 
-    suspend fun getStatisticList(userUuid: String, cafeUuid: String?, period: String): List<GetStatistic>? {
+    suspend fun getStatisticList(userUuid: String, cafeUuid: String?, period: String): List<GetStatistic> {
         val periodType = PeriodType.valueOf(period)
-        val user = userRepository.getUserByUuid(userUuid.toUuid()) ?: return null
+        val user = userRepository.getUserByUuid(userUuid.toUuid())
+            .orThrowNotFoundByUuidError(userUuid)
         val currentDateTime = getTodayDateTime(user.company.offset)
         val startTimeMillis = currentDateTime.minusMonths(24)
             .minusDays(currentDateTime.dayOfMonth - 1)

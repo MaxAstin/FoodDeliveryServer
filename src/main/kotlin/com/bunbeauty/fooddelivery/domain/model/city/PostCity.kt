@@ -6,6 +6,5 @@ import kotlinx.serialization.Serializable
 class PostCity(
     val name: String,
     val timeZone: String,
-    val companyUuid: String,
     val isVisible: Boolean,
 )

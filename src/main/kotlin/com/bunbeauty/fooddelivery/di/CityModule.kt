@@ -1,12 +1,15 @@
 package com.bunbeauty.fooddelivery.di
 
-import com.bunbeauty.fooddelivery.data.repo.city.CityRepository
-import com.bunbeauty.fooddelivery.data.repo.city.ICityRepository
-import com.bunbeauty.fooddelivery.service.city.CityService
-import com.bunbeauty.fooddelivery.service.city.ICityService
+import com.bunbeauty.fooddelivery.data.features.city.CityRepository
+import com.bunbeauty.fooddelivery.domain.feature.city.CityService
 import org.koin.dsl.module
 
 val cityModule = module(createdAtStart = true) {
-    single<ICityService> { CityService(cityRepository = get()) }
-    single<ICityRepository> { CityRepository() }
+    factory {
+        CityService(
+            cityRepository = get(),
+            userRepository = get(),
+        )
+    }
+    single { CityRepository() }
 }

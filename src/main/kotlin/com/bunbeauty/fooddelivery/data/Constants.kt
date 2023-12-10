@@ -22,6 +22,7 @@ object Constants {
     const val UUID_PARAMETER = "uuid"
     const val PERIOD_PARAMETER = "period"
     const val COUNT_PARAMETER = "count"
+    const val QUERY_PARAMETER = "query"
 
     // CODE
     const val CODE_NUMBER_COUNT = 100
