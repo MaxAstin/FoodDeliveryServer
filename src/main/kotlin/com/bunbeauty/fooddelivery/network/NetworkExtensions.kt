@@ -4,10 +4,10 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 
-fun HttpRequestBuilder.buildRequest(
+inline fun <reified BODY> HttpRequestBuilder.buildRequest(
     path: String,
     parameters: Map<String, Any> = mapOf(),
-    body: Any? = null,
+    body: BODY? = null,
 ) {
     if (body != null) {
         setBody(body)
@@ -26,7 +26,7 @@ suspend inline fun <reified R> HttpClient.getData(
 ): ApiResult<R> {
     return safeCall {
         get {
-            buildRequest(
+            buildRequest<Any>(
                 path = path,
                 parameters = parameters,
             )
@@ -34,9 +34,9 @@ suspend inline fun <reified R> HttpClient.getData(
     }
 }
 
-suspend inline fun <reified R> HttpClient.postData(
+suspend inline fun <reified BODY, reified R> HttpClient.postData(
     path: String,
-    body: Any,
+    body: BODY,
     parameters: Map<String, Any> = mapOf(),
 ): ApiResult<R> {
     return safeCall {
