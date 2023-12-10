@@ -13,6 +13,7 @@ import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.DatabaseConfig
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -20,7 +21,13 @@ object DatabaseFactory {
 
     fun init() {
         val dataSource = getDataSource()
-        Database.connect(dataSource)
+        val config = DatabaseConfig {
+            keepLoadedReferencesOutOfTransaction = false
+        }
+        Database.connect(
+            datasource = dataSource,
+            databaseConfig = config
+        )
 
         transaction {
             SchemaUtils.create(CompanyTable)
