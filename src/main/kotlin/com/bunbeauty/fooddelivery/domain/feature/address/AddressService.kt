@@ -37,8 +37,8 @@ class AddressService(
 
     suspend fun getAddressListByUserUuidAndCityUuid(userUuid: String, cityUuid: String): List<GetAddress> {
         return addressRepository.getAddressListByUserUuidAndCityUuid(
-            userUuid = userUuid.toUuid(),
-            cityUuid = cityUuid.toUuid()
+            userUuid = userUuid,
+            cityUuid = cityUuid
         ).map(mapAddress)
     }
 

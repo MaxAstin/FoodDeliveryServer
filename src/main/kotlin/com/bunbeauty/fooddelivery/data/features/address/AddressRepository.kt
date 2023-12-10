@@ -7,8 +7,8 @@ import com.bunbeauty.fooddelivery.domain.feature.address.model.Address
 import com.bunbeauty.fooddelivery.domain.feature.address.model.Suggestion
 import com.bunbeauty.fooddelivery.domain.feature.city.City
 import com.bunbeauty.fooddelivery.domain.model.address.InsertAddress
+import com.bunbeauty.fooddelivery.domain.toUuid
 import com.bunbeauty.fooddelivery.network.getDataOrNull
-import java.util.*
 
 private const val STREET_BOUND = "street"
 
@@ -22,11 +22,12 @@ class AddressRepository(
             .mapAddressEntity()
     }
 
-    suspend fun getAddressListByUserUuidAndCityUuid(userUuid: UUID, cityUuid: UUID): List<Address> {
-        return addressDao.getAddressListByUserUuid(userUuid = userUuid)
+    suspend fun getAddressListByUserUuidAndCityUuid(userUuid: String, cityUuid: String): List<Address> {
+        return addressDao.getAddressListByUserUuid(userUuid = userUuid.toUuid())
+            .map(mapAddressEntity)
             .filter { addressEntity ->
-                addressEntity.street.cafe.city.id.value == cityUuid
-            }.map(mapAddressEntity)
+                addressEntity.street.cityUuid == cityUuid
+            }
     }
 
     suspend fun getStreetSuggestionList(query: String, city: City): List<Suggestion> {
