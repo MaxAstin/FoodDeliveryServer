@@ -51,5 +51,8 @@ suspend inline fun <reified R> HttpClient.postData(
 }
 
 fun <T> ApiResult<T>.getDataOrNull(): T? {
+    if (this is ApiResult.Error) {
+        println(throwable.message)
+    }
     return (this as? ApiResult.Success)?.data
 }
