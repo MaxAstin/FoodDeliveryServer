@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.service
 
 import com.bunbeauty.fooddelivery.auth.IJwtService
-import com.bunbeauty.fooddelivery.data.features.auth.AuthNetworkDataSource
+import com.bunbeauty.fooddelivery.data.features.auth.AuthorizationNetworkDataSource
 import com.bunbeauty.fooddelivery.data.features.auth.AuthorizationRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
@@ -32,7 +32,7 @@ class AuthorizationService(
     private val requestService: RequestService,
     private val authorizationRepository: AuthorizationRepository,
     private val companyRepository: CompanyRepository,
-    private val authNetworkDataSource: AuthNetworkDataSource,
+    private val authorizationNetworkDataSource: AuthorizationNetworkDataSource,
     private val clientUserRepository: ClientUserRepository,
     private val jwtService: IJwtService,
 ) {
@@ -61,13 +61,13 @@ class AuthorizationService(
         val currentMillis = DateTime.now().millis
         val code = testClientUserPhone?.code ?: otpGenerator.generate(currentMillis)
         val apiResult = if (testClientUserPhone == null) {
-            authNetworkDataSource.sendSms(
+            authorizationNetworkDataSource.sendSms(
                 phoneNumber = phoneNumber,
                 sign = DEFAULT_SIGN,
                 text = getSmsText(code, companyUuid),
             )
         } else {
-            authNetworkDataSource.testSendSms(
+            authorizationNetworkDataSource.testSendSms(
                 phoneNumber = phoneNumber,
                 sign = DEFAULT_SIGN,
                 text = getSmsText(code, companyUuid),
@@ -160,13 +160,13 @@ class AuthorizationService(
         val currentMillis = DateTime.now().millis
         val code = testClientUserPhone?.code ?: otpGenerator.generate(currentMillis)
         val apiResult = if (testClientUserPhone == null) {
-            authNetworkDataSource.sendSms(
+            authorizationNetworkDataSource.sendSms(
                 phoneNumber = phoneNumber,
                 sign = DEFAULT_SIGN,
                 text = getSmsText(code, authSession.companyUuid),
             )
         } else {
-            authNetworkDataSource.testSendSms(
+            authorizationNetworkDataSource.testSendSms(
                 phoneNumber = phoneNumber,
                 sign = DEFAULT_SIGN,
                 text = getSmsText(code, authSession.companyUuid),
