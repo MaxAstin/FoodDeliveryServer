@@ -47,7 +47,6 @@ val addressModule = module(createdAtStart = true) {
     single {
         AddressRepository(
             addressNetworkDataSource = get(),
-            authorizationNetworkDataSource = get(),
         )
     }
 
