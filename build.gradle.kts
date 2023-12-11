@@ -44,6 +44,9 @@ dependencies {
     implementation("io.ktor:ktor-server-auth:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("io.ktor:ktor-client-okhttp-jvm:$ktor_version")
+
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_json_version")
@@ -69,7 +72,6 @@ dependencies {
 
     // OTP
     implementation("dev.turingcomplete:kotlin-onetimepassword:$otp_version")
-    implementation("io.ktor:ktor-client-okhttp-jvm:2.2.4")
 
     // Test
     testImplementation("io.mockk:mockk:$mockk_version")

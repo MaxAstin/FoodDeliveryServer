@@ -43,6 +43,15 @@ val authorizationModule = module(createdAtStart = true) {
                     protocol = URLProtocol.HTTPS
                 }
             }
+
+//            install(Logging) {
+//                logger = object : KtorLogger {
+//                    override fun log(message: String) {
+//                        Logger.logD(NETWORK_TAG, message)
+//                    }
+//                }
+//                level = LogLevel.ALL
+//            }
         }
     }
 
