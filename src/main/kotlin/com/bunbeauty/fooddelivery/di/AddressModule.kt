@@ -1,6 +1,5 @@
 package com.bunbeauty.fooddelivery.di
 
-import com.bunbeauty.fooddelivery.data.features.address.AddressDao
 import com.bunbeauty.fooddelivery.data.features.address.AddressNetworkDataSource
 import com.bunbeauty.fooddelivery.data.features.address.AddressRepository
 import com.bunbeauty.fooddelivery.domain.feature.address.AddressService
@@ -45,14 +44,9 @@ val addressModule = module(createdAtStart = true) {
         )
     }
 
-    factory {
-        AddressDao()
-    }
-
     single {
         AddressRepository(
-            addressNetworkDataSource = get(),
-            addressDao = get(),
+            addressNetworkDataSource = get()
         )
     }
 

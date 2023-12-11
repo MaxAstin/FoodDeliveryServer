@@ -1,7 +1,13 @@
 package com.bunbeauty.fooddelivery.data.features.address
 
+import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
+import com.bunbeauty.fooddelivery.data.entity.AddressEntity
+import com.bunbeauty.fooddelivery.data.entity.ClientUserEntity
+import com.bunbeauty.fooddelivery.data.entity.StreetEntity
+import com.bunbeauty.fooddelivery.data.features.address.mapper.mapAddressEntity
 import com.bunbeauty.fooddelivery.data.features.address.mapper.mapSuggestionsResponse
 import com.bunbeauty.fooddelivery.data.features.address.remotemodel.AddressRequestBody
+import com.bunbeauty.fooddelivery.data.table.AddressTable
 import com.bunbeauty.fooddelivery.domain.feature.address.model.Address
 import com.bunbeauty.fooddelivery.domain.feature.address.model.Suggestion
 import com.bunbeauty.fooddelivery.domain.feature.city.City
@@ -12,19 +18,33 @@ import com.bunbeauty.fooddelivery.network.getDataOrNull
 private const val STREET_BOUND = "street"
 
 class AddressRepository(
-    private val addressNetworkDataSource: AddressNetworkDataSource,
-    private val addressDao: AddressDao,
+    private val addressNetworkDataSource: AddressNetworkDataSource
 ) {
 
     suspend fun insertAddress(insertAddress: InsertAddress): Address {
-        return addressDao.insertAddress(insertAddress)
+        return query {
+            AddressEntity.new {
+                house = insertAddress.house
+                flat = insertAddress.flat
+                entrance = insertAddress.entrance
+                floor = insertAddress.floor
+                comment = insertAddress.comment
+                street = StreetEntity[insertAddress.streetUuid]
+                clientUser = ClientUserEntity[insertAddress.clientUserUuid]
+                isVisible = insertAddress.isVisible
+            }.mapAddressEntity()
+        }
     }
 
     suspend fun getAddressListByUserUuidAndCityUuid(userUuid: String, cityUuid: String): List<Address> {
-        return addressDao.getAddressListByUserUuidAndCityUuid(
-            userUuid = userUuid.toUuid(),
-            cityUuid = cityUuid.toUuid()
-        )
+        return query {
+            AddressEntity.find {
+                AddressTable.clientUser eq userUuid.toUuid()
+            }.filter { addressEntity ->
+                addressEntity.street.cafe.city.uuid == cityUuid
+            }.toList()
+                .map(mapAddressEntity)
+        }
     }
 
     suspend fun getStreetSuggestionList(query: String, city: City): List<Suggestion> {
