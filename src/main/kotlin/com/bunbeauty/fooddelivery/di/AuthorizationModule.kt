@@ -7,6 +7,7 @@ import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
@@ -34,6 +35,10 @@ val authorizationModule = module(createdAtStart = true) {
                 json(get())
             }
 
+            install(Logging) {
+                level = LogLevel.ALL
+            }
+
             install(DefaultRequest) {
                 host = "gate.smsaero.ru/v2"
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
@@ -43,15 +48,6 @@ val authorizationModule = module(createdAtStart = true) {
                     protocol = URLProtocol.HTTPS
                 }
             }
-
-//            install(Logging) {
-//                logger = object : KtorLogger {
-//                    override fun log(message: String) {
-//                        Logger.logD(NETWORK_TAG, message)
-//                    }
-//                }
-//                level = LogLevel.ALL
-//            }
         }
     }
 

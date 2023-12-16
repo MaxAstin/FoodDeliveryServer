@@ -7,6 +7,7 @@ import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
@@ -24,6 +25,10 @@ val addressModule = module(createdAtStart = true) {
         HttpClient(OkHttp.create()) {
             install(ContentNegotiation) {
                 json(get())
+            }
+
+            install(Logging) {
+                level = LogLevel.ALL
             }
 
             install(DefaultRequest) {

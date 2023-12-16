@@ -49,6 +49,7 @@ dependencies {
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-client-okhttp-jvm:$ktor_version")
+    implementation("io.ktor:ktor-client-logging:$ktor_version")
 
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
