@@ -35,6 +35,7 @@ tasks.test {
 }
 
 dependencies {
+    // Ktor server
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("io.ktor:ktor-server-websockets:$ktor_version")
@@ -43,8 +44,10 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("io.ktor:ktor-server-auth:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
+
+    // Ktor client
+    implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("io.ktor:ktor-client-okhttp-jvm:$ktor_version")
 
     implementation("ch.qos.logback:logback-classic:$logback_version")
@@ -65,7 +68,9 @@ dependencies {
     implementation("com.ToxicBakery.library.bcrypt:bcrypt:$bcrypt_version")
 
     // Firebase
-    implementation("com.google.firebase:firebase-admin:$firebase_admin_version")
+    implementation("com.google.firebase:firebase-admin:$firebase_admin_version") {
+        exclude("com.google.guava")
+    }
 
     // DateTime
     implementation("joda-time:joda-time:$joda_time_version")

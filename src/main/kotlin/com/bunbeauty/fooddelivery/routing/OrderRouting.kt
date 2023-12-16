@@ -210,7 +210,7 @@ private fun Route.observeManagerOrders() {
                     outgoing.send(Frame.Text(json.encodeToString(cafeOrder)))
                 }.launchIn(this)
             },
-            closeBlock = {
+            onSocketClose = {
                 val cafeUuid = call.parameters[CAFE_UUID_PARAMETER] ?: error("$CAFE_UUID_PARAMETER is required")
                 orderService.userDisconnect(cafeUuid)
             }
