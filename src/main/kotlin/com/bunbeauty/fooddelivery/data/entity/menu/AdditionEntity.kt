@@ -10,6 +10,7 @@ class AdditionEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     val uuid: String = uuid.value.toString()
     var name: String by AdditionTable.name
+    var fullName: String? by AdditionTable.fullName
     var isSelected: Boolean by AdditionTable.isSelected
     var price: Int? by AdditionTable.price
     var photoLink: String by AdditionTable.photoLink

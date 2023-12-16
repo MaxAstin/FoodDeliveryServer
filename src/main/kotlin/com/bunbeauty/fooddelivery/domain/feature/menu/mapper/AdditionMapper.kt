@@ -7,6 +7,7 @@ val mapAddition: Addition.() -> GetAddition = {
     GetAddition(
         uuid = uuid,
         name = name,
+        fullName = fullName,
         isSelected = isSelected,
         price = price,
         photoLink = photoLink,

@@ -7,6 +7,7 @@ val mapAdditionEntity: AdditionEntity.() -> Addition = {
     Addition(
         uuid = uuid,
         name = name,
+        fullName = fullName,
         isSelected = isSelected,
         price = price,
         photoLink = photoLink,
