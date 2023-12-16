@@ -7,6 +7,8 @@ import com.bunbeauty.fooddelivery.data.entity.StreetEntity
 import com.bunbeauty.fooddelivery.data.features.address.mapper.mapAddressEntity
 import com.bunbeauty.fooddelivery.data.features.address.mapper.mapSuggestionsResponse
 import com.bunbeauty.fooddelivery.data.features.address.remotemodel.AddressRequestBody
+import com.bunbeauty.fooddelivery.data.features.address.remotemodel.Bound
+import com.bunbeauty.fooddelivery.data.features.address.remotemodel.Location
 import com.bunbeauty.fooddelivery.data.table.AddressTable
 import com.bunbeauty.fooddelivery.domain.feature.address.model.Address
 import com.bunbeauty.fooddelivery.domain.feature.address.model.Suggestion
@@ -18,7 +20,7 @@ import com.bunbeauty.fooddelivery.network.getDataOrNull
 private const val STREET_BOUND = "street"
 
 class AddressRepository(
-    private val addressNetworkDataSource: AddressNetworkDataSource
+    private val addressNetworkDataSource: AddressNetworkDataSource,
 ) {
 
     suspend fun insertAddress(insertAddress: InsertAddress): Address {
@@ -51,9 +53,9 @@ class AddressRepository(
         return addressNetworkDataSource.requestAddressSuggestions(
             AddressRequestBody(
                 query = query,
-                fromBound = STREET_BOUND,
-                toBound = STREET_BOUND,
-                locations = city.name,
+                fromBound = Bound(value = STREET_BOUND),
+                toBound = Bound(value = STREET_BOUND),
+                locations = listOf(Location(city = city.name)),
             )
         ).getDataOrNull()
             ?.mapSuggestionsResponse()

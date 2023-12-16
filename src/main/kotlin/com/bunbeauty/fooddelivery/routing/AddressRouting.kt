@@ -44,7 +44,10 @@ private fun Route.getSuggestions() {
         getClientWithListResult {
             val query = call.getParameter(QUERY_PARAMETER)
             val cityUuid = call.getParameter(CITY_UUID_PARAMETER)
-            addressService.getStreetSuggestionList(query = query, cityUuid = cityUuid)
+            addressService.getStreetSuggestionList(
+                query = query,
+                cityUuid = cityUuid
+            )
         }
     }
 }
