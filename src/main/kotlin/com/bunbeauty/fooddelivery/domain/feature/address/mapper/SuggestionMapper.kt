@@ -4,5 +4,8 @@ import com.bunbeauty.fooddelivery.domain.feature.address.model.GetSuggestion
 import com.bunbeauty.fooddelivery.domain.feature.address.model.Suggestion
 
 val mapSuggestion: Suggestion.() -> GetSuggestion = {
-    GetSuggestion(value = value)
+    GetSuggestion(
+        fiasId = fiasId,
+        street = street
+    )
 }

@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.domain.feature.address.mapper
 
-import com.bunbeauty.fooddelivery.domain.model.address.InsertAddress
-import com.bunbeauty.fooddelivery.domain.model.address.PostAddress
+import com.bunbeauty.fooddelivery.domain.feature.address.model.InsertAddress
+import com.bunbeauty.fooddelivery.domain.feature.address.model.PostAddress
 import com.bunbeauty.fooddelivery.domain.toUuid
 
 val mapPostAddress: PostAddress.(String) -> InsertAddress = { userUuid ->

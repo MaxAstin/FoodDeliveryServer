@@ -5,6 +5,9 @@ import com.bunbeauty.fooddelivery.domain.feature.address.model.Suggestion
 
 val mapSuggestionsResponse: SuggestionsResponse.() -> List<Suggestion> = {
     suggestions.map { suggestion ->
-        Suggestion(value = suggestion.data.streetWithType)
+        Suggestion(
+            fiasId = suggestion.data.streetFiasId,
+            street = suggestion.data.streetWithType,
+        )
     }
 }

@@ -60,6 +60,9 @@ object DatabaseFactory {
             SchemaUtils.create(AddressTable)
             SchemaUtils.createMissingTablesAndColumns(AddressTable)
 
+            SchemaUtils.create(AddressTableV2)
+            SchemaUtils.createMissingTablesAndColumns(AddressTableV2)
+
             SchemaUtils.create(OrderTable)
             SchemaUtils.createMissingTablesAndColumns(OrderTable)
 

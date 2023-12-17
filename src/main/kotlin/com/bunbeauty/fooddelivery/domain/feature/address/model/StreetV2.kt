@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.domain.feature.address.model
 
-class Suggestion(
+class StreetV2(
     val fiasId: String,
-    val street: String,
+    val name: String,
 )

@@ -3,8 +3,10 @@ package com.bunbeauty.fooddelivery.routing
 import com.bunbeauty.fooddelivery.data.Constants.CITY_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.QUERY_PARAMETER
 import com.bunbeauty.fooddelivery.domain.feature.address.AddressService
-import com.bunbeauty.fooddelivery.domain.model.address.GetAddress
-import com.bunbeauty.fooddelivery.domain.model.address.PostAddress
+import com.bunbeauty.fooddelivery.domain.feature.address.model.GetAddress
+import com.bunbeauty.fooddelivery.domain.feature.address.model.GetAddressV2
+import com.bunbeauty.fooddelivery.domain.feature.address.model.PostAddress
+import com.bunbeauty.fooddelivery.domain.feature.address.model.PostAddressV2
 import com.bunbeauty.fooddelivery.routing.extension.clientWithBody
 import com.bunbeauty.fooddelivery.routing.extension.getClientWithListResult
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
@@ -20,6 +22,7 @@ fun Application.configureAddressRouting() {
             getAddresses()
             getSuggestions()
             postAddress()
+            postAddressV2()
         }
     }
 }
@@ -59,6 +62,17 @@ private fun Route.postAddress() {
     post("/address") {
         clientWithBody<PostAddress, GetAddress> { bodyRequest ->
             addressService.createAddress(bodyRequest.request.jwtUser.uuid, bodyRequest.body)
+        }
+    }
+}
+
+private fun Route.postAddressV2() {
+
+    val addressService: AddressService by inject()
+
+    post("/v2/address") {
+        clientWithBody<PostAddressV2, GetAddressV2> { bodyRequest ->
+            addressService.createAddressV2(bodyRequest.request.jwtUser.uuid, bodyRequest.body)
         }
     }
 }

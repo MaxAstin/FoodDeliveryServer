@@ -15,5 +15,6 @@ class Suggestion(
 
 @Serializable
 class SuggestionData(
+    @SerialName("street_fias_id") val streetFiasId: String,
     @SerialName("street_with_type") val streetWithType: String,
 )

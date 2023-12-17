@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.domain.model.address
+package com.bunbeauty.fooddelivery.domain.feature.address.model
 
 import java.util.*
 

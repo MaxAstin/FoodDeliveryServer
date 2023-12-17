@@ -6,12 +6,8 @@ import com.bunbeauty.fooddelivery.data.features.city.CityRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.domain.error.noAccessToCompanyError
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
-import com.bunbeauty.fooddelivery.domain.feature.address.mapper.mapAddress
-import com.bunbeauty.fooddelivery.domain.feature.address.mapper.mapPostAddress
-import com.bunbeauty.fooddelivery.domain.feature.address.mapper.mapSuggestion
-import com.bunbeauty.fooddelivery.domain.feature.address.model.GetSuggestion
-import com.bunbeauty.fooddelivery.domain.model.address.GetAddress
-import com.bunbeauty.fooddelivery.domain.model.address.PostAddress
+import com.bunbeauty.fooddelivery.domain.feature.address.mapper.*
+import com.bunbeauty.fooddelivery.domain.feature.address.model.*
 import com.bunbeauty.fooddelivery.domain.toUuid
 
 class AddressService(
@@ -33,6 +29,12 @@ class AddressService(
         val insertAddress = postAddress.mapPostAddress(userUuid)
         return addressRepository.insertAddress(insertAddress = insertAddress)
             .mapAddress()
+    }
+
+    suspend fun createAddressV2(userUuid: String, postAddress: PostAddressV2): GetAddressV2 {
+        val insertAddress = mapPostAddressV2(postAddress, userUuid)
+        return addressRepository.insertAddressV2(insertAddress = insertAddress)
+            .mapAddressV2()
     }
 
     suspend fun getAddressListByUserUuidAndCityUuid(userUuid: String, cityUuid: String): List<GetAddress> {
