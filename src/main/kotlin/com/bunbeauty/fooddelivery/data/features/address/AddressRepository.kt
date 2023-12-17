@@ -1,10 +1,7 @@
 package com.bunbeauty.fooddelivery.data.features.address
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.AddressEntity
-import com.bunbeauty.fooddelivery.data.entity.AddressEntityV2
-import com.bunbeauty.fooddelivery.data.entity.ClientUserEntity
-import com.bunbeauty.fooddelivery.data.entity.StreetEntity
+import com.bunbeauty.fooddelivery.data.entity.*
 import com.bunbeauty.fooddelivery.data.features.address.mapper.mapAddressEntity
 import com.bunbeauty.fooddelivery.data.features.address.mapper.mapAddressEntityV2
 import com.bunbeauty.fooddelivery.data.features.address.mapper.mapSuggestionsResponse
@@ -12,10 +9,12 @@ import com.bunbeauty.fooddelivery.data.features.address.remotemodel.AddressReque
 import com.bunbeauty.fooddelivery.data.features.address.remotemodel.Bound
 import com.bunbeauty.fooddelivery.data.features.address.remotemodel.Location
 import com.bunbeauty.fooddelivery.data.table.AddressTable
+import com.bunbeauty.fooddelivery.data.table.AddressV2Table
 import com.bunbeauty.fooddelivery.domain.feature.address.model.*
 import com.bunbeauty.fooddelivery.domain.feature.city.City
 import com.bunbeauty.fooddelivery.domain.toUuid
 import com.bunbeauty.fooddelivery.network.getDataOrNull
+import org.jetbrains.exposed.sql.and
 
 private const val STREET_BOUND = "street"
 
@@ -48,8 +47,9 @@ class AddressRepository(
                 entrance = insertAddress.entrance
                 floor = insertAddress.floor
                 comment = insertAddress.comment
-                clientUser = ClientUserEntity[insertAddress.clientUserUuid]
                 isVisible = insertAddress.isVisible
+                clientUser = ClientUserEntity[insertAddress.clientUserUuid]
+                city = CityEntity[insertAddress.cityUuid]
             }.mapAddressEntityV2()
         }
     }
@@ -62,6 +62,16 @@ class AddressRepository(
                 addressEntity.street.cafe.city.uuid == cityUuid
             }.toList()
                 .map(mapAddressEntity)
+        }
+    }
+
+    suspend fun getAddressListByUserUuidAndCityUuidV2(userUuid: String, cityUuid: String): List<AddressV2> {
+        return query {
+            AddressEntityV2.find {
+                (AddressV2Table.clientUser eq userUuid.toUuid()) and
+                        (AddressV2Table.city eq cityUuid.toUuid())
+            }.toList()
+                .map(mapAddressEntityV2)
         }
     }
 

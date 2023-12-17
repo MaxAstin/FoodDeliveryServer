@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.entity
 
-import com.bunbeauty.fooddelivery.data.table.AddressTableV2
+import com.bunbeauty.fooddelivery.data.table.AddressV2Table
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -9,16 +9,18 @@ import java.util.*
 class AddressEntityV2(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     val uuid: String = uuid.value.toString()
-    var streetFiasId: String by AddressTableV2.streetFiasId
-    var streetName: String by AddressTableV2.streetName
-    var house: String by AddressTableV2.house
-    var flat: String? by AddressTableV2.flat
-    var entrance: String? by AddressTableV2.entrance
-    var floor: String? by AddressTableV2.floor
-    var comment: String? by AddressTableV2.comment
-    var clientUser: ClientUserEntity by ClientUserEntity referencedOn AddressTableV2.clientUser
-    var isVisible: Boolean by AddressTableV2.isVisible
+    var streetFiasId: String by AddressV2Table.streetFiasId
+    var streetName: String by AddressV2Table.streetName
+    var house: String by AddressV2Table.house
+    var flat: String? by AddressV2Table.flat
+    var entrance: String? by AddressV2Table.entrance
+    var floor: String? by AddressV2Table.floor
+    var comment: String? by AddressV2Table.comment
+    var isVisible: Boolean by AddressV2Table.isVisible
 
-    companion object : UUIDEntityClass<AddressEntityV2>(AddressTableV2)
+    var clientUser: ClientUserEntity by ClientUserEntity referencedOn AddressV2Table.clientUser
+    var city: CityEntity by CityEntity referencedOn AddressV2Table.city
+
+    companion object : UUIDEntityClass<AddressEntityV2>(AddressV2Table)
 
 }

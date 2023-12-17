@@ -20,8 +20,10 @@ fun Application.configureAddressRouting() {
     routing {
         authenticate {
             getAddresses()
-            getSuggestions()
             postAddress()
+
+            getSuggestions()
+            getAddressesV2()
             postAddressV2()
         }
     }
@@ -34,7 +36,25 @@ private fun Route.getAddresses() {
     get("/address") {
         getClientWithListResult { request ->
             val cityUuid = call.getParameter(CITY_UUID_PARAMETER)
-            addressService.getAddressListByUserUuidAndCityUuid(request.jwtUser.uuid, cityUuid)
+            addressService.getAddressListByUserUuidAndCityUuid(
+                userUuid = request.jwtUser.uuid,
+                cityUuid = cityUuid
+            )
+        }
+    }
+}
+
+private fun Route.getAddressesV2() {
+
+    val addressService: AddressService by inject()
+
+    get("/v2/address") {
+        getClientWithListResult { request ->
+            val cityUuid = call.getParameter(CITY_UUID_PARAMETER)
+            addressService.getAddressListByUserUuidAndCityUuidV2(
+                userUuid = request.jwtUser.uuid,
+                cityUuid = cityUuid
+            )
         }
     }
 }
@@ -61,7 +81,10 @@ private fun Route.postAddress() {
 
     post("/address") {
         clientWithBody<PostAddress, GetAddress> { bodyRequest ->
-            addressService.createAddress(bodyRequest.request.jwtUser.uuid, bodyRequest.body)
+            addressService.createAddress(
+                userUuid = bodyRequest.request.jwtUser.uuid,
+                postAddress = bodyRequest.body
+            )
         }
     }
 }
@@ -72,7 +95,10 @@ private fun Route.postAddressV2() {
 
     post("/v2/address") {
         clientWithBody<PostAddressV2, GetAddressV2> { bodyRequest ->
-            addressService.createAddressV2(bodyRequest.request.jwtUser.uuid, bodyRequest.body)
+            addressService.createAddressV2(
+                userUuid = bodyRequest.request.jwtUser.uuid,
+                postAddress = bodyRequest.body
+            )
         }
     }
 }

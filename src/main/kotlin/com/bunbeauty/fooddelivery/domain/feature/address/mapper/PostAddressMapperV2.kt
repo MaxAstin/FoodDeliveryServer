@@ -15,5 +15,6 @@ val mapPostAddressV2: PostAddressV2.(String) -> InsertAddressV2 = { userUuid ->
         comment = comment,
         isVisible = isVisible,
         clientUserUuid = userUuid.toUuid(),
+        cityUuid = cityUuid.toUuid(),
     )
 }

@@ -11,6 +11,7 @@ class PostAddressV2(
     val floor: String?,
     val comment: String?,
     val isVisible: Boolean,
+    val cityUuid: String,
 )
 
 @Serializable

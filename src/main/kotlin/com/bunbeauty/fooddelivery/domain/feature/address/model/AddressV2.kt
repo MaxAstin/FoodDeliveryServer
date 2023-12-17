@@ -9,5 +9,6 @@ class AddressV2(
     val floor: String?,
     val comment: String?,
     val userUuid: String,
+    val cityUuid: String,
     val isVisible: Boolean,
 )

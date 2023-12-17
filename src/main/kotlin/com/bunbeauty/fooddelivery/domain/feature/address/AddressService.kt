@@ -44,6 +44,13 @@ class AddressService(
         ).map(mapAddress)
     }
 
+    suspend fun getAddressListByUserUuidAndCityUuidV2(userUuid: String, cityUuid: String): List<GetAddressV2> {
+        return addressRepository.getAddressListByUserUuidAndCityUuidV2(
+            userUuid = userUuid,
+            cityUuid = cityUuid
+        ).map(mapAddressV2)
+    }
+
     suspend fun getStreetSuggestionList(query: String, cityUuid: String): List<GetSuggestion> {
         val city = cityRepository.getCityByUuid(cityUuid.toUuid())
             .orThrowNotFoundByUuidError(cityUuid)

@@ -13,6 +13,7 @@ val mapAddressV2: AddressV2.() -> GetAddressV2 = {
         floor = floor,
         comment = comment,
         userUuid = userUuid,
+        cityUuid = cityUuid,
         isVisible = isVisible,
     )
 }

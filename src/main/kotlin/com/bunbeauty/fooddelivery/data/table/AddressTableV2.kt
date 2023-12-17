@@ -2,7 +2,7 @@ package com.bunbeauty.fooddelivery.data.table
 
 import org.jetbrains.exposed.dao.id.UUIDTable
 
-object AddressTableV2 : UUIDTable() {
+object AddressV2Table : UUIDTable() {
 
     val streetFiasId = varchar("streetFiasId", 512)
     val streetName = varchar("streetName", 512)
@@ -14,5 +14,6 @@ object AddressTableV2 : UUIDTable() {
     val isVisible = bool("isVisible")
 
     val clientUser = reference("clientUser", ClientUserTable)
+    val city = reference("city", CityTable)
 
 }

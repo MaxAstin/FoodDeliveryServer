@@ -12,4 +12,5 @@ class InsertAddressV2(
     val comment: String?,
     val isVisible: Boolean,
     val clientUserUuid: UUID,
+    val cityUuid: UUID,
 )
