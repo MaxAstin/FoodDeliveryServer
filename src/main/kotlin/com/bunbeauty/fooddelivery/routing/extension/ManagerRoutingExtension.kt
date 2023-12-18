@@ -9,7 +9,7 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.manager(
     block: (Request) -> Unit,
 ) {
     checkRights(block) { jwtUser ->
-        jwtUser.isManager()
+        jwtUser.isManager() || jwtUser.isAdmin()
     }
 }
 
