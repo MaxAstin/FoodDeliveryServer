@@ -7,7 +7,7 @@ import io.ktor.util.pipeline.*
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.admin(block: (Request) -> Unit) {
     checkRights(block) { jwtUser ->
-        jwtUser.isManager()
+        jwtUser.isAdmin()
     }
 }
 
