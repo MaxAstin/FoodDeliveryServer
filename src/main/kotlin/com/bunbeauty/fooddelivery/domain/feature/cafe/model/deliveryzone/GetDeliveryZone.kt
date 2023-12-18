@@ -1,5 +1,8 @@
 package com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 class GetDeliveryZone(
     val uuid: String,
     val isVisible: Boolean,
@@ -7,6 +10,7 @@ class GetDeliveryZone(
     val points: List<GetPoint>
 )
 
+@Serializable
 class GetPoint(
     val uuid: String,
     var order: Int,
