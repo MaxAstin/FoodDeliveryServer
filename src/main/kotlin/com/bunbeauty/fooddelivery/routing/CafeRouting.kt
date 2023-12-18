@@ -2,11 +2,11 @@ package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.CAFE_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.CITY_UUID_PARAMETER
-import com.bunbeauty.fooddelivery.domain.model.cafe.GetCafe
-import com.bunbeauty.fooddelivery.domain.model.cafe.PatchCafe
-import com.bunbeauty.fooddelivery.domain.model.cafe.PostCafe
+import com.bunbeauty.fooddelivery.domain.feature.cafe.CafeService
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.GetCafe
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.PatchCafe
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.PostCafe
 import com.bunbeauty.fooddelivery.routing.extension.*
-import com.bunbeauty.fooddelivery.service.CafeService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
@@ -42,7 +42,10 @@ private fun Route.postCafe() {
 
     post("/cafe") {
         adminWithBody<PostCafe, GetCafe> { bodyRequest ->
-            cafeService.createCafe(bodyRequest.body)
+            cafeService.createCafe(
+                userUuid = bodyRequest.request.jwtUser.uuid,
+                postCafe = bodyRequest.body
+            )
         }
     }
 }
@@ -54,7 +57,11 @@ private fun Route.patchCafe() {
     patch("/cafe") {
         managerWithBody<PatchCafe, GetCafe> { bodyRequest ->
             val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
-            cafeService.updateCafe(cafeUuid, bodyRequest.body)
+            cafeService.updateCafe(
+                userUuid = bodyRequest.request.jwtUser.uuid,
+                cafeUuid = cafeUuid,
+                patchCafe = bodyRequest.body
+            )
         }
     }
 }

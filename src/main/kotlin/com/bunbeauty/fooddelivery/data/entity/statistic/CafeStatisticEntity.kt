@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.entity.statistic
 
-import com.bunbeauty.fooddelivery.data.entity.CafeEntity
+import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.table.CafeStatisticTable
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.GetStatistic
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.PeriodType

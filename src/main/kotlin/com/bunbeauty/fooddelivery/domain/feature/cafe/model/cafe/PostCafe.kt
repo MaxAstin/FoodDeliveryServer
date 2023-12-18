@@ -1,10 +1,9 @@
-package com.bunbeauty.fooddelivery.domain.model.cafe
+package com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-class GetCafe(
-    val uuid: String,
+class PostCafe(
     val fromTime: Int,
     val toTime: Int,
     val offset: Int,

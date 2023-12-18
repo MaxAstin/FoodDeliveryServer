@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.data.repo.statistic
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.CafeEntity
+import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.entity.statistic.CafeStatisticEntity
 import com.bunbeauty.fooddelivery.data.entity.statistic.CafeStatisticProductEntity
 import com.bunbeauty.fooddelivery.data.table.CafeStatisticProductTable

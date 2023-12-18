@@ -34,6 +34,7 @@ fun Application.configureKoin() {
             recommendationModule,
             nonWorkingDayModule,
             networkModule,
+            deliveryZoneModule,
         )
     }
 }

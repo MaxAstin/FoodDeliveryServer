@@ -1,18 +1,19 @@
-package com.bunbeauty.fooddelivery.data.repo
+package com.bunbeauty.fooddelivery.data.features.cafe
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.CafeEntity
 import com.bunbeauty.fooddelivery.data.entity.CityEntity
-import com.bunbeauty.fooddelivery.data.table.CafeTable
+import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
+import com.bunbeauty.fooddelivery.data.features.cafe.mapper.mapCafeEntity
 import com.bunbeauty.fooddelivery.data.table.CityTable
-import com.bunbeauty.fooddelivery.domain.model.cafe.GetCafe
-import com.bunbeauty.fooddelivery.domain.model.cafe.InsertCafe
-import com.bunbeauty.fooddelivery.domain.model.cafe.UpdateCafe
+import com.bunbeauty.fooddelivery.data.table.cafe.CafeTable
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.InsertCafe
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.UpdateCafe
 import java.util.*
 
 class CafeRepository {
 
-    suspend fun insertCafe(insertCafe: InsertCafe): GetCafe = query {
+    suspend fun insertCafe(insertCafe: InsertCafe): Cafe = query {
         CafeEntity.new {
             fromTime = insertCafe.fromTime
             toTime = insertCafe.toTime
@@ -23,28 +24,21 @@ class CafeRepository {
             address = insertCafe.address
             city = CityEntity[insertCafe.cityUuid]
             isVisible = insertCafe.isVisible
-        }.toCafe()
+        }.mapCafeEntity()
     }
 
-    suspend fun getCafeByUuid(cafeUuid: UUID): GetCafe? = query {
-        CafeEntity.findById(cafeUuid)?.toCafe()
-    }
-
-    suspend fun getCafeListByCityUuid(cityUuid: UUID): List<GetCafe> = query {
+    suspend fun getCafeListByCityUuid(cityUuid: UUID): List<Cafe> = query {
         CafeEntity.find {
             CafeTable.city eq cityUuid
-        }.map { cafeEntity ->
-            cafeEntity.toCafe()
-        }.toList()
+        }.map(mapCafeEntity)
+            .toList()
     }
 
-    suspend fun getCafeListByCompanyUuid(companyUuid: UUID): List<GetCafe> = query {
+    suspend fun getCafeListByCompanyUuid(companyUuid: UUID): List<Cafe> = query {
         CityEntity.find {
             CityTable.company eq companyUuid
         }.flatMap { cityEntity ->
-            cityEntity.cafes.map { cafeEntity ->
-                cafeEntity.toCafe()
-            }
+            cityEntity.cafes.map(mapCafeEntity)
         }.toList()
     }
 
@@ -54,7 +48,7 @@ class CafeRepository {
         }?.codeCounter
     }
 
-    suspend fun updateCafe(cafeUuid: UUID, updateCafe: UpdateCafe): GetCafe? = query {
+    suspend fun updateCafe(cafeUuid: UUID, updateCafe: UpdateCafe): Cafe? = query {
         CafeEntity.findById(cafeUuid)?.apply {
             fromTime = updateCafe.fromTime ?: fromTime
             toTime = updateCafe.toTime ?: toTime
@@ -64,7 +58,7 @@ class CafeRepository {
             longitude = updateCafe.longitude ?: longitude
             address = updateCafe.address ?: address
             isVisible = updateCafe.isVisible ?: isVisible
-        }?.toCafe()
+        }?.mapCafeEntity()
     }
 
 }

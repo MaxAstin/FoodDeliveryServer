@@ -1,8 +1,9 @@
-package com.bunbeauty.fooddelivery.data.entity
+package com.bunbeauty.fooddelivery.data.entity.cafe
 
-import com.bunbeauty.fooddelivery.data.table.CafeTable
+import com.bunbeauty.fooddelivery.data.entity.CityEntity
+import com.bunbeauty.fooddelivery.data.entity.StreetEntity
 import com.bunbeauty.fooddelivery.data.table.StreetTable
-import com.bunbeauty.fooddelivery.domain.model.cafe.GetCafe
+import com.bunbeauty.fooddelivery.data.table.cafe.CafeTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -27,16 +28,4 @@ class CafeEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     companion object : UUIDEntityClass<CafeEntity>(CafeTable)
 
-    fun toCafe() = GetCafe(
-        uuid = uuid,
-        fromTime = fromTime,
-        toTime = toTime,
-        offset = offset,
-        phone = phoneNumber,
-        latitude = latitude,
-        longitude = longitude,
-        address = address,
-        cityUuid = city.uuid,
-        isVisible = isVisible,
-    )
 }

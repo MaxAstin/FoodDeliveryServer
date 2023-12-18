@@ -1,5 +1,6 @@
 package com.bunbeauty.fooddelivery.data.entity
 
+import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.table.OrderProductTable

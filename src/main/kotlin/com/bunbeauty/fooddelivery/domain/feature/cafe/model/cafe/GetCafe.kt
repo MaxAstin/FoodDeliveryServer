@@ -1,8 +1,10 @@
-package com.bunbeauty.fooddelivery.domain.model.cafe
+package com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe
 
-import java.util.*
+import kotlinx.serialization.Serializable
 
-class InsertCafe(
+@Serializable
+class GetCafe(
+    val uuid: String,
     val fromTime: Int,
     val toTime: Int,
     val offset: Int,
@@ -10,6 +12,6 @@ class InsertCafe(
     val latitude: Double,
     val longitude: Double,
     val address: String,
-    val cityUuid: UUID,
+    val cityUuid: String,
     val isVisible: Boolean,
 )

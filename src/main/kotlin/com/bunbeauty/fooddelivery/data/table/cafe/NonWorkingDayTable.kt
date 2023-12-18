@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.data.table
+package com.bunbeauty.fooddelivery.data.table.cafe
 
 import org.jetbrains.exposed.dao.id.UUIDTable
 

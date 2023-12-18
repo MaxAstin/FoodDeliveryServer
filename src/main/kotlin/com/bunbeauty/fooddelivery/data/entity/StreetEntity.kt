@@ -1,5 +1,6 @@
 package com.bunbeauty.fooddelivery.data.entity
 
+import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.table.StreetTable
 import com.bunbeauty.fooddelivery.domain.model.street.GetStreet
 import org.jetbrains.exposed.dao.UUIDEntity

@@ -2,6 +2,7 @@ package com.bunbeauty.fooddelivery.data.repo.order
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.*
+import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductEntity
 import com.bunbeauty.fooddelivery.data.table.OrderTable

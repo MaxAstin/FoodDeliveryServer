@@ -2,9 +2,9 @@ package com.bunbeauty.fooddelivery.data.features.address
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.AddressEntity
-import com.bunbeauty.fooddelivery.data.entity.CafeEntity
 import com.bunbeauty.fooddelivery.data.entity.CityEntity
 import com.bunbeauty.fooddelivery.data.entity.StreetEntity
+import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.features.address.mapper.mapStreetEntity
 import com.bunbeauty.fooddelivery.domain.feature.address.model.Street
 import com.bunbeauty.fooddelivery.domain.model.street.InsertStreet

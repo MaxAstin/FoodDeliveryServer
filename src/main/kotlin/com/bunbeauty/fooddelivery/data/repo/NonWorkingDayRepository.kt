@@ -1,9 +1,9 @@
 package com.bunbeauty.fooddelivery.data.repo
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.CafeEntity
-import com.bunbeauty.fooddelivery.data.entity.NonWorkingDayEntity
-import com.bunbeauty.fooddelivery.data.table.NonWorkingDayTable
+import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
+import com.bunbeauty.fooddelivery.data.entity.cafe.NonWorkingDayEntity
+import com.bunbeauty.fooddelivery.data.table.cafe.NonWorkingDayTable
 import com.bunbeauty.fooddelivery.domain.model.non_working_day.GetNonWorkingDay
 import com.bunbeauty.fooddelivery.domain.model.non_working_day.InsertNonWorkingDay
 import com.bunbeauty.fooddelivery.domain.model.non_working_day.UpdateNonWorkingDay

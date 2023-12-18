@@ -1,6 +1,6 @@
-package com.bunbeauty.fooddelivery.data.entity
+package com.bunbeauty.fooddelivery.data.entity.cafe
 
-import com.bunbeauty.fooddelivery.data.table.NonWorkingDayTable
+import com.bunbeauty.fooddelivery.data.table.cafe.NonWorkingDayTable
 import com.bunbeauty.fooddelivery.domain.model.non_working_day.GetNonWorkingDay
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass

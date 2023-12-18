@@ -8,8 +8,8 @@ import com.bunbeauty.fooddelivery.data.Constants.ORDER_HISTORY_DAY_COUNT
 import com.bunbeauty.fooddelivery.data.Constants.ORDER_KOD_KEY
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.features.address.StreetRepository
+import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
 import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
-import com.bunbeauty.fooddelivery.data.repo.CafeRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.data.session.SessionHandler

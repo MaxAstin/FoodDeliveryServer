@@ -1,13 +1,13 @@
 package com.bunbeauty.fooddelivery.service
 
-import com.bunbeauty.fooddelivery.data.repo.CafeRepository
+import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.data.repo.UserRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICafeStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICompanyStatisticRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
-import com.bunbeauty.fooddelivery.domain.model.cafe.GetCafe
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
 import com.bunbeauty.fooddelivery.domain.model.company.GetCompany
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.GetStatistic
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.PeriodType
@@ -140,7 +140,7 @@ class StatisticService(
     }
 
     private suspend inline fun updateCafeStatistic(
-        cafe: GetCafe,
+        cafe: Cafe,
         periodType: PeriodType,
         fromDateTime: DateTime,
         toDateTime: DateTime,

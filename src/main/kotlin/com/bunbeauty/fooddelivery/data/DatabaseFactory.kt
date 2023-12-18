@@ -7,6 +7,10 @@ import com.bunbeauty.fooddelivery.data.Constants.JDBC_DRIVER
 import com.bunbeauty.fooddelivery.data.Constants.JDBC_POSTGRESQL_PREFIX
 import com.bunbeauty.fooddelivery.data.Constants.POSTGRES_PREFIX
 import com.bunbeauty.fooddelivery.data.table.*
+import com.bunbeauty.fooddelivery.data.table.cafe.CafeTable
+import com.bunbeauty.fooddelivery.data.table.cafe.DeliveryZonePointTable
+import com.bunbeauty.fooddelivery.data.table.cafe.DeliveryZoneTable
+import com.bunbeauty.fooddelivery.data.table.cafe.NonWorkingDayTable
 import com.bunbeauty.fooddelivery.data.table.menu.*
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -107,6 +111,12 @@ object DatabaseFactory {
 
             SchemaUtils.create(AdditionTable)
             SchemaUtils.createMissingTablesAndColumns(AdditionTable)
+
+            SchemaUtils.create(DeliveryZoneTable)
+            SchemaUtils.createMissingTablesAndColumns(DeliveryZoneTable)
+
+            SchemaUtils.create(DeliveryZonePointTable)
+            SchemaUtils.createMissingTablesAndColumns(DeliveryZonePointTable)
         }
     }
 

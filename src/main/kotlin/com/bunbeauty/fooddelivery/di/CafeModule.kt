@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.di
 
-import com.bunbeauty.fooddelivery.data.repo.CafeRepository
-import com.bunbeauty.fooddelivery.service.CafeService
+import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
+import com.bunbeauty.fooddelivery.domain.feature.cafe.CafeService
 import org.koin.dsl.module
 
 val cafeModule = module(createdAtStart = true) {
