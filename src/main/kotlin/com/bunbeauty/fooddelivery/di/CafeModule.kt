@@ -7,7 +7,8 @@ import org.koin.dsl.module
 val cafeModule = module(createdAtStart = true) {
     factory {
         CafeService(
-            cafeRepository = get()
+            cafeRepository = get(),
+            privacyCheckService = get()
         )
     }
     single { CafeRepository() }

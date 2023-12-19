@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.domain.feature.menu.service
 
 import com.bunbeauty.fooddelivery.data.features.menu.CategoryRepository
-import com.bunbeauty.fooddelivery.data.repo.UserRepository
+import com.bunbeauty.fooddelivery.data.features.user.UserRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUserUuidError
 import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapCategory
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.category.*

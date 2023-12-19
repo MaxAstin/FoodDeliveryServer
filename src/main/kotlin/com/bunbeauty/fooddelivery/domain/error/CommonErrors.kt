@@ -28,3 +28,7 @@ fun parameterIsRequiredError(parameterName: String): Nothing {
 fun noAccessToCompanyError(companyUuid: String): Nothing {
     error("User doesn't has access to this company - $companyUuid")
 }
+
+fun isNotAvailableForYourCompanyError(entity: KClass<*>, uuid: String, companyUuid: String): Nothing {
+    error("${entity.simpleName}($uuid) is not available for your Company($companyUuid)")
+}

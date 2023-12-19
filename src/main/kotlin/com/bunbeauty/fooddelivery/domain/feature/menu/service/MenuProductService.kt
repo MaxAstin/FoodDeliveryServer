@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.domain.feature.menu.service
 import com.bunbeauty.fooddelivery.data.features.menu.CategoryRepository
 import com.bunbeauty.fooddelivery.data.features.menu.HitRepository
 import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
-import com.bunbeauty.fooddelivery.data.repo.UserRepository
+import com.bunbeauty.fooddelivery.data.features.user.UserRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUserUuidError
 import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPatchMenuProduct

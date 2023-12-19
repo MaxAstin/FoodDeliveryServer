@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.domain.feature.city
 
 import com.bunbeauty.fooddelivery.data.features.city.CityRepository
-import com.bunbeauty.fooddelivery.data.repo.UserRepository
+import com.bunbeauty.fooddelivery.data.features.user.UserRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.city.mapper.mapCity
 import com.bunbeauty.fooddelivery.domain.model.city.GetCity
@@ -20,7 +20,7 @@ class CityService(
         val insertCity = InsertCity(
             name = postCity.name,
             timeZone = postCity.timeZone,
-            company = user.company.uuid.toUuid(),
+            company = user.companyUuid.toUuid(),
             isVisible = postCity.isVisible,
         )
 

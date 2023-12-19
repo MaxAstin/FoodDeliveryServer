@@ -35,6 +35,7 @@ fun Application.configureKoin() {
             nonWorkingDayModule,
             networkModule,
             deliveryZoneModule,
+            privacyCheckModule,
         )
     }
 }

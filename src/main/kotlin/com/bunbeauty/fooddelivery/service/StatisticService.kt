@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.service
 
 import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
+import com.bunbeauty.fooddelivery.data.features.user.UserRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
-import com.bunbeauty.fooddelivery.data.repo.UserRepository
 import com.bunbeauty.fooddelivery.data.repo.order.IOrderStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICafeStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICompanyStatisticRepository
@@ -43,7 +43,7 @@ class StatisticService(
             companyStatisticRepository.getStatisticListByTimePeriodTypeCompany(
                 time = startTimeMillis,
                 periodType = periodType,
-                companyUuid = user.company.uuid.toUuid(),
+                companyUuid = user.companyUuid.toUuid(),
             )
         } else {
             cafeStatisticRepository.getStatisticListByTimePeriodTypeCafe(

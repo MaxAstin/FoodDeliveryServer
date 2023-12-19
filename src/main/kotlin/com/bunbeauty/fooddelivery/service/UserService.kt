@@ -3,7 +3,8 @@ package com.bunbeauty.fooddelivery.service
 import at.favre.lib.crypto.bcrypt.BCrypt.MIN_COST
 import com.bunbeauty.fooddelivery.auth.IJwtService
 import com.bunbeauty.fooddelivery.data.enums.UserRole
-import com.bunbeauty.fooddelivery.data.repo.UserRepository
+import com.bunbeauty.fooddelivery.data.features.user.UserRepository
+import com.bunbeauty.fooddelivery.domain.feature.user.mapper.mapUser
 import com.bunbeauty.fooddelivery.domain.model.user.*
 import com.bunbeauty.fooddelivery.domain.toUuid
 import com.toxicbakery.bcrypt.Bcrypt
@@ -23,7 +24,7 @@ class UserService(
             cityUuid = postUser.cityUuid.toUuid()
         )
 
-        return userRepository.insertUser(insertUser)
+        return userRepository.insertUser(insertUser).mapUser()
     }
 
     suspend fun login(postUserAuth: PostUserAuth): UserAuthResponse? {
@@ -33,7 +34,7 @@ class UserService(
                 UserAuthResponse(
                     token = token,
                     cityUuid = user.city.uuid,
-                    companyUuid = user.company.uuid
+                    companyUuid = user.companyUuid
                 )
             } else {
                 println(

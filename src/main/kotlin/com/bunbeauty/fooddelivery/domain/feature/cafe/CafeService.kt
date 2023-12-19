@@ -7,12 +7,20 @@ import com.bunbeauty.fooddelivery.domain.feature.cafe.mapper.cafe.mapPostCafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.GetCafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.PatchCafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.PostCafe
+import com.bunbeauty.fooddelivery.domain.feature.privacy.PrivacyCheckService
 import com.bunbeauty.fooddelivery.domain.toUuid
 
-class CafeService(private val cafeRepository: CafeRepository) {
+class CafeService(
+    private val cafeRepository: CafeRepository,
+    private val privacyCheckService: PrivacyCheckService,
+) {
 
     suspend fun createCafe(userUuid: String, postCafe: PostCafe): GetCafe {
-        // TODO get User/Company/Cities and check that postCafe/cityUuid is in this list
+        privacyCheckService.checkIsCityAvailable(
+            userUuid = userUuid,
+            cityUuid = postCafe.cityUuid
+        )
+
         return cafeRepository.insertCafe(
             insertCafe = postCafe.mapPostCafe()
         ).mapCafe()
@@ -24,7 +32,11 @@ class CafeService(private val cafeRepository: CafeRepository) {
     }
 
     suspend fun updateCafe(userUuid: String, cafeUuid: String, patchCafe: PatchCafe): GetCafe? {
-        // TODO get User/Company/Cities and check that cafe with cafeUuid is in this list
+        privacyCheckService.checkIsCafeAvailable(
+            userUuid = userUuid,
+            cafeUuid = cafeUuid
+        )
+
         return cafeRepository.updateCafe(
             cafeUuid = cafeUuid.toUuid(),
             updateCafe = patchCafe.mapPatchCafe()

@@ -2,7 +2,6 @@ package com.bunbeauty.fooddelivery.data.entity
 
 import com.bunbeauty.fooddelivery.data.enums.UserRole
 import com.bunbeauty.fooddelivery.data.table.UserTable
-import com.bunbeauty.fooddelivery.domain.model.user.GetUser
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -19,14 +18,4 @@ class UserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     companion object : UUIDEntityClass<UserEntity>(UserTable)
 
-    fun toUser(): GetUser {
-        return GetUser(
-            uuid = uuid,
-            username = username,
-            passwordHash = passwordHash,
-            role = role.roleName,
-            city = city.toCity(),
-            company = city.company.toCompany()
-        )
-    }
 }

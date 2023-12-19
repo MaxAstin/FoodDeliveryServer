@@ -7,7 +7,8 @@ import org.koin.dsl.module
 val deliveryZoneModule = module(createdAtStart = true) {
     factory {
         DeliveryZoneService(
-            deliveryZoneRepository = get()
+            deliveryZoneRepository = get(),
+            privacyCheckService = get(),
         )
     }
     single { DeliveryZoneRepository() }
