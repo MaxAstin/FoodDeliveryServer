@@ -2,7 +2,6 @@ package com.bunbeauty.fooddelivery.data.features.city.mapper
 
 import com.bunbeauty.fooddelivery.data.entity.CityEntity
 import com.bunbeauty.fooddelivery.data.features.cafe.mapper.mapCafeEntity
-import com.bunbeauty.fooddelivery.data.features.company.mapper.mapCompanyEntity
 import com.bunbeauty.fooddelivery.domain.feature.city.City
 
 val mapCityEntity: CityEntity.() -> City = {
@@ -11,7 +10,6 @@ val mapCityEntity: CityEntity.() -> City = {
         name = name,
         timeZone = timeZone,
         isVisible = isVisible,
-        company = company.mapCompanyEntity(),
         cafes = cafes.map(mapCafeEntity)
     )
 }
