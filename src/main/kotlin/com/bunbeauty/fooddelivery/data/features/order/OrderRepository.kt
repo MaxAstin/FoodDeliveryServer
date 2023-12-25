@@ -1,29 +1,35 @@
 package com.bunbeauty.fooddelivery.data.features.order
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.*
+import com.bunbeauty.fooddelivery.data.entity.ClientUserEntity
+import com.bunbeauty.fooddelivery.data.entity.OrderEntity
+import com.bunbeauty.fooddelivery.data.entity.OrderProductEntity
+import com.bunbeauty.fooddelivery.data.entity.StatisticOrderEntity
 import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.AdditionEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductEntity
 import com.bunbeauty.fooddelivery.data.features.order.mapper.mapOrderEntity
+import com.bunbeauty.fooddelivery.data.session.SessionHandler
 import com.bunbeauty.fooddelivery.data.table.OrderTable
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.InsertOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.cafe.GetCafeOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.cafe.GetCafeOrderDetails
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.client.GetClientOrder
-import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.client.GetClientOrderUpdate
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.InsertOrderV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.cafe.GetCafeOrderDetailsV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetClientOrderV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v3.InsertOrderV3
 import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetStatisticOrder
 import com.bunbeauty.fooddelivery.domain.toUuid
+import kotlinx.coroutines.flow.Flow
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 
 class OrderRepository {
+
+    private val sessionHandler: SessionHandler<Order> = SessionHandler()
 
     suspend fun insertOrder(insertOrder: InsertOrder): Order = query {
         val orderEntity = OrderEntity.new {
@@ -259,22 +265,26 @@ class OrderRepository {
             }
     }
 
-    suspend fun getClientOrderByUuid(orderUuid: String): GetClientOrder? = query {
-        OrderEntity.findById(orderUuid.toUuid())?.toClientOrder()
-    }
-
-    suspend fun getClientOrderUpdateByUuid(orderUuid: String): GetClientOrderUpdate? = query {
-        OrderUpdateEntity.findById(orderUuid.toUuid())?.toClientOrderUpdate()
-    }
-
     suspend fun getCafeOrderByUuid(orderUuid: String): GetCafeOrder? = query {
         OrderEntity.findById(orderUuid.toUuid())?.toCafeOrder()
     }
 
-    suspend fun updateOrderStatusByUuid(orderUuid: String, status: String): GetCafeOrder? = query {
+    suspend fun updateOrderStatusByUuid(orderUuid: String, status: String): Order? = query {
         val orderEntity = OrderEntity.findById(orderUuid.toUuid())
         orderEntity?.status = status
-        orderEntity?.toCafeOrder()
+        orderEntity?.mapOrderEntity()
+    }
+
+    suspend fun updateSession(key: String, order: Order) {
+        sessionHandler.emitNewValue(key, order)
+    }
+
+    fun getOrderFlowByKey(key: String): Flow<Order> {
+        return sessionHandler.connect(key)
+    }
+
+    fun disconnectFromSession(key: String) {
+        sessionHandler.disconnect(key)
     }
 
 }

@@ -2,6 +2,7 @@ package com.bunbeauty.fooddelivery.domain.feature.order.mapper
 
 import com.bunbeauty.fooddelivery.domain.feature.order.model.CalculatedOrderValues
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
+import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.cafe.GetCafeOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.client.GetClientOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetClientOrderV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetOrderAddressV2
@@ -51,6 +52,18 @@ val mapOrderToV2: Order.(CalculatedOrderValues) -> GetClientOrderV2 = { calculat
         percentDiscount = percentDiscount,
         clientUserUuid = clientUser.uuid,
         oderProductList = oderProducts.map(mapOrderProduct)
+    )
+}
+
+val mapOrderToCafeOrder: Order.() -> GetCafeOrder = {
+    GetCafeOrder(
+        uuid = uuid,
+        code = code,
+        status = status,
+        time = time,
+        timeZone = cafeWithCity.city.timeZone,
+        deferredTime = deferredTime,
+        cafeUuid = cafeWithCity.cafe.uuid,
     )
 }
 

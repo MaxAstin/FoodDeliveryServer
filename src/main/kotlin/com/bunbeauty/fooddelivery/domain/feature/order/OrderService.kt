@@ -11,7 +11,6 @@ import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
 import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.features.order.OrderRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
-import com.bunbeauty.fooddelivery.data.session.SessionHandler
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
 import com.bunbeauty.fooddelivery.domain.feature.order.mapper.*
@@ -33,6 +32,7 @@ import com.bunbeauty.fooddelivery.domain.feature.order.model.v3.PostOrderV3
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.joda.time.DateTime
 
 class OrderService(
@@ -45,9 +45,6 @@ class OrderService(
 ) {
 
     private val codesCount = CODE_LETTERS.length * CODE_NUMBER_COUNT
-    private val cafeSessionHandler: SessionHandler<GetCafeOrder> = SessionHandler()
-    private val clientSessionHandler: SessionHandler<GetClientOrder> = SessionHandler()
-    private val clientSessionHandlerV2: SessionHandler<GetClientOrderUpdate> = SessionHandler()
 
     suspend fun createOrder(clientUserUuid: String, postOrder: PostOrder): GetClientOrder {
         if (postOrder.orderProducts.isEmpty()) {
@@ -59,13 +56,17 @@ class OrderService(
             clientUserUuid = clientUserUuid
         )
         val insertOrder = postOrder.mapPostOrder(orderInfo)
-        val clientOrder = orderRepository.insertOrder(insertOrder)
-        val cafeOrder = orderRepository.getCafeOrderByUuid(clientOrder.uuid)
-        cafeSessionHandler.emitNewValue(cafeOrder?.cafeUuid, cafeOrder)
+        val order = orderRepository.insertOrder(insertOrder)
+        orderRepository.updateSession(
+            key = order.cafeWithCity.cafe.uuid,
+            order = order
+        )
 
+        //TODO map order to cafeOrder
+        val cafeOrder = orderRepository.getCafeOrderByUuid(order.uuid)
         sendNotification(cafeOrder)
 
-        return clientOrder.mapOrder(clientOrder.calculatedOrderValues)
+        return order.mapOrder(order.calculatedOrderValues)
     }
 
     suspend fun createOrderV2(clientUserUuid: String, postOrder: PostOrderV2): GetClientOrderV2 {
@@ -78,13 +79,17 @@ class OrderService(
             clientUserUuid = clientUserUuid
         )
         val insertOrder = postOrder.mapPostOrderV2(orderInfo)
-        val clientOrder = orderRepository.insertOrderV2(insertOrder)
-        val cafeOrder = orderRepository.getCafeOrderByUuid(clientOrder.uuid)
-        cafeSessionHandler.emitNewValue(cafeOrder?.cafeUuid, cafeOrder)
+        val order = orderRepository.insertOrderV2(insertOrder)
+        orderRepository.updateSession(
+            key = order.cafeWithCity.cafe.uuid,
+            order = order
+        )
 
+        //TODO map order to cafeOrder
+        val cafeOrder = orderRepository.getCafeOrderByUuid(order.uuid)
         sendNotification(cafeOrder)
 
-        return clientOrder.mapOrderToV2(clientOrder.calculatedOrderValues)
+        return order.mapOrderToV2(order.calculatedOrderValues)
     }
 
     suspend fun createOrderV3(clientUserUuid: String, postOrder: PostOrderV3): GetClientOrderV2 {
@@ -97,13 +102,17 @@ class OrderService(
             clientUserUuid = clientUserUuid
         )
         val insertOrder = postOrder.mapPostOrderV3(orderInfo)
-        val clientOrder = orderRepository.insertOrderV3(insertOrder)
-        val cafeOrder = orderRepository.getCafeOrderByUuid(clientOrder.uuid)
-        cafeSessionHandler.emitNewValue(cafeOrder?.cafeUuid, cafeOrder)
+        val order = orderRepository.insertOrderV3(insertOrder)
+        orderRepository.updateSession(
+            key = order.cafeWithCity.cafe.uuid,
+            order = order
+        )
 
+        //TODO map order to cafeOrder
+        val cafeOrder = orderRepository.getCafeOrderByUuid(order.uuid)
         sendNotification(cafeOrder)
 
-        return clientOrder.mapOrderToV2(clientOrder.calculatedOrderValues)
+        return order.mapOrderToV2(order.calculatedOrderValues)
     }
 
     suspend fun getOrderListByCafeUuid(cafeUuid: String): List<GetCafeOrder> {
@@ -140,50 +149,55 @@ class OrderService(
         return orderRepository.getOrderByUuidV2(uuid)
     }
 
-    suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder? {
-        val getCafeOrder = orderRepository.updateOrderStatusByUuid(
+    suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder {
+        val order = orderRepository.updateOrderStatusByUuid(
             orderUuid = orderUuid,
             status = patchOrder.status
+        ).orThrowNotFoundByUuidError(orderUuid)
+
+        orderRepository.updateSession(
+            key = order.cafeWithCity.cafe.uuid,
+            order = order
         )
-        cafeSessionHandler.emitNewValue(
-            key = getCafeOrder?.cafeUuid,
-            value = getCafeOrder
+        orderRepository.updateSession(
+            key = order.clientUser.uuid,
+            order = order
         )
 
-        val getClientOrder = orderRepository.getClientOrderByUuid(orderUuid = orderUuid)
-        clientSessionHandler.emitNewValue(
-            key = getClientOrder?.clientUserUuid,
-            value = getClientOrder
-        )
-
-        val getClientOrderUpdate = orderRepository.getClientOrderUpdateByUuid(orderUuid = orderUuid)
-        clientSessionHandlerV2.emitNewValue(
-            key = getClientOrderUpdate?.clientUserUuid,
-            value = getClientOrderUpdate
-        )
-
-        return getCafeOrder
+        return order.mapOrderToCafeOrder()
     }
 
     fun observeClientOrderUpdates(clientUserUuid: String): Flow<GetClientOrder> {
-        return clientSessionHandler.connect(clientUserUuid)
+        return orderRepository.getOrderFlowByKey(clientUserUuid).map { order ->
+            order.mapOrder(
+                CalculatedOrderValues(
+                    oldTotalCost = null,
+                    newTotalCost = 0,
+                )
+            )
+        }
     }
 
     fun observeClientOrderUpdatesV2(clientUserUuid: String): Flow<GetClientOrderUpdate> {
-        return clientSessionHandlerV2.connect(clientUserUuid)
+        return orderRepository.getOrderFlowByKey(clientUserUuid).map { order ->
+            GetClientOrderUpdate(
+                uuid = order.uuid,
+                status = order.status,
+                clientUserUuid = order.clientUser.uuid,
+            )
+        }
     }
 
     fun observeCafeOrderUpdates(cafeUuid: String): Flow<GetCafeOrder> {
-        return cafeSessionHandler.connect(cafeUuid)
+        return orderRepository.getOrderFlowByKey(cafeUuid).map(mapOrderToCafeOrder)
     }
 
     fun clientDisconnect(clientUserUuid: String) {
-        clientSessionHandler.disconnect(clientUserUuid)
-        clientSessionHandlerV2.disconnect(clientUserUuid)
+        orderRepository.disconnectFromSession(clientUserUuid)
     }
 
     fun userDisconnect(cafeUuid: String) {
-        cafeSessionHandler.disconnect(cafeUuid)
+        orderRepository.disconnectFromSession(cafeUuid)
     }
 
     private suspend fun createOrderInfo(postOrder: PostOrder, clientUserUuid: String): OrderInfo {
