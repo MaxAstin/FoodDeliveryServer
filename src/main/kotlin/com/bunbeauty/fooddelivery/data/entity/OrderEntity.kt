@@ -5,12 +5,12 @@ import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.table.OrderProductTable
 import com.bunbeauty.fooddelivery.data.table.OrderTable
-import com.bunbeauty.fooddelivery.domain.model.order.GetOrderAddress
-import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetCafeOrder
-import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetCafeOrderDetails
-import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetCafeOrderDetailsV2
-import com.bunbeauty.fooddelivery.domain.model.order.client.get.GetClientOrder
-import com.bunbeauty.fooddelivery.domain.model.order.client.get.GetClientOrderV2
+import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.cafe.GetCafeOrder
+import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.cafe.GetCafeOrderDetails
+import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.client.GetClientOrder
+import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.cafe.GetCafeOrderDetailsV2
+import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetClientOrderV2
+import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetOrderAddressV2
 import com.bunbeauty.fooddelivery.domain.model.statistic.GetStatisticOrder
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
@@ -72,7 +72,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         timeZone = cafe.city.timeZone,
         isDelivery = isDelivery,
         deferredTime = deferredTime,
-        address = GetOrderAddress(
+        address = GetOrderAddressV2(
             description = addressDescription,
             street = addressStreet,
             house = addressHouse,
@@ -132,7 +132,7 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         timeZone = cafe.city.timeZone,
         isDelivery = isDelivery,
         deferredTime = deferredTime,
-        address = GetOrderAddress(
+        address = GetOrderAddressV2(
             description = addressDescription,
             street = addressStreet,
             house = addressHouse,

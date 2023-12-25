@@ -9,6 +9,7 @@ import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientSettings
 import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.domain.model.client_user.InsertClientUser
 import com.bunbeauty.fooddelivery.domain.model.client_user.UpdateClientUser
+import com.bunbeauty.fooddelivery.domain.toUuid
 import org.jetbrains.exposed.sql.and
 import java.util.*
 
@@ -25,8 +26,8 @@ class ClientUserRepository {
         }.singleOrNull()?.toClientUser()
     }
 
-    suspend fun getClientUserByUuid(uuid: UUID): GetClientUser? = query {
-        ClientUserEntity.findById(uuid)?.let { clientUserEntity ->
+    suspend fun getClientUserByUuid(uuid: String): GetClientUser? = query {
+        ClientUserEntity.findById(uuid.toUuid())?.let { clientUserEntity ->
             if (clientUserEntity.isActive) {
                 clientUserEntity.toClientUser()
             } else {
@@ -35,8 +36,8 @@ class ClientUserRepository {
         }
     }
 
-    suspend fun getClientSettingsByUuid(uuid: UUID): GetClientSettings? = query {
-        ClientSettingsEntity.findById(uuid)?.toClientSetting()
+    suspend fun getClientSettingsByUuid(uuid: String): GetClientSettings? = query {
+        ClientSettingsEntity.findById(uuid.toUuid())?.toClientSetting()
     }
 
     suspend fun insertClientUser(insertClientUser: InsertClientUser): GetClientUser = query {

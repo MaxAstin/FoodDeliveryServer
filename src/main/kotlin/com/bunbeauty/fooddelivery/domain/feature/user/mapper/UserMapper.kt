@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.domain.feature.user.mapper
 
-import com.bunbeauty.fooddelivery.domain.feature.city.mapper.mapCity
+import com.bunbeauty.fooddelivery.domain.feature.city.mapper.mapCityWithCafes
 import com.bunbeauty.fooddelivery.domain.feature.user.User
 import com.bunbeauty.fooddelivery.domain.model.user.GetUser
 
@@ -10,6 +10,6 @@ val mapUser: User.() -> GetUser = {
         username = username,
         passwordHash = passwordHash,
         role = role,
-        city = city.mapCity()
+        city = cityWithCafes.mapCityWithCafes()
     )
 }

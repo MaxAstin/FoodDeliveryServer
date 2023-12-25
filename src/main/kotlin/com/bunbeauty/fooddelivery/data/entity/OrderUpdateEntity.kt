@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.data.entity
 
 import com.bunbeauty.fooddelivery.data.table.OrderTable
-import com.bunbeauty.fooddelivery.domain.model.order.client.get.GetClientOrderUpdate
+import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.client.GetClientOrderUpdate
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

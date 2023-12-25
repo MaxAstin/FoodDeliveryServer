@@ -8,6 +8,8 @@ val mapSuggestionsResponse: SuggestionsResponse.() -> List<Suggestion> = {
         Suggestion(
             fiasId = suggestion.data.streetFiasId,
             street = suggestion.data.streetWithType,
+            latitude = suggestion.data.latitude,
+            longitude = suggestion.data.longitude,
         )
     }
 }

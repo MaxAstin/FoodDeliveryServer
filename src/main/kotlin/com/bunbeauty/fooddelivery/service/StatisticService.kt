@@ -79,26 +79,27 @@ class StatisticService(
                 fromDateTime = monthPeriodFromDateTime,
                 toDateTime = toDateTime,
             )
-            cafeRepository.getCafeListByCompanyUuid(company.uuid.toUuid()).forEach { cafe ->
-                updateCafeStatistic(
-                    cafe = cafe,
-                    periodType = PeriodType.DAY,
-                    fromDateTime = dayPeriodFromDateTime,
-                    toDateTime = toDateTime,
-                )
-                updateCafeStatistic(
-                    cafe = cafe,
-                    periodType = PeriodType.WEEK,
-                    fromDateTime = weekPeriodFromDateTime,
-                    toDateTime = toDateTime,
-                )
-                updateCafeStatistic(
-                    cafe = cafe,
-                    periodType = PeriodType.MONTH,
-                    fromDateTime = monthPeriodFromDateTime,
-                    toDateTime = toDateTime,
-                )
-            }
+            cafeRepository.getCafeListByCompanyUuid(companyUuid = company.uuid)
+                .forEach { cafe ->
+                    updateCafeStatistic(
+                        cafe = cafe,
+                        periodType = PeriodType.DAY,
+                        fromDateTime = dayPeriodFromDateTime,
+                        toDateTime = toDateTime,
+                    )
+                    updateCafeStatistic(
+                        cafe = cafe,
+                        periodType = PeriodType.WEEK,
+                        fromDateTime = weekPeriodFromDateTime,
+                        toDateTime = toDateTime,
+                    )
+                    updateCafeStatistic(
+                        cafe = cafe,
+                        periodType = PeriodType.MONTH,
+                        fromDateTime = monthPeriodFromDateTime,
+                        toDateTime = toDateTime,
+                    )
+                }
         }
     }
 

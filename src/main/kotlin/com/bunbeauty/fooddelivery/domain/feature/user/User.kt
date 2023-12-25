@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.domain.feature.user
 
-import com.bunbeauty.fooddelivery.domain.feature.city.City
+import com.bunbeauty.fooddelivery.domain.feature.city.CityWithCafes
 import com.bunbeauty.fooddelivery.domain.feature.company.Company
 
 class User(
@@ -8,7 +8,7 @@ class User(
     val username: String,
     val passwordHash: String,
     val role: String,
-    val city: City,
+    val cityWithCafes: CityWithCafes,
     val company: Company,
 ) {
 

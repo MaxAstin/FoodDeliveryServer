@@ -8,7 +8,6 @@ import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.GetCafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.PatchCafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.PostCafe
 import com.bunbeauty.fooddelivery.domain.feature.privacy.PrivacyCheckService
-import com.bunbeauty.fooddelivery.domain.toUuid
 
 class CafeService(
     private val cafeRepository: CafeRepository,
@@ -27,7 +26,7 @@ class CafeService(
     }
 
     suspend fun getCafeListByCityUuid(cityUuid: String): List<GetCafe> {
-        return cafeRepository.getCafeListByCityUuid(cityUuid = cityUuid.toUuid())
+        return cafeRepository.getCafeListByCityUuid(cityUuid = cityUuid)
             .map(mapCafe)
     }
 
@@ -38,7 +37,7 @@ class CafeService(
         )
 
         return cafeRepository.updateCafe(
-            cafeUuid = cafeUuid.toUuid(),
+            cafeUuid = cafeUuid,
             updateCafe = patchCafe.mapPatchCafe()
         )?.mapCafe()
     }

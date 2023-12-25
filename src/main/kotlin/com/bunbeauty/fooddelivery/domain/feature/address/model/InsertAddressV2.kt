@@ -1,16 +1,20 @@
 package com.bunbeauty.fooddelivery.domain.feature.address.model
 
-import java.util.*
-
 class InsertAddressV2(
-    val streetFiasId: String,
-    val streetName: String,
+    val street: InsertStreetV2,
     val house: String,
     val flat: String?,
     val entrance: String?,
     val floor: String?,
     val comment: String?,
     val isVisible: Boolean,
-    val clientUserUuid: UUID,
-    val cityUuid: UUID,
+    val clientUserUuid: String,
+    val cityUuid: String,
+)
+
+class InsertStreetV2(
+    val fiasId: String,
+    val name: String,
+    val latitude: Double,
+    val longitude: Double,
 )

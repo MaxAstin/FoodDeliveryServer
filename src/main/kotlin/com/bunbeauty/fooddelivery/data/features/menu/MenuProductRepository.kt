@@ -9,6 +9,7 @@ import com.bunbeauty.fooddelivery.data.table.menu.MenuProductTable
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.InsertMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.UpdateMenuProduct
+import com.bunbeauty.fooddelivery.domain.toUuid
 import org.jetbrains.exposed.sql.SizedCollection
 import java.util.*
 
@@ -64,14 +65,14 @@ class MenuProductRepository {
         }?.mapMenuProductEntity()
     }
 
-    suspend fun getMenuProductListByCompanyUuid(companyUuid: UUID): List<MenuProduct> = query {
+    suspend fun getMenuProductListByCompanyUuid(companyUuid: String): List<MenuProduct> = query {
         MenuProductEntity.find {
-            MenuProductTable.company eq companyUuid
+            MenuProductTable.company eq companyUuid.toUuid()
         }.map(mapMenuProductEntity)
             .toList()
     }
 
-    suspend fun getMenuProductByUuid(uuid: UUID): MenuProduct? = query {
-        MenuProductEntity.findById(uuid)?.mapMenuProductEntity()
+    suspend fun getMenuProductByUuid(uuid: String): MenuProduct? = query {
+        MenuProductEntity.findById(uuid.toUuid())?.mapMenuProductEntity()
     }
 }

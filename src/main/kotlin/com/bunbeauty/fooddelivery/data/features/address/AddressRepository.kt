@@ -5,6 +5,7 @@ import com.bunbeauty.fooddelivery.data.entity.*
 import com.bunbeauty.fooddelivery.data.features.address.mapper.mapAddressEntity
 import com.bunbeauty.fooddelivery.data.features.address.mapper.mapAddressEntityV2
 import com.bunbeauty.fooddelivery.data.features.address.mapper.mapSuggestionsResponse
+import com.bunbeauty.fooddelivery.data.features.address.remotemodel.AddressByIdRequestBody
 import com.bunbeauty.fooddelivery.data.features.address.remotemodel.AddressRequestBody
 import com.bunbeauty.fooddelivery.data.features.address.remotemodel.Bound
 import com.bunbeauty.fooddelivery.data.features.address.remotemodel.Location
@@ -40,16 +41,18 @@ class AddressRepository(
     suspend fun insertAddressV2(insertAddress: InsertAddressV2): AddressV2 {
         return query {
             AddressEntityV2.new {
-                streetFiasId = insertAddress.streetFiasId
-                streetName = insertAddress.streetName
+                streetFiasId = insertAddress.street.fiasId
+                streetName = insertAddress.street.name
+                streetLatitude = insertAddress.street.latitude
+                streetLongitude = insertAddress.street.longitude
                 house = insertAddress.house
                 flat = insertAddress.flat
                 entrance = insertAddress.entrance
                 floor = insertAddress.floor
                 comment = insertAddress.comment
                 isVisible = insertAddress.isVisible
-                clientUser = ClientUserEntity[insertAddress.clientUserUuid]
-                city = CityEntity[insertAddress.cityUuid]
+                clientUser = ClientUserEntity[insertAddress.clientUserUuid.toUuid()]
+                city = CityEntity[insertAddress.cityUuid.toUuid()]
             }.mapAddressEntityV2()
         }
     }
@@ -73,6 +76,26 @@ class AddressRepository(
             }.toList()
                 .map(mapAddressEntityV2)
         }
+    }
+
+    suspend fun getAddressByUuid(uuid: String): Address? {
+        return query {
+            AddressEntity.findById(uuid.toUuid())?.mapAddressEntity()
+        }
+    }
+
+    suspend fun getAddressV2ByUuid(uuid: String): AddressV2? {
+        return query {
+            AddressEntityV2.findById(uuid.toUuid())?.mapAddressEntityV2()
+        }
+    }
+
+    suspend fun getSuggestionById(fiasId: String): Suggestion? {
+        return addressNetworkDataSource.requestAddressSuggestionById(
+            AddressByIdRequestBody(query = fiasId)
+        ).getDataOrNull()
+            ?.mapSuggestionsResponse()
+            ?.firstOrNull()
     }
 
     suspend fun getStreetSuggestionList(query: String, city: City): List<Suggestion> {

@@ -9,7 +9,7 @@ import com.bunbeauty.fooddelivery.data.table.cafe.CafeTable
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.InsertCafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.UpdateCafe
-import java.util.*
+import com.bunbeauty.fooddelivery.domain.toUuid
 
 class CafeRepository {
 
@@ -27,29 +27,29 @@ class CafeRepository {
         }.mapCafeEntity()
     }
 
-    suspend fun getCafeListByCityUuid(cityUuid: UUID): List<Cafe> = query {
+    suspend fun getCafeListByCityUuid(cityUuid: String): List<Cafe> = query {
         CafeEntity.find {
-            CafeTable.city eq cityUuid
+            CafeTable.city eq cityUuid.toUuid()
         }.map(mapCafeEntity)
             .toList()
     }
 
-    suspend fun getCafeListByCompanyUuid(companyUuid: UUID): List<Cafe> = query {
+    suspend fun getCafeListByCompanyUuid(companyUuid: String): List<Cafe> = query {
         CityEntity.find {
-            CityTable.company eq companyUuid
+            CityTable.company eq companyUuid.toUuid()
         }.flatMap { cityEntity ->
             cityEntity.cafes.map(mapCafeEntity)
         }.toList()
     }
 
-    suspend fun incrementCafeCodeCounter(cafeUuid: UUID, divisor: Int): Int? = query {
-        CafeEntity.findById(cafeUuid)?.apply {
-            codeCounter = (codeCounter + 1) % divisor
+    suspend fun incrementCafeCodeCounter(cafeUuid: String, limit: Int): Int? = query {
+        CafeEntity.findById(cafeUuid.toUuid())?.apply {
+            codeCounter = (codeCounter + 1) % limit
         }?.codeCounter
     }
 
-    suspend fun updateCafe(cafeUuid: UUID, updateCafe: UpdateCafe): Cafe? = query {
-        CafeEntity.findById(cafeUuid)?.apply {
+    suspend fun updateCafe(cafeUuid: String, updateCafe: UpdateCafe): Cafe? = query {
+        CafeEntity.findById(cafeUuid.toUuid())?.apply {
             fromTime = updateCafe.fromTime ?: fromTime
             toTime = updateCafe.toTime ?: toTime
             offset = updateCafe.offset ?: offset

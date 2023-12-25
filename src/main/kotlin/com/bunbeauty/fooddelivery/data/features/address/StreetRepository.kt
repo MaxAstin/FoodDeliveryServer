@@ -1,7 +1,6 @@
 package com.bunbeauty.fooddelivery.data.features.address
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.AddressEntity
 import com.bunbeauty.fooddelivery.data.entity.CityEntity
 import com.bunbeauty.fooddelivery.data.entity.StreetEntity
 import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
@@ -24,10 +23,6 @@ class StreetRepository {
         CityEntity.findById(cityUuid)?.cafes?.flatMap { cafeEntity ->
             cafeEntity.streets
         }?.map(mapStreetEntity) ?: emptyList()
-    }
-
-    suspend fun getStreetByAddressUuid(addressUuid: UUID): Street? = query {
-        AddressEntity.findById(addressUuid)?.street?.mapStreetEntity()
     }
 
     suspend fun getStreetByUuid(streetUuid: UUID): Street? = query {

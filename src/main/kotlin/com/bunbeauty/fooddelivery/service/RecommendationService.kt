@@ -17,8 +17,9 @@ class RecommendationService(
 ) {
 
     suspend fun getRecommendationDataByCompanyUuid(companyUuid: String): GetRecommendationData {
-        val company = companyRepository.getCompanyByUuid(companyUuid.toUuid()).orThrowNotFoundByUuidError(companyUuid)
-        val menuProductList = menuProductRepository.getMenuProductListByCompanyUuid(companyUuid.toUuid())
+        val company = companyRepository.getCompanyByUuid(uuid = companyUuid.toUuid())
+            .orThrowNotFoundByUuidError(companyUuid)
+        val menuProductList = menuProductRepository.getMenuProductListByCompanyUuid(companyUuid = companyUuid)
         val recommendationList = menuProductList.mapNotNull { menuProduct ->
             recommendationRepository.getRecommendationByMenuProductUuid(
                 menuProductUuid = menuProduct.uuid.toUuid()

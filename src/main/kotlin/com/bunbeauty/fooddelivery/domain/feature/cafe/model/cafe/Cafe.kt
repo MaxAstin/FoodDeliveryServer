@@ -1,5 +1,7 @@
 package com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe
 
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.DeliveryZone
+
 class Cafe(
     val uuid: String,
     val fromTime: Int,
@@ -11,4 +13,5 @@ class Cafe(
     val address: String,
     val cityUuid: String,
     val isVisible: Boolean,
+    val zones: List<DeliveryZone>,
 )

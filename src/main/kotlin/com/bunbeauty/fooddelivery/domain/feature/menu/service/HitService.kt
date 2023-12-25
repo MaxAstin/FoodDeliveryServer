@@ -5,10 +5,9 @@ import com.bunbeauty.fooddelivery.data.Constants.HITS_COUNT
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.features.menu.HitRepository
 import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
+import com.bunbeauty.fooddelivery.data.features.order.OrderRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
-import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
-import com.bunbeauty.fooddelivery.domain.model.order.client.get.GetClientOrderV2
-import com.bunbeauty.fooddelivery.domain.toUuid
+import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetClientOrderV2
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.joda.time.DateTime
@@ -16,7 +15,7 @@ import org.joda.time.DateTime
 class HitService(
     private val companyRepository: CompanyRepository,
     private val menuProductRepository: MenuProductRepository,
-    private val orderRepository: IOrderRepository,
+    private val orderRepository: OrderRepository,
     private val hitRepository: HitRepository,
 ) {
 
@@ -27,11 +26,16 @@ class HitService(
             .millis
         companyRepository.getCompanyList().forEach { company ->
             val orderListAsync = async {
-                orderRepository.getOrderListByCompanyUuidLimited(company.uuid.toUuid(), monthBeforeMillis)
+                orderRepository.getOrderListByCompanyUuidLimited(
+                    companyUuid = company.uuid,
+                    limitTime = monthBeforeMillis
+                )
             }
             val invisibleMenuProductUuidListAsync = async {
-                menuProductRepository.getMenuProductListByCompanyUuid(company.uuid.toUuid()).filter { menuProduct ->
-                    !menuProduct.isVisible
+                menuProductRepository.getMenuProductListByCompanyUuid(
+                    companyUuid = company.uuid
+                ).filterNot { menuProduct ->
+                    menuProduct.isVisible
                 }.map { menuProduct ->
                     menuProduct.uuid
                 }

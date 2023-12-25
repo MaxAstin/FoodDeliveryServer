@@ -11,6 +11,8 @@ class AddressEntityV2(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     val uuid: String = uuid.value.toString()
     var streetFiasId: String by AddressV2Table.streetFiasId
     var streetName: String by AddressV2Table.streetName
+    var streetLatitude: Double by AddressV2Table.streetLatitude
+    var streetLongitude: Double by AddressV2Table.streetLongitude
     var house: String by AddressV2Table.house
     var flat: String? by AddressV2Table.flat
     var entrance: String? by AddressV2Table.entrance

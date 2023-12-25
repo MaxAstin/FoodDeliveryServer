@@ -18,9 +18,9 @@ class AddressService(
 ) {
 
     suspend fun createAddress(userUuid: String, postAddress: PostAddress): GetAddress {
-        val street = streetRepository.getStreetByUuid(postAddress.streetUuid.toUuid())
+        val street = streetRepository.getStreetByUuid(streetUuid = postAddress.streetUuid.toUuid())
             .orThrowNotFoundByUuidError(postAddress.streetUuid)
-        val clientUser = clientUserRepository.getClientUserByUuid(userUuid.toUuid())
+        val clientUser = clientUserRepository.getClientUserByUuid(uuid = userUuid)
             .orThrowNotFoundByUuidError(userUuid)
         if (street.companyUuid != clientUser.company.uuid) {
             noAccessToCompanyError(street.companyUuid)
@@ -32,7 +32,16 @@ class AddressService(
     }
 
     suspend fun createAddressV2(userUuid: String, postAddress: PostAddressV2): GetAddressV2 {
-        val insertAddress = mapPostAddressV2(postAddress, userUuid)
+        val fiasId = postAddress.street.fiasId
+        val suggestion = addressRepository.getSuggestionById(fiasId = fiasId)
+            .orThrowNotFoundByUuidError(uuid = fiasId)
+        val addressInfo = AddressInfoV2(
+            userUuid = userUuid,
+            streetLatitude = suggestion.latitude,
+            streetLongitude = suggestion.longitude,
+        )
+
+        val insertAddress = postAddress.mapPostAddressV2(addressInfo)
         return addressRepository.insertAddressV2(insertAddress = insertAddress)
             .mapAddressV2()
     }
@@ -55,8 +64,10 @@ class AddressService(
         val city = cityRepository.getCityByUuid(cityUuid.toUuid())
             .orThrowNotFoundByUuidError(cityUuid)
 
-        return addressRepository.getStreetSuggestionList(query, city)
-            .map(mapSuggestion)
+        return addressRepository.getStreetSuggestionList(
+            query = query,
+            city = city
+        ).map(mapSuggestion)
     }
 
 }

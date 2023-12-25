@@ -3,13 +3,13 @@ package com.bunbeauty.fooddelivery
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.data.features.menu.HitRepository
 import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
+import com.bunbeauty.fooddelivery.data.features.order.OrderRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
-import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.service.HitService
-import com.bunbeauty.fooddelivery.domain.model.order.GetOrderAddress
-import com.bunbeauty.fooddelivery.domain.model.order.GetOrderProduct
-import com.bunbeauty.fooddelivery.domain.model.order.client.get.GetClientOrderV2
+import com.bunbeauty.fooddelivery.domain.feature.order.model.GetOrderProduct
+import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetClientOrderV2
+import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetOrderAddressV2
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -26,7 +26,7 @@ class HitServiceTests {
     private lateinit var menuProductRepository: MenuProductRepository
 
     @MockK
-    private lateinit var orderRepository: IOrderRepository
+    private lateinit var orderRepository: OrderRepository
 
     @MockK
     private lateinit var hitRepository: HitRepository
@@ -94,7 +94,7 @@ class HitServiceTests {
             timeZone = "UTC+3",
             isDelivery = true,
             deferredTime = null,
-            address = GetOrderAddress(
+            address = GetOrderAddressV2(
                 description = "",
                 street = "",
                 house = "",
@@ -148,6 +148,7 @@ class HitServiceTests {
                 additionGroups = listOf(),
             ),
             orderUuid = "",
+            additions = emptyList(),
         )
     }
 

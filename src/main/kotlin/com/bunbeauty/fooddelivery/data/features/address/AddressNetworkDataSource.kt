@@ -1,5 +1,6 @@
 package com.bunbeauty.fooddelivery.data.features.address
 
+import com.bunbeauty.fooddelivery.data.features.address.remotemodel.AddressByIdRequestBody
 import com.bunbeauty.fooddelivery.data.features.address.remotemodel.AddressRequestBody
 import com.bunbeauty.fooddelivery.data.features.address.remotemodel.SuggestionsResponse
 import com.bunbeauty.fooddelivery.network.ApiResult
@@ -10,8 +11,15 @@ class AddressNetworkDataSource(private val client: HttpClient) {
 
     suspend fun requestAddressSuggestions(addressRequestBody: AddressRequestBody): ApiResult<SuggestionsResponse> {
         return client.postData(
-            path = "address",
+            path = "suggest/address",
             body = addressRequestBody,
+        )
+    }
+
+    suspend fun requestAddressSuggestionById(addressByIdRequestBody: AddressByIdRequestBody): ApiResult<SuggestionsResponse> {
+        return client.postData(
+            path = "findById/address",
+            body = addressByIdRequestBody,
         )
     }
 

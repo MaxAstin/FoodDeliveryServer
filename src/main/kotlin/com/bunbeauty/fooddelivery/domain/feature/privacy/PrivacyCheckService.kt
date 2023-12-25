@@ -13,8 +13,8 @@ class PrivacyCheckService(
 
     suspend fun checkIsCityAvailable(userUuid: String, cityUuid: String) {
         val user = userRepository.getUserByUuid(userUuid.toUuid()).orThrowNotFoundByUuidError(userUuid)
-        val isAvailable = user.company.cities.any { city ->
-            city.uuid == cityUuid
+        val isAvailable = user.company.citiesWithCafes.any { cityWithCafes ->
+            cityWithCafes.city.uuid == cityUuid
         }
         if (!isAvailable) {
             isNotAvailableForYourCompanyError(
@@ -27,7 +27,7 @@ class PrivacyCheckService(
 
     suspend fun checkIsCafeAvailable(userUuid: String, cafeUuid: String) {
         val user = userRepository.getUserByUuid(userUuid.toUuid()).orThrowNotFoundByUuidError(userUuid)
-        val isAvailable = user.company.cities.flatMap { city ->
+        val isAvailable = user.company.citiesWithCafes.flatMap { city ->
             city.cafes
         }.any { cafe ->
             cafe.uuid == cafeUuid

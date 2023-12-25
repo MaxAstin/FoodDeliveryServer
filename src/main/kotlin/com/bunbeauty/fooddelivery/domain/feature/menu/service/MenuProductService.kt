@@ -21,8 +21,8 @@ class MenuProductService(
 ) {
 
     suspend fun getMenuProductListByCompanyUuid(companyUuid: String): List<GetMenuProduct> {
-        val menuProductList = menuProductRepository.getMenuProductListByCompanyUuid(companyUuid.toUuid())
-        val hitProductUuidList = hitRepository.getHitProductUuidListByCompanyUuid(companyUuid)
+        val menuProductList = menuProductRepository.getMenuProductListByCompanyUuid(companyUuid = companyUuid)
+        val hitProductUuidList = hitRepository.getHitProductUuidListByCompanyUuid(companyUuid = companyUuid)
         val updatedMenuProductList = if (hitProductUuidList.isNotEmpty()) {
             val hitsCategory = categoryRepository.getHitsCategory()
 

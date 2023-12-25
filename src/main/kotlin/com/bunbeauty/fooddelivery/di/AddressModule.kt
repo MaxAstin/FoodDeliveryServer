@@ -32,7 +32,7 @@ val addressModule = module(createdAtStart = true) {
             }
 
             install(DefaultRequest) {
-                host = "suggestions.dadata.ru/suggestions/api/4_1/rs/suggest"
+                host = "suggestions.dadata.ru/suggestions/api/4_1/rs"
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
                 header(HttpHeaders.Authorization, addressAuthToken)
 

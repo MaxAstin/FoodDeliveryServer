@@ -23,7 +23,8 @@ class CityRepository {
     suspend fun getCityListByCompanyUuid(companyUuid: UUID): List<City> = query {
         CityEntity.find {
             CityTable.company eq companyUuid
-        }.map(mapCityEntity).toList()
+        }.map(mapCityEntity)
+            .toList()
     }
 
     suspend fun getCityByUuid(cityUuid: UUID): City? = query {
