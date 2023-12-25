@@ -9,6 +9,7 @@ class SessionHandler<T> {
 
     suspend fun emitNewValue(key: String?, value: T?) {
         println("emitNewValue $key - $value")
+        println("emitNewValue ${sessionMap[key]}")
         if (key != null && value != null) {
             sessionMap[key]?.mutableSharedFlow?.emit(value)
         }
