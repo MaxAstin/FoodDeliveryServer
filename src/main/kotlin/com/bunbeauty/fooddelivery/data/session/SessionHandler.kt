@@ -8,6 +8,7 @@ class SessionHandler<T> {
     private val sessionMap: LinkedHashMap<String, Session<T>> = LinkedHashMap()
 
     suspend fun emitNewValue(key: String?, value: T?) {
+        println("emitNewValue $key - $value")
         if (key != null && value != null) {
             sessionMap[key]?.mutableSharedFlow?.emit(value)
         }
