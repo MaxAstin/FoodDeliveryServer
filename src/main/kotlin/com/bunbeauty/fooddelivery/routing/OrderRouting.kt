@@ -199,7 +199,8 @@ private fun Route.observeClientOrdersV2() {
     webSocket("/client/order/v2/subscribe") {
         clientSocket(
             block = { request ->
-                orderService.observeClientOrderUpdatesV2(request.jwtUser.uuid).onEach { clientOrder ->
+                orderService.observeClientOrderUpdatesV2(clientUserUuid = request.jwtUser.uuid).onEach { clientOrder ->
+                    println("observeClientOrdersV2 outgoing.send ${clientOrder.status}")
                     outgoing.send(Frame.Text(json.encodeToString(clientOrder)))
                 }.launchIn(this)
             },
