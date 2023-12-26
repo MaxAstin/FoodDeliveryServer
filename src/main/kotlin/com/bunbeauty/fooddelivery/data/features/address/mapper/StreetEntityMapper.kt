@@ -7,6 +7,8 @@ val mapStreetEntity: StreetEntity.() -> Street = {
     Street(
         uuid = uuid,
         name = name,
+        latitude = latitude,
+        longitude = longitude,
         cityUuid = cafe.city.uuid,
         cafeUuid = cafe.uuid,
         companyUuid = cafe.city.company.uuid,

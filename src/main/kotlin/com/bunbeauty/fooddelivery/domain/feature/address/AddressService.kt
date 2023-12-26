@@ -9,6 +9,7 @@ import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.address.mapper.*
 import com.bunbeauty.fooddelivery.domain.feature.address.model.*
 import com.bunbeauty.fooddelivery.domain.toUuid
+import kotlinx.coroutines.delay
 
 class AddressService(
     private val addressRepository: AddressRepository,
@@ -71,20 +72,25 @@ class AddressService(
     }
 
     suspend fun updateStreets() {
-        streetRepository.getAllStreets().forEach { street ->
-            val city = cityRepository.getCityByUuid(cityUuid = street.cityUuid)
-                .orThrowNotFoundByUuidError(uuid = street.cityUuid)
-            val suggestions = addressRepository.getStreetSuggestionList(query = street.name, city = city)
-            if (suggestions.size == 1) {
-                streetRepository.updateStreetCoordinates(
-                    uuid = street.uuid,
-                    latitude = suggestions.first().latitude,
-                    longitude = suggestions.first().longitude
-                )
-            } else {
-                println("!!! uuid ${street.uuid} suggestions = ${suggestions.joinToString { it.street }} !!!")
+        streetRepository.getAllStreets()
+            .filter { street ->
+                street.latitude == 0.0
+            }.forEach { street ->
+                delay(1_000)
+
+                val city = cityRepository.getCityByUuid(cityUuid = street.cityUuid)
+                    .orThrowNotFoundByUuidError(uuid = street.cityUuid)
+                val suggestions = addressRepository.getStreetSuggestionList(query = street.name, city = city)
+                if (suggestions.size == 1) {
+                    streetRepository.updateStreetCoordinates(
+                        uuid = street.uuid,
+                        latitude = suggestions.first().latitude,
+                        longitude = suggestions.first().longitude
+                    )
+                } else {
+                    println("!!! uuid ${street.uuid} suggestions = ${suggestions.joinToString { it.street }} !!!")
+                }
             }
-        }
     }
 
 }
