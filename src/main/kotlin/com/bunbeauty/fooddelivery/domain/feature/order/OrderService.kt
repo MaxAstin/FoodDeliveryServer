@@ -62,9 +62,7 @@ class OrderService(
             order = order
         )
 
-        //TODO map order to cafeOrder
-        val cafeOrder = orderRepository.getCafeOrderByUuid(order.uuid)
-        sendNotification(cafeOrder)
+        sendNotification(order)
 
         return order.mapOrder(order.calculatedOrderValues)
     }
@@ -85,9 +83,7 @@ class OrderService(
             order = order
         )
 
-        //TODO map order to cafeOrder
-        val cafeOrder = orderRepository.getCafeOrderByUuid(order.uuid)
-        sendNotification(cafeOrder)
+        sendNotification(order)
 
         return order.mapOrderToV2(order.calculatedOrderValues)
     }
@@ -108,9 +104,7 @@ class OrderService(
             order = order
         )
 
-        //TODO map order to cafeOrder
-        val cafeOrder = orderRepository.getCafeOrderByUuid(order.uuid)
-        sendNotification(cafeOrder)
+        sendNotification(order)
 
         return order.mapOrderToV2(order.calculatedOrderValues)
     }
@@ -169,12 +163,7 @@ class OrderService(
 
     fun observeClientOrderUpdates(clientUserUuid: String): Flow<GetClientOrder> {
         return orderRepository.getOrderFlowByKey(clientUserUuid).map { order ->
-            order.mapOrder(
-                CalculatedOrderValues(
-                    oldTotalCost = null,
-                    newTotalCost = 0,
-                )
-            )
+            order.mapOrder(order.calculatedOrderValues)
         }
     }
 
@@ -343,15 +332,11 @@ class OrderService(
         }
     }
 
-    private fun sendNotification(cafeOrder: GetCafeOrder?) {
-        if (cafeOrder == null) {
-            return
-        }
-
+    private fun sendNotification(order: Order) {
         firebaseMessaging.send(
             Message.builder()
-                .putData(ORDER_KOD_KEY, cafeOrder.code)
-                .setTopic(cafeOrder.cafeUuid)
+                .putData(ORDER_KOD_KEY, order.code)
+                .setTopic(order.cafeWithCity.cafe.uuid)
                 .build()
         )
     }

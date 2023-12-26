@@ -265,10 +265,6 @@ class OrderRepository {
             }
     }
 
-    suspend fun getCafeOrderByUuid(orderUuid: String): GetCafeOrder? = query {
-        OrderEntity.findById(orderUuid.toUuid())?.toCafeOrder()
-    }
-
     suspend fun updateOrderStatusByUuid(orderUuid: String, status: String): Order? = query {
         val orderEntity = OrderEntity.findById(orderUuid.toUuid())
         orderEntity?.status = status
