@@ -1,12 +1,14 @@
-package com.bunbeauty.fooddelivery.data.entity
+package com.bunbeauty.fooddelivery.data.entity.order
 
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductEntity
-import com.bunbeauty.fooddelivery.data.table.OrderProductTable
+import com.bunbeauty.fooddelivery.data.table.order.OrderProductAdditionTable
+import com.bunbeauty.fooddelivery.data.table.order.OrderProductTable
 import com.bunbeauty.fooddelivery.domain.feature.order.model.GetOrderProduct
 import com.bunbeauty.fooddelivery.domain.model.statistic.GetStatisticOrderProduct
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.sql.SizedIterable
 import java.util.*
 
 class OrderProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
@@ -25,6 +27,7 @@ class OrderProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     var menuProduct: MenuProductEntity by MenuProductEntity referencedOn OrderProductTable.menuProduct
     var order: OrderEntity by OrderEntity referencedOn OrderProductTable.order
+    val additions: SizedIterable<OrderProductAdditionEntity> by OrderProductAdditionEntity referrersOn OrderProductAdditionTable.orderProduct
 
     companion object : UUIDEntityClass<OrderProductEntity>(OrderProductTable)
 

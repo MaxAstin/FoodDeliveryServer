@@ -9,8 +9,8 @@ import com.bunbeauty.fooddelivery.data.features.address.remotemodel.AddressByIdR
 import com.bunbeauty.fooddelivery.data.features.address.remotemodel.AddressRequestBody
 import com.bunbeauty.fooddelivery.data.features.address.remotemodel.Bound
 import com.bunbeauty.fooddelivery.data.features.address.remotemodel.Location
-import com.bunbeauty.fooddelivery.data.table.AddressTable
-import com.bunbeauty.fooddelivery.data.table.AddressV2Table
+import com.bunbeauty.fooddelivery.data.table.address.AddressTable
+import com.bunbeauty.fooddelivery.data.table.address.AddressV2Table
 import com.bunbeauty.fooddelivery.domain.feature.address.model.*
 import com.bunbeauty.fooddelivery.domain.feature.city.City
 import com.bunbeauty.fooddelivery.domain.toUuid

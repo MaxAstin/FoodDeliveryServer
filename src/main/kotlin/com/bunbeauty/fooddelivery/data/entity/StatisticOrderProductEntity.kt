@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.entity
 
-import com.bunbeauty.fooddelivery.data.table.OrderProductTable
+import com.bunbeauty.fooddelivery.data.table.order.OrderProductTable
 import com.bunbeauty.fooddelivery.domain.model.order.GetStatisticOrderProduct
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass

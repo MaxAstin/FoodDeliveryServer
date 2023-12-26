@@ -18,5 +18,11 @@ class GetOrderProduct(
     val barcode: Int,
     val menuProduct: GetMenuProduct,
     val orderUuid: String,
-    val additions: List<String>,
+    val additions: List<GetOrderProductAddition>,
+)
+
+@Serializable
+class GetOrderProductAddition(
+    val uuid: String,
+    val name: String,
 )

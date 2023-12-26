@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.data.repo.order
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.OrderEntity
-import com.bunbeauty.fooddelivery.data.table.OrderTable
+import com.bunbeauty.fooddelivery.data.entity.order.OrderEntity
+import com.bunbeauty.fooddelivery.data.table.order.OrderTable
 import com.bunbeauty.fooddelivery.domain.model.statistic.GetStatisticOrder
 import org.jetbrains.exposed.sql.and
 import java.util.*

@@ -1,9 +1,10 @@
 package com.bunbeauty.fooddelivery.data.entity
 
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.data.table.AddressTable
+import com.bunbeauty.fooddelivery.data.entity.order.OrderEntity
 import com.bunbeauty.fooddelivery.data.table.ClientUserTable
-import com.bunbeauty.fooddelivery.data.table.OrderTable
+import com.bunbeauty.fooddelivery.data.table.address.AddressTable
+import com.bunbeauty.fooddelivery.data.table.order.OrderTable
 import com.bunbeauty.fooddelivery.domain.model.client_user.GetCafeClientUser
 import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientUser
 import org.jetbrains.exposed.dao.UUIDEntity

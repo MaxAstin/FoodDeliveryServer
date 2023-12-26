@@ -7,11 +7,16 @@ import com.bunbeauty.fooddelivery.data.Constants.JDBC_DRIVER
 import com.bunbeauty.fooddelivery.data.Constants.JDBC_POSTGRESQL_PREFIX
 import com.bunbeauty.fooddelivery.data.Constants.POSTGRES_PREFIX
 import com.bunbeauty.fooddelivery.data.table.*
+import com.bunbeauty.fooddelivery.data.table.address.AddressTable
+import com.bunbeauty.fooddelivery.data.table.address.AddressV2Table
 import com.bunbeauty.fooddelivery.data.table.cafe.CafeTable
 import com.bunbeauty.fooddelivery.data.table.cafe.DeliveryZonePointTable
 import com.bunbeauty.fooddelivery.data.table.cafe.DeliveryZoneTable
 import com.bunbeauty.fooddelivery.data.table.cafe.NonWorkingDayTable
 import com.bunbeauty.fooddelivery.data.table.menu.*
+import com.bunbeauty.fooddelivery.data.table.order.OrderProductAdditionTable
+import com.bunbeauty.fooddelivery.data.table.order.OrderProductTable
+import com.bunbeauty.fooddelivery.data.table.order.OrderTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers.IO
@@ -117,6 +122,9 @@ object DatabaseFactory {
 
             SchemaUtils.create(DeliveryZonePointTable)
             SchemaUtils.createMissingTablesAndColumns(DeliveryZonePointTable)
+
+            SchemaUtils.create(OrderProductAdditionTable)
+            SchemaUtils.createMissingTablesAndColumns(OrderProductAdditionTable)
         }
     }
 

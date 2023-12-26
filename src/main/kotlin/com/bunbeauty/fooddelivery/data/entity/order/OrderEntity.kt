@@ -1,10 +1,11 @@
-package com.bunbeauty.fooddelivery.data.entity
+package com.bunbeauty.fooddelivery.data.entity.order
 
+import com.bunbeauty.fooddelivery.data.entity.ClientUserEntity
 import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
-import com.bunbeauty.fooddelivery.data.table.OrderProductTable
-import com.bunbeauty.fooddelivery.data.table.OrderTable
+import com.bunbeauty.fooddelivery.data.table.order.OrderProductTable
+import com.bunbeauty.fooddelivery.data.table.order.OrderTable
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.cafe.GetCafeOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.cafe.GetCafeOrderDetails
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.client.GetClientOrder

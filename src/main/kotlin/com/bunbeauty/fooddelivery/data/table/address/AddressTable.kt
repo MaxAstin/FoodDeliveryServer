@@ -1,5 +1,7 @@
-package com.bunbeauty.fooddelivery.data.table
+package com.bunbeauty.fooddelivery.data.table.address
 
+import com.bunbeauty.fooddelivery.data.table.ClientUserTable
+import com.bunbeauty.fooddelivery.data.table.StreetTable
 import org.jetbrains.exposed.dao.id.UUIDTable
 
 object AddressTable : UUIDTable() {

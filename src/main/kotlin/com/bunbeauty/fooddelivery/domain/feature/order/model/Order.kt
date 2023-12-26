@@ -3,7 +3,6 @@ package com.bunbeauty.fooddelivery.domain.feature.order.model
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.CafeWithCity
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUserLight
 import com.bunbeauty.fooddelivery.domain.feature.company.Company
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.Addition
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProduct
 
 class Order(
@@ -27,7 +26,7 @@ class Order(
     val cafeWithCity: CafeWithCity,
     val company: Company,
     val clientUser: ClientUserLight,
-    val oderProducts: List<OrderProduct>
+    val oderProducts: List<OrderProduct>,
 )
 
 class OrderProduct(
@@ -43,5 +42,11 @@ class OrderProduct(
     val photoLink: String,
     val barcode: Int,
     val menuProduct: MenuProduct,
-    val additions: List<Addition>,
+    val additions: List<OrderProductAddition>,
+)
+
+class OrderProductAddition(
+    val uuid: String,
+    val name: String,
+    val price: Int?,
 )

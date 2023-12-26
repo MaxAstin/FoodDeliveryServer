@@ -2,16 +2,17 @@ package com.bunbeauty.fooddelivery.data.features.order
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.ClientUserEntity
-import com.bunbeauty.fooddelivery.data.entity.OrderEntity
-import com.bunbeauty.fooddelivery.data.entity.OrderProductEntity
 import com.bunbeauty.fooddelivery.data.entity.StatisticOrderEntity
 import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.AdditionEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductEntity
+import com.bunbeauty.fooddelivery.data.entity.order.OrderEntity
+import com.bunbeauty.fooddelivery.data.entity.order.OrderProductAdditionEntity
+import com.bunbeauty.fooddelivery.data.entity.order.OrderProductEntity
 import com.bunbeauty.fooddelivery.data.features.order.mapper.mapOrderEntity
 import com.bunbeauty.fooddelivery.data.session.SessionHandler
-import com.bunbeauty.fooddelivery.data.table.OrderTable
+import com.bunbeauty.fooddelivery.data.table.order.OrderTable
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.InsertOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.cafe.GetCafeOrder
@@ -149,7 +150,11 @@ class OrderRepository {
             }
             insertOrderProduct.additionUuids.forEach { additionUuid ->
                 val additionEntity = AdditionEntity[additionUuid.toUuid()]
-                // TODO insert addition
+                OrderProductAdditionEntity.new {
+                    name = additionEntity.fullName ?: additionEntity.name
+                    price = additionEntity.price
+                    orderProduct = orderProductEntity
+                }
             }
         }
 
