@@ -80,15 +80,16 @@ class AddressService(
 
                 val city = cityRepository.getCityByUuid(cityUuid = street.cityUuid)
                     .orThrowNotFoundByUuidError(uuid = street.cityUuid)
-                val suggestions = addressRepository.getStreetSuggestionList(query = street.name, city = city)
-                if (suggestions.size == 1) {
+                val suggestion = addressRepository.getStreetSuggestionList(
+                    query = street.name,
+                    city = city
+                ).firstOrNull()
+                if (suggestion != null) {
                     streetRepository.updateStreetCoordinates(
                         uuid = street.uuid,
-                        latitude = suggestions.first().latitude,
-                        longitude = suggestions.first().longitude
+                        latitude = suggestion.latitude,
+                        longitude = suggestion.longitude
                     )
-                } else {
-                    println("!!! uuid ${street.uuid} suggestions = ${suggestions.joinToString { it.street }} !!!")
                 }
             }
     }
