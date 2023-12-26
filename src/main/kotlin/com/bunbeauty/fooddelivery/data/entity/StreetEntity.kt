@@ -12,8 +12,11 @@ class StreetEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     val uuid: String = uuid.value.toString()
     var name: String by StreetTable.name
-    var cafe: CafeEntity by CafeEntity referencedOn StreetTable.cafe
+    var latitude: Double by StreetTable.latitude
+    var longitude: Double by StreetTable.longitude
     var isVisible: Boolean by StreetTable.isVisible
+
+    var cafe: CafeEntity by CafeEntity referencedOn StreetTable.cafe
 
     companion object : UUIDEntityClass<StreetEntity>(StreetTable)
 

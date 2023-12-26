@@ -7,7 +7,7 @@ import com.bunbeauty.fooddelivery.data.features.city.mapper.mapCityEntity
 import com.bunbeauty.fooddelivery.data.table.CityTable
 import com.bunbeauty.fooddelivery.domain.feature.city.City
 import com.bunbeauty.fooddelivery.domain.model.city.InsertCity
-import java.util.*
+import com.bunbeauty.fooddelivery.domain.toUuid
 
 class CityRepository {
 
@@ -20,14 +20,14 @@ class CityRepository {
         }.mapCityEntity()
     }
 
-    suspend fun getCityListByCompanyUuid(companyUuid: UUID): List<City> = query {
+    suspend fun getCityListByCompanyUuid(companyUuid: String): List<City> = query {
         CityEntity.find {
-            CityTable.company eq companyUuid
+            CityTable.company eq companyUuid.toUuid()
         }.map(mapCityEntity)
             .toList()
     }
 
-    suspend fun getCityByUuid(cityUuid: UUID): City? = query {
-        CityEntity.findById(cityUuid)?.mapCityEntity()
+    suspend fun getCityByUuid(cityUuid: String): City? = query {
+        CityEntity.findById(cityUuid.toUuid())?.mapCityEntity()
     }
 }

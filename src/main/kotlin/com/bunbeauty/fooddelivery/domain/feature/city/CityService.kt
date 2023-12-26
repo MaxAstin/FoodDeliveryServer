@@ -28,7 +28,7 @@ class CityService(
     }
 
     suspend fun getCityListByCompanyUuid(companyUuid: String): List<GetCity> {
-        return cityRepository.getCityListByCompanyUuid(companyUuid.toUuid())
+        return cityRepository.getCityListByCompanyUuid(companyUuid = companyUuid)
             .map(mapCity)
     }
 

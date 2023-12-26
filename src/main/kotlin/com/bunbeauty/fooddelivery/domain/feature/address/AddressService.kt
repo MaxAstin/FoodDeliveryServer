@@ -61,13 +61,30 @@ class AddressService(
     }
 
     suspend fun getStreetSuggestionList(query: String, cityUuid: String): List<GetSuggestion> {
-        val city = cityRepository.getCityByUuid(cityUuid.toUuid())
+        val city = cityRepository.getCityByUuid(cityUuid)
             .orThrowNotFoundByUuidError(cityUuid)
 
         return addressRepository.getStreetSuggestionList(
             query = query,
             city = city
         ).map(mapSuggestion)
+    }
+
+    suspend fun updateStreets() {
+        streetRepository.getAllStreets().forEach { street ->
+            val city = cityRepository.getCityByUuid(cityUuid = street.cityUuid)
+                .orThrowNotFoundByUuidError(uuid = street.cityUuid)
+            val suggestions = addressRepository.getStreetSuggestionList(query = street.name, city = city)
+            if (suggestions.size == 1) {
+                streetRepository.updateStreetCoordinates(
+                    uuid = street.uuid,
+                    latitude = suggestions.first().latitude,
+                    longitude = suggestions.first().longitude
+                )
+            } else {
+                println("!!! uuid ${street.uuid} suggestions = ${suggestions.joinToString { it.street }} !!!")
+            }
+        }
     }
 
 }
