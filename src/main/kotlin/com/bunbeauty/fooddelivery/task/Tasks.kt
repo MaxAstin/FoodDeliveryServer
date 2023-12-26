@@ -6,6 +6,4 @@ fun Application.scheduleTasks() {
     scheduleUpdateHitsTask()
     scheduleUpdateStatisticTask()
     scheduleClearRequestsTask()
-
-    scheduleUpdateStreetsTask()
 }

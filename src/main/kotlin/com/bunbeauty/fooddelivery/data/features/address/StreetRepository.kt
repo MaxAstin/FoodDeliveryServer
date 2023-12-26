@@ -7,7 +7,6 @@ import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.features.address.mapper.mapStreetEntity
 import com.bunbeauty.fooddelivery.domain.feature.address.model.Street
 import com.bunbeauty.fooddelivery.domain.model.street.InsertStreet
-import com.bunbeauty.fooddelivery.domain.toUuid
 import java.util.*
 
 class StreetRepository {
@@ -28,17 +27,6 @@ class StreetRepository {
 
     suspend fun getStreetByUuid(streetUuid: UUID): Street? = query {
         StreetEntity.findById(streetUuid)?.mapStreetEntity()
-    }
-
-    suspend fun getAllStreets(): List<Street> = query {
-        StreetEntity.all().map(mapStreetEntity)
-    }
-
-    suspend fun updateStreetCoordinates(uuid: String, latitude: Double, longitude: Double) = query {
-        StreetEntity.findById(uuid.toUuid())?.apply {
-            this.latitude = latitude
-            this.longitude = longitude
-        }
     }
 
 }

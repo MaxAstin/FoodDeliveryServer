@@ -9,7 +9,6 @@ import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.address.mapper.*
 import com.bunbeauty.fooddelivery.domain.feature.address.model.*
 import com.bunbeauty.fooddelivery.domain.toUuid
-import kotlinx.coroutines.delay
 
 class AddressService(
     private val addressRepository: AddressRepository,
@@ -69,29 +68,6 @@ class AddressService(
             query = query,
             city = city
         ).map(mapSuggestion)
-    }
-
-    suspend fun updateStreets() {
-        streetRepository.getAllStreets()
-            .filter { street ->
-                street.latitude == 0.0
-            }.forEach { street ->
-                delay(1_000)
-
-                val city = cityRepository.getCityByUuid(cityUuid = street.cityUuid)
-                    .orThrowNotFoundByUuidError(uuid = street.cityUuid)
-                val suggestion = addressRepository.getStreetSuggestionList(
-                    query = street.name,
-                    city = city
-                ).firstOrNull()
-                if (suggestion != null) {
-                    streetRepository.updateStreetCoordinates(
-                        uuid = street.uuid,
-                        latitude = suggestion.latitude,
-                        longitude = suggestion.longitude
-                    )
-                }
-            }
     }
 
 }
