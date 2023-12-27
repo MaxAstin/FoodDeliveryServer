@@ -193,7 +193,7 @@ class OrderRepository {
         }.count()
     }
 
-    suspend fun getOrderListByUserUuidV2(userUuid: String, count: Int?): List<GetClientOrderV2> = query {
+    suspend fun getOrderListByUserUuidV2(userUuid: String, count: Int?): List<Order> = query {
         OrderEntity.find {
             OrderTable.clientUser eq userUuid.toUuid()
         }.orderBy(OrderTable.time to SortOrder.DESC)
@@ -204,15 +204,13 @@ class OrderRepository {
                     orderEntityList
                 }
             }
-            .map { orderEntity ->
-                orderEntity.toClientOrderV2()
-            }
+            .map(mapOrderEntity)
     }
 
-    suspend fun getClientOrderByUuidV2(userUuid: String, orderUuid: String): GetClientOrderV2? = query {
+    suspend fun getClientOrderByUuidV2(userUuid: String, orderUuid: String): Order? = query {
         val orderEntity = OrderEntity.findById(orderUuid.toUuid())
         if (orderEntity?.clientUser?.id?.value == userUuid.toUuid()) {
-            orderEntity.toClientOrderV2()
+            orderEntity.mapOrderEntity()
         } else {
             null
         }

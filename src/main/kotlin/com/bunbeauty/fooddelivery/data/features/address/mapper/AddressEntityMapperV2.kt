@@ -10,6 +10,8 @@ val mapAddressEntityV2: AddressEntityV2.() -> AddressV2 = {
         street = StreetV2(
             fiasId = streetFiasId,
             name = streetName,
+            latitude = streetLatitude,
+            longitude = streetLongitude,
         ),
         house = house,
         flat = flat,

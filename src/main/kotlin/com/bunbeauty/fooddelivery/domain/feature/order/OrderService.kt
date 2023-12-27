@@ -13,6 +13,7 @@ import com.bunbeauty.fooddelivery.data.features.order.OrderRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.DeliveryZone
 import com.bunbeauty.fooddelivery.domain.feature.order.mapper.*
 import com.bunbeauty.fooddelivery.domain.feature.order.model.CalculatedOrderValues
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
@@ -129,9 +130,11 @@ class OrderService(
             orderRepository.getClientOrderByUuidV2(
                 userUuid = userUuid,
                 orderUuid = orderUuid
-            )?.let { getClientOrderV2 ->
-                listOf(getClientOrderV2)
-            } ?: emptyList()
+            )?.let { order ->
+                listOf(order)
+            }.orEmpty()
+        }.map { order ->
+            order.mapOrderToV2(order.calculatedOrderValues)
         }
     }
 
@@ -254,9 +257,8 @@ class OrderService(
 
     private suspend fun createOrderInfoV2(postOrder: PostOrderV3, clientUserUuid: String): OrderInfoV2 {
         val cafeUuid = if (postOrder.isDelivery) {
-            findCafeByAddressUuid(
-                addressUuid = postOrder.address.uuid
-            ).uuid
+            val addressUuid = postOrder.address.uuid
+            findCafeByAddressUuid(addressUuid = addressUuid).uuid
         } else {
             postOrder.address.uuid
         }
@@ -285,11 +287,51 @@ class OrderService(
     }
 
     private suspend fun findCafeByAddressUuid(addressUuid: String): Cafe {
-        val address = addressRepository.getAddressV2ByUuid(uuid = addressUuid)
-            .orThrowNotFoundByUuidError(uuid = addressUuid)
-        val cafeList = cafeRepository.getCafeListByCityUuid(cityUuid = address.cityUuid)
+        val addressV1 = addressRepository.getAddressByUuid(uuid = addressUuid)
+        return if (addressV1 != null) {
+            findCafeByCoordinates(
+                addressUuid = addressUuid,
+                cityUuid = addressV1.cityUuid,
+                latitude = addressV1.street.latitude,
+                longitude = addressV1.street.longitude,
+            )
+        } else {
+            val addressV2 = addressRepository.getAddressV2ByUuid(uuid = addressUuid)
+                .orThrowNotFoundByUuidError(uuid = addressUuid)
+            findCafeByCoordinates(
+                addressUuid = addressUuid,
+                cityUuid = addressV2.cityUuid,
+                latitude = addressV2.street.latitude,
+                longitude = addressV2.street.longitude,
+            )
+        }
+    }
 
-        return cafeList.firstOrNull() ?: noCafeError(addressUuid = addressUuid)
+    private suspend fun findCafeByCoordinates(
+        addressUuid: String,
+        cityUuid: String,
+        latitude: Double,
+        longitude: Double,
+    ): Cafe {
+        val cafeList = cafeRepository.getCafeListByCityUuid(cityUuid = cityUuid)
+        return cafeList.find { cafe ->
+            cafe.zones.any { zone ->
+                isCoordinatesInsideZone(
+                    latitude = latitude,
+                    longitude = longitude,
+                    zone = zone,
+                )
+            }
+        } ?: noCafeError(addressUuid = addressUuid)
+    }
+
+    private fun isCoordinatesInsideZone(
+        latitude: Double,
+        longitude: Double,
+        zone: DeliveryZone,
+    ): Boolean {
+        // TODO check is inside polygon
+        return true
     }
 
     private suspend fun generateCode(cafeUuid: String): String {
@@ -341,6 +383,7 @@ class OrderService(
         )
     }
 
+    // TODO take into account addition price
     private val Order.calculatedOrderValues: CalculatedOrderValues
         get() = CalculatedOrderValues(
             oldTotalCost = oldTotalCost,
