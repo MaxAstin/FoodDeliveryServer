@@ -54,10 +54,16 @@ class AddressService(
     }
 
     suspend fun getAddressListByUserUuidAndCityUuidV2(userUuid: String, cityUuid: String): List<GetAddressV2> {
-        return addressRepository.getAddressListByUserUuidAndCityUuidV2(
+        val addressV1List = addressRepository.getAddressListByUserUuidAndCityUuid(
+            userUuid = userUuid,
+            cityUuid = cityUuid
+        ).map(mapAddressToV2)
+        val addressV2List = addressRepository.getAddressListByUserUuidAndCityUuidV2(
             userUuid = userUuid,
             cityUuid = cityUuid
         ).map(mapAddressV2)
+
+        return addressV1List + addressV2List
     }
 
     suspend fun getStreetSuggestionList(query: String, cityUuid: String): List<GetSuggestion> {

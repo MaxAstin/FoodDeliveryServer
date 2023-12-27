@@ -8,6 +8,7 @@ class Address(
     val floor: String?,
     val comment: String?,
     val street: Street,
+    val cityUuid: String,
     val userUuid: String,
     val isVisible: Boolean,
 )
