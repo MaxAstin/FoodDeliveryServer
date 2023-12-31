@@ -13,7 +13,6 @@ import com.bunbeauty.fooddelivery.data.features.order.OrderRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
-import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.DeliveryZone
 import com.bunbeauty.fooddelivery.domain.feature.order.mapper.*
 import com.bunbeauty.fooddelivery.domain.feature.order.model.CalculatedOrderValues
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
@@ -43,6 +42,7 @@ class OrderService(
     private val menuProductRepository: MenuProductRepository,
     private val cafeRepository: CafeRepository,
     private val firebaseMessaging: FirebaseMessaging,
+    private val polygonHelper: PolygonHelper,
 ) {
 
     private val codesCount = CODE_LETTERS.length * CODE_NUMBER_COUNT
@@ -315,23 +315,28 @@ class OrderService(
     ): Cafe {
         val cafeList = cafeRepository.getCafeListByCityUuid(cityUuid = cityUuid)
         return cafeList.find { cafe ->
-            cafe.zones.any { zone ->
-                isCoordinatesInsideZone(
-                    latitude = latitude,
-                    longitude = longitude,
-                    zone = zone,
-                )
-            }
+            isCafeAvailableAtCoordinates(
+                cafe = cafe,
+                latitude = latitude,
+                longitude = longitude,
+            )
         } ?: noCafeError(addressUuid = addressUuid)
     }
 
-    private fun isCoordinatesInsideZone(
+    private fun isCafeAvailableAtCoordinates(
+        cafe: Cafe,
         latitude: Double,
         longitude: Double,
-        zone: DeliveryZone,
     ): Boolean {
-        // TODO check is inside polygon
-        return true
+        return cafe.isVisible && cafe.zones.any { zone ->
+            zone.isVisible && polygonHelper.isPointInPolygon(
+                latitude = latitude,
+                longitude = longitude,
+                polygon = zone.points.map { point ->
+                    point.latitude to point.longitude
+                },
+            )
+        }
     }
 
     private suspend fun generateCode(cafeUuid: String): String {
