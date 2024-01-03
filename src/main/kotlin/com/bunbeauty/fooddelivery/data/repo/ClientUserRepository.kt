@@ -1,12 +1,11 @@
 package com.bunbeauty.fooddelivery.data.repo
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.ClientSettingsEntity
 import com.bunbeauty.fooddelivery.data.entity.ClientUserEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
+import com.bunbeauty.fooddelivery.data.features.clientuser.mapper.mapClientUserEntity
 import com.bunbeauty.fooddelivery.data.table.ClientUserTable
-import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientSettings
-import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientUser
+import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUser
 import com.bunbeauty.fooddelivery.domain.model.client_user.InsertClientUser
 import com.bunbeauty.fooddelivery.domain.model.client_user.UpdateClientUser
 import com.bunbeauty.fooddelivery.domain.toUuid
@@ -18,37 +17,34 @@ class ClientUserRepository {
     suspend fun getClientUserByPhoneNumberAndCompanyUuid(
         phoneNumber: String,
         companyUuid: UUID,
-    ): GetClientUser? = query {
+    ): ClientUser? = query {
         ClientUserEntity.find {
             (ClientUserTable.phoneNumber eq phoneNumber) and
                     (ClientUserTable.company eq companyUuid) and
                     (ClientUserTable.isActive eq true)
-        }.singleOrNull()?.toClientUser()
+        }.singleOrNull()
+            ?.mapClientUserEntity()
     }
 
-    suspend fun getClientUserByUuid(uuid: String): GetClientUser? = query {
+    suspend fun getClientUserByUuid(uuid: String): ClientUser? = query {
         ClientUserEntity.findById(uuid.toUuid())?.let { clientUserEntity ->
             if (clientUserEntity.isActive) {
-                clientUserEntity.toClientUser()
+                clientUserEntity.mapClientUserEntity()
             } else {
                 null
             }
         }
     }
 
-    suspend fun getClientSettingsByUuid(uuid: String): GetClientSettings? = query {
-        ClientSettingsEntity.findById(uuid.toUuid())?.toClientSetting()
-    }
-
-    suspend fun insertClientUser(insertClientUser: InsertClientUser): GetClientUser = query {
+    suspend fun insertClientUser(insertClientUser: InsertClientUser): ClientUser = query {
         ClientUserEntity.new {
             phoneNumber = insertClientUser.phoneNumber
             email = insertClientUser.email
             company = CompanyEntity[insertClientUser.companyUuid]
-        }.toClientUser()
+        }.mapClientUserEntity()
     }
 
-    suspend fun updateClientUserByUuid(updateClientUser: UpdateClientUser): GetClientUser? = query {
+    suspend fun updateClientUserByUuid(updateClientUser: UpdateClientUser): ClientUser? = query {
         ClientUserEntity.findById(updateClientUser.uuid)?.let { clientUserEntity ->
             if (clientUserEntity.isActive) {
                 clientUserEntity.apply {
@@ -58,24 +54,7 @@ class ClientUserRepository {
                     updateClientUser.isActive?.let { newIsActive ->
                         isActive = newIsActive
                     }
-                }.toClientUser()
-            } else {
-                null
-            }
-        }
-    }
-
-    suspend fun updateClientUserSettingsByUuid(updateClientUser: UpdateClientUser): GetClientSettings? = query {
-        ClientSettingsEntity.findById(updateClientUser.uuid)?.let { clientSettingsEntity ->
-            if (clientSettingsEntity.isActive) {
-                clientSettingsEntity.apply {
-                    updateClientUser.email?.let { newEmail ->
-                        email = newEmail
-                    }
-                    updateClientUser.isActive?.let { newIsActive ->
-                        isActive = newIsActive
-                    }
-                }.toClientSetting()
+                }.mapClientUserEntity()
             } else {
                 null
             }

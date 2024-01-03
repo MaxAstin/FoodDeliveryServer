@@ -34,11 +34,7 @@ private fun Routing.clientLogin() {
         safely {
             val postClientUserAuth: PostClientUserAuth = call.receive()
             val clientAuthResponse = clientUserService.login(postClientUserAuth)
-            if (clientAuthResponse == null) {
-                call.respondBad("Unable to log in with provided credentials")
-            } else {
-                call.respondOk(clientAuthResponse)
-            }
+            call.respondOk(clientAuthResponse)
         }
     }
 }

@@ -8,8 +8,8 @@ import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.domain.error.errorWithCode
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.error.somethingWentWrongError
+import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUser
 import com.bunbeauty.fooddelivery.domain.model.client_user.ClientAuthResponse
-import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientUser
 import com.bunbeauty.fooddelivery.domain.model.client_user.InsertClientUser
 import com.bunbeauty.fooddelivery.domain.model.client_user.login.*
 import com.bunbeauty.fooddelivery.domain.toUuid
@@ -137,10 +137,9 @@ class AuthorizationService(
             authSession.phoneNumber,
             authSession.companyUuid.toUuid(),
         ) ?: registerClientUser(authSession)
-        val token = jwtService.generateToken(clientUser)
 
         return ClientAuthResponse(
-            token = token,
+            token = jwtService.generateToken(clientUser),
             userUuid = clientUser.uuid
         )
     }
@@ -210,7 +209,7 @@ class AuthorizationService(
         return authorizationRepository.getTestClientUserPhoneList()
     }
 
-    private suspend fun registerClientUser(authSession: GetClientAuthSession): GetClientUser {
+    private suspend fun registerClientUser(authSession: GetClientAuthSession): ClientUser {
         val insertClientUser = InsertClientUser(
             phoneNumber = authSession.phoneNumber,
             email = null,

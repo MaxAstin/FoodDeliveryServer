@@ -14,7 +14,6 @@ import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
 import com.bunbeauty.fooddelivery.domain.feature.order.mapper.*
-import com.bunbeauty.fooddelivery.domain.feature.order.model.CalculatedOrderValues
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderProductLight
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.OrderInfo
@@ -29,6 +28,8 @@ import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.PostOrderV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.cafe.GetCafeOrderDetailsV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetClientOrderV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v3.PostOrderV3
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderTotalUseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CheckIsPointInPolygonUseCase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import kotlinx.coroutines.flow.Flow
@@ -42,7 +43,8 @@ class OrderService(
     private val menuProductRepository: MenuProductRepository,
     private val cafeRepository: CafeRepository,
     private val firebaseMessaging: FirebaseMessaging,
-    private val polygonHelper: PolygonHelper,
+    private val checkIsPointInPolygonUseCase: CheckIsPointInPolygonUseCase,
+    private val calculateOrderTotalUseCase: CalculateOrderTotalUseCase,
 ) {
 
     private val codesCount = CODE_LETTERS.length * CODE_NUMBER_COUNT
@@ -65,7 +67,8 @@ class OrderService(
 
         sendNotification(order)
 
-        return order.mapOrder(order.calculatedOrderValues)
+        val orderTotal = calculateOrderTotalUseCase(order)
+        return order.mapOrder(orderTotal)
     }
 
     suspend fun createOrderV2(clientUserUuid: String, postOrder: PostOrderV2): GetClientOrderV2 {
@@ -86,7 +89,8 @@ class OrderService(
 
         sendNotification(order)
 
-        return order.mapOrderToV2(order.calculatedOrderValues)
+        val orderTotal = calculateOrderTotalUseCase(order)
+        return order.mapOrderToV2(orderTotal)
     }
 
     suspend fun createOrderV3(clientUserUuid: String, postOrder: PostOrderV3): GetClientOrderV2 {
@@ -107,16 +111,26 @@ class OrderService(
 
         sendNotification(order)
 
-        return order.mapOrderToV2(order.calculatedOrderValues)
+        val orderTotal = calculateOrderTotalUseCase(order)
+        return order.mapOrderToV2(orderTotal)
     }
 
     suspend fun getOrderListByCafeUuid(cafeUuid: String): List<GetCafeOrder> {
         val limitTime = DateTime.now().withTimeAtStartOfDay().minusDays(ORDER_HISTORY_DAY_COUNT).millis
-        return orderRepository.getOrderListByCafeUuidLimited(cafeUuid, limitTime)
+        return orderRepository.getOrderListByCafeUuidLimited(
+            cafeUuid = cafeUuid,
+            limitTime = limitTime
+        ).map(mapOrderToCafeOrder)
     }
 
     suspend fun getOrderListByUserUuid(userUuid: String, count: Int?): List<GetClientOrder> {
-        return orderRepository.getOrderListByUserUuid(userUuid, count)
+        return orderRepository.getOrderListByUserUuid(
+            userUuid = userUuid,
+            count = count
+        ).map { order ->
+            val orderTotal = calculateOrderTotalUseCase(order)
+            order.mapOrder(orderTotal)
+        }
     }
 
     suspend fun getOrderListByUserUuidV2(
@@ -124,26 +138,38 @@ class OrderService(
         count: Int?,
         orderUuid: String?,
     ): List<GetClientOrderV2> {
-        return if (orderUuid == null) {
-            orderRepository.getOrderListByUserUuidV2(userUuid, count)
-        } else {
-            orderRepository.getClientOrderByUuidV2(
+        val orderEntityList = if (orderUuid == null) {
+            orderRepository.getOrderListByUserUuid(
                 userUuid = userUuid,
-                orderUuid = orderUuid
-            )?.let { order ->
-                listOf(order)
-            }.orEmpty()
-        }.map { order ->
-            order.mapOrderToV2(order.calculatedOrderValues)
+                count = count
+            )
+        } else {
+            orderRepository.getOrderByUuid(orderUuid = orderUuid)
+                ?.takeIf { order ->
+                    order.clientUser.uuid == userUuid
+                }?.let { order ->
+                    listOf(order)
+                }.orEmpty()
+        }
+
+        return orderEntityList.map { order ->
+            val orderTotal = calculateOrderTotalUseCase(order)
+            order.mapOrderToV2(orderTotal)
         }
     }
 
-    suspend fun getOrderByUuid(uuid: String): GetCafeOrderDetails? {
-        return orderRepository.getOrderByUuid(uuid)
+    suspend fun getOrderByUuid(uuid: String): GetCafeOrderDetails {
+        val order = orderRepository.getOrderByUuid(uuid).orThrowNotFoundByUuidError(uuid)
+        val orderTotal = calculateOrderTotalUseCase(order)
+
+        return order.mapOrderToCafeOrderDetails(orderTotal)
     }
 
-    suspend fun getOrderByUuidV2(uuid: String): GetCafeOrderDetailsV2? {
-        return orderRepository.getOrderByUuidV2(uuid)
+    suspend fun getOrderByUuidV2(uuid: String): GetCafeOrderDetailsV2 {
+        val order = orderRepository.getOrderByUuid(uuid).orThrowNotFoundByUuidError(uuid)
+        val orderTotal = calculateOrderTotalUseCase(order)
+
+        return order.mapOrderToCafeOrderDetailsV2(orderTotal)
     }
 
     suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder {
@@ -166,7 +192,8 @@ class OrderService(
 
     fun observeClientOrderUpdates(clientUserUuid: String): Flow<GetClientOrder> {
         return orderRepository.getOrderFlowByKey(clientUserUuid).map { order ->
-            order.mapOrder(order.calculatedOrderValues)
+            val orderTotal = calculateOrderTotalUseCase(order)
+            order.mapOrder(orderTotal)
         }
     }
 
@@ -329,7 +356,7 @@ class OrderService(
         longitude: Double,
     ): Boolean {
         return cafe.isVisible && cafe.zones.any { zone ->
-            zone.isVisible && polygonHelper.isPointInPolygon(
+            zone.isVisible && checkIsPointInPolygonUseCase(
                 latitude = latitude,
                 longitude = longitude,
                 polygon = zone.points.map { point ->
@@ -387,37 +414,6 @@ class OrderService(
                 .build()
         )
     }
-
-    // TODO take into account addition price
-    private val Order.calculatedOrderValues: CalculatedOrderValues
-        get() = CalculatedOrderValues(
-            oldTotalCost = oldTotalCost,
-            newTotalCost = newTotalCost,
-        )
-
-    private val Order.newTotalCost: Int
-        get() {
-            val oderProductsSumCost = oderProducts.sumOf { orderProductEntity ->
-                orderProductEntity.count * orderProductEntity.newPrice
-            }
-            val discount = (oderProductsSumCost * (percentDiscount ?: 0) / 100.0).toInt()
-
-            return oderProductsSumCost - discount + (deliveryCost ?: 0)
-        }
-
-    private val Order.oldTotalCost: Int?
-        get() {
-            val isOldTotalCostEnabled = oderProducts.any { orderProductEntity ->
-                orderProductEntity.oldPrice != null
-            } || percentDiscount != null
-            return if (isOldTotalCostEnabled) {
-                oderProducts.sumOf { orderProductEntity ->
-                    orderProductEntity.count * (orderProductEntity.oldPrice ?: orderProductEntity.newPrice)
-                } + (deliveryCost ?: 0)
-            } else {
-                null
-            }
-        }
 
     private fun emptyProductListIsError(): Nothing {
         error("Product list is empty")

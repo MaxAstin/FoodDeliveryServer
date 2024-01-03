@@ -2,6 +2,8 @@ package com.bunbeauty.fooddelivery.service.client_user
 
 import com.bunbeauty.fooddelivery.auth.IJwtService
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
+import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUser
+import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUserToClientSettings
 import com.bunbeauty.fooddelivery.domain.model.client_user.*
 import com.bunbeauty.fooddelivery.domain.toUuid
 import com.google.firebase.auth.FirebaseAuth
@@ -12,38 +14,39 @@ class ClientUserService(
     private val jwtService: IJwtService,
 ) : IClientUserService {
 
-    override suspend fun login(clientUserAuth: PostClientUserAuth): ClientAuthResponse? {
+    override suspend fun login(clientUserAuth: PostClientUserAuth): ClientAuthResponse {
         val firebaseUser = firebaseAuth.getUser(clientUserAuth.firebaseUuid)
-        return if (firebaseUser.phoneNumber == clientUserAuth.phoneNumber) {
-            var getClientUser = clientUserRepository.getClientUserByPhoneNumberAndCompanyUuid(
-                clientUserAuth.phoneNumber,
-                clientUserAuth.companyUuid.toUuid()
-            )
-            if (getClientUser == null) {
-                val insertClientUser = InsertClientUser(
-                    phoneNumber = clientUserAuth.phoneNumber,
-                    email = null,
-                    companyUuid = clientUserAuth.companyUuid.toUuid(),
-                )
-                getClientUser = clientUserRepository.insertClientUser(insertClientUser)
-            }
-
-            val token = jwtService.generateToken(getClientUser)
-            ClientAuthResponse(
-                token = token,
-                userUuid = getClientUser.uuid
-            )
-        } else {
-            null
+        if (firebaseUser.phoneNumber != clientUserAuth.phoneNumber) {
+            credentialsError()
         }
+
+        var clientUser = clientUserRepository.getClientUserByPhoneNumberAndCompanyUuid(
+            clientUserAuth.phoneNumber,
+            clientUserAuth.companyUuid.toUuid()
+        )
+        if (clientUser == null) {
+            val insertClientUser = InsertClientUser(
+                phoneNumber = clientUserAuth.phoneNumber,
+                email = null,
+                companyUuid = clientUserAuth.companyUuid.toUuid(),
+            )
+            clientUser = clientUserRepository.insertClientUser(insertClientUser)
+        }
+
+        return ClientAuthResponse(
+            token = jwtService.generateToken(clientUser),
+            userUuid = clientUser.uuid
+        )
     }
 
     override suspend fun getClientUserByUuid(clientUserUuid: String): GetClientUser? {
         return clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
+            ?.mapClientUser()
     }
 
     override suspend fun getClientSettingsByUuid(clientUserUuid: String): GetClientSettings? {
-        return clientUserRepository.getClientSettingsByUuid(uuid = clientUserUuid)
+        return clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
+            ?.mapClientUserToClientSettings()
     }
 
     override suspend fun updateClientUserByUuid(
@@ -56,20 +59,24 @@ class ClientUserService(
                 email = patchClientUser.email,
                 isActive = patchClientUser.isActive,
             )
-        )
+        )?.mapClientUser()
     }
 
     override suspend fun updateClientUserSettingsByUuid(
         clientUserUuid: String,
-        patchClientUser: PatchClientUserSettings
+        patchClientUser: PatchClientUserSettings,
     ): GetClientSettings? {
-        return clientUserRepository.updateClientUserSettingsByUuid(
+        return clientUserRepository.updateClientUserByUuid(
             UpdateClientUser(
                 uuid = clientUserUuid.toUuid(),
                 email = patchClientUser.email,
                 isActive = patchClientUser.isActive,
             )
-        )
+        )?.mapClientUserToClientSettings()
+    }
+
+    private fun credentialsError() {
+        error("Unable to log in with provided credentials")
     }
 
 }

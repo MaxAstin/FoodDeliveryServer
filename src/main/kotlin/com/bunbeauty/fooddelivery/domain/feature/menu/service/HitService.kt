@@ -7,7 +7,7 @@ import com.bunbeauty.fooddelivery.data.features.menu.HitRepository
 import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.features.order.OrderRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
-import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetClientOrderV2
+import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.joda.time.DateTime
@@ -51,14 +51,14 @@ class HitService(
     }
 
     fun getHitMenuProductUuidList(
-        orderList: List<GetClientOrderV2>,
+        orderList: List<Order>,
         invisibleMenuProductUuidList: List<String>,
         count: Int,
     ): List<String> {
         return orderList.filter { order ->
             order.status == OrderStatus.DELIVERED.name
         }.flatMap { order ->
-            order.oderProductList
+            order.oderProducts
         }.asSequence()
             .filter { orderProduct ->
                 !invisibleMenuProductUuidList.contains(orderProduct.menuProduct.uuid)

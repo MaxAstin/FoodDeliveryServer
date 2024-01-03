@@ -1,7 +1,6 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.routing.extension.client
-import com.bunbeauty.fooddelivery.routing.extension.respondBad
 import com.bunbeauty.fooddelivery.routing.extension.respondOk
 import com.bunbeauty.fooddelivery.service.payment.IPaymentService
 import io.ktor.server.application.*
@@ -25,11 +24,7 @@ private fun Route.getPayment() {
     get("/payment") {
         client { request ->
             val payment = paymentService.getPaymentByClientUuid(request.jwtUser.uuid)
-            if (payment == null) {
-                call.respondBad("No payment for userUuid = ${request.jwtUser.uuid}")
-            } else {
-                call.respondOk(payment)
-            }
+            call.respondOk(payment)
         }
     }
 }

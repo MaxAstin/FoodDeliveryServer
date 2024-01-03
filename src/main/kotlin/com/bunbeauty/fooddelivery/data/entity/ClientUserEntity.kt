@@ -5,8 +5,6 @@ import com.bunbeauty.fooddelivery.data.entity.order.OrderEntity
 import com.bunbeauty.fooddelivery.data.table.ClientUserTable
 import com.bunbeauty.fooddelivery.data.table.address.AddressTable
 import com.bunbeauty.fooddelivery.data.table.order.OrderTable
-import com.bunbeauty.fooddelivery.domain.model.client_user.GetCafeClientUser
-import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientUser
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -25,26 +23,4 @@ class ClientUserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     companion object : UUIDEntityClass<ClientUserEntity>(ClientUserTable)
 
-    fun toClientUser(): GetClientUser {
-        return GetClientUser(
-            uuid = uuid,
-            phoneNumber = phoneNumber,
-            email = email,
-            company = company.toCompany(),
-            addresses = addresses.map { addressEntity ->
-                addressEntity.toAddress()
-            },
-            orders = orders.map { orderEntity ->
-                orderEntity.toClientOrder()
-            }
-        )
-    }
-
-    fun toCafeUser(): GetCafeClientUser {
-        return GetCafeClientUser(
-            uuid = uuid,
-            phoneNumber = phoneNumber,
-            email = email
-        )
-    }
 }

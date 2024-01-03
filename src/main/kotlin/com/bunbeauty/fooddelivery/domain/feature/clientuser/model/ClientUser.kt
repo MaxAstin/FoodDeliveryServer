@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.domain.feature.clientuser.model
 
-import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.domain.feature.address.model.Address
+import com.bunbeauty.fooddelivery.domain.feature.company.Company
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 
 class ClientUser(
@@ -9,7 +9,7 @@ class ClientUser(
    val phoneNumber: String,
    val email: String?,
    val isActive: Boolean,
-   val company: CompanyEntity,
+   val company: Company,
    val addresses: List<Address>,
    val orders: List<Order>,
 )

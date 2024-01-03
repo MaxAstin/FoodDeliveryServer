@@ -1,8 +1,8 @@
-package com.bunbeauty.fooddelivery.domain.feature.order
+package com.bunbeauty.fooddelivery.domain.feature.order.usecase
 
-class PolygonHelper {
+class CheckIsPointInPolygonUseCase {
 
-    fun isPointInPolygon(
+   operator fun invoke(
         latitude: Double,
         longitude: Double,
         polygon: List<Pair<Double, Double>>

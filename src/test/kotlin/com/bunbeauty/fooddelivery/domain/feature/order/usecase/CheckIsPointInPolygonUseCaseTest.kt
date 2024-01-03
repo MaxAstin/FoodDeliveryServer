@@ -1,17 +1,17 @@
-package com.bunbeauty.fooddelivery.domain.feature.order
+package com.bunbeauty.fooddelivery.domain.feature.order.usecase
 
 import org.junit.Test
 import kotlin.test.BeforeTest
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class PolygonHelperTest {
+class CheckIsPointInPolygonUseCaseTest {
 
-    private lateinit var polygonHelper: PolygonHelper
+    private lateinit var checkIsPointInPolygonUseCase: CheckIsPointInPolygonUseCase
 
     @BeforeTest
     fun setup() {
-        polygonHelper = PolygonHelper()
+        checkIsPointInPolygonUseCase = CheckIsPointInPolygonUseCase()
     }
 
     /**
@@ -30,7 +30,7 @@ class PolygonHelperTest {
             1.0 to 0.0,
         )
 
-        val result = polygonHelper.isPointInPolygon(
+        val result = checkIsPointInPolygonUseCase(
             latitude = latitude,
             longitude = longitude,
             polygon = polygon,
@@ -55,7 +55,7 @@ class PolygonHelperTest {
             2.0 to 1.0,
         )
 
-        val result = polygonHelper.isPointInPolygon(
+        val result = checkIsPointInPolygonUseCase(
             latitude = latitude,
             longitude = longitude,
             polygon = polygon,
@@ -82,7 +82,7 @@ class PolygonHelperTest {
             1.0 to 1.0,
         )
 
-        val result = polygonHelper.isPointInPolygon(
+        val result = checkIsPointInPolygonUseCase(
             latitude = latitude,
             longitude = longitude,
             polygon = polygon,
@@ -109,7 +109,7 @@ class PolygonHelperTest {
             1.0 to 2.0,
         )
 
-        val result = polygonHelper.isPointInPolygon(
+        val result = checkIsPointInPolygonUseCase(
             latitude = latitude,
             longitude = longitude,
             polygon = polygon,
@@ -143,7 +143,7 @@ class PolygonHelperTest {
             0.0 to 4.0,
         )
 
-        val result = polygonHelper.isPointInPolygon(
+        val result = checkIsPointInPolygonUseCase(
             latitude = latitude,
             longitude = longitude,
             polygon = polygon,
@@ -177,7 +177,7 @@ class PolygonHelperTest {
             0.0 to 4.0,
         )
 
-        val result = polygonHelper.isPointInPolygon(
+        val result = checkIsPointInPolygonUseCase(
             latitude = latitude,
             longitude = longitude,
             polygon = polygon,

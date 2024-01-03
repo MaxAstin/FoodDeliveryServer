@@ -15,12 +15,7 @@ import com.bunbeauty.fooddelivery.data.session.SessionHandler
 import com.bunbeauty.fooddelivery.data.table.order.OrderTable
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.InsertOrder
-import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.cafe.GetCafeOrder
-import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.cafe.GetCafeOrderDetails
-import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.client.GetClientOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.InsertOrderV2
-import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.cafe.GetCafeOrderDetailsV2
-import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetClientOrderV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v3.InsertOrderV3
 import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetStatisticOrder
 import com.bunbeauty.fooddelivery.domain.toUuid
@@ -161,41 +156,17 @@ class OrderRepository {
         orderEntity.mapOrderEntity()
     }
 
-    suspend fun getOrderListByCafeUuidLimited(cafeUuid: String, limitTime: Long): List<GetCafeOrder> = query {
+    suspend fun getOrderListByCafeUuidLimited(cafeUuid: String, limitTime: Long): List<Order> = query {
         OrderEntity.find {
             (OrderTable.cafe eq cafeUuid.toUuid()) and
                     (OrderTable.time greater limitTime)
         }.orderBy(OrderTable.time to SortOrder.DESC)
-            .map { orderEntity ->
-                orderEntity.toCafeOrder()
-            }
+            .map(mapOrderEntity)
     }
 
-    suspend fun getOrderListByUserUuid(userUuid: String, count: Int?): List<GetClientOrder> = query {
+    suspend fun getOrderListByUserUuid(userUuid: String, count: Int?): List<Order> = query {
         OrderEntity.find {
             (OrderTable.clientUser eq userUuid.toUuid())
-        }.orderBy(OrderTable.time to SortOrder.DESC)
-            .let { orderEntityList ->
-                if (count != null) {
-                    orderEntityList.limit(count)
-                } else {
-                    orderEntityList
-                }
-            }
-            .map { orderEntity ->
-                orderEntity.toClientOrder()
-            }
-    }
-
-    suspend fun getOrderCountByUserUuid(userUuid: String): Long = query {
-        OrderEntity.find {
-            OrderTable.clientUser eq userUuid.toUuid()
-        }.count()
-    }
-
-    suspend fun getOrderListByUserUuidV2(userUuid: String, count: Int?): List<Order> = query {
-        OrderEntity.find {
-            OrderTable.clientUser eq userUuid.toUuid()
         }.orderBy(OrderTable.time to SortOrder.DESC)
             .let { orderEntityList ->
                 if (count != null) {
@@ -207,49 +178,38 @@ class OrderRepository {
             .map(mapOrderEntity)
     }
 
-    suspend fun getClientOrderByUuidV2(userUuid: String, orderUuid: String): Order? = query {
-        val orderEntity = OrderEntity.findById(orderUuid.toUuid())
-        if (orderEntity?.clientUser?.id?.value == userUuid.toUuid()) {
-            orderEntity.mapOrderEntity()
-        } else {
-            null
-        }
+    suspend fun getOrderCountByUserUuid(userUuid: String): Long = query {
+        OrderEntity.find {
+            OrderTable.clientUser eq userUuid.toUuid()
+        }.count()
     }
 
-    suspend fun getOrderByUuid(orderUuid: String): GetCafeOrderDetails? = query {
-        OrderEntity.findById(orderUuid.toUuid())?.toCafeOrderDetails()
-    }
-
-    suspend fun getOrderByUuidV2(orderUuid: String): GetCafeOrderDetailsV2? = query {
-        OrderEntity.findById(orderUuid.toUuid())?.toCafeOrderDetailsV2()
+    suspend fun getOrderByUuid(orderUuid: String): Order? = query {
+        OrderEntity.findById(orderUuid.toUuid())?.mapOrderEntity()
     }
 
     suspend fun getOrderListByCompanyUuidLimited(
         companyUuid: String,
         limitTime: Long,
-    ): List<GetClientOrderV2> = query {
+    ): List<Order> = query {
         OrderEntity.find {
             (OrderTable.company eq companyUuid.toUuid()) and
                     (OrderTable.time greater limitTime)
         }.orderBy(OrderTable.time to SortOrder.DESC)
-            .map { orderEntity ->
-                orderEntity.toClientOrderV2()
-            }
+            .map(mapOrderEntity)
     }
 
     suspend fun getOrderDetailsListByCafeUuid(
         cafeUuid: String,
         startTimeMillis: Long,
         endTimeMillis: Long,
-    ): List<GetCafeOrderDetailsV2> = query {
+    ): List<Order> = query {
         OrderEntity.find {
             (OrderTable.cafe eq cafeUuid.toUuid()) and
                     OrderTable.time.greaterEq(startTimeMillis) and
                     OrderTable.time.less(endTimeMillis)
         }.orderBy(OrderTable.time to SortOrder.DESC)
-            .map { orderEntity ->
-                orderEntity.toCafeOrderDetailsV2()
-            }
+            .map(mapOrderEntity)
     }
 
     suspend fun getStatisticOrderListByCafeUuid(

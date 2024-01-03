@@ -5,11 +5,17 @@ import com.bunbeauty.fooddelivery.data.features.menu.HitRepository
 import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.features.order.OrderRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.CafeWithCity
+import com.bunbeauty.fooddelivery.domain.feature.city.City
+import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUserLight
+import com.bunbeauty.fooddelivery.domain.feature.company.Company
+import com.bunbeauty.fooddelivery.domain.feature.company.Delivery
+import com.bunbeauty.fooddelivery.domain.feature.company.Payment
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.service.HitService
-import com.bunbeauty.fooddelivery.domain.feature.order.model.GetOrderProduct
-import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetClientOrderV2
-import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetOrderAddressV2
+import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
+import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderProduct
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -85,32 +91,69 @@ class HitServiceTests {
         assertContentEquals(expectedMenuProductUuidList, hitMenuProductUuidList)
     }
 
-    private fun getFakeOrder(status: String, orderProductList: List<GetOrderProduct>): GetClientOrderV2 {
-        return GetClientOrderV2(
+    private fun getFakeOrder(status: String, orderProductList: List<OrderProduct>): Order {
+        return Order(
             uuid = "",
-            code = "",
-            status = status,
             time = 0,
-            timeZone = "UTC+3",
             isDelivery = true,
-            deferredTime = null,
-            address = GetOrderAddressV2(
-                description = "",
-                street = "",
-                house = "",
-                flat = "",
-                entrance = "",
-                floor = "",
-                comment = "",
-            ),
+            code = "",
+            addressDescription = "",
+            addressStreet = "",
+            addressHouse = "",
+            addressFlat = "",
+            addressEntrance = "",
+            addressFloor = "",
+            addressComment = "",
             comment = "",
-            deliveryCost = 100,
-            oldTotalCost = 250,
-            newTotalCost = 245,
-            paymentMethod = null,
+            deferredTime = null,
+            status = status,
+            deliveryCost = null,
+            paymentMethod = "",
             percentDiscount = null,
-            clientUserUuid = "",
-            oderProductList = orderProductList,
+            cafeWithCity = CafeWithCity(
+                cafe = Cafe(
+                    uuid = "",
+                    fromTime = 0,
+                    toTime = 0,
+                    offset = 3,
+                    phone = "",
+                    latitude = 0.0,
+                    longitude = 0.0,
+                    address = "",
+                    cityUuid = "",
+                    isVisible = true,
+                    zones = emptyList(),
+                ),
+                city = City(
+                    uuid = "",
+                    name = "",
+                    timeZone = "",
+                    isVisible = true,
+                ),
+            ),
+            company = Company(
+                uuid = "",
+                name = "",
+                offset = 3,
+                delivery = Delivery(
+                    forFree = 0,
+                    cost = 0,
+                ),
+                forceUpdateVersion = 0,
+                payment = Payment(
+                    phoneNumber = null,
+                    cardNumber = null,
+                ),
+                percentDiscount = null,
+                maxVisibleRecommendationCount = 0,
+                citiesWithCafes = emptyList(),
+            ),
+            clientUser = ClientUserLight(
+                uuid = "",
+                phoneNumber = "",
+                email = "",
+            ),
+            oderProducts = orderProductList,
         )
     }
 
@@ -118,8 +161,8 @@ class HitServiceTests {
         menuProductUuid: String,
         count: Int,
         price: Int,
-    ): GetOrderProduct {
-        return GetOrderProduct(
+    ): OrderProduct {
+        return OrderProduct(
             uuid = "",
             count = count,
             name = "",
@@ -131,7 +174,7 @@ class HitServiceTests {
             comboDescription = "",
             photoLink = "",
             barcode = 0,
-            menuProduct = GetMenuProduct(
+            menuProduct = MenuProduct(
                 uuid = menuProductUuid,
                 name = "",
                 newPrice = price,
@@ -147,7 +190,6 @@ class HitServiceTests {
                 categories = listOf(),
                 additionGroups = listOf(),
             ),
-            orderUuid = "",
             additions = emptyList(),
         )
     }

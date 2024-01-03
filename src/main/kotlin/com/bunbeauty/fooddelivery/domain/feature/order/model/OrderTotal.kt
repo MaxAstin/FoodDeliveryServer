@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.domain.feature.order.model
 
-class CalculatedOrderValues(
+class OrderTotal(
     val oldTotalCost: Int?,
     val newTotalCost: Int,
 )
