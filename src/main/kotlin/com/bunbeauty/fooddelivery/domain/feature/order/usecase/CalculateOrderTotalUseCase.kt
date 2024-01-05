@@ -1,22 +1,26 @@
 package com.bunbeauty.fooddelivery.domain.feature.order.usecase
 
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
+import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderProduct
+import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderProductTotal
 import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderTotal
 
 class CalculateOrderTotalUseCase {
 
-    // TODO take into account addition price
     operator fun invoke(order: Order): OrderTotal {
         return OrderTotal(
             oldTotalCost = order.oldTotalCost,
             newTotalCost = order.newTotalCost,
+            productTotalMap = order.oderProducts.associate { orderProduct ->
+                orderProduct.total
+            }
         )
     }
 
     private val Order.newTotalCost: Int
         get() {
-            val oderProductsSumCost = oderProducts.sumOf { orderProductEntity ->
-                orderProductEntity.count * orderProductEntity.newPrice
+            val oderProductsSumCost = oderProducts.sumOf { orderProduct ->
+                orderProduct.newTotalCost
             }
             val discount = (oderProductsSumCost * (percentDiscount ?: 0) / 100.0).toInt()
 
@@ -25,15 +29,42 @@ class CalculateOrderTotalUseCase {
 
     private val Order.oldTotalCost: Int?
         get() {
-            val isOldTotalCostEnabled = oderProducts.any { orderProductEntity ->
-                orderProductEntity.oldPrice != null
+            val isOldTotalCostEnabled = oderProducts.any { orderProduct ->
+                orderProduct.oldPrice != null
             } || percentDiscount != null
             return if (isOldTotalCostEnabled) {
-                oderProducts.sumOf { orderProductEntity ->
-                    orderProductEntity.count * (orderProductEntity.oldPrice ?: orderProductEntity.newPrice)
+                oderProducts.sumOf { orderProduct ->
+                    orderProduct.oldTotalCost ?: orderProduct.newTotalCost
                 } + (deliveryCost ?: 0)
             } else {
                 null
+            }
+        }
+
+    private val OrderProduct.additionsPrice: Int
+        get() {
+            return additions.sumOf { addition ->
+                addition.price ?: 0
+            }
+        }
+
+    private val OrderProduct.total: Pair<String, OrderProductTotal>
+        get() {
+            return uuid to OrderProductTotal(
+                oldTotalCost = oldTotalCost,
+                newTotalCost = newTotalCost,
+            )
+        }
+
+    private val OrderProduct.newTotalCost: Int
+        get() {
+            return count * (newPrice + additionsPrice)
+        }
+
+    private val OrderProduct.oldTotalCost: Int?
+        get() {
+            return oldPrice?.let {
+                count * (oldPrice + additionsPrice)
             }
         }
 

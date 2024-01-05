@@ -3,7 +3,6 @@ package com.bunbeauty.fooddelivery.data.entity.order
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductEntity
 import com.bunbeauty.fooddelivery.data.table.order.OrderProductAdditionTable
 import com.bunbeauty.fooddelivery.data.table.order.OrderProductTable
-import com.bunbeauty.fooddelivery.domain.feature.order.model.GetOrderProduct
 import com.bunbeauty.fooddelivery.domain.model.statistic.GetStatisticOrderProduct
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
@@ -30,23 +29,6 @@ class OrderProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     val additions: SizedIterable<OrderProductAdditionEntity> by OrderProductAdditionEntity referrersOn OrderProductAdditionTable.orderProduct
 
     companion object : UUIDEntityClass<OrderProductEntity>(OrderProductTable)
-
-    fun toOrderProduct() = GetOrderProduct(
-        uuid = uuid,
-        count = count,
-        name = name,
-        newPrice = newPrice,
-        oldPrice = oldPrice,
-        utils = utils,
-        nutrition = nutrition,
-        description = description,
-        comboDescription = comboDescription,
-        photoLink = photoLink,
-        barcode = barcode,
-        menuProduct = menuProduct.toMenuProduct(),
-        orderUuid = order.uuid,
-        additions = emptyList(),
-    )
 
     fun toStatisticOrderProduct() = GetStatisticOrderProduct(
         uuid = uuid,

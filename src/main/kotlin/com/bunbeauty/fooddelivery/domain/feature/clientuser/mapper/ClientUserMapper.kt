@@ -29,7 +29,8 @@ val mapClientUser: ClientUser.() -> GetClientUser = {
             order.mapOrder(
                 OrderTotal(
                     oldTotalCost = null,
-                    newTotalCost = 0
+                    newTotalCost = 0,
+                    productTotalMap = emptyMap(),
                 )
             )
         }
