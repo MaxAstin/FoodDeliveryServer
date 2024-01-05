@@ -4,6 +4,7 @@ import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderProduct
 import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderProductTotal
 import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderTotal
+import com.bunbeauty.fooddelivery.util.orZero
 
 class CalculateOrderTotalUseCase {
 
@@ -41,16 +42,10 @@ class CalculateOrderTotalUseCase {
             }
         }
 
-    private val OrderProduct.additionsPrice: Int
-        get() {
-            return additions.sumOf { addition ->
-                addition.price ?: 0
-            }
-        }
-
     private val OrderProduct.total: Pair<String, OrderProductTotal>
         get() {
             return uuid to OrderProductTotal(
+                additionsPrice = additionsPrice,
                 oldTotalCost = oldTotalCost,
                 newTotalCost = newTotalCost,
             )
@@ -58,13 +53,27 @@ class CalculateOrderTotalUseCase {
 
     private val OrderProduct.newTotalCost: Int
         get() {
-            return count * (newPrice + additionsPrice)
+            return count * (newPrice + additionsPrice.orZero())
         }
 
     private val OrderProduct.oldTotalCost: Int?
         get() {
             return oldPrice?.let {
-                count * (oldPrice + additionsPrice)
+                count * (oldPrice + additionsPrice.orZero())
+            }
+        }
+
+    private val OrderProduct.additionsPrice: Int?
+        get() {
+            val noAdditionsWithPrice = additions.all { addition ->
+                addition.price == null
+            }
+            return if (noAdditionsWithPrice) {
+                null
+            } else {
+                additions.sumOf { addition ->
+                    addition.price ?: 0
+                }
             }
         }
 

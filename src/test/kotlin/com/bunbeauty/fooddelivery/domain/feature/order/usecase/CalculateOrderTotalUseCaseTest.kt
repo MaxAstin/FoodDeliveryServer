@@ -50,14 +50,17 @@ class CalculateOrderTotalUseCaseTest {
             oldTotalCost = 850,
             productTotalMap = mapOf(
                 "1" to OrderProductTotal(
+                    additionsPrice = null,
                     newTotalCost = 100,
                     oldTotalCost = 120,
                 ),
                 "2" to OrderProductTotal(
+                    additionsPrice = null,
                     newTotalCost = 400,
                     oldTotalCost = 430,
                 ),
                 "3" to OrderProductTotal(
+                    additionsPrice = null,
                     newTotalCost = 300,
                     oldTotalCost = null,
                 ),
@@ -101,14 +104,17 @@ class CalculateOrderTotalUseCaseTest {
             oldTotalCost = 950,
             productTotalMap = mapOf(
                 "1" to OrderProductTotal(
+                    additionsPrice = null,
                     newTotalCost = 100,
                     oldTotalCost = 120,
                 ),
                 "2" to OrderProductTotal(
+                    additionsPrice = null,
                     newTotalCost = 400,
                     oldTotalCost = 430,
                 ),
                 "3" to OrderProductTotal(
+                    additionsPrice = null,
                     newTotalCost = 300,
                     oldTotalCost = null,
                 ),
@@ -162,14 +168,17 @@ class CalculateOrderTotalUseCaseTest {
             oldTotalCost = 1100,
             productTotalMap = mapOf(
                 "1" to OrderProductTotal(
+                    additionsPrice = null,
                     newTotalCost = 100,
                     oldTotalCost = 120,
                 ),
                 "2" to OrderProductTotal(
+                    additionsPrice = 50,
                     newTotalCost = 500,
                     oldTotalCost = 530,
                 ),
                 "3" to OrderProductTotal(
+                    additionsPrice = 50,
                     newTotalCost = 450,
                     oldTotalCost = null,
                 ),
@@ -223,14 +232,17 @@ class CalculateOrderTotalUseCaseTest {
             oldTotalCost = 1200,
             productTotalMap = mapOf(
                 "1" to OrderProductTotal(
+                    additionsPrice = null,
                     newTotalCost = 100,
                     oldTotalCost = 120,
                 ),
                 "2" to OrderProductTotal(
+                    additionsPrice = 50,
                     newTotalCost = 500,
                     oldTotalCost = 530,
                 ),
                 "3" to OrderProductTotal(
+                    additionsPrice = 50,
                     newTotalCost = 450,
                     oldTotalCost = null,
                 ),

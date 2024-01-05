@@ -18,6 +18,7 @@ class GetOrderProduct(
     val barcode: Int,
     val menuProduct: GetMenuProduct,
     val orderUuid: String,
+    val additionsPrice: Int?,
     val newTotalCost: Int,
     val oldTotalCost: Int?,
     val additions: List<GetOrderProductAddition>,

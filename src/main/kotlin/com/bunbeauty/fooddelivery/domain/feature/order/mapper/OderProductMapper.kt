@@ -22,6 +22,7 @@ val mapOrderProduct: OrderProduct.(String, OrderProductTotal) -> GetOrderProduct
             barcode = barcode,
             menuProduct = menuProduct.mapMenuProduct(),
             orderUuid = orderUuid,
+            additionsPrice = orderProductTotal.additionsPrice,
             newTotalCost = orderProductTotal.newTotalCost,
             oldTotalCost = orderProductTotal.oldTotalCost,
             additions = additions.map { addition ->
