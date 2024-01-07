@@ -13,7 +13,7 @@ class AdditionGroupEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     val uuid: String = uuid.value.toString()
     var name: String by AdditionGroupTable.name
     var singleChoice: Boolean by AdditionGroupTable.singleChoice
-    var priority: Int by AdditionTable.priority
+    var priority: Int by AdditionGroupTable.priority
     var isVisible: Boolean by AdditionGroupTable.isVisible
 
     val additions: SizedIterable<AdditionEntity> by AdditionEntity referrersOn AdditionTable.group
