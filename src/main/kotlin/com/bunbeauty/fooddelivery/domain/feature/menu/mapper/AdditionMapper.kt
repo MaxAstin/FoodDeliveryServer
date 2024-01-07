@@ -11,6 +11,7 @@ val mapAddition: Addition.() -> GetAddition = {
         isSelected = isSelected,
         price = price,
         photoLink = photoLink,
+        priority = priority,
         isVisible = isVisible,
     )
 }
