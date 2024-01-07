@@ -1,6 +1,5 @@
 package com.bunbeauty.fooddelivery.domain.feature.order.model
 
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -16,7 +15,6 @@ class GetOrderProduct(
     val comboDescription: String?,
     val photoLink: String,
     val barcode: Int,
-    val menuProduct: GetMenuProduct,
     val orderUuid: String,
     val additionsPrice: Int?,
     val newCommonPrice: Int,
