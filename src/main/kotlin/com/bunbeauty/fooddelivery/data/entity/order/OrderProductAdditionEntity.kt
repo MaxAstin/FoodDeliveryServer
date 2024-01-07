@@ -11,6 +11,7 @@ class OrderProductAdditionEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     val uuid: String = uuid.value.toString()
     var name: String by OrderProductAdditionTable.name
     var price: Int? by OrderProductAdditionTable.price
+    var priority: Int by OrderProductAdditionTable.priority
 
     var orderProduct: OrderProductEntity by OrderProductEntity referencedOn OrderProductAdditionTable.orderProduct
 

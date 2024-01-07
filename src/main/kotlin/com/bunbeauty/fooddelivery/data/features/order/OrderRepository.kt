@@ -143,11 +143,12 @@ class OrderRepository {
                 menuProduct = menuProductEntity
                 order = orderEntity
             }
-            insertOrderProduct.additionUuids.forEach { additionUuid ->
+            insertOrderProduct.additionUuids.forEachIndexed { i, additionUuid ->
                 val additionEntity = AdditionEntity[additionUuid.toUuid()]
                 OrderProductAdditionEntity.new {
                     name = additionEntity.fullName ?: additionEntity.name
                     price = additionEntity.price
+                    priority = i
                     orderProduct = orderProductEntity
                 }
             }

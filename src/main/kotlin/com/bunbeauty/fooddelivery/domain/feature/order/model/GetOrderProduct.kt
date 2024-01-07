@@ -28,4 +28,5 @@ class GetOrderProduct(
 class GetOrderProductAddition(
     val uuid: String,
     val name: String,
+    val priority: Int,
 )

@@ -29,6 +29,7 @@ val mapOrderProduct: OrderProduct.(String, OrderProductTotal) -> GetOrderProduct
                 GetOrderProductAddition(
                     uuid = addition.uuid,
                     name = addition.name,
+                    priority = addition.priority,
                 )
             },
         )

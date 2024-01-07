@@ -29,5 +29,6 @@ val mapOrderProductAdditionEntity: OrderProductAdditionEntity.() -> OrderProduct
         uuid = uuid,
         name = name,
         price = price,
+        priority = priority,
     )
 }
