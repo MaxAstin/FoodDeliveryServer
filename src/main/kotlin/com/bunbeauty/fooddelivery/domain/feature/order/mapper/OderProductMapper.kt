@@ -23,6 +23,8 @@ val mapOrderProduct: OrderProduct.(String, OrderProductTotal) -> GetOrderProduct
             menuProduct = menuProduct.mapMenuProduct(),
             orderUuid = orderUuid,
             additionsPrice = orderProductTotal.additionsPrice,
+            newCommonPrice = orderProductTotal.newCommonPrice,
+            oldCommonPrice = orderProductTotal.oldCommonPrice,
             newTotalCost = orderProductTotal.newTotalCost,
             oldTotalCost = orderProductTotal.oldTotalCost,
             additions = additions.map { addition ->

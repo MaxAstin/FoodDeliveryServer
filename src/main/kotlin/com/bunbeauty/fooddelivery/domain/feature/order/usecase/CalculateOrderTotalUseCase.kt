@@ -46,6 +46,8 @@ class CalculateOrderTotalUseCase {
         get() {
             return uuid to OrderProductTotal(
                 additionsPrice = additionsPrice,
+                newCommonPrice = newCommonPrice,
+                oldCommonPrice = oldCommonPrice,
                 oldTotalCost = oldTotalCost,
                 newTotalCost = newTotalCost,
             )
@@ -53,13 +55,25 @@ class CalculateOrderTotalUseCase {
 
     private val OrderProduct.newTotalCost: Int
         get() {
-            return count * (newPrice + additionsPrice.orZero())
+            return count * newCommonPrice
         }
 
     private val OrderProduct.oldTotalCost: Int?
         get() {
+            return oldCommonPrice?.let { price ->
+                count * price
+            }
+        }
+
+    private val OrderProduct.newCommonPrice: Int
+        get() {
+            return newPrice + additionsPrice.orZero()
+        }
+
+    private val OrderProduct.oldCommonPrice: Int?
+        get() {
             return oldPrice?.let {
-                count * (oldPrice + additionsPrice.orZero())
+                oldPrice + additionsPrice.orZero()
             }
         }
 
