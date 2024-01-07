@@ -14,6 +14,7 @@ class AdditionEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var isSelected: Boolean by AdditionTable.isSelected
     var price: Int? by AdditionTable.price
     var photoLink: String by AdditionTable.photoLink
+    var priority: Int by AdditionTable.priority
     var isVisible: Boolean by AdditionTable.isVisible
 
     companion object : UUIDEntityClass<AdditionEntity>(AdditionTable)

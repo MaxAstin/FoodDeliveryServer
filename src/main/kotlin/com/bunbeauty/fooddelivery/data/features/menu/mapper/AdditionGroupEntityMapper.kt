@@ -8,6 +8,7 @@ val mapAdditionGroupEntity: AdditionGroupEntity.() -> AdditionGroup = {
         uuid = uuid,
         name = name,
         singleChoice = singleChoice,
+        priority = priority,
         isVisible = isVisible,
         additions = additions.map(mapAdditionEntity),
     )

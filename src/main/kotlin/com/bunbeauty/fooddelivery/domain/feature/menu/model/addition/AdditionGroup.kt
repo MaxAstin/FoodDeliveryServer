@@ -4,6 +4,7 @@ data class AdditionGroup(
     val uuid: String,
     val name: String,
     val singleChoice: Boolean,
+    val priority: Int,
     val isVisible: Boolean,
     val additions: List<Addition>,
 )

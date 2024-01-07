@@ -11,6 +11,7 @@ val mapAdditionEntity: AdditionEntity.() -> Addition = {
         isSelected = isSelected,
         price = price,
         photoLink = photoLink,
+        priority = priority,
         isVisible = isVisible,
     )
 }

@@ -9,6 +9,7 @@ object AdditionTable : UUIDTable() {
     val isSelected = bool("isSelected")
     val price = integer("price").nullable()
     val photoLink = varchar("photoLink", 512)
+    val priority = integer("priority").default(1)
     val isVisible = bool("isVisible")
 
     val group = reference("group", AdditionGroupTable)
