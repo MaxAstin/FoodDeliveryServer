@@ -6,6 +6,7 @@ import com.bunbeauty.fooddelivery.domain.feature.address.model.Suggestion
 val mapSuggestion: Suggestion.() -> GetSuggestion = {
     GetSuggestion(
         fiasId = fiasId,
-        street = street
+        street = street,
+        details = settlement ?: city ?: "",
     )
 }

@@ -17,6 +17,8 @@ class Suggestion(
 class SuggestionData(
     @SerialName("street_fias_id") val streetFiasId: String,
     @SerialName("street_with_type") val streetWithType: String,
+    @SerialName("settlement_with_type") val settlementWithType: String?,
+    @SerialName("city_with_type") val cityWithType: String?,
     @SerialName("geo_lat") val latitude: Double,
     @SerialName("geo_lon") val longitude: Double,
 )
