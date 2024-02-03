@@ -6,9 +6,7 @@ object AdditionGroupTable : UUIDTable() {
 
     val name = varchar("name", 512)
     val singleChoice = bool("singleChoice")
-    val priority = integer("priority").default(1)
+    val priority = integer("priority")
     val isVisible = bool("isVisible")
-
-    val menuProduct = reference("menuProduct", MenuProductTable)
 
 }

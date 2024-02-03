@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.data.entity.menu
 
 import com.bunbeauty.fooddelivery.data.table.menu.AdditionGroupTable
-import com.bunbeauty.fooddelivery.data.table.menu.AdditionTable
+import com.bunbeauty.fooddelivery.data.table.menu.MenuProductToAdditionToAdditionGroupTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -16,7 +16,7 @@ class AdditionGroupEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var priority: Int by AdditionGroupTable.priority
     var isVisible: Boolean by AdditionGroupTable.isVisible
 
-    val additions: SizedIterable<AdditionEntity> by AdditionEntity referrersOn AdditionTable.group
+    val additions: SizedIterable<AdditionEntity> by AdditionEntity via MenuProductToAdditionToAdditionGroupTable
 
     companion object : UUIDEntityClass<AdditionGroupEntity>(AdditionGroupTable)
 

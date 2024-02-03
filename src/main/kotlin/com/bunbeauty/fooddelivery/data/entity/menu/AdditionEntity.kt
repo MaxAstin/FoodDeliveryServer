@@ -1,6 +1,7 @@
 package com.bunbeauty.fooddelivery.data.entity.menu
 
 import com.bunbeauty.fooddelivery.data.table.menu.AdditionTable
+import com.bunbeauty.fooddelivery.data.table.menu.MenuProductToAdditionToAdditionGroupTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -11,11 +12,13 @@ class AdditionEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     val uuid: String = uuid.value.toString()
     var name: String by AdditionTable.name
     var fullName: String? by AdditionTable.fullName
-    var isSelected: Boolean by AdditionTable.isSelected
     var price: Int? by AdditionTable.price
     var photoLink: String by AdditionTable.photoLink
     var priority: Int by AdditionTable.priority
     var isVisible: Boolean by AdditionTable.isVisible
+
+    var isVisibleForConcreteMenuProduct by MenuProductToAdditionToAdditionGroupTable.isVisible
+    var isSelectedForConcreteMenuProduct by MenuProductToAdditionToAdditionGroupTable.isSelected
 
     companion object : UUIDEntityClass<AdditionEntity>(AdditionTable)
 

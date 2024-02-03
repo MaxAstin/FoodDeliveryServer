@@ -9,7 +9,9 @@ val mapAdditionGroupEntity: AdditionGroupEntity.() -> AdditionGroup = {
         name = name,
         singleChoice = singleChoice,
         priority = priority,
-        isVisible = isVisible,
+        isVisible = isVisible && additions.any { addition ->
+            addition.isVisible && addition.isVisibleForConcreteMenuProduct
+        },
         additions = additions.map(mapAdditionEntity),
     )
 }

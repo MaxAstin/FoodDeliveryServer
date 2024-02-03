@@ -1,7 +1,5 @@
-package com.bunbeauty.fooddelivery.data.table
+package com.bunbeauty.fooddelivery.data.table.menu
 
-import com.bunbeauty.fooddelivery.data.table.menu.CategoryTable
-import com.bunbeauty.fooddelivery.data.table.menu.MenuProductTable
 import org.jetbrains.exposed.sql.Table
 
 object MenuProductCategoryTable: Table() {

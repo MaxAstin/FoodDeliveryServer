@@ -57,14 +57,23 @@ object DatabaseFactory {
             SchemaUtils.create(StreetTable)
             SchemaUtils.createMissingTablesAndColumns(StreetTable)
 
-            SchemaUtils.create(CategoryTable)
-            SchemaUtils.createMissingTablesAndColumns(CategoryTable)
-
             SchemaUtils.create(MenuProductTable)
             SchemaUtils.createMissingTablesAndColumns(MenuProductTable)
 
+            SchemaUtils.create(CategoryTable)
+            SchemaUtils.createMissingTablesAndColumns(CategoryTable)
+
+            SchemaUtils.create(AdditionGroupTable)
+            SchemaUtils.createMissingTablesAndColumns(AdditionGroupTable)
+
+            SchemaUtils.create(AdditionTable)
+            SchemaUtils.createMissingTablesAndColumns(AdditionTable)
+
             SchemaUtils.create(MenuProductCategoryTable)
             SchemaUtils.createMissingTablesAndColumns(MenuProductCategoryTable)
+
+            SchemaUtils.create(MenuProductToAdditionToAdditionGroupTable)
+            SchemaUtils.createMissingTablesAndColumns(MenuProductToAdditionToAdditionGroupTable)
 
             SchemaUtils.create(AddressTable)
             SchemaUtils.createMissingTablesAndColumns(AddressTable)
@@ -110,12 +119,6 @@ object DatabaseFactory {
 
             SchemaUtils.create(NonWorkingDayTable)
             SchemaUtils.createMissingTablesAndColumns(NonWorkingDayTable)
-
-            SchemaUtils.create(AdditionGroupTable)
-            SchemaUtils.createMissingTablesAndColumns(AdditionGroupTable)
-
-            SchemaUtils.create(AdditionTable)
-            SchemaUtils.createMissingTablesAndColumns(AdditionTable)
 
             SchemaUtils.create(DeliveryZoneTable)
             SchemaUtils.createMissingTablesAndColumns(DeliveryZoneTable)

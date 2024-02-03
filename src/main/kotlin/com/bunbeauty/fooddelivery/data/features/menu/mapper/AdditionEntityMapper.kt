@@ -8,10 +8,10 @@ val mapAdditionEntity: AdditionEntity.() -> Addition = {
         uuid = uuid,
         name = name,
         fullName = fullName,
-        isSelected = isSelected,
+        isSelected = isSelectedForConcreteMenuProduct,
         price = price,
         photoLink = photoLink,
         priority = priority,
-        isVisible = isVisible,
+        isVisible = isVisible && isVisibleForConcreteMenuProduct,
     )
 }
