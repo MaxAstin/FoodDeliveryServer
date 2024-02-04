@@ -34,17 +34,21 @@ val mapMenuProductWithAdditionEntityListToMenuProduct: List<MenuProductWithAddit
     menuProduct.copy(additionGroups = additionGroups)
 }
 
-private val mapMenuProductWithAdditionEntityListToAdditionGroup: List<MenuProductWithAdditionEntity>.() -> AdditionGroup = {
-    val additionGroupEntity = first().additionGroup
-    AdditionGroup(
-        uuid = additionGroupEntity.uuid,
-        name = additionGroupEntity.name,
-        singleChoice = additionGroupEntity.singleChoice,
-        priority = additionGroupEntity.priority,
-        isVisible = additionGroupEntity.isVisible && any { it.isVisible },
-        additions = map(mapMenuProductWithAdditionEntityToAddition),
-    )
-}
+private val mapMenuProductWithAdditionEntityListToAdditionGroup: List<MenuProductWithAdditionEntity>.() -> AdditionGroup =
+    {
+        val additionGroupEntity = first().additionGroup
+        AdditionGroup(
+            uuid = additionGroupEntity.uuid,
+            name = additionGroupEntity.name,
+            singleChoice = additionGroupEntity.singleChoice,
+            priority = additionGroupEntity.priority,
+            isVisible = additionGroupEntity.isVisible && any { menuProductWithAdditionEntity ->
+                menuProductWithAdditionEntity.isVisible &&
+                        menuProductWithAdditionEntity.addition.isVisible
+            },
+            additions = map(mapMenuProductWithAdditionEntityToAddition),
+        )
+    }
 
 private val mapMenuProductWithAdditionEntityToAddition: MenuProductWithAdditionEntity.() -> Addition = {
     Addition(
