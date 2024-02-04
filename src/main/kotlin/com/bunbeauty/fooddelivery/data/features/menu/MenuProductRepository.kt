@@ -8,6 +8,7 @@ import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductWithAdditionEntity
 import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapMenuProductEntity
 import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapMenuProductWithAdditionEntityListToMenuProduct
 import com.bunbeauty.fooddelivery.data.table.menu.MenuProductTable
+import com.bunbeauty.fooddelivery.data.table.menu.MenuProductToAdditionToAdditionGroupTable
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.InsertMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.UpdateMenuProduct
@@ -74,12 +75,19 @@ class MenuProductRepository {
             .toList()
     }
 
-    suspend fun getMenuProductListWithAdditionByCompanyUuid(companyUuid: String): List<MenuProduct> = query {
-        MenuProductWithAdditionEntity.find {
+    suspend fun getMenuProductWithAdditionListByCompanyUuid(companyUuid: String): List<MenuProduct> = query {
+        MenuProductEntity.find {
             MenuProductTable.company eq companyUuid.toUuid()
-        }.groupBy { menuProductListWithAddition ->
-            menuProductListWithAddition.menuProduct.uuid
-        }.values.map(mapMenuProductWithAdditionEntityListToMenuProduct)
+        }.map { menuProductEntity ->
+            val menuProductWithAdditionEntities = MenuProductWithAdditionEntity.find {
+                MenuProductToAdditionToAdditionGroupTable.menuProduct eq menuProductEntity.uuid.toUuid()
+            }
+            if (menuProductWithAdditionEntities.empty()) {
+                menuProductEntity.mapMenuProductEntity()
+            } else {
+                menuProductWithAdditionEntities.toList().mapMenuProductWithAdditionEntityListToMenuProduct()
+            }
+        }
     }
 
     suspend fun getMenuProductByUuid(uuid: String): MenuProduct? = query {

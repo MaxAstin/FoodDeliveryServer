@@ -18,10 +18,24 @@ import org.koin.ktor.ext.inject
 fun Application.configureMenuProductRouting() {
 
     routing {
+        getAllMenuProductsTest()
         getAllMenuProducts()
         authenticate {
             postMenuProduct()
             patchMenuProduct()
+        }
+    }
+}
+
+private fun Routing.getAllMenuProductsTest() {
+
+    val menuProductService: MenuProductService by inject()
+
+    get("/menu_product/test") {
+        safely {
+            val companyUuid = call.getParameter(COMPANY_UUID_PARAMETER)
+            val menuProductList = menuProductService.getMenuProductListByCompanyUuidTest(companyUuid)
+            call.respondOkWithList(menuProductList)
         }
     }
 }

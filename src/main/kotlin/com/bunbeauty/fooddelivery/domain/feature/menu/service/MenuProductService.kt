@@ -44,6 +44,28 @@ class MenuProductService(
         }
     }
 
+    suspend fun getMenuProductListByCompanyUuidTest(companyUuid: String): List<GetMenuProduct> {
+        val menuProductList = menuProductRepository.getMenuProductWithAdditionListByCompanyUuid(companyUuid = companyUuid)
+        val hitProductUuidList = hitRepository.getHitProductUuidListByCompanyUuid(companyUuid = companyUuid)
+        val updatedMenuProductList = if (hitProductUuidList.isNotEmpty()) {
+            val hitsCategory = categoryRepository.getHitsCategory()
+
+            menuProductList.map { menuProduct ->
+                if (hitProductUuidList.contains(menuProduct.uuid)) {
+                    menuProduct.copy(categories = menuProduct.categories + hitsCategory)
+                } else {
+                    menuProduct
+                }
+            }
+        } else {
+            menuProductList
+        }
+
+        return updatedMenuProductList.map { menuProduct ->
+            orderAdditionGroups(menuProduct).mapMenuProduct()
+        }
+    }
+
     suspend fun createMenuProduct(postMenuProduct: PostMenuProduct, creatorUuid: String): GetMenuProduct {
         val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
             .orThrowNotFoundByUserUuidError(creatorUuid)
