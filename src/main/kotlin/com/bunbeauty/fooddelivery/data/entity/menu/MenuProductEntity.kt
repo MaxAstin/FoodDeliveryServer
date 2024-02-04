@@ -3,7 +3,6 @@ package com.bunbeauty.fooddelivery.data.entity.menu
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.table.menu.MenuProductCategoryTable
 import com.bunbeauty.fooddelivery.data.table.menu.MenuProductTable
-import com.bunbeauty.fooddelivery.data.table.menu.MenuProductToAdditionToAdditionGroupTable
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
@@ -28,7 +27,6 @@ class MenuProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     var company: CompanyEntity by CompanyEntity referencedOn MenuProductTable.company
     var categories: SizedIterable<CategoryEntity> by CategoryEntity via MenuProductCategoryTable
-    val additionGroups: SizedIterable<AdditionGroupEntity> by AdditionGroupEntity via MenuProductToAdditionToAdditionGroupTable
 
     companion object : UUIDEntityClass<MenuProductEntity>(MenuProductTable)
 

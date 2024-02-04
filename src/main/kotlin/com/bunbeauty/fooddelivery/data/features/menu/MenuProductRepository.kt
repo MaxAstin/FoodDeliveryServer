@@ -4,7 +4,9 @@ import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.CategoryEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductEntity
+import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductWithAdditionEntity
 import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapMenuProductEntity
+import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapMenuProductWithAdditionEntityListToMenuProduct
 import com.bunbeauty.fooddelivery.data.table.menu.MenuProductTable
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.InsertMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProduct
@@ -70,6 +72,14 @@ class MenuProductRepository {
             MenuProductTable.company eq companyUuid.toUuid()
         }.map(mapMenuProductEntity)
             .toList()
+    }
+
+    suspend fun getMenuProductListWithAdditionByCompanyUuid(companyUuid: String): List<MenuProduct> = query {
+        MenuProductWithAdditionEntity.find {
+            MenuProductTable.company eq companyUuid.toUuid()
+        }.groupBy { menuProductListWithAddition ->
+            menuProductListWithAddition.menuProduct.uuid
+        }.values.map(mapMenuProductWithAdditionEntityListToMenuProduct)
     }
 
     suspend fun getMenuProductByUuid(uuid: String): MenuProduct? = query {
