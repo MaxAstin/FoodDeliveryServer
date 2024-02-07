@@ -5,8 +5,8 @@ import com.bunbeauty.fooddelivery.data.entity.ClientUserEntity
 import com.bunbeauty.fooddelivery.data.entity.StatisticOrderEntity
 import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.data.entity.menu.AdditionEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductEntity
+import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductWithAdditionGroupWithAdditionEntity
 import com.bunbeauty.fooddelivery.data.entity.order.OrderEntity
 import com.bunbeauty.fooddelivery.data.entity.order.OrderProductAdditionEntity
 import com.bunbeauty.fooddelivery.data.entity.order.OrderProductEntity
@@ -144,7 +144,7 @@ class OrderRepository {
                 order = orderEntity
             }
             insertOrderProduct.additionUuids.forEachIndexed { i, additionUuid ->
-                val additionEntity = AdditionEntity[additionUuid.toUuid()]
+                val additionEntity = MenuProductWithAdditionGroupWithAdditionEntity[additionUuid.toUuid()].addition
                 OrderProductAdditionEntity.new {
                     name = additionEntity.fullName ?: additionEntity.name
                     price = additionEntity.price
