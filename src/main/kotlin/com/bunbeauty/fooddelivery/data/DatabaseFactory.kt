@@ -72,8 +72,11 @@ object DatabaseFactory {
             SchemaUtils.create(MenuProductCategoryTable)
             SchemaUtils.createMissingTablesAndColumns(MenuProductCategoryTable)
 
-            SchemaUtils.create(MenuProductToAdditionToAdditionGroupTable)
-            SchemaUtils.createMissingTablesAndColumns(MenuProductToAdditionToAdditionGroupTable)
+            SchemaUtils.create(MenuProductToAdditionGroupTable)
+            SchemaUtils.createMissingTablesAndColumns(MenuProductToAdditionGroupTable)
+
+            SchemaUtils.create(MenuProductToAdditionGroupToAdditionTable)
+            SchemaUtils.createMissingTablesAndColumns(MenuProductToAdditionGroupToAdditionTable)
 
             SchemaUtils.create(AddressTable)
             SchemaUtils.createMissingTablesAndColumns(AddressTable)

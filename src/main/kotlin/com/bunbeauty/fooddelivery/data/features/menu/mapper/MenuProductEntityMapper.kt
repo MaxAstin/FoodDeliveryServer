@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.data.features.menu.mapper
 
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductEntity
-import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductWithAdditionEntity
+import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductWithAdditionGroupWithAdditionEntity
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.Addition
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.AdditionGroup
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProduct
@@ -25,34 +25,33 @@ val mapMenuProductEntity: MenuProductEntity.() -> MenuProduct = {
     )
 }
 
-val mapMenuProductWithAdditionEntityListToMenuProduct: List<MenuProductWithAdditionEntity>.() -> MenuProduct = {
-    val menuProduct = first().menuProduct.mapMenuProductEntity()
-    val additionGroups = groupBy { mapMenuProductWithAdditionEntity ->
-        mapMenuProductWithAdditionEntity.additionGroup.uuid
-    }.values.map(mapMenuProductWithAdditionEntityListToAdditionGroup)
+val mapToMenuProduct: List<MenuProductWithAdditionGroupWithAdditionEntity>.() -> MenuProduct = {
+    val menuProduct = first().menuProductWithAdditionGroup.menuProduct.mapMenuProductEntity()
+    val additionGroups = groupBy {
+        it.menuProductWithAdditionGroup.uuid
+    }.values.map(mapToAdditionGroup)
 
     menuProduct.copy(additionGroups = additionGroups)
 }
 
-private val mapMenuProductWithAdditionEntityListToAdditionGroup: List<MenuProductWithAdditionEntity>.() -> AdditionGroup =
-    {
-        val additionGroupEntity = first().additionGroup
-        AdditionGroup(
-            uuid = additionGroupEntity.uuid,
-            name = additionGroupEntity.name,
-            singleChoice = additionGroupEntity.singleChoice,
-            priority = additionGroupEntity.priority,
-            isVisible = additionGroupEntity.isVisible && any { menuProductWithAdditionEntity ->
-                menuProductWithAdditionEntity.isVisible &&
-                        menuProductWithAdditionEntity.addition.isVisible
-            },
-            additions = map(mapMenuProductWithAdditionEntityToAddition),
-        )
-    }
+private val mapToAdditionGroup: List<MenuProductWithAdditionGroupWithAdditionEntity>.() -> AdditionGroup = {
+    val menuProductWithAdditionGroup = first().menuProductWithAdditionGroup
+    val additionGroup = menuProductWithAdditionGroup.additionGroup
+    AdditionGroup(
+        uuid = menuProductWithAdditionGroup.uuid,
+        name = additionGroup.name,
+        singleChoice = additionGroup.singleChoice,
+        priority = additionGroup.priority,
+        isVisible = additionGroup.isVisible && any {
+            it.isVisible && it.addition.isVisible
+        },
+        additions = map(mapToAddition),
+    )
+}
 
-private val mapMenuProductWithAdditionEntityToAddition: MenuProductWithAdditionEntity.() -> Addition = {
+private val mapToAddition: MenuProductWithAdditionGroupWithAdditionEntity.() -> Addition = {
     Addition(
-        uuid = addition.uuid,
+        uuid = uuid,
         name = addition.name,
         fullName = addition.fullName,
         isSelected = isSelected,

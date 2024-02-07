@@ -4,11 +4,13 @@ import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.CategoryEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductEntity
-import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductWithAdditionEntity
+import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductWithAdditionGroupEntity
+import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductWithAdditionGroupWithAdditionEntity
 import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapMenuProductEntity
-import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapMenuProductWithAdditionEntityListToMenuProduct
+import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapToMenuProduct
 import com.bunbeauty.fooddelivery.data.table.menu.MenuProductTable
-import com.bunbeauty.fooddelivery.data.table.menu.MenuProductToAdditionToAdditionGroupTable
+import com.bunbeauty.fooddelivery.data.table.menu.MenuProductToAdditionGroupTable
+import com.bunbeauty.fooddelivery.data.table.menu.MenuProductToAdditionGroupToAdditionTable
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.InsertMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.UpdateMenuProduct
@@ -79,13 +81,21 @@ class MenuProductRepository {
         MenuProductEntity.find {
             MenuProductTable.company eq companyUuid.toUuid()
         }.map { menuProductEntity ->
-            val menuProductWithAdditionEntities = MenuProductWithAdditionEntity.find {
-                MenuProductToAdditionToAdditionGroupTable.menuProduct eq menuProductEntity.uuid.toUuid()
+            val menuProductWithAdditionEntities = MenuProductWithAdditionGroupWithAdditionEntity.find {
+                val menuProductWithAdditionGroupEntityList = MenuProductWithAdditionGroupEntity.find {
+                    MenuProductToAdditionGroupTable.menuProduct eq menuProductEntity.uuid.toUuid()
+                }.map {
+                    it.id
+                }
+
+                MenuProductToAdditionGroupToAdditionTable.menuProductToAdditionGroup.inList(
+                    menuProductWithAdditionGroupEntityList
+                )
             }
             if (menuProductWithAdditionEntities.empty()) {
                 menuProductEntity.mapMenuProductEntity()
             } else {
-                menuProductWithAdditionEntities.toList().mapMenuProductWithAdditionEntityListToMenuProduct()
+                menuProductWithAdditionEntities.toList().mapToMenuProduct()
             }
         }
     }
