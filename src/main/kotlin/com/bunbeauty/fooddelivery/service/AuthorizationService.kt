@@ -23,7 +23,7 @@ import org.joda.time.DateTime
 private const val CODE_LENGTH = 6
 private const val SEND_CODE_OPERATION_NAME = "sendCode"
 private const val AUTH_SECRET_KEY = "AUTH_SECRET_KEY"
-private const val DEFAULT_SIGN = "SMS Aero"
+private const val DEFAULT_SIGN = "BunBeauty"
 private const val MESSAGE_TEXT = "ваш код подтверждения для приложения"
 private const val AUTH_SESSION_TIMEOUT = 5 * 60 * 1_000L // 5 min
 private const val INITIAL_ATTEMPTS_COUNT = 3
