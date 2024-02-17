@@ -13,5 +13,6 @@ class UpdateMenuProduct(
     val photoLink: String?,
     val barcode: Int?,
     val categoryUuids: List<UUID>?,
+    val isRecommended: Boolean?,
     val isVisible: Boolean?,
 )

@@ -117,9 +117,6 @@ object DatabaseFactory {
             SchemaUtils.create(LinkTable)
             SchemaUtils.createMissingTablesAndColumns(LinkTable)
 
-            SchemaUtils.create(RecommendationTable)
-            SchemaUtils.createMissingTablesAndColumns(RecommendationTable)
-
             SchemaUtils.create(NonWorkingDayTable)
             SchemaUtils.createMissingTablesAndColumns(NonWorkingDayTable)
 

@@ -16,6 +16,7 @@ val mapPatchMenuProduct: PatchMenuProduct.() -> UpdateMenuProduct = {
         photoLink = photoLink,
         barcode = barcode,
         categoryUuids = categoryUuids?.map(mapUuid),
+        isRecommended = isRecommended,
         isVisible = isVisible,
     )
 }

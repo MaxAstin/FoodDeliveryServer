@@ -14,5 +14,6 @@ class PatchMenuProduct(
     val photoLink: String? = null,
     val barcode: Int? = null,
     val categoryUuids: List<String>? = null,
+    val isRecommended: Boolean? = null,
     val isVisible: Boolean? = null,
 )

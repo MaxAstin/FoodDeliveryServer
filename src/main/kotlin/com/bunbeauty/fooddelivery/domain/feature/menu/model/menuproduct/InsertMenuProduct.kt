@@ -14,5 +14,6 @@ class InsertMenuProduct(
     val barcode: Int,
     val companyUuid: UUID,
     val categoryUuids: List<UUID>,
+    val isRecommended: Boolean,
     val isVisible: Boolean,
 )

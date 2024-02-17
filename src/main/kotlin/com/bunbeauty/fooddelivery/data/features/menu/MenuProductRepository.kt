@@ -31,6 +31,7 @@ class MenuProductRepository {
             comboDescription = insertMenuProduct.comboDescription
             photoLink = insertMenuProduct.photoLink
             barcode = insertMenuProduct.barcode
+            isRecommended = insertMenuProduct.isRecommended
             isVisible = insertMenuProduct.isVisible
             company = CompanyEntity[insertMenuProduct.companyUuid]
             categories = SizedCollection(insertMenuProduct.categoryUuids.map { categoryUuid ->
@@ -61,6 +62,7 @@ class MenuProductRepository {
             }
             photoLink = updateMenuProduct.photoLink ?: photoLink
             barcode = updateMenuProduct.barcode ?: barcode
+            isRecommended = updateMenuProduct.isRecommended ?: isRecommended
             isVisible = updateMenuProduct.isVisible ?: isVisible
             updateMenuProduct.categoryUuids?.let { categoryUuids ->
                 categories = SizedCollection(categoryUuids.map { categoryUuid ->

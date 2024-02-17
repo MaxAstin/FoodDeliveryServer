@@ -14,5 +14,6 @@ class PostMenuProduct(
     val photoLink: String,
     val barcode: Int,
     val categoryUuids: List<String>,
+    val isRecommended: Boolean,
     val isVisible: Boolean,
 )
