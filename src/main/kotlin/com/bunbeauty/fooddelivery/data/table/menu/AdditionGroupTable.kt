@@ -10,6 +10,6 @@ object AdditionGroupTable : UUIDTable() {
     val priority = integer("priority")
     val isVisible = bool("isVisible")
 
-    val company = reference("company", CompanyTable).nullable()
+    val company = reference("company", CompanyTable)
 
 }
