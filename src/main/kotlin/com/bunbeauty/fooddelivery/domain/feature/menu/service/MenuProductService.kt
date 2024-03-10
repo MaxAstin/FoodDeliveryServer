@@ -8,7 +8,7 @@ import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUserUuidError
 import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPatchMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPostMenuProduct
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.AdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.MenuProductAdditionGroup
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.PatchMenuProduct
@@ -78,7 +78,7 @@ class MenuProductService(
         )
     }
 
-    private fun orderAdditions(additionGroup: AdditionGroup): AdditionGroup {
+    private fun orderAdditions(additionGroup: MenuProductAdditionGroup): MenuProductAdditionGroup {
         return additionGroup.copy(
             additions = additionGroup.additions.sortedBy { addition ->
                 addition.priority

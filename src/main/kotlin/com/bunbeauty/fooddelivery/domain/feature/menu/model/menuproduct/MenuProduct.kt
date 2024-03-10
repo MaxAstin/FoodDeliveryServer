@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct
 
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.AdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.MenuProductAdditionGroup
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.category.Category
 
 data class MenuProduct(
@@ -18,5 +18,5 @@ data class MenuProduct(
     val isVisible: Boolean,
     val companyUuid: String,
     val categories: List<Category>,
-    val additionGroups: List<AdditionGroup>,
+    val additionGroups: List<MenuProductAdditionGroup>,
 )

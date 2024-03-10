@@ -5,11 +5,9 @@ import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.features.user.UserRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUserUuidError
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
-import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapAddition
-import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapMenuProduct
-import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPostAddition
-import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPostAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.*
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.GetAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.GetAdditionGroup
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAddition
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditionGroup
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
@@ -46,6 +44,15 @@ class AdditionService(
         }
     }
 
+    suspend fun getAdditionGroups(creatorUuid: String): List<GetAdditionGroup> {
+        val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
+            .orThrowNotFoundByUserUuidError(creatorUuid)
+            .uuid
+            .toUuid()
+        return additionRepository.getAdditionGroupListByCompanyUuid(companyUuid = companyUuid)
+            .map(mapAdditionGroup)
+    }
+
     suspend fun createAddition(postAddition: PostAddition, creatorUuid: String): GetAddition {
         val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
             .orThrowNotFoundByUserUuidError(creatorUuid)
@@ -55,6 +62,15 @@ class AdditionService(
         return additionRepository.insertAddition(
             insertAddition = postAddition.mapPostAddition(companyUuid)
         ).mapAddition()
+    }
+
+    suspend fun getAddition(creatorUuid: String): List<GetAddition> {
+        val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
+            .orThrowNotFoundByUserUuidError(creatorUuid)
+            .uuid
+            .toUuid()
+        return additionRepository.getAdditionListByCompanyUuid(companyUuid = companyUuid)
+            .map(mapAddition)
     }
 
     private suspend fun checkMenuProductsAvailability(

@@ -2,8 +2,8 @@ package com.bunbeauty.fooddelivery.data.features.menu.mapper
 
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductWithAdditionGroupWithAdditionEntity
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.AdditionGroup
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.MenuProductAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.MenuProductAdditionGroup
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProduct
 
 val mapMenuProductEntity: MenuProductEntity.() -> MenuProduct = {
@@ -30,15 +30,15 @@ val mapToMenuProduct: List<MenuProductWithAdditionGroupWithAdditionEntity>.() ->
     val menuProduct = first().menuProductWithAdditionGroup.menuProduct.mapMenuProductEntity()
     val additionGroups = groupBy {
         it.menuProductWithAdditionGroup.uuid
-    }.values.map(mapToAdditionGroup)
+    }.values.map(mapToMenuProductAdditionGroup)
 
     menuProduct.copy(additionGroups = additionGroups)
 }
 
-private val mapToAdditionGroup: List<MenuProductWithAdditionGroupWithAdditionEntity>.() -> AdditionGroup = {
+private val mapToMenuProductAdditionGroup: List<MenuProductWithAdditionGroupWithAdditionEntity>.() -> MenuProductAdditionGroup = {
     val menuProductWithAdditionGroup = first().menuProductWithAdditionGroup
     val additionGroup = menuProductWithAdditionGroup.additionGroup
-    AdditionGroup(
+    MenuProductAdditionGroup(
         uuid = menuProductWithAdditionGroup.uuid,
         name = additionGroup.name,
         singleChoice = additionGroup.singleChoice,

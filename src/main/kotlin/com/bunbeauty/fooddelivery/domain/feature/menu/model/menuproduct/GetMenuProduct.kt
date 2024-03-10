@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct
 
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.GetAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.GetMenuProductAdditionGroup
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.category.GetCategory
 import kotlinx.serialization.Serializable
 
@@ -19,5 +19,5 @@ class GetMenuProduct(
     val isRecommended: Boolean,
     val isVisible: Boolean,
     val categories: List<GetCategory>,
-    val additionGroups: List<GetAdditionGroup>,
+    val additionGroups: List<GetMenuProductAdditionGroup>,
 )

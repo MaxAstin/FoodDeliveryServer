@@ -4,7 +4,11 @@ import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.*
 import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapToAddition
+import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapToAdditionGroup
+import com.bunbeauty.fooddelivery.data.table.menu.AdditionGroupTable
+import com.bunbeauty.fooddelivery.data.table.menu.AdditionTable
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.Addition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.AdditionGroup
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.InsertAddition
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.InsertAdditionGroup
 import java.util.*
@@ -36,6 +40,12 @@ class AdditionRepository {
         }
     }
 
+    suspend fun getAdditionGroupListByCompanyUuid(companyUuid: UUID): List<AdditionGroup> = query {
+        AdditionGroupEntity.find {
+            AdditionGroupTable.company eq companyUuid
+        }.map(mapToAdditionGroup)
+    }
+
     suspend fun insertAddition(insertAddition: InsertAddition): Addition = query {
         AdditionEntity.new {
             name = insertAddition.name
@@ -50,6 +60,12 @@ class AdditionRepository {
 
     suspend fun getAdditionByUuid(uuid: UUID): Addition? = query {
         AdditionEntity.findById(uuid)?.mapToAddition()
+    }
+
+    suspend fun getAdditionListByCompanyUuid(companyUuid: UUID): List<Addition> = query {
+        AdditionEntity.find {
+            AdditionTable.company eq companyUuid
+        }.map(mapToAddition)
     }
 
 

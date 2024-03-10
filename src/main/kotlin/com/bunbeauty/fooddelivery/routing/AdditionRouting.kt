@@ -5,6 +5,7 @@ import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditio
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditionGroup
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.service.AdditionService
+import com.bunbeauty.fooddelivery.routing.extension.getManagerWithListResult
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -15,7 +16,10 @@ fun Application.configureAdditionRouting() {
     routing {
         authenticate {
             postAdditionGroup()
+            getAdditionGroups()
+
             postAddition()
+            getAdditions()
         }
     }
 }
@@ -34,6 +38,17 @@ private fun Route.postAdditionGroup() {
     }
 }
 
+private fun Route.getAdditionGroups() {
+
+    val additionService: AdditionService by inject()
+
+    get("/addition_group") {
+        getManagerWithListResult { request ->
+            additionService.getAdditionGroups(creatorUuid = request.jwtUser.uuid)
+        }
+    }
+}
+
 private fun Route.postAddition() {
 
     val additionService: AdditionService by inject()
@@ -44,6 +59,17 @@ private fun Route.postAddition() {
                 postAddition = bodyRequest.body,
                 creatorUuid = bodyRequest.request.jwtUser.uuid
             )
+        }
+    }
+}
+
+private fun Route.getAdditions() {
+
+    val additionService: AdditionService by inject()
+
+    get("/addition") {
+        getManagerWithListResult { request ->
+            additionService.getAddition(creatorUuid = request.jwtUser.uuid)
         }
     }
 }
