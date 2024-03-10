@@ -44,6 +44,7 @@ class AdditionRepository {
             photoLink = insertAddition.photoLink
             priority = insertAddition.priority
             isVisible = insertAddition.isVisible
+            company = CompanyEntity[insertAddition.companyUuid]
         }.mapToAddition()
     }
 
