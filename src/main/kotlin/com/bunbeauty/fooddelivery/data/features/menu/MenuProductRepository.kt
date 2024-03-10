@@ -82,27 +82,34 @@ class MenuProductRepository {
     suspend fun getMenuProductWithAdditionListByCompanyUuid(companyUuid: String): List<MenuProduct> = query {
         MenuProductEntity.find {
             MenuProductTable.company eq companyUuid.toUuid()
-        }.map { menuProductEntity ->
-            val menuProductWithAdditionEntities = MenuProductWithAdditionGroupWithAdditionEntity.find {
-                val menuProductWithAdditionGroupEntityList = MenuProductWithAdditionGroupEntity.find {
-                    MenuProductToAdditionGroupTable.menuProduct eq menuProductEntity.uuid.toUuid()
-                }.map {
-                    it.id
-                }
-
-                MenuProductToAdditionGroupToAdditionTable.menuProductToAdditionGroup.inList(
-                    menuProductWithAdditionGroupEntityList
-                )
-            }
-            if (menuProductWithAdditionEntities.empty()) {
-                menuProductEntity.mapMenuProductEntity()
-            } else {
-                menuProductWithAdditionEntities.toList().mapToMenuProduct()
-            }
-        }
+        }.map(::getMenuProductWithAdditions)
     }
 
-    suspend fun getMenuProductByUuid(uuid: String): MenuProduct? = query {
-        MenuProductEntity.findById(uuid.toUuid())?.mapMenuProductEntity()
+    suspend fun getMenuProductByUuid(uuid: UUID): MenuProduct? = query {
+        MenuProductEntity.findById(uuid)?.mapMenuProductEntity()
+    }
+
+    suspend fun getMenuProductWithAdditionListByUuid(uuid: UUID): MenuProduct? = query {
+        MenuProductEntity.findById(uuid)?.let(::getMenuProductWithAdditions)
+    }
+
+    private fun getMenuProductWithAdditions(menuProductEntity: MenuProductEntity): MenuProduct {
+        val menuProductWithAdditionEntities = MenuProductWithAdditionGroupWithAdditionEntity.find {
+            val menuProductWithAdditionGroupEntityList = MenuProductWithAdditionGroupEntity.find {
+                MenuProductToAdditionGroupTable.menuProduct eq menuProductEntity.uuid.toUuid()
+            }.map {
+                it.id
+            }
+
+            MenuProductToAdditionGroupToAdditionTable.menuProductToAdditionGroup.inList(
+                menuProductWithAdditionGroupEntityList
+            )
+        }
+
+        return if (menuProductWithAdditionEntities.empty()) {
+            menuProductEntity.mapMenuProductEntity()
+        } else {
+            menuProductWithAdditionEntities.toList().mapToMenuProduct()
+        }
     }
 }

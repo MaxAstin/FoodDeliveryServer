@@ -30,6 +30,7 @@ import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetClient
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v3.PostOrderV3
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderTotalUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CheckIsPointInPolygonUseCase
+import com.bunbeauty.fooddelivery.domain.toUuid
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import kotlinx.coroutines.flow.Flow
@@ -396,7 +397,8 @@ class OrderService(
             .orThrowNotFoundByUuidError(clientUserUuid)
             .company
         val orderCost = orderProductList.sumOf { postOrderProduct ->
-            val menuProduct = menuProductRepository.getMenuProductByUuid(uuid = postOrderProduct.menuProductUuid)
+            val menuProduct =
+                menuProductRepository.getMenuProductByUuid(uuid = postOrderProduct.menuProductUuid.toUuid())
             (menuProduct?.newPrice ?: 0) * postOrderProduct.count
         }
         return if (orderCost >= company.delivery.forFree) {

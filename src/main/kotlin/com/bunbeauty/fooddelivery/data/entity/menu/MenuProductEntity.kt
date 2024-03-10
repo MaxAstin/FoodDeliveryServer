@@ -3,7 +3,6 @@ package com.bunbeauty.fooddelivery.data.entity.menu
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.table.menu.MenuProductCategoryTable
 import com.bunbeauty.fooddelivery.data.table.menu.MenuProductTable
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -30,22 +29,4 @@ class MenuProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     companion object : UUIDEntityClass<MenuProductEntity>(MenuProductTable)
 
-    fun toMenuProduct() = GetMenuProduct(
-        uuid = uuid,
-        name = name,
-        newPrice = newPrice,
-        oldPrice = oldPrice,
-        utils = utils,
-        nutrition = nutrition,
-        description = description,
-        comboDescription = comboDescription,
-        photoLink = photoLink,
-        barcode = barcode,
-        isRecommended = isRecommended,
-        isVisible = isVisible,
-        categories = categories.map { categoryEntity ->
-            categoryEntity.toCategory()
-        }.toMutableList(),
-        additionGroups = emptyList(),
-    )
 }

@@ -1,10 +1,10 @@
-package com.bunbeauty.fooddelivery.domain.feature.menu.mapper
+package com.bunbeauty.fooddelivery.data.features.menu.mapper
 
+import com.bunbeauty.fooddelivery.data.entity.menu.AdditionEntity
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.Addition
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.GetAddition
 
-val mapAddition: Addition.() -> GetAddition = {
-    GetAddition(
+val mapToAddition: AdditionEntity.() -> Addition = {
+    Addition(
         uuid = uuid,
         name = name,
         fullName = fullName,
@@ -12,5 +12,6 @@ val mapAddition: Addition.() -> GetAddition = {
         photoLink = photoLink,
         priority = priority,
         isVisible = isVisible,
+        companyUuid = company.uuid,
     )
 }

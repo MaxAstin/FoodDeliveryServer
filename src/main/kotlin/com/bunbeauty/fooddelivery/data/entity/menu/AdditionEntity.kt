@@ -1,5 +1,6 @@
 package com.bunbeauty.fooddelivery.data.entity.menu
 
+import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.table.menu.AdditionTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
@@ -15,6 +16,8 @@ class AdditionEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var photoLink: String by AdditionTable.photoLink
     var priority: Int by AdditionTable.priority
     var isVisible: Boolean by AdditionTable.isVisible
+
+    var company: CompanyEntity by CompanyEntity referencedOn AdditionTable.company
 
     companion object : UUIDEntityClass<AdditionEntity>(AdditionTable)
 

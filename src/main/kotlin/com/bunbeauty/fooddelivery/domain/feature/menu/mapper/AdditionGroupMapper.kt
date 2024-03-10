@@ -10,6 +10,6 @@ val mapAdditionGroup: AdditionGroup.() -> GetAdditionGroup = {
         singleChoice = singleChoice,
         priority = priority,
         isVisible = isVisible,
-        additions = additions.map(mapAddition),
+        additions = additions.map(mapMenuProductAddition),
     )
 }

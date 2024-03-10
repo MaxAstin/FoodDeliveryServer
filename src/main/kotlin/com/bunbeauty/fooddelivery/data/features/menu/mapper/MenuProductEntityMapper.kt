@@ -2,8 +2,8 @@ package com.bunbeauty.fooddelivery.data.features.menu.mapper
 
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductWithAdditionGroupWithAdditionEntity
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.Addition
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.AdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.MenuProductAddition
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProduct
 
 val mapMenuProductEntity: MenuProductEntity.() -> MenuProduct = {
@@ -20,6 +20,7 @@ val mapMenuProductEntity: MenuProductEntity.() -> MenuProduct = {
         barcode = barcode,
         isRecommended = isRecommended,
         isVisible = isVisible,
+        companyUuid = company.uuid,
         categories = categories.map(mapCategoryEntity),
         additionGroups = emptyList(),
     )
@@ -45,12 +46,12 @@ private val mapToAdditionGroup: List<MenuProductWithAdditionGroupWithAdditionEnt
         isVisible = additionGroup.isVisible && any {
             it.isVisible && it.addition.isVisible
         },
-        additions = map(mapToAddition),
+        additions = map(mapToMenuProductAddition),
     )
 }
 
-private val mapToAddition: MenuProductWithAdditionGroupWithAdditionEntity.() -> Addition = {
-    Addition(
+private val mapToMenuProductAddition: MenuProductWithAdditionGroupWithAdditionEntity.() -> MenuProductAddition = {
+    MenuProductAddition(
         uuid = uuid,
         name = addition.name,
         fullName = addition.fullName,

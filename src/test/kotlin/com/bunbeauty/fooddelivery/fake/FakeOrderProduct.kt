@@ -41,6 +41,7 @@ object FakeOrderProduct {
                 isVisible = true,
                 categories = listOf(),
                 additionGroups = listOf(),
+                companyUuid = "",
             ),
             additions = additions,
         )

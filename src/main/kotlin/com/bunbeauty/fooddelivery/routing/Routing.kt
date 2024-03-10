@@ -25,4 +25,5 @@ fun Application.configureRouting() {
     configureRecommendationRouting()
     configureNonWorkingDayRouting()
     configureDeliveryZoneRouting()
+    configureAdditionRouting()
 }

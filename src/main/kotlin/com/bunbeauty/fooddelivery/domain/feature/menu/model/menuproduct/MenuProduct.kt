@@ -16,6 +16,7 @@ data class MenuProduct(
     val barcode: Int,
     val isRecommended: Boolean,
     val isVisible: Boolean,
+    val companyUuid: String,
     val categories: List<Category>,
     val additionGroups: List<AdditionGroup>,
 )
