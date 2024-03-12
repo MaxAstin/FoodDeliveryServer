@@ -3,14 +3,17 @@ package com.bunbeauty.fooddelivery.data.features.menu
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.*
+import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapMenuProductEntity
 import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapToAddition
 import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapToAdditionGroup
 import com.bunbeauty.fooddelivery.data.table.menu.AdditionGroupTable
 import com.bunbeauty.fooddelivery.data.table.menu.AdditionTable
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.Addition
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.AdditionGroup
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.InsertAddition
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.InsertAdditionGroup
+import com.bunbeauty.fooddelivery.data.table.menu.MenuProductToAdditionGroupTable
+import com.bunbeauty.fooddelivery.data.table.menu.MenuProductToAdditionGroupToAdditionTable
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.*
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProduct
+import com.bunbeauty.fooddelivery.domain.toUuid
+import org.jetbrains.exposed.sql.and
 import java.util.*
 
 class AdditionRepository {
@@ -46,6 +49,10 @@ class AdditionRepository {
         }.map(mapToAdditionGroup)
     }
 
+    suspend fun getAdditionGroupByUuid(uuid: UUID): AdditionGroup? = query {
+        AdditionGroupEntity.findById(uuid)?.mapToAdditionGroup()
+    }
+
     suspend fun insertAddition(insertAddition: InsertAddition): Addition = query {
         AdditionEntity.new {
             name = insertAddition.name
@@ -58,6 +65,30 @@ class AdditionRepository {
         }.mapToAddition()
     }
 
+    suspend fun insertAdditionToGroup(insertAdditionToGroup: InsertAdditionToGroup): List<MenuProduct> = query {
+        MenuProductWithAdditionGroupEntity.find {
+            MenuProductToAdditionGroupTable.additionGroup eq insertAdditionToGroup.additionGroupUuid
+        }.map { menuProductWithAdditionGroupEntity ->
+            val menuProductWithAdditionGroupWithAdditionEntity = MenuProductWithAdditionGroupWithAdditionEntity.find {
+                (MenuProductToAdditionGroupToAdditionTable.menuProductToAdditionGroup eq
+                        menuProductWithAdditionGroupEntity.uuid.toUuid()) and
+                        (MenuProductToAdditionGroupToAdditionTable.addition eq
+                                insertAdditionToGroup.additionUuid)
+            }
+
+            if (menuProductWithAdditionGroupWithAdditionEntity.empty()) {
+                MenuProductWithAdditionGroupWithAdditionEntity.new {
+                    menuProductWithAdditionGroup = menuProductWithAdditionGroupEntity
+                    addition = AdditionEntity[insertAdditionToGroup.additionUuid]
+                    isSelected = insertAdditionToGroup.isSelected
+                    isVisible = insertAdditionToGroup.isVisible
+                }
+            }
+
+            menuProductWithAdditionGroupEntity.menuProduct.mapMenuProductEntity()
+        }
+    }
+
     suspend fun getAdditionByUuid(uuid: UUID): Addition? = query {
         AdditionEntity.findById(uuid)?.mapToAddition()
     }
@@ -67,6 +98,5 @@ class AdditionRepository {
             AdditionTable.company eq companyUuid
         }.map(mapToAddition)
     }
-
 
 }

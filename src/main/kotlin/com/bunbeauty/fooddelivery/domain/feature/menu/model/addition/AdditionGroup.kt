@@ -6,4 +6,5 @@ data class AdditionGroup(
     val singleChoice: Boolean,
     val priority: Int,
     val isVisible: Boolean,
+    val companyUuid: String,
 )
