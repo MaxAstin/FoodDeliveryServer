@@ -73,7 +73,7 @@ class AdditionService(
             companyUuid = companyUuid
         )
         checkAdditionGroupAvailability(
-            additionGroupUuid = postAdditionToGroup.additionUuid,
+            additionGroupUuid = postAdditionToGroup.groupUuid,
             companyUuid = companyUuid
         )
 
