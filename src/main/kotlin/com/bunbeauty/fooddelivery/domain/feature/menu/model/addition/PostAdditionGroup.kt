@@ -4,9 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class PostAdditionGroup(
-    val groupName: String,
-    val groupPriority: Int,
+    val name: String,
     val singleChoice: Boolean,
-    val menuProductUuids: List<String>,
-    val additionUuids: List<String>,
+    val priority: Int,
+    val isVisible: Boolean,
 )

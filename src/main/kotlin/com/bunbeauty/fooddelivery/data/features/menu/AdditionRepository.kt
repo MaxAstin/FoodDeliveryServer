@@ -19,20 +19,34 @@ import java.util.*
 class AdditionRepository {
 
     suspend fun insertAdditionGroup(insertAdditionGroup: InsertAdditionGroup) = query {
-        val additionGroupEntity = AdditionGroupEntity.new {
-            name = insertAdditionGroup.groupName
+        AdditionGroupEntity.new {
+            name = insertAdditionGroup.name
             singleChoice = insertAdditionGroup.singleChoice
-            priority = insertAdditionGroup.groupPriority
-            isVisible = true
+            priority = insertAdditionGroup.priority
+            isVisible = insertAdditionGroup.isVisible
             company = CompanyEntity[insertAdditionGroup.companyUuid]
-        }
-        insertAdditionGroup.menuProductUuids.map { menuProductUuid ->
-            MenuProductWithAdditionGroupEntity.new {
-                menuProduct = MenuProductEntity[menuProductUuid]
-                additionGroup = additionGroupEntity
+        }.mapToAdditionGroup()
+    }
+
+    suspend fun insertAdditionGroupToMenuProducts(
+        insertAdditionGroupToMenuProducts: InsertAdditionGroupToMenuProducts,
+    ) = query {
+        insertAdditionGroupToMenuProducts.menuProductUuids.mapNotNull { menuProductUuid ->
+            val menuProductWithAdditionGroupEntity = MenuProductWithAdditionGroupEntity.find {
+                (MenuProductToAdditionGroupTable.menuProduct eq menuProductUuid) and
+                        (MenuProductToAdditionGroupTable.additionGroup eq insertAdditionGroupToMenuProducts.additionGroupUuid)
+            }
+
+            if (menuProductWithAdditionGroupEntity.empty()) {
+                MenuProductWithAdditionGroupEntity.new {
+                    menuProduct = MenuProductEntity[menuProductUuid]
+                    additionGroup = AdditionGroupEntity[insertAdditionGroupToMenuProducts.additionGroupUuid]
+                }
+            } else {
+                null
             }
         }.forEach { menuProductWithAdditionGroupEntity ->
-            insertAdditionGroup.additionUuids.forEach { additionUuid ->
+            insertAdditionGroupToMenuProducts.additionUuids.forEach { additionUuid ->
                 MenuProductWithAdditionGroupWithAdditionEntity.new {
                     menuProductWithAdditionGroup = menuProductWithAdditionGroupEntity
                     addition = AdditionEntity[additionUuid]
@@ -51,6 +65,13 @@ class AdditionRepository {
 
     suspend fun getAdditionGroupByUuid(uuid: UUID): AdditionGroup? = query {
         AdditionGroupEntity.findById(uuid)?.mapToAdditionGroup()
+    }
+
+    suspend fun getAdditionGroupByName(name: String, companyUuid: UUID): AdditionGroup? = query {
+        AdditionGroupEntity.find {
+            (AdditionGroupTable.name eq name) and
+                    (AdditionGroupTable.company eq companyUuid)
+        }.firstOrNull()?.mapToAdditionGroup()
     }
 
     suspend fun insertAddition(insertAddition: InsertAddition): Addition = query {
@@ -91,6 +112,16 @@ class AdditionRepository {
 
     suspend fun getAdditionByUuid(uuid: UUID): Addition? = query {
         AdditionEntity.findById(uuid)?.mapToAddition()
+    }
+
+    suspend fun getAdditionByName(
+        name: String,
+        companyUuid: UUID,
+    ): Addition? = query {
+        AdditionEntity.find {
+            (AdditionTable.name eq name) and
+                    (AdditionTable.company eq companyUuid)
+        }.firstOrNull()?.mapToAddition()
     }
 
     suspend fun getAdditionListByCompanyUuid(companyUuid: UUID): List<Addition> = query {

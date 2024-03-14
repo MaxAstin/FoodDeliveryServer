@@ -16,25 +16,47 @@ class AdditionService(
     private val menuProductRepository: MenuProductRepository,
 ) {
 
-    suspend fun createAdditionGroup(postAdditionGroup: PostAdditionGroup, creatorUuid: String): List<GetMenuProduct> {
+    suspend fun createAdditionGroup(postAdditionGroup: PostAdditionGroup, creatorUuid: String): GetAdditionGroup {
+        val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
+            .orThrowNotFoundByUserUuidError(creatorUuid)
+            .uuid
+            .toUuid()
+
+        val additionGroup = additionRepository.getAdditionGroupByName(
+            name = postAdditionGroup.name,
+            companyUuid = companyUuid,
+        )
+        if (additionGroup != null) {
+            additionGroupAlreadyExistsError(name = postAdditionGroup.name)
+        }
+
+        return additionRepository.insertAdditionGroup(
+            insertAdditionGroup = postAdditionGroup.mapPostAdditionGroup(companyUuid)
+        ).mapAdditionGroup()
+    }
+
+    suspend fun addAdditionGroupToMenuProducts(
+        postAdditionGroupToMenuProducts: PostAdditionGroupToMenuProducts,
+        creatorUuid: String,
+    ): List<GetMenuProduct> {
         val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
             .orThrowNotFoundByUserUuidError(creatorUuid)
             .uuid
 
         checkMenuProductsAvailability(
-            menuProductUuids = postAdditionGroup.menuProductUuids,
+            menuProductUuids = postAdditionGroupToMenuProducts.menuProductUuids,
             companyUuid = companyUuid
         )
         checkAdditionsAvailability(
-            additionUuids = postAdditionGroup.additionUuids,
+            additionUuids = postAdditionGroupToMenuProducts.additionUuids,
             companyUuid = companyUuid
         )
 
-        additionRepository.insertAdditionGroup(
-            insertAdditionGroup = postAdditionGroup.mapPostAdditionGroup(companyUuid.toUuid())
+        additionRepository.insertAdditionGroupToMenuProducts(
+            insertAdditionGroupToMenuProducts = postAdditionGroupToMenuProducts.mapPostAdditionGroupToMenuProducts()
         )
 
-        return postAdditionGroup.menuProductUuids.map { menuProductUuid ->
+        return postAdditionGroupToMenuProducts.menuProductUuids.map { menuProductUuid ->
             menuProductRepository.getMenuProductWithAdditionListByUuid(uuid = menuProductUuid.toUuid())
                 .orThrowNotFoundByUuidError(menuProductUuid)
                 .mapMenuProduct()
@@ -55,6 +77,14 @@ class AdditionService(
             .orThrowNotFoundByUserUuidError(creatorUuid)
             .uuid
             .toUuid()
+
+        val additionGroup = additionRepository.getAdditionByName(
+            name = postAddition.name,
+            companyUuid = companyUuid
+        )
+        if (additionGroup != null) {
+            additionAlreadyExistsError(name = additionGroup.name)
+        }
 
         return additionRepository.insertAddition(
             insertAddition = postAddition.mapPostAddition(companyUuid)
@@ -142,6 +172,14 @@ class AdditionService(
 
     private fun noAccessToAdditionGroupError(additionGroupUuid: String): Nothing {
         error("User doesn't has access to this addition group - $additionGroupUuid")
+    }
+
+    private fun additionGroupAlreadyExistsError(name: String): Nothing {
+        error("Addition group with name \"$name\" already exists")
+    }
+
+    private fun additionAlreadyExistsError(name: String): Nothing {
+        error("Addition with name \"$name\" already exists")
     }
 
 }

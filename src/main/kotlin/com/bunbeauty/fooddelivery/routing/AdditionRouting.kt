@@ -1,9 +1,6 @@
 package com.bunbeauty.fooddelivery.routing
 
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.GetAddition
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAddition
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditionGroup
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditionToGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.*
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.service.AdditionService
 import com.bunbeauty.fooddelivery.routing.extension.getManagerWithListResult
@@ -17,6 +14,7 @@ fun Application.configureAdditionRouting() {
     routing {
         authenticate {
             postAdditionGroup()
+            postAdditionGroupToMenuProducts()
             getAdditionGroups()
 
             postAddition()
@@ -31,9 +29,23 @@ private fun Route.postAdditionGroup() {
     val additionService: AdditionService by inject()
 
     post("/addition_group") {
-        managerWithBody<PostAdditionGroup, List<GetMenuProduct>> { bodyRequest ->
+        managerWithBody<PostAdditionGroup, GetAdditionGroup> { bodyRequest ->
             additionService.createAdditionGroup(
                 postAdditionGroup = bodyRequest.body,
+                creatorUuid = bodyRequest.request.jwtUser.uuid
+            )
+        }
+    }
+}
+
+private fun Route.postAdditionGroupToMenuProducts() {
+
+    val additionService: AdditionService by inject()
+
+    post("/addition_group_to_menu_products") {
+        managerWithBody<PostAdditionGroupToMenuProducts, List<GetMenuProduct>> { bodyRequest ->
+            additionService.addAdditionGroupToMenuProducts(
+                postAdditionGroupToMenuProducts = bodyRequest.body,
                 creatorUuid = bodyRequest.request.jwtUser.uuid
             )
         }
