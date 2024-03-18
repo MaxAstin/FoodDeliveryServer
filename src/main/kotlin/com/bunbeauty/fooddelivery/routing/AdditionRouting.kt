@@ -1,9 +1,11 @@
 package com.bunbeauty.fooddelivery.routing
 
+import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.*
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.service.AdditionService
 import com.bunbeauty.fooddelivery.routing.extension.getManagerWithListResult
+import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -16,6 +18,7 @@ fun Application.configureAdditionRouting() {
             postAdditionGroup()
             postAdditionGroupToMenuProducts()
             getAdditionGroups()
+            patchAdditionGroups()
 
             postAddition()
             postAdditionToGroup()
@@ -59,6 +62,22 @@ private fun Route.getAdditionGroups() {
     get("/addition_group") {
         getManagerWithListResult { request ->
             additionService.getAdditionGroups(creatorUuid = request.jwtUser.uuid)
+        }
+    }
+}
+
+private fun Route.patchAdditionGroups() {
+
+    val additionService: AdditionService by inject()
+
+    patch("/addition_group") {
+        managerWithBody<PatchAdditionGroup, GetAdditionGroup> { bodyRequest ->
+            val additionGroupUuid = call.getParameter(UUID_PARAMETER)
+            additionService.patchAdditionGroups(
+                creatorUuid = bodyRequest.request.jwtUser.uuid,
+                additionGroupUuid = additionGroupUuid,
+                patchAdditionGroup = bodyRequest.body
+            )
         }
     }
 }

@@ -72,6 +72,36 @@ class AdditionService(
             .map(mapAdditionGroup)
     }
 
+    suspend fun patchAdditionGroups(
+        creatorUuid: String,
+        additionGroupUuid: String,
+        patchAdditionGroup: PatchAdditionGroup,
+    ): GetAdditionGroup {
+        val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
+            .orThrowNotFoundByUserUuidError(creatorUuid)
+            .uuid
+
+        checkAdditionGroupAvailability(
+            additionGroupUuid = additionGroupUuid,
+            companyUuid = companyUuid
+        )
+        if (patchAdditionGroup.name != null) {
+            val additionGroup = additionRepository.getAdditionGroupByName(
+                name = patchAdditionGroup.name,
+                companyUuid = companyUuid.toUuid(),
+            )
+            if (additionGroup != null) {
+                additionGroupAlreadyExistsError(name = patchAdditionGroup.name)
+            }
+        }
+
+        return additionRepository.updateAdditionGroup(
+            additionGroupUuid = additionGroupUuid.toUuid(),
+            updateAdditionGroup = patchAdditionGroup.mapPatchAdditionGroup()
+        ).orThrowNotFoundByUuidError(additionGroupUuid)
+            .mapAdditionGroup()
+    }
+
     suspend fun createAddition(postAddition: PostAddition, creatorUuid: String): GetAddition {
         val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
             .orThrowNotFoundByUserUuidError(creatorUuid)

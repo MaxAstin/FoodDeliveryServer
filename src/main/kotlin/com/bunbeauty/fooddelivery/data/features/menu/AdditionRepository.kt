@@ -74,6 +74,18 @@ class AdditionRepository {
         }.firstOrNull()?.mapToAdditionGroup()
     }
 
+    suspend fun updateAdditionGroup(
+        additionGroupUuid: UUID,
+        updateAdditionGroup: UpdateAdditionGroup,
+    ): AdditionGroup? = query {
+        AdditionGroupEntity.findById(additionGroupUuid)?.apply {
+            name = updateAdditionGroup.name ?: name
+            singleChoice = updateAdditionGroup.singleChoice ?: singleChoice
+            priority = updateAdditionGroup.priority ?: priority
+            isVisible = updateAdditionGroup.isVisible ?: isVisible
+        }?.mapToAdditionGroup()
+    }
+
     suspend fun insertAddition(insertAddition: InsertAddition): Addition = query {
         AdditionEntity.new {
             name = insertAddition.name
