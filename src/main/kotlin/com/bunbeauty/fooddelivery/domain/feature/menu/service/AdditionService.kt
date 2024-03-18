@@ -72,7 +72,7 @@ class AdditionService(
             .map(mapAdditionGroup)
     }
 
-    suspend fun patchAdditionGroups(
+    suspend fun patchAdditionGroup(
         creatorUuid: String,
         additionGroupUuid: String,
         patchAdditionGroup: PatchAdditionGroup,
@@ -153,6 +153,36 @@ class AdditionService(
             .toUuid()
         return additionRepository.getAdditionListByCompanyUuid(companyUuid = companyUuid)
             .map(mapAddition)
+    }
+
+    suspend fun patchAddition(
+        creatorUuid: String,
+        additionUuid: String,
+        patchAddition: PatchAddition,
+    ): GetAddition {
+        val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
+            .orThrowNotFoundByUserUuidError(creatorUuid)
+            .uuid
+
+        checkAdditionsAvailability(
+            additionUuids = listOf(additionUuid),
+            companyUuid = companyUuid
+        )
+        if (patchAddition.name != null) {
+            val addition = additionRepository.getAdditionByName(
+                name = patchAddition.name,
+                companyUuid = companyUuid.toUuid(),
+            )
+            if (addition != null && additionUuid != addition.uuid) {
+                additionAlreadyExistsError(name = patchAddition.name)
+            }
+        }
+
+        return additionRepository.updateAddition(
+            additionUuid = additionUuid.toUuid(),
+            updateAddition = patchAddition.mapPatchAddition()
+        ).orThrowNotFoundByUuidError(additionUuid)
+            .mapAddition()
     }
 
     private suspend fun checkMenuProductsAvailability(

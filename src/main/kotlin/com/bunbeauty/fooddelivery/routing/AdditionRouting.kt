@@ -18,11 +18,12 @@ fun Application.configureAdditionRouting() {
             postAdditionGroup()
             postAdditionGroupToMenuProducts()
             getAdditionGroups()
-            patchAdditionGroups()
+            patchAdditionGroup()
 
             postAddition()
             postAdditionToGroup()
             getAdditions()
+            patchAddition()
         }
     }
 }
@@ -66,14 +67,14 @@ private fun Route.getAdditionGroups() {
     }
 }
 
-private fun Route.patchAdditionGroups() {
+private fun Route.patchAdditionGroup() {
 
     val additionService: AdditionService by inject()
 
     patch("/addition_group") {
         managerWithBody<PatchAdditionGroup, GetAdditionGroup> { bodyRequest ->
             val additionGroupUuid = call.getParameter(UUID_PARAMETER)
-            additionService.patchAdditionGroups(
+            additionService.patchAdditionGroup(
                 creatorUuid = bodyRequest.request.jwtUser.uuid,
                 additionGroupUuid = additionGroupUuid,
                 patchAdditionGroup = bodyRequest.body
@@ -117,6 +118,22 @@ private fun Route.getAdditions() {
     get("/addition") {
         getManagerWithListResult { request ->
             additionService.getAddition(creatorUuid = request.jwtUser.uuid)
+        }
+    }
+}
+
+private fun Route.patchAddition() {
+
+    val additionService: AdditionService by inject()
+
+    patch("/addition") {
+        managerWithBody<PatchAddition, GetAddition> { bodyRequest ->
+            val additionGroupUuid = call.getParameter(UUID_PARAMETER)
+            additionService.patchAddition(
+                creatorUuid = bodyRequest.request.jwtUser.uuid,
+                additionUuid = additionGroupUuid,
+                patchAddition = bodyRequest.body
+            )
         }
     }
 }

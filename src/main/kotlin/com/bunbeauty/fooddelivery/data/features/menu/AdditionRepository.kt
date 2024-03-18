@@ -142,4 +142,22 @@ class AdditionRepository {
         }.map(mapToAddition)
     }
 
+    suspend fun updateAddition(
+        additionUuid: UUID,
+        updateAddition: UpdateAddition,
+    ): Addition? = query {
+        AdditionEntity.findById(additionUuid)?.apply {
+            name = updateAddition.name ?: name
+            fullName = (updateAddition.fullName ?: fullName)?.takeIf { fullName ->
+                fullName.isNotEmpty()
+            }
+            price = (updateAddition.price ?: price)?.takeIf { price ->
+                price != 0
+            }
+            photoLink = updateAddition.photoLink ?: photoLink
+            priority = updateAddition.priority ?: priority
+            isVisible = updateAddition.isVisible ?: isVisible
+        }?.mapToAddition()
+    }
+
 }
