@@ -90,7 +90,7 @@ class AdditionService(
                 name = patchAdditionGroup.name,
                 companyUuid = companyUuid.toUuid(),
             )
-            if (additionGroup != null) {
+            if (additionGroup != null && additionGroupUuid != additionGroup.uuid) {
                 additionGroupAlreadyExistsError(name = patchAdditionGroup.name)
             }
         }
