@@ -5,6 +5,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 class GetDeliveryZone(
     val uuid: String,
+    val minOrderCost: Int?,
+    val normalDeliveryCost: Int,
+    val forLowDeliveryCost: Int?,
+    val lowDeliveryCost: Int?,
     val isVisible: Boolean,
     val cafeUuid: String,
     val points: List<GetPoint>

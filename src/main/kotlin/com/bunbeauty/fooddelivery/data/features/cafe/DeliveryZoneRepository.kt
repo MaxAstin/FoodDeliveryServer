@@ -14,6 +14,10 @@ class DeliveryZoneRepository {
 
     suspend fun insertDeliveryZone(insertDeliveryZone: InsertDeliveryZone): DeliveryZone = query {
         val deliveryZoneEntity = DeliveryZoneEntity.new {
+             minOrderCost = insertDeliveryZone.minOrderCost
+             normalDeliveryCost = insertDeliveryZone.normalDeliveryCost
+             forLowDeliveryCost = insertDeliveryZone.forLowDeliveryCost
+             lowDeliveryCost = insertDeliveryZone.lowDeliveryCost
             isVisible = insertDeliveryZone.isVisible
             cafe = CafeEntity[insertDeliveryZone.cafeUuid]
         }

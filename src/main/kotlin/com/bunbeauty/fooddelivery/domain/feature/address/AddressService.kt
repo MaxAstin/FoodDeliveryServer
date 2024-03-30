@@ -2,12 +2,15 @@ package com.bunbeauty.fooddelivery.domain.feature.address
 
 import com.bunbeauty.fooddelivery.data.features.address.AddressRepository
 import com.bunbeauty.fooddelivery.data.features.address.StreetRepository
+import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
 import com.bunbeauty.fooddelivery.data.features.city.CityRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.domain.error.noAccessToCompanyError
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.address.mapper.*
 import com.bunbeauty.fooddelivery.domain.feature.address.model.*
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.DeliveryZone
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CheckIsPointInPolygonUseCase
 import com.bunbeauty.fooddelivery.domain.toUuid
 
 class AddressService(
@@ -15,6 +18,8 @@ class AddressService(
     private val streetRepository: StreetRepository,
     private val clientUserRepository: ClientUserRepository,
     private val cityRepository: CityRepository,
+    private val cafeRepository: CafeRepository,
+    private val checkIsPointInPolygonUseCase: CheckIsPointInPolygonUseCase,
 ) {
 
     suspend fun createAddress(userUuid: String, postAddress: PostAddress): GetAddress {
@@ -40,10 +45,15 @@ class AddressService(
             streetLatitude = suggestion.latitude,
             streetLongitude = suggestion.longitude,
         )
+        val deliveryZone = getDeliveryCostByCoordinates(
+            cityUuid = postAddress.cityUuid,
+            latitude = suggestion.latitude,
+            longitude = suggestion.longitude,
+        ) ?: deliveryNotAvailableAtThisAddress(suggestion.latitude, suggestion.longitude)
 
         val insertAddress = postAddress.mapPostAddressV2(addressInfo)
         return addressRepository.insertAddressV2(insertAddress = insertAddress)
-            .mapAddressV2()
+            .mapAddressV2(deliveryZone)
     }
 
     suspend fun getAddressListByUserUuidAndCityUuid(userUuid: String, cityUuid: String): List<GetAddress> {
@@ -57,11 +67,27 @@ class AddressService(
         val addressV1List = addressRepository.getAddressListByUserUuidAndCityUuid(
             userUuid = userUuid,
             cityUuid = cityUuid
-        ).map(mapAddressToV2)
+        ).mapNotNull { address ->
+            getDeliveryCostByCoordinates(
+                cityUuid = cityUuid,
+                latitude = address.street.latitude,
+                longitude = address.street.longitude,
+            )?.let { deliveryCost ->
+                address.mapAddressToV2(deliveryCost)
+            }
+        }
         val addressV2List = addressRepository.getAddressListByUserUuidAndCityUuidV2(
             userUuid = userUuid,
             cityUuid = cityUuid
-        ).map(mapAddressV2)
+        ).mapNotNull { address ->
+            getDeliveryCostByCoordinates(
+                cityUuid = cityUuid,
+                latitude = address.street.latitude,
+                longitude = address.street.longitude,
+            )?.let { deliveryCost ->
+                address.mapAddressV2(deliveryCost)
+            }
+        }
 
         return addressV1List + addressV2List
     }
@@ -74,6 +100,34 @@ class AddressService(
             query = query,
             city = city
         ).map(mapSuggestion)
+    }
+
+    private suspend fun getDeliveryCostByCoordinates(
+        cityUuid: String,
+        latitude: Double,
+        longitude: Double,
+    ): DeliveryZone? {
+        val cafeList = cafeRepository.getCafeListByCityUuid(cityUuid = cityUuid)
+        return cafeList
+            .asSequence()
+            .filter { cafe -> cafe.isVisible }
+            .map { cafe ->
+                cafe.zones
+            }.flatten()
+            .filter { zone -> zone.isVisible }
+            .find { zone ->
+                checkIsPointInPolygonUseCase(
+                    latitude = latitude,
+                    longitude = longitude,
+                    polygon = zone.points.map { point ->
+                        point.latitude to point.longitude
+                    },
+                )
+            }
+    }
+
+    private fun deliveryNotAvailableAtThisAddress(latitude: Double, longitude: Double): Nothing {
+        error("Delivery not available at this address: $latitude,$longitude")
     }
 
 }

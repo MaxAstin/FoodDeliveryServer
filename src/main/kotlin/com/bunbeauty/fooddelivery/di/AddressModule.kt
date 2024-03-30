@@ -61,6 +61,8 @@ val addressModule = module(createdAtStart = true) {
             streetRepository = get(),
             clientUserRepository = get(),
             cityRepository = get(),
+            cafeRepository = get(),
+            checkIsPointInPolygonUseCase = get(),
         )
     }
 }

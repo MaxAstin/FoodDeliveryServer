@@ -3,6 +3,7 @@ package com.bunbeauty.fooddelivery.domain.feature.address.mapper
 import com.bunbeauty.fooddelivery.domain.feature.address.model.Address
 import com.bunbeauty.fooddelivery.domain.feature.address.model.GetAddress
 import com.bunbeauty.fooddelivery.domain.feature.address.model.GetAddressV2
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.DeliveryZone
 
 val mapAddress: Address.() -> GetAddress = {
     GetAddress(
@@ -18,7 +19,7 @@ val mapAddress: Address.() -> GetAddress = {
     )
 }
 
-val mapAddressToV2: Address.() -> GetAddressV2 = {
+val mapAddressToV2: Address.(DeliveryZone) -> GetAddressV2 = { deliveryZone ->
     GetAddressV2(
         uuid = uuid,
         street = street.name,
@@ -27,6 +28,10 @@ val mapAddressToV2: Address.() -> GetAddressV2 = {
         entrance = entrance,
         floor = floor,
         comment = comment,
+        minOrderCost = deliveryZone.minOrderCost,
+        normalDeliveryCost = deliveryZone.normalDeliveryCost,
+        forLowDeliveryCost = deliveryZone.forLowDeliveryCost,
+        lowDeliveryCost = deliveryZone.lowDeliveryCost,
         userUuid = userUuid,
         cityUuid = street.cityUuid,
         isVisible = isVisible,
