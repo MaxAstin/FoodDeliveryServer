@@ -11,11 +11,23 @@ import kotlin.test.assertEquals
 
 class CalculateOrderTotalUseCaseTest {
 
+    private val calculateOrderProductTotalUseCase = CalculateOrderProductTotalUseCase()
+    private val calculateOrderProductsNewCostUseCase = CalculateOrderProductsNewCostUseCase(
+        calculateOrderProductTotalUseCase = calculateOrderProductTotalUseCase
+    )
+    private val calculateOrderProductsOldCostUseCase = CalculateOrderProductsOldCostUseCase(
+        calculateOrderProductTotalUseCase = calculateOrderProductTotalUseCase
+    )
+
     private lateinit var calculateOrderTotalUseCase: CalculateOrderTotalUseCase
 
     @Before
     fun setUp() {
-        calculateOrderTotalUseCase = CalculateOrderTotalUseCase()
+        calculateOrderTotalUseCase = CalculateOrderTotalUseCase(
+            calculateOrderProductsNewCostUseCase = calculateOrderProductsNewCostUseCase,
+            calculateOrderProductsOldCostUseCase = calculateOrderProductsOldCostUseCase,
+            calculateOrderProductTotalUseCase = calculateOrderProductTotalUseCase
+        )
     }
 
     @Test

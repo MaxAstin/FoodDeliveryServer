@@ -2,13 +2,29 @@ package com.bunbeauty.fooddelivery.di
 
 import com.bunbeauty.fooddelivery.data.features.order.OrderRepository
 import com.bunbeauty.fooddelivery.domain.feature.order.OrderService
-import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderTotalUseCase
-import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CheckIsPointInPolygonUseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.*
 import org.koin.dsl.module
 
 val orderModule = module(createdAtStart = true) {
     factory { CheckIsPointInPolygonUseCase() }
-    factory { CalculateOrderTotalUseCase() }
+    factory {
+        CalculateOrderProductsNewCostUseCase(
+            calculateOrderProductTotalUseCase = get()
+        )
+    }
+    factory {
+        CalculateOrderProductsOldCostUseCase(
+            calculateOrderProductTotalUseCase = get()
+        )
+    }
+    factory { CalculateOrderProductTotalUseCase() }
+    factory {
+        CalculateOrderTotalUseCase(
+            calculateOrderProductsNewCostUseCase = get(),
+            calculateOrderProductsOldCostUseCase = get(),
+            calculateOrderProductTotalUseCase = get(),
+        )
+    }
     factory {
         OrderService(
             orderRepository = get(),
@@ -19,6 +35,7 @@ val orderModule = module(createdAtStart = true) {
             firebaseMessaging = get(),
             checkIsPointInPolygonUseCase = get(),
             calculateOrderTotalUseCase = get(),
+            calculateOrderProductsNewCostUseCase = get(),
         )
     }
     single { OrderRepository() }

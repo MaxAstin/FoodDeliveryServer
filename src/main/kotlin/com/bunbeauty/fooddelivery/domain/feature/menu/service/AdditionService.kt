@@ -190,7 +190,7 @@ class AdditionService(
         companyUuid: String,
     ) {
         menuProductUuids.forEach { menuProductUuid ->
-            val menuProduct = menuProductRepository.getMenuProductByUuid(uuid = menuProductUuid.toUuid())
+            val menuProduct = menuProductRepository.getMenuProductByUuid(uuid = menuProductUuid)
                 .orThrowNotFoundByUuidError(uuid = menuProductUuid)
             if (menuProduct.companyUuid != companyUuid) {
                 noAccessToMenuProductError(menuProductUuid)

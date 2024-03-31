@@ -15,7 +15,7 @@ import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
 import com.bunbeauty.fooddelivery.domain.feature.order.mapper.*
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
-import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderProductLight
+import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderProduct
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.OrderInfo
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.PatchOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.PostOrder
@@ -28,9 +28,9 @@ import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.PostOrderV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.cafe.GetCafeOrderDetailsV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetClientOrderV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v3.PostOrderV3
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderProductsNewCostUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderTotalUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CheckIsPointInPolygonUseCase
-import com.bunbeauty.fooddelivery.domain.toUuid
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import kotlinx.coroutines.flow.Flow
@@ -46,6 +46,7 @@ class OrderService(
     private val firebaseMessaging: FirebaseMessaging,
     private val checkIsPointInPolygonUseCase: CheckIsPointInPolygonUseCase,
     private val calculateOrderTotalUseCase: CalculateOrderTotalUseCase,
+    private val calculateOrderProductsNewCostUseCase: CalculateOrderProductsNewCostUseCase,
 ) {
 
     private val codesCount = CODE_LETTERS.length * CODE_NUMBER_COUNT
@@ -236,7 +237,12 @@ class OrderService(
         val deliveryCost = getDeliveryCost(
             isDelivery = postOrder.isDelivery,
             clientUserUuid = clientUserUuid,
-            orderProductList = postOrder.orderProducts.map(mapPostOrderProductToLight)
+            orderProducts = postOrder.orderProducts.map { postOrderProduct ->
+                val menuProduct = menuProductRepository.getMenuProductByUuid(postOrderProduct.menuProductUuid)
+                    .orThrowNotFoundByUuidError(postOrderProduct.menuProductUuid)
+                postOrderProduct.mapPostOrderProductToOrderProduct(menuProduct)
+            },
+            percentDiscount = null,
         )
 
         return OrderInfo(
@@ -262,15 +268,20 @@ class OrderService(
         val company = clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
             .orThrowNotFoundByUuidError(clientUserUuid)
             .company
-        val deliveryCost = getDeliveryCost(
-            isDelivery = postOrder.isDelivery,
-            clientUserUuid = clientUserUuid,
-            orderProductList = postOrder.orderProducts.map(mapPostOrderProductToLight)
-        )
         val percentDiscount = company.percentDiscount?.takeIf {
             val orderCount = orderRepository.getOrderCountByUserUuid(userUuid = clientUserUuid)
             orderCount == 0L
         }
+        val deliveryCost = getDeliveryCost(
+            isDelivery = postOrder.isDelivery,
+            clientUserUuid = clientUserUuid,
+            orderProducts = postOrder.orderProducts.map { postOrderProduct ->
+                val menuProduct = menuProductRepository.getMenuProductByUuid(postOrderProduct.menuProductUuid)
+                    .orThrowNotFoundByUuidError(postOrderProduct.menuProductUuid)
+                postOrderProduct.mapPostOrderProductToOrderProduct(menuProduct)
+            },
+            percentDiscount = percentDiscount
+        )
 
         return OrderInfoV2(
             time = DateTime.now().millis,
@@ -283,7 +294,10 @@ class OrderService(
         )
     }
 
-    private suspend fun createOrderInfoV2(postOrder: PostOrderV3, clientUserUuid: String): OrderInfoV2 {
+    private suspend fun createOrderInfoV2(
+        postOrder: PostOrderV3,
+        clientUserUuid: String,
+    ): OrderInfoV2 {
         val cafeUuid = if (postOrder.isDelivery) {
             val addressUuid = postOrder.address.uuid
             findCafeByAddressUuid(addressUuid = addressUuid).uuid
@@ -293,15 +307,20 @@ class OrderService(
         val company = clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
             .orThrowNotFoundByUuidError(clientUserUuid)
             .company
-        val deliveryCost = getDeliveryCost(
-            isDelivery = postOrder.isDelivery,
-            clientUserUuid = clientUserUuid,
-            orderProductList = postOrder.orderProducts.map(mapPostOrderProductV3ToLight)
-        )
         val percentDiscount = company.percentDiscount?.takeIf {
             val orderCount = orderRepository.getOrderCountByUserUuid(userUuid = clientUserUuid)
             orderCount == 0L
         }
+        val deliveryCost = getDeliveryCost(
+            isDelivery = postOrder.isDelivery,
+            clientUserUuid = clientUserUuid,
+            orderProducts = postOrder.orderProducts.map { postOrderProduct ->
+                val menuProduct = menuProductRepository.getMenuProductByUuid(postOrderProduct.menuProductUuid)
+                    .orThrowNotFoundByUuidError(postOrderProduct.menuProductUuid)
+                postOrderProduct.mapPostOrderProductV3ToOrderProduct(menuProduct)
+            },
+            percentDiscount = percentDiscount
+        )
 
         return OrderInfoV2(
             time = DateTime.now().millis,
@@ -387,7 +406,8 @@ class OrderService(
     private suspend fun getDeliveryCost(
         isDelivery: Boolean,
         clientUserUuid: String,
-        orderProductList: List<OrderProductLight>,
+        orderProducts: List<OrderProduct>,
+        percentDiscount: Int?,
     ): Int? {
         if (!isDelivery) {
             return null
@@ -396,12 +416,12 @@ class OrderService(
         val company = clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
             .orThrowNotFoundByUuidError(clientUserUuid)
             .company
-        val orderCost = orderProductList.sumOf { postOrderProduct ->
-            val menuProduct =
-                menuProductRepository.getMenuProductByUuid(uuid = postOrderProduct.menuProductUuid.toUuid())
-            (menuProduct?.newPrice ?: 0) * postOrderProduct.count
-        }
-        return if (orderCost >= company.delivery.forFree) {
+        val orderProductsNewCost = calculateOrderProductsNewCostUseCase(
+            orderProductList = orderProducts,
+            percentDiscount = percentDiscount
+        )
+
+        return if (orderProductsNewCost >= company.delivery.forFree) {
             0
         } else {
             company.delivery.cost
