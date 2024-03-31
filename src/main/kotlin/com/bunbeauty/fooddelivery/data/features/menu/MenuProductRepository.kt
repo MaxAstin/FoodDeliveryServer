@@ -89,8 +89,8 @@ class MenuProductRepository {
         MenuProductEntity.findById(uuid.toUuid())?.mapMenuProductEntity()
     }
 
-    suspend fun getMenuProductWithAdditionListByUuid(uuid: UUID): MenuProduct? = query {
-        MenuProductEntity.findById(uuid)?.let(::getMenuProductWithAdditions)
+    suspend fun getMenuProductWithAdditionListByUuid(uuid: String): MenuProduct? = query {
+        MenuProductEntity.findById(uuid.toUuid())?.let(::getMenuProductWithAdditions)
     }
 
     private fun getMenuProductWithAdditions(menuProductEntity: MenuProductEntity): MenuProduct {

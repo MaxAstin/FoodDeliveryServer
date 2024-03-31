@@ -26,6 +26,12 @@ val orderModule = module(createdAtStart = true) {
         )
     }
     factory {
+        GetDeliveryCostUseCase(
+            clientUserRepository = get(),
+            calculateOrderProductsNewCostUseCase = get(),
+        )
+    }
+    factory {
         OrderService(
             orderRepository = get(),
             addressRepository = get(),
@@ -35,7 +41,7 @@ val orderModule = module(createdAtStart = true) {
             firebaseMessaging = get(),
             checkIsPointInPolygonUseCase = get(),
             calculateOrderTotalUseCase = get(),
-            calculateOrderProductsNewCostUseCase = get(),
+            getDeliveryCostUseCase = get(),
         )
     }
     single { OrderRepository() }
