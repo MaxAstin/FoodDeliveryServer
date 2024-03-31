@@ -57,7 +57,7 @@ class AdditionService(
         )
 
         return postAdditionGroupToMenuProducts.menuProductUuids.map { menuProductUuid ->
-            menuProductRepository.getMenuProductWithAdditionListByUuid(uuid = menuProductUuid.toUuid())
+            menuProductRepository.getMenuProductWithAdditionListByUuid(uuid = menuProductUuid)
                 .orThrowNotFoundByUuidError(menuProductUuid)
                 .mapMenuProduct()
         }
@@ -141,7 +141,7 @@ class AdditionService(
             insertAdditionToGroup = postAdditionToGroup.mapPostAdditionToGroup()
         ).mapNotNull { menuProduct ->
             menuProductRepository.getMenuProductWithAdditionListByUuid(
-                uuid = menuProduct.uuid.toUuid()
+                uuid = menuProduct.uuid
             )?.mapMenuProduct()
         }
     }

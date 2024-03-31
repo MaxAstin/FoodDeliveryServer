@@ -13,6 +13,7 @@ val joda_time_version: String by project
 val mockk_version: String by project
 val junit_version: String by project
 val otp_version: String by project
+val coroutines_version: String by project
 
 plugins {
     kotlin("jvm") version "1.9.10"
@@ -81,6 +82,7 @@ dependencies {
 
     // Test
     testImplementation("io.mockk:mockk:$mockk_version")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version")
     testImplementation(kotlin("test"))
 
 }
