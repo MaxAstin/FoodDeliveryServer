@@ -26,7 +26,7 @@ val mapOrder: Order.(OrderTotal) -> GetClientOrder = { orderTotal ->
         oldTotalCost = orderTotal.oldTotalCost,
         newTotalCost = orderTotal.newTotalCost,
         clientUserUuid = clientUser.uuid,
-        oderProductList = oderProducts.mapNotNull { oderProduct ->
+        oderProductList = orderProducts.mapNotNull { oderProduct ->
             orderTotal.productTotalMap[oderProduct.uuid]?.let { orderProductTotal ->
                 oderProduct.mapOrderProduct(uuid, orderProductTotal)
             }
@@ -51,7 +51,7 @@ val mapOrderToV2: Order.(OrderTotal) -> GetClientOrderV2 = { orderTotal ->
         paymentMethod = paymentMethod,
         percentDiscount = percentDiscount,
         clientUserUuid = clientUser.uuid,
-        oderProductList = oderProducts.mapNotNull { oderProduct ->
+        oderProductList = orderProducts.mapNotNull { oderProduct ->
             orderTotal.productTotalMap[oderProduct.uuid]?.let { orderProductTotal ->
                 oderProduct.mapOrderProduct(uuid, orderProductTotal)
             }
@@ -87,7 +87,7 @@ val mapOrderToCafeOrderDetails: Order.(OrderTotal) -> GetCafeOrderDetails = { or
         newTotalCost = orderTotal.newTotalCost,
         clientUser = clientUser.mapClientUserLight(),
         cafeUuid = cafeWithCity.cafe.uuid,
-        oderProductList = oderProducts.mapNotNull { oderProduct ->
+        oderProductList = orderProducts.mapNotNull { oderProduct ->
             orderTotal.productTotalMap[oderProduct.uuid]?.let { orderProductTotal ->
                 oderProduct.mapOrderProduct(uuid, orderProductTotal)
             }
@@ -114,7 +114,7 @@ val mapOrderToCafeOrderDetailsV2: Order.(OrderTotal) -> GetCafeOrderDetailsV2 = 
         cafeUuid = cafeWithCity.cafe.uuid,
         percentDiscount = percentDiscount,
         paymentMethod = paymentMethod,
-        oderProductList = oderProducts.mapNotNull { oderProduct ->
+        oderProductList = orderProducts.mapNotNull { oderProduct ->
             orderTotal.productTotalMap[oderProduct.uuid]?.let { orderProductTotal ->
                 oderProduct.mapOrderProduct(uuid, orderProductTotal)
             }

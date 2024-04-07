@@ -1,23 +1,42 @@
 package com.bunbeauty.fooddelivery.domain.feature.order.usecase
 
-import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderProductTotal
 import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderTotal
 import com.bunbeauty.fooddelivery.fake.FakeOrder
 import com.bunbeauty.fooddelivery.fake.FakeOrderProduct
-import com.bunbeauty.fooddelivery.fake.FakeOrderProductAddition
+import com.bunbeauty.fooddelivery.fake.FakeOrderProductTotal
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.Before
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class CalculateOrderTotalUseCaseTest {
 
-    private val calculateOrderProductTotalUseCase = CalculateOrderProductTotalUseCase()
-    private val calculateOrderProductsNewCostUseCase = CalculateOrderProductsNewCostUseCase(
-        calculateOrderProductTotalUseCase = calculateOrderProductTotalUseCase
-    )
-    private val calculateOrderProductsOldCostUseCase = CalculateOrderProductsOldCostUseCase(
-        calculateOrderProductTotalUseCase = calculateOrderProductTotalUseCase
-    )
+    private val orderProduct1 = FakeOrderProduct.create(uuid = "1")
+    private val orderProduct2 = FakeOrderProduct.create(uuid = "2")
+    private val orderProductList = listOf(orderProduct1, orderProduct2)
+    private val calculateOrderProductsNewCostUseCase: CalculateOrderProductsNewCostUseCase = mockk {
+        every {
+            this@mockk(
+                orderProductList = orderProductList,
+                percentDiscount = null
+            )
+        } returns 500
+    }
+    private val calculateOrderProductsOldCostUseCase: CalculateOrderProductsOldCostUseCase = mockk {
+        every {
+            this@mockk(
+                orderProductList = orderProductList,
+                percentDiscount = null
+            )
+        } returns 600
+    }
+    private val orderProductTotal1 = FakeOrderProductTotal.create()
+    private val orderProductTotal2 = FakeOrderProductTotal.create()
+    private val calculateOrderProductTotalUseCase: CalculateOrderProductTotalUseCase = mockk {
+        every { this@mockk(orderProduct1) } returns orderProductTotal1
+        every { this@mockk(orderProduct2) } returns orderProductTotal2
+    }
 
     private lateinit var calculateOrderTotalUseCase: CalculateOrderTotalUseCase
 
@@ -31,57 +50,21 @@ class CalculateOrderTotalUseCaseTest {
     }
 
     @Test
-    fun `returns calculated order total when no delivery and no discount`() {
+    fun `returns order total when no delivery`() {
         val order = FakeOrder.create(
             isDelivery = false,
             deliveryCost = null,
-            percentDiscount = null,
             orderProductList = listOf(
-                FakeOrderProduct.create(
-                    uuid = "1",
-                    count = 1,
-                    newPrice = 100,
-                    oldPrice = 120
-                ),
-                FakeOrderProduct.create(
-                    uuid = "2",
-                    count = 2,
-                    newPrice = 200,
-                    oldPrice = 215
-                ),
-                FakeOrderProduct.create(
-                    uuid = "3",
-                    count = 3,
-                    newPrice = 100,
-                    oldPrice = null
-                ),
+                orderProduct1,
+                orderProduct2
             ),
         )
         val expected = OrderTotal(
-            newTotalCost = 800,
-            oldTotalCost = 850,
+            newTotalCost = 500,
+            oldTotalCost = 600,
             productTotalMap = mapOf(
-                "1" to OrderProductTotal(
-                    additionsPrice = null,
-                    newCommonPrice = 100,
-                    oldCommonPrice = 120,
-                    newTotalCost = 100,
-                    oldTotalCost = 120,
-                ),
-                "2" to OrderProductTotal(
-                    additionsPrice = null,
-                    newCommonPrice = 200,
-                    oldCommonPrice = 215,
-                    newTotalCost = 400,
-                    oldTotalCost = 430,
-                ),
-                "3" to OrderProductTotal(
-                    additionsPrice = null,
-                    newCommonPrice = 100,
-                    oldCommonPrice = null,
-                    newTotalCost = 300,
-                    oldTotalCost = null,
-                ),
+                "1" to orderProductTotal1,
+                "2" to orderProductTotal2,
             ),
         )
 
@@ -91,57 +74,21 @@ class CalculateOrderTotalUseCaseTest {
     }
 
     @Test
-    fun `returns calculated order total when there is delivery and discount`() {
+    fun `returns order total when delivery is not null`() {
         val order = FakeOrder.create(
             isDelivery = true,
             deliveryCost = 100,
-            percentDiscount = 10,
             orderProductList = listOf(
-                FakeOrderProduct.create(
-                    uuid = "1",
-                    count = 1,
-                    newPrice = 100,
-                    oldPrice = 120
-                ),
-                FakeOrderProduct.create(
-                    uuid = "2",
-                    count = 2,
-                    newPrice = 200,
-                    oldPrice = 215
-                ),
-                FakeOrderProduct.create(
-                    uuid = "3",
-                    count = 3,
-                    newPrice = 100,
-                    oldPrice = null
-                ),
+                orderProduct1,
+                orderProduct2
             ),
         )
         val expected = OrderTotal(
-            newTotalCost = 820,
-            oldTotalCost = 950,
+            newTotalCost = 600,
+            oldTotalCost = 700,
             productTotalMap = mapOf(
-                "1" to OrderProductTotal(
-                    additionsPrice = null,
-                    newCommonPrice = 100,
-                    oldCommonPrice = 120,
-                    newTotalCost = 100,
-                    oldTotalCost = 120,
-                ),
-                "2" to OrderProductTotal(
-                    additionsPrice = null,
-                    newCommonPrice = 200,
-                    oldCommonPrice = 215,
-                    newTotalCost = 400,
-                    oldTotalCost = 430,
-                ),
-                "3" to OrderProductTotal(
-                    additionsPrice = null,
-                    newCommonPrice = 100,
-                    oldCommonPrice = null,
-                    newTotalCost = 300,
-                    oldTotalCost = null,
-                ),
+                "1" to orderProductTotal1,
+                "2" to orderProductTotal2,
             ),
         )
 
@@ -150,143 +97,4 @@ class CalculateOrderTotalUseCaseTest {
         assertEquals(expected, result)
     }
 
-    @Test
-    fun `returns calculated order total when there are additions`() {
-        val order = FakeOrder.create(
-            isDelivery = false,
-            deliveryCost = null,
-            percentDiscount = null,
-            orderProductList = listOf(
-                FakeOrderProduct.create(
-                    uuid = "1",
-                    count = 1,
-                    newPrice = 100,
-                    oldPrice = 120,
-                    additions = listOf(
-                        FakeOrderProductAddition.create(price = null)
-                    )
-                ),
-                FakeOrderProduct.create(
-                    uuid = "2",
-                    count = 2,
-                    newPrice = 200,
-                    oldPrice = 215,
-                    additions = listOf(
-                        FakeOrderProductAddition.create(price = 50)
-                    )
-                ),
-                FakeOrderProduct.create(
-                    uuid = "3",
-                    count = 3,
-                    newPrice = 100,
-                    oldPrice = null,
-                    additions = listOf(
-                        FakeOrderProductAddition.create(price = 20),
-                        FakeOrderProductAddition.create(price = 30),
-                    )
-                ),
-            ),
-        )
-        val expected = OrderTotal(
-            newTotalCost = 1050,
-            oldTotalCost = 1100,
-            productTotalMap = mapOf(
-                "1" to OrderProductTotal(
-                    additionsPrice = null,
-                    newCommonPrice = 100,
-                    oldCommonPrice = 120,
-                    newTotalCost = 100,
-                    oldTotalCost = 120,
-                ),
-                "2" to OrderProductTotal(
-                    additionsPrice = 50,
-                    newCommonPrice = 250,
-                    oldCommonPrice = 265,
-                    newTotalCost = 500,
-                    oldTotalCost = 530,
-                ),
-                "3" to OrderProductTotal(
-                    additionsPrice = 50,
-                    newCommonPrice = 150,
-                    oldCommonPrice = null,
-                    newTotalCost = 450,
-                    oldTotalCost = null,
-                ),
-            ),
-        )
-
-        val result = calculateOrderTotalUseCase(order)
-
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `returns calculated order total when there is delivery, discount and additions`() {
-        val order = FakeOrder.create(
-            isDelivery = true,
-            deliveryCost = 100,
-            percentDiscount = 10,
-            orderProductList = listOf(
-                FakeOrderProduct.create(
-                    uuid = "1",
-                    count = 1,
-                    newPrice = 100,
-                    oldPrice = 120,
-                    additions = listOf(
-                        FakeOrderProductAddition.create(price = null)
-                    )
-                ),
-                FakeOrderProduct.create(
-                    uuid = "2",
-                    count = 2,
-                    newPrice = 200,
-                    oldPrice = 215,
-                    additions = listOf(
-                        FakeOrderProductAddition.create(price = 50)
-                    )
-                ),
-                FakeOrderProduct.create(
-                    uuid = "3",
-                    count = 3,
-                    newPrice = 100,
-                    oldPrice = null,
-                    additions = listOf(
-                        FakeOrderProductAddition.create(price = 20),
-                        FakeOrderProductAddition.create(price = 30),
-                    )
-                ),
-            ),
-        )
-        val expected = OrderTotal(
-            newTotalCost = 1045,
-            oldTotalCost = 1200,
-            productTotalMap = mapOf(
-                "1" to OrderProductTotal(
-                    additionsPrice = null,
-                    newCommonPrice = 100,
-                    oldCommonPrice = 120,
-                    newTotalCost = 100,
-                    oldTotalCost = 120,
-                ),
-                "2" to OrderProductTotal(
-                    additionsPrice = 50,
-                    newCommonPrice = 250,
-                    oldCommonPrice = 265,
-                    newTotalCost = 500,
-                    oldTotalCost = 530,
-                ),
-                "3" to OrderProductTotal(
-                    additionsPrice = 50,
-                    newCommonPrice = 150,
-                    oldCommonPrice = null,
-                    newTotalCost = 450,
-                    oldTotalCost = null,
-                ),
-            ),
-        )
-
-        val result = calculateOrderTotalUseCase(order)
-
-        assertEquals(expected, result)
-    }
 }

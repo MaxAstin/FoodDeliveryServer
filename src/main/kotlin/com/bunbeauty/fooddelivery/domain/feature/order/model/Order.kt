@@ -26,7 +26,7 @@ class Order(
     val cafeWithCity: CafeWithCity,
     val company: Company,
     val clientUser: ClientUserLight,
-    val oderProducts: List<OrderProduct>,
+    val orderProducts: List<OrderProduct>,
 )
 
 class OrderProduct(

@@ -9,7 +9,8 @@ val orderModule = module(createdAtStart = true) {
     factory { CheckIsPointInPolygonUseCase() }
     factory {
         CalculateOrderProductsNewCostUseCase(
-            calculateOrderProductTotalUseCase = get()
+            calculateOrderProductTotalUseCase = get(),
+            calculateCostWithDiscountUseCase = get()
         )
     }
     factory {
@@ -30,6 +31,9 @@ val orderModule = module(createdAtStart = true) {
             clientUserRepository = get(),
             calculateOrderProductsNewCostUseCase = get(),
         )
+    }
+    factory {
+        CalculateCostWithDiscountUseCase()
     }
     factory {
         OrderService(

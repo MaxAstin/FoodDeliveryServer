@@ -58,7 +58,7 @@ class HitService(
         return orderList.filter { order ->
             order.status == OrderStatus.DELIVERED.name
         }.flatMap { order ->
-            order.oderProducts
+            order.orderProducts
         }.asSequence()
             .filter { orderProduct ->
                 !invisibleMenuProductUuidList.contains(orderProduct.menuProduct.uuid)

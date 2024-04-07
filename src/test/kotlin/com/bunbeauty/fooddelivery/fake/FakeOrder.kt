@@ -80,7 +80,7 @@ object FakeOrder {
                 phoneNumber = "",
                 email = "",
             ),
-            oderProducts = orderProductList,
+            orderProducts = orderProductList,
         )
     }
 

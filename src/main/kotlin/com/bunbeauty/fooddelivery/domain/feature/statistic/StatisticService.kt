@@ -1,13 +1,17 @@
-package com.bunbeauty.fooddelivery.service
+package com.bunbeauty.fooddelivery.domain.feature.statistic
 
 import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
+import com.bunbeauty.fooddelivery.data.features.statistic.OrderStatisticRepository
 import com.bunbeauty.fooddelivery.data.features.user.UserRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
-import com.bunbeauty.fooddelivery.data.repo.order.IOrderStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICafeStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICompanyStatisticRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
+import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateCostWithDiscountUseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderProductTotalUseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderProductsNewCostUseCase
 import com.bunbeauty.fooddelivery.domain.model.company.GetCompany
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.GetStatistic
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.PeriodType
@@ -15,13 +19,15 @@ import com.bunbeauty.fooddelivery.domain.model.new_statistic.UpdateStatistic
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.insert.InsertCafeStatistic
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.insert.InsertCompanyStatistic
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.insert.InsertStatisticProduct
-import com.bunbeauty.fooddelivery.domain.model.statistic.GetStatisticOrder
 import com.bunbeauty.fooddelivery.domain.toUuid
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 
 class StatisticService(
-    private val orderStatisticRepository: IOrderStatisticRepository,
+    private val orderStatisticRepository: OrderStatisticRepository,
+    private val calculateOrderProductsNewCostUseCase: CalculateOrderProductsNewCostUseCase,
+    private val calculateOrderProductTotalUseCase: CalculateOrderProductTotalUseCase,
+    private val calculateCostWithDiscountUseCase: CalculateCostWithDiscountUseCase,
     private val companyRepository: CompanyRepository,
     private val cafeRepository: CafeRepository,
     private val companyStatisticRepository: ICompanyStatisticRepository,
@@ -109,7 +115,7 @@ class StatisticService(
         fromDateTime: DateTime,
         toDateTime: DateTime,
     ) {
-        val statisticOrderList = orderStatisticRepository.getOrderListByCompanyUuid(
+        val orderList = orderStatisticRepository.getOrderListByCompanyUuid(
             companyUuid = company.uuid.toUuid(),
             fromTime = fromDateTime.millis,
             toTime = toDateTime.millis,
@@ -124,17 +130,17 @@ class StatisticService(
             val insertCompanyStatisticDay = InsertCompanyStatistic(
                 time = fromDateTime.millis,
                 periodType = periodType,
-                orderCount = statisticOrderList.size,
-                orderProceeds = calculateOrderProceeds(statisticOrderList),
-                statisticProductList = calculateStatisticProductList(statisticOrderList),
+                orderCount = orderList.size,
+                orderProceeds = calculateOrderProceeds(orderList),
+                statisticProductList = calculateStatisticProductList(orderList),
                 companyUuid = company.uuid.toUuid(),
             )
             companyStatisticRepository.insetStatistic(insertCompanyStatisticDay)
         } else {
             val updateStatistic = UpdateStatistic(
-                orderCount = statisticOrderList.size,
-                orderProceeds = calculateOrderProceeds(statisticOrderList),
-                statisticProductList = calculateStatisticProductList(statisticOrderList)
+                orderCount = orderList.size,
+                orderProceeds = calculateOrderProceeds(orderList),
+                statisticProductList = calculateStatisticProductList(orderList)
             )
             companyStatisticRepository.updateStatistic(getStatistic.uuid.toUuid(), updateStatistic)
         }
@@ -162,7 +168,8 @@ class StatisticService(
                 time = fromDateTime.millis,
                 periodType = periodType,
                 orderCount = statisticOrderList.size,
-                orderProceeds = calculateOrderProceeds(statisticOrderList),
+                orderProceeds =
+                calculateOrderProceeds(statisticOrderList),
                 statisticProductList = calculateStatisticProductList(statisticOrderList),
                 cafeUuid = cafe.uuid.toUuid(),
             )
@@ -207,28 +214,42 @@ class StatisticService(
         }
     }
 
-    private fun calculateOrderProceeds(statisticOrderList: List<GetStatisticOrder>): Int {
-        return statisticOrderList.sumOf { statisticOrder ->
-            statisticOrder.statisticOrderProductList.sumOf { statisticOrderProduct ->
-                statisticOrderProduct.newPrice * statisticOrderProduct.count
-            }
+    private fun calculateOrderProceeds(orderList: List<Order>): Int {
+        return orderList.sumOf { order ->
+            calculateOrderProductsNewCostUseCase(
+                orderProductList = order.orderProducts,
+                percentDiscount = order.percentDiscount
+            )
         }
     }
 
-    private fun calculateStatisticProductList(statisticOrderList: List<GetStatisticOrder>): List<InsertStatisticProduct> {
-        return statisticOrderList.flatMap { statisticOrder ->
-            statisticOrder.statisticOrderProductList
-        }.groupBy { statisticOrderProduct ->
-            statisticOrderProduct.menuProductUuid
-        }.map { (_, statisticOrderProductList) ->
+    private fun calculateStatisticProductList(orderList: List<Order>): List<InsertStatisticProduct> {
+        return orderList.flatMap { order ->
+            order.orderProducts.map { orderProduct ->
+                OrderProductWithDiscount(
+                    orderProduct = orderProduct,
+                    percentDiscount = order.percentDiscount
+                )
+            }
+        }.groupBy { orderProductWithDiscount ->
+            orderProductWithDiscount.orderProduct.menuProduct.uuid
+        }.mapNotNull { (_, orderProductWithDiscountList) ->
+            val firstOrderProduct = orderProductWithDiscountList.firstOrNull()?.orderProduct ?: return@mapNotNull null
             InsertStatisticProduct(
-                name = statisticOrderProductList.first().name,
-                photoLink = statisticOrderProductList.first().photoLink,
-                productCount = statisticOrderProductList.sumOf { statisticOrderProduct ->
-                    statisticOrderProduct.count
+                name = firstOrderProduct.name,
+                photoLink = firstOrderProduct.photoLink,
+                productCount = orderProductWithDiscountList.sumOf { orderProductWithDiscount ->
+                    orderProductWithDiscount.orderProduct.count
                 },
-                proceeds = statisticOrderProductList.sumOf { statisticOrderProduct ->
-                    statisticOrderProduct.newPrice * statisticOrderProduct.count
+                proceeds = orderProductWithDiscountList.sumOf { orderProductWithDiscount ->
+                    val productTotal =
+                        calculateOrderProductTotalUseCase(orderProduct = orderProductWithDiscount.orderProduct)
+                    val orderProductCostWithDiscount = calculateCostWithDiscountUseCase(
+                        cost = productTotal.newTotalCost,
+                        percentDiscount = orderProductWithDiscount.percentDiscount,
+                    )
+
+                    orderProductCostWithDiscount
                 }
             )
         }

@@ -1,16 +1,17 @@
-package com.bunbeauty.fooddelivery.data.repo.order
+package com.bunbeauty.fooddelivery.data.features.statistic
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.order.OrderEntity
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
+import com.bunbeauty.fooddelivery.data.features.order.mapper.mapOrderEntity
 import com.bunbeauty.fooddelivery.data.table.order.OrderTable
-import com.bunbeauty.fooddelivery.domain.model.statistic.GetStatisticOrder
+import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import org.jetbrains.exposed.sql.and
 import java.util.*
 
-class OrderStatisticRepository : IOrderStatisticRepository {
+class OrderStatisticRepository {
 
-    override suspend fun getOrderListByCafeUuid(cafeUuid: UUID, fromTime: Long, toTime: Long): List<GetStatisticOrder> =
+    suspend fun getOrderListByCafeUuid(cafeUuid: UUID, fromTime: Long, toTime: Long): List<Order> =
         query {
             OrderEntity.find {
                 (OrderTable.cafe eq cafeUuid) and
@@ -25,16 +26,14 @@ class OrderStatisticRepository : IOrderStatisticRepository {
                                 OrderStatus.DONE.name,
                             )
                         )
-            }.map { orderEntity ->
-                orderEntity.toStatisticOrder()
-            }
+            }.map(mapOrderEntity)
         }
 
-    override suspend fun getOrderListByCompanyUuid(
+    suspend fun getOrderListByCompanyUuid(
         companyUuid: UUID,
         fromTime: Long,
         toTime: Long,
-    ): List<GetStatisticOrder> = query {
+    ): List<Order> = query {
         OrderEntity.find {
             (OrderTable.company eq companyUuid) and
                     (OrderTable.time greater fromTime) and
@@ -48,9 +47,7 @@ class OrderStatisticRepository : IOrderStatisticRepository {
                             OrderStatus.DONE.name,
                         )
                     )
-        }.map { orderEntity ->
-            orderEntity.toStatisticOrder()
-        }
+        }.map(mapOrderEntity)
     }
 
 }

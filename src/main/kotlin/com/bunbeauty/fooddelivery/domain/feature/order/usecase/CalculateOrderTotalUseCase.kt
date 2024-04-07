@@ -11,11 +11,11 @@ class CalculateOrderTotalUseCase(
 
     operator fun invoke(order: Order): OrderTotal {
         val oldCost = calculateOrderProductsOldCostUseCase(
-            orderProductList = order.oderProducts,
+            orderProductList = order.orderProducts,
             percentDiscount = order.percentDiscount
         )
         val newCost = calculateOrderProductsNewCostUseCase(
-            orderProductList = order.oderProducts,
+            orderProductList = order.orderProducts,
             percentDiscount = order.percentDiscount
         )
 
@@ -24,7 +24,7 @@ class CalculateOrderTotalUseCase(
                 oldCost + (order.deliveryCost ?: 0)
             },
             newTotalCost = newCost + (order.deliveryCost ?: 0),
-            productTotalMap = order.oderProducts.associate { orderProduct ->
+            productTotalMap = order.orderProducts.associate { orderProduct ->
                 orderProduct.uuid to calculateOrderProductTotalUseCase(orderProduct)
             }
         )

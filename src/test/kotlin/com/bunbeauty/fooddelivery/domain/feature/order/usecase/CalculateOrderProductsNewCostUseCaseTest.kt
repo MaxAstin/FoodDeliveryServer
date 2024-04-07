@@ -22,17 +22,20 @@ class CalculateOrderProductsNewCostUseCaseTest {
             this@mockk(orderProduct2)
         } returns orderProductTotal2
     }
+    private val calculateCostWithDiscountUseCase: CalculateCostWithDiscountUseCase = mockk()
     private lateinit var calculateOrderProductsNewCostUseCase: CalculateOrderProductsNewCostUseCase
 
     @BeforeTest
     fun setup() {
         calculateOrderProductsNewCostUseCase = CalculateOrderProductsNewCostUseCase(
-            calculateOrderProductTotalUseCase = calculateOrderProductTotalUseCase
+            calculateOrderProductTotalUseCase = calculateOrderProductTotalUseCase,
+            calculateCostWithDiscountUseCase = calculateCostWithDiscountUseCase,
         )
     }
 
     @Test
     fun `return order product sum when discount is not available`() {
+        every { calculateCostWithDiscountUseCase(300, null) } returns 300
         val expected = 300
 
         val orderProductsNewCost = calculateOrderProductsNewCostUseCase(
@@ -48,6 +51,7 @@ class CalculateOrderProductsNewCostUseCaseTest {
 
     @Test
     fun `return order product sum with discount when discount is available`() {
+        every { calculateCostWithDiscountUseCase(300, 10) } returns 270
         val expected = 270
 
         val orderProductsNewCost = calculateOrderProductsNewCostUseCase(
