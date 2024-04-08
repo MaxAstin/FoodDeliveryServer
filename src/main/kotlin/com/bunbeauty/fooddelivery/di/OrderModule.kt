@@ -33,6 +33,12 @@ val orderModule = module(createdAtStart = true) {
         )
     }
     factory {
+        FindDeliveryZoneByCityUuidAndCoordinatesUseCase(
+            cafeRepository = get(),
+            checkIsPointInPolygonUseCase = get(),
+        )
+    }
+    factory {
         CalculateCostWithDiscountUseCase()
     }
     factory {
@@ -43,7 +49,7 @@ val orderModule = module(createdAtStart = true) {
             menuProductRepository = get(),
             cafeRepository = get(),
             firebaseMessaging = get(),
-            checkIsPointInPolygonUseCase = get(),
+            findDeliveryZoneByCityUuidAndCoordinatesUseCase = get(),
             calculateOrderTotalUseCase = get(),
             getDeliveryCostUseCase = get(),
         )

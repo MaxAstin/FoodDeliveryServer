@@ -45,7 +45,7 @@ class AddressService(
             streetLatitude = suggestion.latitude,
             streetLongitude = suggestion.longitude,
         )
-        val deliveryZone = getDeliveryCostByCoordinates(
+        val deliveryZone = getDeliveryZoneByCoordinates(
             cityUuid = postAddress.cityUuid,
             latitude = suggestion.latitude,
             longitude = suggestion.longitude,
@@ -68,24 +68,24 @@ class AddressService(
             userUuid = userUuid,
             cityUuid = cityUuid
         ).mapNotNull { address ->
-            getDeliveryCostByCoordinates(
+            getDeliveryZoneByCoordinates(
                 cityUuid = cityUuid,
                 latitude = address.street.latitude,
                 longitude = address.street.longitude,
-            )?.let { deliveryCost ->
-                address.mapAddressToV2(deliveryCost)
+            )?.let { deliveryZone ->
+                address.mapAddressToV2(deliveryZone)
             }
         }
         val addressV2List = addressRepository.getAddressListByUserUuidAndCityUuidV2(
             userUuid = userUuid,
             cityUuid = cityUuid
         ).mapNotNull { address ->
-            getDeliveryCostByCoordinates(
+            getDeliveryZoneByCoordinates(
                 cityUuid = cityUuid,
                 latitude = address.street.latitude,
                 longitude = address.street.longitude,
-            )?.let { deliveryCost ->
-                address.mapAddressV2(deliveryCost)
+            )?.let { deliveryZone ->
+                address.mapAddressV2(deliveryZone)
             }
         }
 
@@ -102,7 +102,7 @@ class AddressService(
         ).map(mapSuggestion)
     }
 
-    private suspend fun getDeliveryCostByCoordinates(
+    private suspend fun getDeliveryZoneByCoordinates(
         cityUuid: String,
         latitude: Double,
         longitude: Double,

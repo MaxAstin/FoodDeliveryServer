@@ -8,7 +8,7 @@ class CompanyService(private val companyRepository: CompanyRepository) : ICompan
 
     override suspend fun createCompany(postCompany: PostCompany): GetCompany {
         if ((postCompany.percentDiscount ?: 0) > 99) {
-            error("percentDiscount can't be greater then 99")
+            error("PercentDiscount can't be greater then 99")
         }
         val insertCompany = InsertCompany(
             name = postCompany.name,
@@ -22,7 +22,7 @@ class CompanyService(private val companyRepository: CompanyRepository) : ICompan
 
     override suspend fun changeCompanyByUuid(companyUuid: String, patchCompany: PatchCompany): GetCompany? {
         if ((patchCompany.percentDiscount ?: 0) > 99) {
-            error("percentDiscount can't be greater then 99")
+            error("PercentDiscount can't be greater then 99")
         }
         val updateCompany = UpdateCompany(
             uuid = companyUuid.toUuid(),
