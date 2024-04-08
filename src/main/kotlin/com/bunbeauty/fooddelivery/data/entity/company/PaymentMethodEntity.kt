@@ -1,11 +1,11 @@
 package com.bunbeauty.fooddelivery.data.entity.company
 
-import com.bunbeauty.fooddelivery.data.model.company.payment_method.GetPaymentMethod
 import com.bunbeauty.fooddelivery.data.table.PaymentMethodTable
+import com.bunbeauty.fooddelivery.domain.model.company.payment_method.GetPaymentMethod
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.UUID
+import java.util.*
 
 class PaymentMethodEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 

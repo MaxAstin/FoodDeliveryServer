@@ -28,7 +28,15 @@ fun Application.configureKoin() {
             paymentMethodModule,
             linkModule,
             notificationModule,
+            discountModule,
             requestModule,
+            authorizationModule,
+            recommendationModule,
+            nonWorkingDayModule,
+            networkModule,
+            deliveryZoneModule,
+            privacyCheckModule,
+            additionModule,
         )
     }
 }

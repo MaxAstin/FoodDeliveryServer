@@ -2,8 +2,10 @@ package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.CAFE_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.PERIOD_PARAMETER
-import com.bunbeauty.fooddelivery.routing.extension.*
-import com.bunbeauty.fooddelivery.service.StatisticService
+import com.bunbeauty.fooddelivery.domain.feature.statistic.StatisticService
+import com.bunbeauty.fooddelivery.routing.extension.manager
+import com.bunbeauty.fooddelivery.routing.extension.respondNotFound
+import com.bunbeauty.fooddelivery.routing.extension.respondOkOrBad
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
@@ -19,7 +21,7 @@ fun Application.configureStatisticRouting() {
     }
 }
 
-fun Route.getStatistic() {
+private fun Route.getStatistic() {
 
     val statisticService: StatisticService by inject()
 
@@ -37,7 +39,7 @@ fun Route.getStatistic() {
     }
 }
 
-fun Route.getStatisticDetails() {
+private fun Route.getStatisticDetails() {
 
     get("/statistic/details") {
         manager {

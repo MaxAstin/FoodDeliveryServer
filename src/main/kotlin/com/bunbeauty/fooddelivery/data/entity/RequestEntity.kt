@@ -1,12 +1,11 @@
 package com.bunbeauty.fooddelivery.data.entity
 
-import com.bunbeauty.fooddelivery.data.model.request.GetRequest
 import com.bunbeauty.fooddelivery.data.table.RequestTable
-import com.bunbeauty.fooddelivery.data.table.UserTable
+import com.bunbeauty.fooddelivery.domain.model.request.GetRequest
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.UUID
+import java.util.*
 
 class RequestEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 

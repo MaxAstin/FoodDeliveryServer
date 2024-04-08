@@ -20,4 +20,10 @@ fun Application.configureRouting() {
     configurePaymentMethodRouting()
     configureLinkRouting()
     configureNotificationRouting()
+    configureDiscountRouting()
+    configureAuthorizationRouting()
+    configureRecommendationRouting()
+    configureNonWorkingDayRouting()
+    configureDeliveryZoneRouting()
+    configureAdditionRouting()
 }

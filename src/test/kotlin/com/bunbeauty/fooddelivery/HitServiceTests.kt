@@ -1,15 +1,13 @@
 package com.bunbeauty.fooddelivery
 
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
-import com.bunbeauty.fooddelivery.data.model.menu_product.GetMenuProduct
-import com.bunbeauty.fooddelivery.data.model.order.GetOrderAddress
-import com.bunbeauty.fooddelivery.data.model.order.GetOrderProduct
-import com.bunbeauty.fooddelivery.data.model.order.client.get.GetClientOrderV2
-import com.bunbeauty.fooddelivery.data.repo.company.ICompanyRepository
-import com.bunbeauty.fooddelivery.data.repo.hit.IHitRepository
-import com.bunbeauty.fooddelivery.data.repo.menu_product.IMenuProductRepository
-import com.bunbeauty.fooddelivery.data.repo.order.IOrderRepository
-import com.bunbeauty.fooddelivery.service.hit.HitService
+import com.bunbeauty.fooddelivery.data.features.menu.HitRepository
+import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
+import com.bunbeauty.fooddelivery.data.features.order.OrderRepository
+import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
+import com.bunbeauty.fooddelivery.domain.feature.menu.service.HitService
+import com.bunbeauty.fooddelivery.fake.FakeOrder
+import com.bunbeauty.fooddelivery.fake.FakeOrderProduct
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -20,16 +18,16 @@ import kotlin.test.assertContentEquals
 class HitServiceTests {
 
     @MockK
-    private lateinit var companyRepository: ICompanyRepository
+    private lateinit var companyRepository: CompanyRepository
 
     @MockK
-    private lateinit var menuProductRepository: IMenuProductRepository
+    private lateinit var menuProductRepository: MenuProductRepository
 
     @MockK
-    private lateinit var orderRepository: IOrderRepository
+    private lateinit var orderRepository: OrderRepository
 
     @MockK
-    private lateinit var hitRepository: IHitRepository
+    private lateinit var hitRepository: HitRepository
 
     @InjectMockKs
     private lateinit var hitService: HitService
@@ -46,28 +44,62 @@ class HitServiceTests {
         // 7 - invisible product
         // 5, 6, 8
         val orderList = listOf(
-            getFakeOrder(
+            FakeOrder.create(
                 status = OrderStatus.CANCELED.name,
                 orderProductList = listOf(
-                    getFakeOrderProduct("1", 20, 400),
-                    getFakeOrderProduct("2", 15, 100),
-                    getFakeOrderProduct("3", 10, 500),
+                    FakeOrderProduct.create(
+                        menuProductUuid = "1",
+                        count = 20,
+                        newPrice = 400,
+                    ),
+                    FakeOrderProduct.create(
+                        menuProductUuid = "2",
+                        count = 15,
+                        newPrice = 100,
+                    ),
+                    FakeOrderProduct.create(
+                        menuProductUuid = "3",
+                        count = 10,
+                        newPrice = 500,
+                    ),
                 )
             ),
-            getFakeOrder(
-                status = OrderStatus.DELIVERED.name,
+            FakeOrder.create(
                 orderProductList = listOf(
-                    getFakeOrderProduct("4", 1, 20),
-                    getFakeOrderProduct("5", 5, 100),
-                    getFakeOrderProduct("6", 14, 200),
+                    FakeOrderProduct.create(
+                        menuProductUuid = "4",
+                        count = 1,
+                        newPrice = 20,
+                    ),
+                    FakeOrderProduct.create(
+                        menuProductUuid = "5",
+                        count = 5,
+                        newPrice = 100,
+                    ),
+                    FakeOrderProduct.create(
+                        menuProductUuid = "6",
+                        count = 14,
+                        newPrice = 200,
+                    ),
                 )
             ),
-            getFakeOrder(
-                status = OrderStatus.DELIVERED.name,
+            FakeOrder.create(
                 orderProductList = listOf(
-                    getFakeOrderProduct("5", 25, 100),
-                    getFakeOrderProduct("7", 5, 1000),
-                    getFakeOrderProduct("8", 6, 400),
+                    FakeOrderProduct.create(
+                        menuProductUuid = "5",
+                        count = 25,
+                        newPrice = 100,
+                    ),
+                    FakeOrderProduct.create(
+                        menuProductUuid = "7",
+                        count = 5,
+                        newPrice = 1000,
+                    ),
+                    FakeOrderProduct.create(
+                        menuProductUuid = "8",
+                        count = 6,
+                        newPrice = 400,
+                    ),
                 )
             )
         )
@@ -83,69 +115,6 @@ class HitServiceTests {
         )
 
         assertContentEquals(expectedMenuProductUuidList, hitMenuProductUuidList)
-    }
-
-    private fun getFakeOrder(status: String, orderProductList: List<GetOrderProduct>): GetClientOrderV2 {
-        return GetClientOrderV2(
-            uuid = "",
-            code = "",
-            status = status,
-            time = 0,
-            timeZone = "UTC+3",
-            isDelivery = true,
-            deferredTime = null,
-            address = GetOrderAddress(
-                description = "",
-                street = "",
-                house = "",
-                flat = "",
-                entrance = "",
-                floor = "",
-                comment = "",
-            ),
-            comment = "",
-            deliveryCost = 100,
-            oldTotalCost = 250,
-            newTotalCost = 245,
-            paymentMethod = null,
-            clientUserUuid = "",
-            oderProductList = orderProductList,
-        )
-    }
-
-    private fun getFakeOrderProduct(
-        menuProductUuid: String,
-        count: Int,
-        price: Int,
-    ): GetOrderProduct {
-        return GetOrderProduct(
-            uuid = "",
-            count = count,
-            name = "",
-            newPrice = price,
-            oldPrice = null,
-            utils = null,
-            nutrition = null,
-            description = "",
-            comboDescription = "",
-            photoLink = "",
-            barcode = 0,
-            menuProduct = GetMenuProduct(
-                uuid = menuProductUuid,
-                name = "",
-                newPrice = price,
-                oldPrice = null,
-                utils = null,
-                nutrition = null,
-                description = "",
-                comboDescription = "",
-                photoLink = "",
-                barcode = 0,
-                categories = mutableListOf(),
-                isVisible = true,
-            ),
-            orderUuid = "",
-        )
     }
 
 }

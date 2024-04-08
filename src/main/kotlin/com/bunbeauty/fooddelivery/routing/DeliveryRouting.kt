@@ -16,7 +16,7 @@ fun Application.configureDeliveryRouting() {
     }
 }
 
-fun Routing.getDelivery() {
+private fun Routing.getDelivery() {
 
     val deliveryService: IDeliveryService by inject()
 

@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.service.delivery
 
-import com.bunbeauty.fooddelivery.data.model.delivery.GetDelivery
+import com.bunbeauty.fooddelivery.domain.model.company.delivery.GetDelivery
 
 interface IDeliveryService {
 

@@ -1,11 +1,11 @@
 package com.bunbeauty.fooddelivery.data.entity.company
 
-import com.bunbeauty.fooddelivery.data.model.company.link.GetLink
 import com.bunbeauty.fooddelivery.data.table.LinkTable
+import com.bunbeauty.fooddelivery.domain.model.company.link.GetLink
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.UUID
+import java.util.*
 
 class LinkEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 

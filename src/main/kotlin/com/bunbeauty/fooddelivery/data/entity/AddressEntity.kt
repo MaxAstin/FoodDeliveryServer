@@ -1,11 +1,11 @@
 package com.bunbeauty.fooddelivery.data.entity
 
-import com.bunbeauty.fooddelivery.data.model.address.GetAddress
-import com.bunbeauty.fooddelivery.data.table.AddressTable
+import com.bunbeauty.fooddelivery.data.table.address.AddressTable
+import com.bunbeauty.fooddelivery.domain.feature.address.model.GetAddress
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.UUID
+import java.util.*
 
 class AddressEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
@@ -21,6 +21,10 @@ class AddressEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     companion object : UUIDEntityClass<AddressEntity>(AddressTable)
 
+    @Deprecated(
+        message = "Use mapper",
+        replaceWith = ReplaceWith("mapAddressEntity")
+    )
     fun toAddress() = GetAddress(
         uuid = uuid,
         house = house,

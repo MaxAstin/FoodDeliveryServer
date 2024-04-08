@@ -1,14 +1,14 @@
 package com.bunbeauty.fooddelivery.data.entity
 
+import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.data.model.city.GetCity
-import com.bunbeauty.fooddelivery.data.table.CafeTable
 import com.bunbeauty.fooddelivery.data.table.CityTable
+import com.bunbeauty.fooddelivery.data.table.cafe.CafeTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.SizedIterable
-import java.util.UUID
+import java.util.*
 
 class CityEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
@@ -22,11 +22,4 @@ class CityEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     companion object : UUIDEntityClass<CityEntity>(CityTable)
 
-    fun toCity() = GetCity(
-        uuid = uuid,
-        name = name,
-        timeZone = timeZone,
-        company = company.toCompany(),
-        isVisible = isVisible,
-    )
 }

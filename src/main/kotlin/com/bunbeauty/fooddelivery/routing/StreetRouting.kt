@@ -1,12 +1,13 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.CITY_UUID_PARAMETER
-import com.bunbeauty.fooddelivery.data.model.street.GetStreet
-import com.bunbeauty.fooddelivery.data.model.street.PostStreet
+import com.bunbeauty.fooddelivery.domain.feature.address.StreetService
+import com.bunbeauty.fooddelivery.domain.model.street.GetStreet
+import com.bunbeauty.fooddelivery.domain.model.street.PostStreet
+import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
-import com.bunbeauty.fooddelivery.routing.extension.respondOk
+import com.bunbeauty.fooddelivery.routing.extension.respondOkWithList
 import com.bunbeauty.fooddelivery.routing.extension.safely
-import com.bunbeauty.fooddelivery.service.street.IStreetService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
@@ -22,26 +23,26 @@ fun Application.configureStreetRouting() {
     }
 }
 
-fun Routing.getStreetsByCityUuid() {
+private fun Routing.getStreetsByCityUuid() {
 
-    val streetService: IStreetService by inject()
+    val streetService: StreetService by inject()
 
     get("/street") {
         safely {
-            val cityUuid = call.parameters[CITY_UUID_PARAMETER] ?: error("$CITY_UUID_PARAMETER is required")
-            val streetList = streetService.getStreetListByCompanyUuid(cityUuid)
-            call.respondOk(streetList)
+            val cityUuid = call.getParameter(CITY_UUID_PARAMETER)
+            val streetList = streetService.getStreetListByCityUuid(cityUuid = cityUuid)
+            call.respondOkWithList(streetList)
         }
     }
 }
 
-fun Route.postStreet() {
+private fun Route.postStreet() {
 
-    val streetService: IStreetService by inject()
+    val streetService: StreetService by inject()
 
     post("/street") {
         managerWithBody<PostStreet, GetStreet> { bodyRequest ->
-            streetService.createStreet(bodyRequest.body)
+            streetService.createStreet(postStreet = bodyRequest.body)
         }
     }
 

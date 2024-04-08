@@ -7,11 +7,22 @@ import com.bunbeauty.fooddelivery.data.Constants.JDBC_DRIVER
 import com.bunbeauty.fooddelivery.data.Constants.JDBC_POSTGRESQL_PREFIX
 import com.bunbeauty.fooddelivery.data.Constants.POSTGRES_PREFIX
 import com.bunbeauty.fooddelivery.data.table.*
+import com.bunbeauty.fooddelivery.data.table.address.AddressTable
+import com.bunbeauty.fooddelivery.data.table.address.AddressV2Table
+import com.bunbeauty.fooddelivery.data.table.cafe.CafeTable
+import com.bunbeauty.fooddelivery.data.table.cafe.DeliveryZonePointTable
+import com.bunbeauty.fooddelivery.data.table.cafe.DeliveryZoneTable
+import com.bunbeauty.fooddelivery.data.table.cafe.NonWorkingDayTable
+import com.bunbeauty.fooddelivery.data.table.menu.*
+import com.bunbeauty.fooddelivery.data.table.order.OrderProductAdditionTable
+import com.bunbeauty.fooddelivery.data.table.order.OrderProductTable
+import com.bunbeauty.fooddelivery.data.table.order.OrderTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.DatabaseConfig
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -19,7 +30,13 @@ object DatabaseFactory {
 
     fun init() {
         val dataSource = getDataSource()
-        Database.connect(dataSource)
+        val config = DatabaseConfig {
+            keepLoadedReferencesOutOfTransaction = false
+        }
+        Database.connect(
+            datasource = dataSource,
+            databaseConfig = config
+        )
 
         transaction {
             SchemaUtils.create(CompanyTable)
@@ -40,17 +57,32 @@ object DatabaseFactory {
             SchemaUtils.create(StreetTable)
             SchemaUtils.createMissingTablesAndColumns(StreetTable)
 
+            SchemaUtils.create(MenuProductTable)
+            SchemaUtils.createMissingTablesAndColumns(MenuProductTable)
+
             SchemaUtils.create(CategoryTable)
             SchemaUtils.createMissingTablesAndColumns(CategoryTable)
 
-            SchemaUtils.create(MenuProductTable)
-            SchemaUtils.createMissingTablesAndColumns(MenuProductTable)
+            SchemaUtils.create(AdditionGroupTable)
+            SchemaUtils.createMissingTablesAndColumns(AdditionGroupTable)
+
+            SchemaUtils.create(AdditionTable)
+            SchemaUtils.createMissingTablesAndColumns(AdditionTable)
 
             SchemaUtils.create(MenuProductCategoryTable)
             SchemaUtils.createMissingTablesAndColumns(MenuProductCategoryTable)
 
+            SchemaUtils.create(MenuProductToAdditionGroupTable)
+            SchemaUtils.createMissingTablesAndColumns(MenuProductToAdditionGroupTable)
+
+            SchemaUtils.create(MenuProductToAdditionGroupToAdditionTable)
+            SchemaUtils.createMissingTablesAndColumns(MenuProductToAdditionGroupToAdditionTable)
+
             SchemaUtils.create(AddressTable)
             SchemaUtils.createMissingTablesAndColumns(AddressTable)
+
+            SchemaUtils.create(AddressV2Table)
+            SchemaUtils.createMissingTablesAndColumns(AddressV2Table)
 
             SchemaUtils.create(OrderTable)
             SchemaUtils.createMissingTablesAndColumns(OrderTable)
@@ -61,8 +93,8 @@ object DatabaseFactory {
             SchemaUtils.create(RequestTable)
             SchemaUtils.createMissingTablesAndColumns(RequestTable)
 
-            SchemaUtils.create(ClientUserLoginSessionTable)
-            SchemaUtils.createMissingTablesAndColumns(ClientUserLoginSessionTable)
+            SchemaUtils.create(ClientAuthSessionTable)
+            SchemaUtils.createMissingTablesAndColumns(ClientAuthSessionTable)
 
             SchemaUtils.create(TestClientUserPhoneTable)
             SchemaUtils.createMissingTablesAndColumns(TestClientUserPhoneTable)
@@ -84,6 +116,18 @@ object DatabaseFactory {
 
             SchemaUtils.create(LinkTable)
             SchemaUtils.createMissingTablesAndColumns(LinkTable)
+
+            SchemaUtils.create(NonWorkingDayTable)
+            SchemaUtils.createMissingTablesAndColumns(NonWorkingDayTable)
+
+            SchemaUtils.create(DeliveryZoneTable)
+            SchemaUtils.createMissingTablesAndColumns(DeliveryZoneTable)
+
+            SchemaUtils.create(DeliveryZonePointTable)
+            SchemaUtils.createMissingTablesAndColumns(DeliveryZonePointTable)
+
+            SchemaUtils.create(OrderProductAdditionTable)
+            SchemaUtils.createMissingTablesAndColumns(OrderProductAdditionTable)
         }
     }
 

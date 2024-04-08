@@ -1,19 +1,21 @@
 package com.bunbeauty.fooddelivery.data.repo.statistic
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.CafeEntity
+import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.entity.statistic.CafeStatisticEntity
 import com.bunbeauty.fooddelivery.data.entity.statistic.CafeStatisticProductEntity
-import com.bunbeauty.fooddelivery.data.model.new_statistic.GetStatistic
-import com.bunbeauty.fooddelivery.data.model.new_statistic.PeriodType
-import com.bunbeauty.fooddelivery.data.model.new_statistic.UpdateStatistic
-import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertCafeStatistic
-import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertStatisticProduct
 import com.bunbeauty.fooddelivery.data.table.CafeStatisticProductTable
 import com.bunbeauty.fooddelivery.data.table.CafeStatisticTable
-import org.jetbrains.exposed.sql.*
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.GetStatistic
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.PeriodType
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.UpdateStatistic
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.insert.InsertCafeStatistic
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.insert.InsertStatisticProduct
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.util.UUID
+import java.util.*
 
 class CafeStatisticRepository : ICafeStatisticRepository {
 

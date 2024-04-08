@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.service.ip
 
-import com.bunbeauty.fooddelivery.data.model.request.RequestAvailability
+import com.bunbeauty.fooddelivery.domain.model.request.RequestAvailability
 
 interface IRequestService {
 

@@ -1,10 +1,10 @@
 package com.bunbeauty.fooddelivery.data.repo.statistic
 
-import com.bunbeauty.fooddelivery.data.model.new_statistic.GetStatistic
-import com.bunbeauty.fooddelivery.data.model.new_statistic.PeriodType
-import com.bunbeauty.fooddelivery.data.model.new_statistic.UpdateStatistic
-import com.bunbeauty.fooddelivery.data.model.new_statistic.insert.InsertCompanyStatistic
-import java.util.UUID
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.GetStatistic
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.PeriodType
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.UpdateStatistic
+import com.bunbeauty.fooddelivery.domain.model.new_statistic.insert.InsertCompanyStatistic
+import java.util.*
 
 interface ICompanyStatisticRepository {
 
