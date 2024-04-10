@@ -31,20 +31,15 @@ class AdditionRepository {
     suspend fun insertAdditionGroupToMenuProducts(
         insertAdditionGroupToMenuProducts: InsertAdditionGroupToMenuProducts,
     ) = query {
-        insertAdditionGroupToMenuProducts.menuProductUuids.mapNotNull { menuProductUuid ->
-            val menuProductWithAdditionGroupEntity = MenuProductWithAdditionGroupEntity.find {
+        insertAdditionGroupToMenuProducts.menuProductUuids.map { menuProductUuid ->
+            MenuProductWithAdditionGroupEntity.find {
                 (MenuProductToAdditionGroupTable.menuProduct eq menuProductUuid) and
                         (MenuProductToAdditionGroupTable.additionGroup eq insertAdditionGroupToMenuProducts.additionGroupUuid)
-            }
-
-            if (menuProductWithAdditionGroupEntity.empty()) {
-                MenuProductWithAdditionGroupEntity.new {
+            }.firstOrNull()
+                ?: MenuProductWithAdditionGroupEntity.new {
                     menuProduct = MenuProductEntity[menuProductUuid]
                     additionGroup = AdditionGroupEntity[insertAdditionGroupToMenuProducts.additionGroupUuid]
                 }
-            } else {
-                null
-            }
         }.forEach { menuProductWithAdditionGroupEntity ->
             insertAdditionGroupToMenuProducts.additionUuids.forEach { additionUuid ->
                 MenuProductWithAdditionGroupWithAdditionEntity.new {
