@@ -3,6 +3,7 @@ package com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone
 import java.util.*
 
 class InsertDeliveryZone(
+    val name: String,
     val minOrderCost: Int?,
     val normalDeliveryCost: Int,
     val forLowDeliveryCost: Int?,

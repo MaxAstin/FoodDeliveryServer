@@ -2,6 +2,7 @@ package com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone
 
 class DeliveryZone(
     val uuid: String,
+    val name: String,
     val minOrderCost: Int?,
     val normalDeliveryCost: Int,
     val forLowDeliveryCost: Int?,

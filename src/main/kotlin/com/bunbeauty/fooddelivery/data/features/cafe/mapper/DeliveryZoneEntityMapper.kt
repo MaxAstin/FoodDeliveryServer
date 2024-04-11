@@ -8,6 +8,7 @@ import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.Point
 val mapDeliveryZoneEntity: DeliveryZoneEntity.() -> DeliveryZone = {
     DeliveryZone(
         uuid = uuid,
+        name = name,
         minOrderCost = minOrderCost,
         normalDeliveryCost = normalDeliveryCost,
         forLowDeliveryCost = forLowDeliveryCost,

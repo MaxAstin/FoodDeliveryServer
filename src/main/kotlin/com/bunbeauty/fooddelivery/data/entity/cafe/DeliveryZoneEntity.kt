@@ -11,6 +11,7 @@ import java.util.*
 class DeliveryZoneEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
     val uuid: String = uuid.value.toString()
+    var name: String by DeliveryZoneTable.name
     var minOrderCost: Int? by DeliveryZoneTable.minOrderCost
     var normalDeliveryCost: Int by DeliveryZoneTable.normalDeliveryCost
     var forLowDeliveryCost: Int? by DeliveryZoneTable.forLowDeliveryCost

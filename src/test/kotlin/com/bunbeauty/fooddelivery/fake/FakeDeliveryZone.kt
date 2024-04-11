@@ -12,6 +12,7 @@ object FakeDeliveryZone {
     ): DeliveryZone {
         return DeliveryZone(
             uuid = "",
+            name = "",
             minOrderCost = minOrderCost,
             normalDeliveryCost = normalDeliveryCost,
             forLowDeliveryCost = forLowDeliveryCost,

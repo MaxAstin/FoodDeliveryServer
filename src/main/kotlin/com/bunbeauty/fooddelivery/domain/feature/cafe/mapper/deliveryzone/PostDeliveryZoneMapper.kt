@@ -8,6 +8,7 @@ import com.bunbeauty.fooddelivery.domain.toUuid
 
 val mapPostDeliveryZone: PostDeliveryZone.() -> InsertDeliveryZone = {
     InsertDeliveryZone(
+        name = name,
         minOrderCost = minOrderCost,
         normalDeliveryCost = normalDeliveryCost,
         forLowDeliveryCost = forLowDeliveryCost,
