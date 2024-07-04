@@ -108,7 +108,6 @@ class AddressService(
         longitude: Double,
     ): DeliveryZone? {
         val cafeList = cafeRepository.getCafeListByCityUuid(cityUuid = cityUuid)
-        println("cafeList ${cafeList.joinToString { it.uuid }}")
         return cafeList
             .asSequence()
             .filter { cafe -> cafe.isVisible }
@@ -117,8 +116,6 @@ class AddressService(
             }.flatten()
             .filter { zone -> zone.isVisible }
             .find { zone ->
-                println("zone ${zone.uuid}")
-                println("points ${zone.points.joinToString { "${it.latitude} ${it.longitude}" }}")
                 checkIsPointInPolygonUseCase(
                     latitude = latitude,
                     longitude = longitude,
@@ -127,9 +124,7 @@ class AddressService(
                     }.map { point ->
                         point.latitude to point.longitude
                     },
-                ).also {
-                    println("checkIsPointInPolygonUseCase $it")
-                }
+                )
             }
     }
 
