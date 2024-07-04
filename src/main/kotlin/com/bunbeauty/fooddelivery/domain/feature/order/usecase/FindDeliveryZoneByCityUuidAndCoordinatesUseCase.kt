@@ -31,9 +31,12 @@ class FindDeliveryZoneByCityUuidAndCoordinatesUseCase(
             checkIsPointInPolygonUseCase(
                 latitude = latitude,
                 longitude = longitude,
-                polygon = deliveryZoneWithCafe.deliveryZone.points.map { point ->
-                    point.latitude to point.longitude
-                },
+                polygon = deliveryZoneWithCafe.deliveryZone.points
+                    .sortedBy { point ->
+                        point.order
+                    }.map { point ->
+                        point.latitude to point.longitude
+                    },
             )
         } ?: noCafeError(addressUuid = addressUuid)
     }

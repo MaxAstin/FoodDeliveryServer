@@ -122,7 +122,9 @@ class AddressService(
                 checkIsPointInPolygonUseCase(
                     latitude = latitude,
                     longitude = longitude,
-                    polygon = zone.points.map { point ->
+                    polygon = zone.points.sortedBy { point ->
+                        point.order
+                    }.map { point ->
                         point.latitude to point.longitude
                     },
                 ).also {
