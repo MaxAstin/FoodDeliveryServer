@@ -16,13 +16,13 @@ fun Application.configureDeliveryRouting() {
     }
 }
 
-fun Routing.getDelivery() {
+private fun Routing.getDelivery() {
 
     val deliveryService: IDeliveryService by inject()
 
     get("/delivery") {
-        safely(COMPANY_UUID_PARAMETER) { parameterMap ->
-            val companyUuid = parameterMap[COMPANY_UUID_PARAMETER]!!
+        safely {
+            val companyUuid = call.parameters[COMPANY_UUID_PARAMETER] ?: error("$COMPANY_UUID_PARAMETER is required")
             val delivery = deliveryService.getDeliveryByCompanyUuid(companyUuid)
             if (delivery == null) {
                 call.respondBad("No delivery with companyUuid = $companyUuid")

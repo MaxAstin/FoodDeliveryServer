@@ -1,145 +1,82 @@
 package com.bunbeauty.fooddelivery.service.client_user
 
 import com.bunbeauty.fooddelivery.auth.IJwtService
-import com.bunbeauty.fooddelivery.data.Constants.CLIENT_USER_LOGIN_SESSION_TIMEOUT
-import com.bunbeauty.fooddelivery.data.ext.toUuid
-import com.bunbeauty.fooddelivery.data.model.client_user.*
-import com.bunbeauty.fooddelivery.data.model.client_user.login.*
-import com.bunbeauty.fooddelivery.data.repo.client_user.IClientUserRepository
+import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
+import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUser
+import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUserToClientSettings
+import com.bunbeauty.fooddelivery.domain.model.client_user.*
+import com.bunbeauty.fooddelivery.domain.toUuid
 import com.google.firebase.auth.FirebaseAuth
-import org.joda.time.DateTime
-import java.util.*
-import com.bunbeauty.fooddelivery.data.model.client_user.ClientAuthResponse
 
 class ClientUserService(
     private val firebaseAuth: FirebaseAuth,
-    private val clientUserRepository: IClientUserRepository,
+    private val clientUserRepository: ClientUserRepository,
     private val jwtService: IJwtService,
 ) : IClientUserService {
 
-    override suspend fun login(clientUserAuth: PostClientUserAuth): ClientAuthResponse? {
+    override suspend fun login(clientUserAuth: PostClientUserAuth): ClientAuthResponse {
         val firebaseUser = firebaseAuth.getUser(clientUserAuth.firebaseUuid)
-        return if (firebaseUser.phoneNumber == clientUserAuth.phoneNumber) {
-            var getClientUser = clientUserRepository.getClientUserByPhoneNumberAndCompayUuid(
-                clientUserAuth.phoneNumber,
-                clientUserAuth.companyUuid.toUuid()
-            )
-            if (getClientUser == null) {
-                val insertClientUser = InsertClientUser(
-                    phoneNumber = clientUserAuth.phoneNumber,
-                    email = null,
-                    companyUuid = clientUserAuth.companyUuid.toUuid(),
-                )
-                getClientUser = clientUserRepository.insertClientUser(insertClientUser)
-            }
-
-            val token = jwtService.generateToken(getClientUser)
-            ClientAuthResponse(token = token)
-        } else {
-            null
+        if (firebaseUser.phoneNumber != clientUserAuth.phoneNumber) {
+            credentialsError()
         }
-    }
 
-    override suspend fun sendCode(postClientCodeRequest: PostClientCodeRequest): GetClientUserLoginSessionUuid? {
-        return if (isRequestForTestPhone(postClientCodeRequest)) {
-            GetClientUserLoginSessionUuid(
-                uuid = UUID.randomUUID().toString()
+        var clientUser = clientUserRepository.getClientUserByPhoneNumberAndCompanyUuid(
+            clientUserAuth.phoneNumber,
+            clientUserAuth.companyUuid.toUuid()
+        )
+        if (clientUser == null) {
+            val insertClientUser = InsertClientUser(
+                phoneNumber = clientUserAuth.phoneNumber,
+                email = null,
+                companyUuid = clientUserAuth.companyUuid.toUuid(),
             )
-        } else {
-            sendCode(postClientCodeRequest.phoneNumber)?.let { code ->
-                val insertClientUserLoginSession = InsertClientUserLoginSession(
-                    phoneNumber = postClientCodeRequest.phoneNumber,
-                    time = DateTime.now().millis,
-                    code = code
-                )
-                clientUserRepository.insertClientUserLoginSession(insertClientUserLoginSession)
-            }
+            clientUser = clientUserRepository.insertClientUser(insertClientUser)
         }
-    }
 
-    override suspend fun checkCode(postClientCode: PostClientCode): ClientAuthResponse? {
-        return if ((isCodeForTestPhone(postClientCode) && isCodeActualForTestPhone(postClientCode))
-            || isCodeActual(postClientCode)
-        ) {
-            val getClientUser = clientUserRepository.getClientUserByPhoneNumberAndCompayUuid(
-                postClientCode.phoneNumber,
-                postClientCode.companyUuid.toUuid()
-            ) ?: registerClientUser(postClientCode)
-            val token = jwtService.generateToken(getClientUser)
-            ClientAuthResponse(token = token)
-        } else {
-            null
-        }
-    }
-
-    override suspend fun createTestClientUserPhone(postTestClientUserPhone: PostTestClientUserPhone): GetTestClientUserPhone {
-        return clientUserRepository.insertTestClientUserPhone(
-            InsertTestClientUserPhone(
-                phoneNumber = postTestClientUserPhone.phoneNumber,
-                code = postTestClientUserPhone.code
-            )
+        return ClientAuthResponse(
+            token = jwtService.generateToken(clientUser),
+            userUuid = clientUser.uuid
         )
     }
 
-    override suspend fun getTestClientUserPhoneList(): List<GetTestClientUserPhone> {
-        return clientUserRepository.getTestClientUserPhoneList()
+    override suspend fun getClientUserByUuid(clientUserUuid: String): GetClientUser? {
+        return clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
+            ?.mapClientUser()
     }
 
-    override suspend fun getClientUserByUuid(clientUserUuid: String): GetClientUser? {
-        return clientUserRepository.getClientUserByUuid(clientUserUuid.toUuid())
+    override suspend fun getClientSettingsByUuid(clientUserUuid: String): GetClientSettings? {
+        return clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
+            ?.mapClientUserToClientSettings()
     }
 
     override suspend fun updateClientUserByUuid(
         clientUserUuid: String,
-        patchClientUser: PatchClientUser,
+        patchClientUser: PatchClientUserSettings,
     ): GetClientUser? {
-        return clientUserRepository.updateClientUserByUuid(clientUserUuid.toUuid(), patchClientUser.email)
+        return clientUserRepository.updateClientUserByUuid(
+            UpdateClientUser(
+                uuid = clientUserUuid.toUuid(),
+                email = patchClientUser.email,
+                isActive = patchClientUser.isActive,
+            )
+        )?.mapClientUser()
     }
 
-    suspend fun isRequestForTestPhone(postClientCodeRequest: PostClientCodeRequest): Boolean {
-        return isForTestPhone(postClientCodeRequest.phoneNumber)
+    override suspend fun updateClientUserSettingsByUuid(
+        clientUserUuid: String,
+        patchClientUser: PatchClientUserSettings,
+    ): GetClientSettings? {
+        return clientUserRepository.updateClientUserByUuid(
+            UpdateClientUser(
+                uuid = clientUserUuid.toUuid(),
+                email = patchClientUser.email,
+                isActive = patchClientUser.isActive,
+            )
+        )?.mapClientUserToClientSettings()
     }
 
-    suspend fun sendCode(phoneNumber: String): String? {
-        return ""
-    }
-
-    suspend fun isCodeForTestPhone(postClientCode: PostClientCode): Boolean {
-        return isForTestPhone(postClientCode.phoneNumber)
-    }
-
-    suspend fun isForTestPhone(phoneNumber: String): Boolean {
-        return clientUserRepository.getTestClientUserPhoneByPhoneNumber(phoneNumber) != null
-    }
-
-    suspend fun isCodeActualForTestPhone(postClientCode: PostClientCode): Boolean {
-        return clientUserRepository.getTestClientUserPhoneByPhoneNumber(postClientCode.phoneNumber)
-            ?.let { getTestClientUserPhone ->
-                getTestClientUserPhone.code == postClientCode.code
-            } ?: false
-    }
-
-    suspend fun isCodeActual(postClientCode: PostClientCode): Boolean {
-        return clientUserRepository.getClientUserLoginSessionByUuid(postClientCode.uuid.toUuid())
-            .let { clientUserLoginSessionWithCode ->
-                clientUserLoginSessionWithCode != null &&
-                        clientUserLoginSessionWithCode.code == postClientCode.code &&
-                        clientUserLoginSessionWithCode.phoneNumber == postClientCode.phoneNumber &&
-                        isClientUserLoginSessionIsActual(clientUserLoginSessionWithCode.time)
-            }
-    }
-
-    fun isClientUserLoginSessionIsActual(time: Long): Boolean {
-        return time + CLIENT_USER_LOGIN_SESSION_TIMEOUT > DateTime.now().millis
-    }
-
-    suspend fun registerClientUser(postClientCode: PostClientCode): GetClientUser {
-        val insertClientUser = InsertClientUser(
-            phoneNumber = postClientCode.phoneNumber,
-            email = null,
-            companyUuid = postClientCode.companyUuid.toUuid(),
-        )
-        return clientUserRepository.insertClientUser(insertClientUser)
+    private fun credentialsError() {
+        error("Unable to log in with provided credentials")
     }
 
 }

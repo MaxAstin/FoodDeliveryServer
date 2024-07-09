@@ -5,15 +5,19 @@ val serialization_json_version: String by project
 val exposed_version: String by project
 val hikari_version: String by project
 val postgres_version: String by project
+val h2_version: String by project
 val koin_version: String by project
 val bcrypt_version: String by project
 val firebase_admin_version: String by project
 val joda_time_version: String by project
 val mockk_version: String by project
+val junit_version: String by project
+val otp_version: String by project
+val coroutines_version: String by project
 
 plugins {
-    kotlin("jvm") version "1.7.0"
-    kotlin("plugin.serialization") version "1.7.0"
+    kotlin("jvm") version "1.9.10"
+    kotlin("plugin.serialization") version "1.9.10"
     application
 }
 
@@ -27,7 +31,12 @@ repositories {
 
 tasks.create("stage").dependsOn("installDist")
 
+tasks.test {
+    useJUnit()
+}
+
 dependencies {
+    // Ktor server
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("io.ktor:ktor-server-websockets:$ktor_version")
@@ -36,10 +45,14 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("io.ktor:ktor-server-auth:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
 
-    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    // Ktor client
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-client-okhttp-jvm:$ktor_version")
+    implementation("io.ktor:ktor-client-logging:$ktor_version")
+
+    implementation("ch.qos.logback:logback-classic:$logback_version")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_json_version")
 
@@ -57,12 +70,19 @@ dependencies {
     implementation("com.ToxicBakery.library.bcrypt:bcrypt:$bcrypt_version")
 
     // Firebase
-    implementation("com.google.firebase:firebase-admin:$firebase_admin_version")
+    implementation("com.google.firebase:firebase-admin:$firebase_admin_version") {
+        exclude("com.google.guava")
+    }
 
     // DateTime
     implementation("joda-time:joda-time:$joda_time_version")
 
+    // OTP
+    implementation("dev.turingcomplete:kotlin-onetimepassword:$otp_version")
+
     // Test
     testImplementation("io.mockk:mockk:$mockk_version")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version")
+    testImplementation(kotlin("test"))
 
 }

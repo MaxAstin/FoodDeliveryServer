@@ -2,10 +2,10 @@ package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.CAFE_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.PERIOD_PARAMETER
+import com.bunbeauty.fooddelivery.domain.feature.statistic.StatisticService
 import com.bunbeauty.fooddelivery.routing.extension.manager
-import com.bunbeauty.fooddelivery.routing.extension.respondBad
-import com.bunbeauty.fooddelivery.routing.extension.respondOk
-import com.bunbeauty.fooddelivery.service.statistic.IStatisticService
+import com.bunbeauty.fooddelivery.routing.extension.respondNotFound
+import com.bunbeauty.fooddelivery.routing.extension.respondOkOrBad
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
@@ -16,24 +16,34 @@ fun Application.configureStatisticRouting() {
     routing {
         authenticate {
             getStatistic()
+            getStatisticDetails()
         }
     }
 }
 
-fun Route.getStatistic() {
+private fun Route.getStatistic() {
 
-    val statisticService: IStatisticService by inject()
+    val statisticService: StatisticService by inject()
 
     get("/statistic") {
-        manager(CAFE_UUID_PARAMETER, PERIOD_PARAMETER) { request ->
-            val cafeUuid = request.parameterMap[CAFE_UUID_PARAMETER]!!
-            val period = request.parameterMap[PERIOD_PARAMETER]!!
-            val statisticList = statisticService.getStatisticList(request.jwtUser.uuid, cafeUuid, period)
-            if (statisticList == null) {
-                call.respondBad("Wrong parameters values")
-            } else {
-                call.respondOk(statisticList)
-            }
+        manager { request ->
+            val cafeUuid = call.parameters[CAFE_UUID_PARAMETER]
+            val period = call.parameters[PERIOD_PARAMETER] ?: error("$PERIOD_PARAMETER is required")
+            val statisticList = statisticService.getStatisticList(
+                userUuid = request.jwtUser.uuid,
+                cafeUuid = cafeUuid,
+                period = period
+            )
+            call.respondOkOrBad(statisticList)
+        }
+    }
+}
+
+private fun Route.getStatisticDetails() {
+
+    get("/statistic/details") {
+        manager {
+            call.respondNotFound()
         }
     }
 }

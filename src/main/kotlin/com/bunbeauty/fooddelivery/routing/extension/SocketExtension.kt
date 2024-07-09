@@ -5,58 +5,55 @@ import com.bunbeauty.fooddelivery.routing.model.Request
 import io.ktor.server.auth.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.delay
 import java.sql.DriverManager.println
 
 suspend inline fun DefaultWebSocketServerSession.clientSocket(
-    vararg parameterNameList: String,
     block: (Request) -> Unit,
     crossinline closeBlock: (Request) -> Unit,
 ) {
     println("clientSocket")
-    socket(*parameterNameList, block = block, closeBlock = closeBlock) { jwtUser ->
+    socket(block = block, closeBlock = closeBlock) { jwtUser ->
         jwtUser.isClient()
     }
 }
 
 suspend inline fun DefaultWebSocketServerSession.managerSocket(
-    vararg parameterNameList: String,
     block: (Request) -> Unit,
-    crossinline closeBlock: (Request) -> Unit,
+    crossinline onSocketClose: (Request) -> Unit,
 ) {
     println("managerSocket")
-    socket(*parameterNameList, block = block, closeBlock = closeBlock) { jwtUser ->
+    socket(block = block, closeBlock = onSocketClose) { jwtUser ->
         jwtUser.isManager()
     }
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 suspend inline fun DefaultWebSocketServerSession.socket(
-    vararg parameterNameList: String,
     block: (Request) -> Unit,
     crossinline closeBlock: (Request) -> Unit,
-    checkBlock: (JwtUser) -> Boolean,
+    checkAccess: (JwtUser) -> Boolean,
 ) {
-    val jwtUser = call.authentication.principal as? JwtUser
-    if (jwtUser != null) {
-        call.handleParameters(*parameterNameList) { parameterMap ->
-            val request = Request(jwtUser, parameterMap)
-            try {
-                if (checkBlock(jwtUser)) {
-                    block(request)
-                } else {
-                    close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Only for clients"))
-                }
-                while (!incoming.isClosedForReceive) {
-                    delay(1000)
-                }
-                println("onClose ${closeReason.await()?.message}")
-                closeBlock(request)
-            } catch (exception: Exception) {
-                println("onClose ${closeReason.await()?.message}")
-                closeBlock(request)
-            }
-        }
-    } else {
+    val jwtUser = call.authentication.principal() as? JwtUser
+    if (jwtUser == null) {
         close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Only for authorized users"))
+        return
+    }
+
+    if (!checkAccess(jwtUser)) {
+        close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "No access for your role"))
+        return
+    }
+
+    val request = Request(jwtUser)
+    try {
+        block(request)
+        while (!incoming.isClosedForReceive) {
+            delay(1000)
+        }
+    } finally {
+        println("Socket closed ${closeReason.await()?.message}")
+        closeBlock(request)
     }
 }

@@ -1,12 +1,10 @@
 package com.bunbeauty.fooddelivery.di
 
-import com.bunbeauty.fooddelivery.data.repo.category.CategoryRepository
-import com.bunbeauty.fooddelivery.data.repo.category.ICategoryRepository
-import com.bunbeauty.fooddelivery.service.category.CategoryService
-import com.bunbeauty.fooddelivery.service.category.ICategoryService
+import com.bunbeauty.fooddelivery.data.features.menu.CategoryRepository
+import com.bunbeauty.fooddelivery.domain.feature.menu.service.CategoryService
 import org.koin.dsl.module
 
 val categoryModule = module(createdAtStart = true) {
-    single<ICategoryService> { CategoryService(get(), get()) }
-    single<ICategoryRepository> { CategoryRepository() }
+    single { CategoryService(get(), get()) }
+    single { CategoryRepository() }
 }

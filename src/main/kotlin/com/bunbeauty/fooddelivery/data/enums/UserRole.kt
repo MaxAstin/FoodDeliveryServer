@@ -8,7 +8,7 @@ enum class UserRole(val roleName: String) {
 
     companion object {
         fun findByRoleName(roleName: String): UserRole {
-            return values().find { userRole ->
+            return entries.find { userRole ->
                 userRole.roleName == roleName
             } ?: UNKNOWN
         }

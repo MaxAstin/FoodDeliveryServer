@@ -2,13 +2,14 @@ package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.COMPANY_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
-import com.bunbeauty.fooddelivery.data.model.category.GetCategory
-import com.bunbeauty.fooddelivery.data.model.category.PatchCategory
-import com.bunbeauty.fooddelivery.data.model.category.PostCategory
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.category.GetCategory
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.category.PatchCategory
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.category.PostCategory
+import com.bunbeauty.fooddelivery.domain.feature.menu.service.CategoryService
+import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
-import com.bunbeauty.fooddelivery.routing.extension.respondOk
+import com.bunbeauty.fooddelivery.routing.extension.respondOkWithList
 import com.bunbeauty.fooddelivery.routing.extension.safely
-import com.bunbeauty.fooddelivery.service.category.ICategoryService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
@@ -25,22 +26,22 @@ fun Application.configureCategoryRouting() {
     }
 }
 
-fun Routing.getCategories() {
+private fun Routing.getCategories() {
 
-    val categoryService: ICategoryService by inject()
+    val categoryService: CategoryService by inject()
 
     get("/category") {
-        safely(COMPANY_UUID_PARAMETER) { parameterMap ->
-            val companyUuid = parameterMap[COMPANY_UUID_PARAMETER]!!
+        safely {
+            val companyUuid = call.getParameter(COMPANY_UUID_PARAMETER)
             val categoryList = categoryService.getCategoryListByCompanyUuid(companyUuid)
-            call.respondOk(categoryList)
+            call.respondOkWithList(categoryList)
         }
     }
 }
 
-fun Route.postCategory() {
+private fun Route.postCategory() {
 
-    val categoryService: ICategoryService by inject()
+    val categoryService: CategoryService by inject()
 
     post("/category") {
         managerWithBody<PostCategory, GetCategory> { bodyRequest ->
@@ -49,13 +50,13 @@ fun Route.postCategory() {
     }
 }
 
-fun Route.patchCategory() {
+private fun Route.patchCategory() {
 
-    val categoryService: ICategoryService by inject()
+    val categoryService: CategoryService by inject()
 
     patch("/category") {
-        managerWithBody<PatchCategory, GetCategory>(UUID_PARAMETER) { bodyRequest ->
-            val categoryUuid = bodyRequest.request.parameterMap[UUID_PARAMETER]!!
+        managerWithBody<PatchCategory, GetCategory> { bodyRequest ->
+            val categoryUuid = call.getParameter(UUID_PARAMETER)
             categoryService.updateCategory(categoryUuid, bodyRequest.body)
         }
     }

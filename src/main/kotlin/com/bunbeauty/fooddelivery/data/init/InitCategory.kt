@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.init
 
-data class InitCategory(
+class InitCategory(
     val name: String,
     val priority: Int
 )

@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.session
 
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asSharedFlow
 
 class SessionHandler<T> {
@@ -13,7 +13,7 @@ class SessionHandler<T> {
         }
     }
 
-    fun connect(key: String): SharedFlow<T> {
+    fun connect(key: String): Flow<T> {
         println("connect to session $key")
         val existedSession = sessionMap[key]
         return if (existedSession == null) {

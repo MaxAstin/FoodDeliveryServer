@@ -1,42 +1,63 @@
 package com.bunbeauty.fooddelivery.service.ip
 
-import com.bunbeauty.fooddelivery.data.Constants.CONSECUTIVE_REQUESTS_LIMIT
-import com.bunbeauty.fooddelivery.data.Constants.REQUEST_LIMIT_TIMEOUT
-import com.bunbeauty.fooddelivery.data.model.request.InsertRequest
-import com.bunbeauty.fooddelivery.data.model.request.RequestAvailability
+import com.bunbeauty.fooddelivery.data.Constants.DAY_REQUEST_LIMIT
+import com.bunbeauty.fooddelivery.data.Constants.REQUIRED_TIME_BETWEEN_REQUESTS
 import com.bunbeauty.fooddelivery.data.repo.request.IRequestRepository
+import com.bunbeauty.fooddelivery.domain.error.ExceptionWithCode
+import com.bunbeauty.fooddelivery.domain.error.errorWithCode
+import com.bunbeauty.fooddelivery.domain.model.request.InsertRequest
 import org.joda.time.DateTime
 
-class RequestService(private val requestRepository: IRequestRepository) : IRequestService {
+private const val TOO_MANY_REQUESTS_CODE = 800
+
+class RequestService(private val requestRepository: IRequestRepository) {
 
     /**
-        Request ([requestName]) is available for concrete [ip] in 2 cases:
-         - more than [REQUEST_LIMIT_TIMEOUT] milliseconds have passed since the last request
-         - less than [CONSECUTIVE_REQUESTS_LIMIT] requests in a day
+     * Checks the availability of a request based on the IP address and request name.
+     *
+     * @param ip The IP address of the requester.
+     * @param requestName The name of the request.
+     *
+     * @throws ExceptionWithCode indicating that there are too many requests.
      */
-    override suspend fun isRequestAvailable(ip: String, requestName: String): RequestAvailability {
-        val startDayMillis = DateTime.now().withTimeAtStartOfDay().millis
-        val lastRequestTime = requestRepository.getLastDayRequestByIpAndName(ip, requestName, startDayMillis)?.time ?: 0L
+    suspend fun checkRequestAvailability(ip: String, requestName: String) {
+        println("isRequestAvailable requestName: $requestName ip: $ip")
+
         val currentTimeMillis = DateTime.now().millis
-        val untilNextRequest = lastRequestTime + REQUEST_LIMIT_TIMEOUT - currentTimeMillis
-
-        val dayRequestCount = requestRepository.getDayRequestCountByIpAndName(ip, requestName, startDayMillis)
-
-        return (untilNextRequest < 0 || dayRequestCount < CONSECUTIVE_REQUESTS_LIMIT).let { isAvailable ->
-            if (isAvailable) {
-                requestRepository.insertRequest(
-                    InsertRequest(
-                        ip = ip,
-                        name = requestName,
-                        time = currentTimeMillis
-                    )
-                )
-
-                RequestAvailability.Available
-            } else {
-                RequestAvailability.NotAvailable((untilNextRequest / 1000).toInt())
-            }
+        val lastRequestTime = requestRepository.getLastRequestByIpAndName(ip, requestName)?.time ?: 0L
+        if (currentTimeMillis - lastRequestTime < REQUIRED_TIME_BETWEEN_REQUESTS) {
+            val untilNextRequestMillis = REQUIRED_TIME_BETWEEN_REQUESTS - (currentTimeMillis - lastRequestTime)
+            val untilNextRequestSeconds = (untilNextRequestMillis / 1000).toInt()
+            tooManyRequestsError(untilNextRequestSeconds)
         }
+
+        val requestCount = requestRepository.getRequestCountByIpAndName(ip, requestName)
+        if (requestCount >= DAY_REQUEST_LIMIT) {
+            tooManyRequestsError()
+        }
+
+        requestRepository.insertRequest(
+            InsertRequest(
+                ip = ip,
+                name = requestName,
+                time = currentTimeMillis
+            )
+        )
+    }
+
+    suspend fun clearRequests() {
+        requestRepository.deleteAll()
+    }
+
+    private fun tooManyRequestsError(seconds: Int? = null): Nothing {
+        var message = "Too many requests. Please wait"
+        if (seconds != null) {
+            message += " $seconds s"
+        }
+        errorWithCode(
+            message = message,
+            code = TOO_MANY_REQUESTS_CODE
+        )
     }
 }
 

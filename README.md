@@ -1,11 +1,11 @@
-# Food delivery API
-🍔. REST API for catering establishment and their clients 
+# 🍔 Food delivery API
+
+RESTful API for restaurants and their clients
 
 ### Stack
 - Kotlin
 - Ktor
 - Kotlin Coroutines
 - Exposed / HikariCP / PostgreSQL
-- HikariCP
 - Koin
 - Bcrypt

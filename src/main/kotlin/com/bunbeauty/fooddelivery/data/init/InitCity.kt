@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.init
 
-data class InitCity(
+class InitCity(
     val name: String,
     val timeZone: String,
     val isVisible: Boolean,
