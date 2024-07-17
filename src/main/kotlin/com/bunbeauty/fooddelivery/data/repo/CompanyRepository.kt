@@ -4,14 +4,13 @@ import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.features.company.mapper.mapCompanyEntity
 import com.bunbeauty.fooddelivery.domain.feature.company.Company
-import com.bunbeauty.fooddelivery.domain.model.company.GetCompany
 import com.bunbeauty.fooddelivery.domain.model.company.InsertCompany
 import com.bunbeauty.fooddelivery.domain.model.company.UpdateCompany
 import java.util.*
 
 class CompanyRepository {
 
-    suspend fun insertCompany(insertCompany: InsertCompany): GetCompany = query {
+    suspend fun insertCompany(insertCompany: InsertCompany): Company = query {
         CompanyEntity.new {
             name = insertCompany.name
             forFreeDelivery = insertCompany.forFreeDelivery
@@ -20,7 +19,7 @@ class CompanyRepository {
             percentDiscount = insertCompany.percentDiscount?.takeIf { percentDiscount ->
                 percentDiscount != 0
             }
-        }.toCompany()
+        }.mapCompanyEntity()
     }
 
     suspend fun updateCompany(updateCompany: UpdateCompany): Company? = query {
@@ -40,9 +39,7 @@ class CompanyRepository {
         CompanyEntity.findById(uuid)?.mapCompanyEntity()
     }
 
-    suspend fun getCompanyList(): List<GetCompany> = query {
-        CompanyEntity.all().map { companyEntity ->
-            companyEntity.toCompany()
-        }
+    suspend fun getCompanyList(): List<Company> = query {
+        CompanyEntity.all().map(mapCompanyEntity)
     }
 }

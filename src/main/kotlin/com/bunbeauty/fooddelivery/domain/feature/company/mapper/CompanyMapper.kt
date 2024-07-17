@@ -16,5 +16,6 @@ val mapCompany: Company.() -> GetCompany = {
         payment = payment.mapPayment(),
         percentDiscount = percentDiscount,
         maxVisibleRecommendationCount = maxVisibleRecommendationCount,
+        isOpen = isOpen,
     )
 }

@@ -21,7 +21,9 @@ class CompanyService(private val companyRepository: CompanyRepository) {
             forceUpdateVersion = postCompany.forceUpdateVersion,
             percentDiscount = postCompany.percentDiscount,
         )
-        return companyRepository.insertCompany(insertCompany)
+        val company = companyRepository.insertCompany(insertCompany)
+
+        return company.mapCompany()
     }
 
     suspend fun changeCompanyByUuid(companyUuid: String, patchCompany: PatchCompany): GetCompany {

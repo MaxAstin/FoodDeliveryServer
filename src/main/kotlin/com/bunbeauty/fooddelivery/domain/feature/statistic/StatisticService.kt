@@ -8,11 +8,11 @@ import com.bunbeauty.fooddelivery.data.repo.statistic.ICafeStatisticRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICompanyStatisticRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
+import com.bunbeauty.fooddelivery.domain.feature.company.Company
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateCostWithDiscountUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderProductTotalUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderProductsNewCostUseCase
-import com.bunbeauty.fooddelivery.domain.model.company.GetCompany
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.GetStatistic
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.PeriodType
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.UpdateStatistic
@@ -110,7 +110,7 @@ class StatisticService(
     }
 
     private suspend inline fun updateCompanyStatistic(
-        company: GetCompany,
+        company: Company,
         periodType: PeriodType,
         fromDateTime: DateTime,
         toDateTime: DateTime,
