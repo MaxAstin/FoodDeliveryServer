@@ -232,9 +232,10 @@ private fun Route.getIsOrderAvailable() {
     val orderService: OrderService by inject()
 
     get("/is_order_available") {
-        client {
+        safely {
             val companyUuid = call.getParameter(COMPANY_UUID_PARAMETER)
-            orderService.isOrderAvailable(companyUuid = companyUuid)
+            val isAvailable = orderService.isOrderAvailable(companyUuid = companyUuid)
+            call.respondOk(isAvailable)
         }
     }
 }
