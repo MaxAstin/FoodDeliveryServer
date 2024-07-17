@@ -42,6 +42,11 @@ val orderModule = module(createdAtStart = true) {
         CalculateCostWithDiscountUseCase()
     }
     factory {
+        IsOrderAvailableUseCase(
+            companyRepository = get()
+        )
+    }
+    factory {
         OrderService(
             orderRepository = get(),
             addressRepository = get(),
@@ -52,6 +57,7 @@ val orderModule = module(createdAtStart = true) {
             findDeliveryZoneByCityUuidAndCoordinatesUseCase = get(),
             calculateOrderTotalUseCase = get(),
             getDeliveryCostUseCase = get(),
+            isOrderAvailableUseCase = get(),
         )
     }
     single { OrderRepository() }

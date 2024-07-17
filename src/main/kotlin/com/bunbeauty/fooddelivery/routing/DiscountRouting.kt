@@ -1,6 +1,7 @@
 package com.bunbeauty.fooddelivery.routing
 
-import com.bunbeauty.fooddelivery.data.Constants
+import com.bunbeauty.fooddelivery.data.Constants.COMPANY_UUID_PARAMETER
+import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.respondOkOrBad
 import com.bunbeauty.fooddelivery.routing.extension.safely
 import com.bunbeauty.fooddelivery.service.DiscountService
@@ -21,8 +22,8 @@ private fun Routing.getDiscount() {
 
     get("/discount") {
         safely {
-            val companyUuid = call.parameters[Constants.COMPANY_UUID_PARAMETER] ?: error("${Constants.COMPANY_UUID_PARAMETER} is required")
-            val discount = discountService.getDiscountByCompanyUuid(companyUuid)
+            val companyUuid = call.getParameter(COMPANY_UUID_PARAMETER)
+            val discount = discountService.getDiscountByCompanyUuid(companyUuid = companyUuid)
             call.respondOkOrBad(discount)
         }
     }

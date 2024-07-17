@@ -30,6 +30,7 @@ import com.bunbeauty.fooddelivery.domain.feature.order.model.v3.PostOrderV3
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderTotalUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.FindDeliveryZoneByCityUuidAndCoordinatesUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.GetDeliveryCostUseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.IsOrderAvailableUseCase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import kotlinx.coroutines.flow.Flow
@@ -46,6 +47,7 @@ class OrderService(
     private val findDeliveryZoneByCityUuidAndCoordinatesUseCase: FindDeliveryZoneByCityUuidAndCoordinatesUseCase,
     private val calculateOrderTotalUseCase: CalculateOrderTotalUseCase,
     private val getDeliveryCostUseCase: GetDeliveryCostUseCase,
+    private val isOrderAvailableUseCase: IsOrderAvailableUseCase,
 ) {
 
     private val codesCount = CODE_LETTERS.length * CODE_NUMBER_COUNT
@@ -218,6 +220,10 @@ class OrderService(
 
     fun userDisconnect(cafeUuid: String) {
         orderRepository.disconnectFromSession(cafeUuid)
+    }
+    
+    suspend fun isOrderAvailable(companyUuid: String): Boolean {
+        return isOrderAvailableUseCase(companyUuid = companyUuid)
     }
 
     private suspend fun createOrderInfo(postOrder: PostOrder, clientUserUuid: String): OrderInfo {

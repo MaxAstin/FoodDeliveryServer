@@ -24,6 +24,7 @@ class CompanyEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var paymentCardNumber: String? by CompanyTable.paymentCardNumber
     var percentDiscount: Int? by CompanyTable.percentDiscount
     var maxVisibleRecommendationCount: Int by CompanyTable.maxVisibleRecommendationCount
+    var isOpen: Boolean by CompanyTable.isOpen
 
     val cities: SizedIterable<CityEntity> by CityEntity referrersOn CityTable.company
 

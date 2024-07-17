@@ -229,8 +229,8 @@ class AuthorizationService(
     }
 
     private suspend fun getSmsText(otpCode: String, companyUuid: String): String {
-        val company = companyRepository.getCompanyByUuid(companyUuid.toUuid())
-            .orThrowNotFoundByUuidError(companyUuid)
+        val company = companyRepository.getCompanyByUuid(uuid = companyUuid.toUuid())
+            .orThrowNotFoundByUuidError(uuid = companyUuid)
         return "$otpCode $MESSAGE_TEXT ${company.name}"
     }
 

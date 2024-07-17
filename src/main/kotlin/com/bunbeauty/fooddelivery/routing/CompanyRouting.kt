@@ -1,11 +1,12 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.COMPANY_UUID_PARAMETER
+import com.bunbeauty.fooddelivery.domain.feature.company.CompanyService
 import com.bunbeauty.fooddelivery.domain.model.company.GetCompany
 import com.bunbeauty.fooddelivery.domain.model.company.PatchCompany
 import com.bunbeauty.fooddelivery.domain.model.company.PostCompany
 import com.bunbeauty.fooddelivery.routing.extension.adminWithBody
-import com.bunbeauty.fooddelivery.service.company.ICompanyService
+import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
@@ -23,7 +24,7 @@ fun Application.configureCompanyRouting() {
 
 private fun Route.createCompany() {
 
-    val companyService: ICompanyService by inject()
+    val companyService: CompanyService by inject()
 
     post("/company") {
         adminWithBody<PostCompany, GetCompany> { bodyRequest ->
@@ -34,12 +35,15 @@ private fun Route.createCompany() {
 
 private fun Route.changeCompany() {
 
-    val companyService: ICompanyService by inject()
+    val companyService: CompanyService by inject()
 
     patch("/company") {
         adminWithBody<PatchCompany, GetCompany> { bodyRequest ->
-            val companyUuid = call.parameters[COMPANY_UUID_PARAMETER] ?: error("$COMPANY_UUID_PARAMETER is required")
-            companyService.changeCompanyByUuid(companyUuid, bodyRequest.body)
+            val companyUuid = call.getParameter(COMPANY_UUID_PARAMETER)
+            companyService.changeCompanyByUuid(
+                companyUuid = companyUuid,
+                patchCompany = bodyRequest.body
+            )
         }
     }
 }

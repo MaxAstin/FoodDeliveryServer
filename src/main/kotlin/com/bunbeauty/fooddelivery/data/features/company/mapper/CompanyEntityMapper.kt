@@ -22,6 +22,7 @@ val mapCompanyEntity: CompanyEntity.() -> Company = {
         ),
         percentDiscount = percentDiscount,
         maxVisibleRecommendationCount = maxVisibleRecommendationCount,
+        isOpen = isOpen,
         citiesWithCafes = cities.map(mapCityEntityToCityWithCafes),
     )
 }

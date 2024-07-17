@@ -2,6 +2,8 @@ package com.bunbeauty.fooddelivery.data.repo
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
+import com.bunbeauty.fooddelivery.data.features.company.mapper.mapCompanyEntity
+import com.bunbeauty.fooddelivery.domain.feature.company.Company
 import com.bunbeauty.fooddelivery.domain.model.company.GetCompany
 import com.bunbeauty.fooddelivery.domain.model.company.InsertCompany
 import com.bunbeauty.fooddelivery.domain.model.company.UpdateCompany
@@ -21,7 +23,7 @@ class CompanyRepository {
         }.toCompany()
     }
 
-    suspend fun updateCompany(updateCompany: UpdateCompany): GetCompany? = query {
+    suspend fun updateCompany(updateCompany: UpdateCompany): Company? = query {
         CompanyEntity.findById(updateCompany.uuid)?.apply {
             name = updateCompany.name ?: name
             forFreeDelivery = updateCompany.forFreeDelivery ?: forFreeDelivery
@@ -30,11 +32,12 @@ class CompanyRepository {
             percentDiscount = (updateCompany.percentDiscount ?: percentDiscount).takeIf { percentDiscount ->
                 percentDiscount != 0
             }
-        }?.toCompany()
+            isOpen = updateCompany.isOpen ?: isOpen
+        }?.mapCompanyEntity()
     }
 
-    suspend fun getCompanyByUuid(uuid: UUID): GetCompany? = query {
-        CompanyEntity.findById(uuid)?.toCompany()
+    suspend fun getCompanyByUuid(uuid: UUID): Company? = query {
+        CompanyEntity.findById(uuid)?.mapCompanyEntity()
     }
 
     suspend fun getCompanyList(): List<GetCompany> = query {

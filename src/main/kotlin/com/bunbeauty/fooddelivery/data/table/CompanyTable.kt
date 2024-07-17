@@ -12,5 +12,6 @@ object CompanyTable : UUIDTable() {
     val paymentCardNumber = varchar("paymentCardNumber", 512).nullable()
     val percentDiscount = integer("percentDiscount").nullable()
     val maxVisibleRecommendationCount = integer("maxVisibleRecommendationCount").default(4)
+    val isOpen = bool("isOpen").default(true)
 
 }

@@ -1,6 +1,7 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.CAFE_UUID_PARAMETER
+import com.bunbeauty.fooddelivery.data.Constants.COMPANY_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.COUNT_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
 import com.bunbeauty.fooddelivery.domain.feature.order.OrderService
@@ -26,6 +27,8 @@ import org.koin.ktor.ext.inject
 fun Application.configureOrderRouting() {
 
     routing {
+        getIsOrderAvailable()
+
         authenticate {
             postOrder()
             patchOrder()
@@ -220,6 +223,18 @@ private fun Route.postOrderV3() {
                 bodyRequest.request.jwtUser.uuid,
                 bodyRequest.body
             )
+        }
+    }
+}
+
+private fun Route.getIsOrderAvailable() {
+
+    val orderService: OrderService by inject()
+
+    get("/is_order_available") {
+        client {
+            val companyUuid = call.getParameter(COMPANY_UUID_PARAMETER)
+            orderService.isOrderAvailable(companyUuid = companyUuid)
         }
     }
 }
