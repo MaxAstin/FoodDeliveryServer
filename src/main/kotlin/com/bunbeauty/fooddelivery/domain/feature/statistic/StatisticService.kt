@@ -16,12 +16,14 @@ import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderPro
 import com.bunbeauty.fooddelivery.domain.feature.statistic.mapper.toGetLastMonthCompanyStatistic
 import com.bunbeauty.fooddelivery.domain.feature.statistic.model.GetLastMonthCompanyStatistic
 import com.bunbeauty.fooddelivery.domain.feature.statistic.model.OrderProductWithDiscount
+import com.bunbeauty.fooddelivery.domain.model.ListWrapper
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.GetStatistic
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.PeriodType
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.UpdateStatistic
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.insert.InsertCafeStatistic
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.insert.InsertCompanyStatistic
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.insert.InsertStatisticProduct
+import com.bunbeauty.fooddelivery.domain.toListWrapper
 import com.bunbeauty.fooddelivery.domain.toUuid
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
@@ -113,8 +115,8 @@ class StatisticService(
         }
     }
 
-    suspend fun getLastMonthCompanyStatistic(): List<GetLastMonthCompanyStatistic> {
-        return getLastMonthCompanyStatisticUseCase().map(toGetLastMonthCompanyStatistic)
+    suspend fun getLastMonthCompanyStatistic(): ListWrapper<GetLastMonthCompanyStatistic> {
+        return getLastMonthCompanyStatisticUseCase().map(toGetLastMonthCompanyStatistic).toListWrapper()
     }
 
     private suspend inline fun updateCompanyStatistic(

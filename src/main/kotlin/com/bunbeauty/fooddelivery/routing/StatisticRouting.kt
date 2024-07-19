@@ -3,10 +3,7 @@ package com.bunbeauty.fooddelivery.routing
 import com.bunbeauty.fooddelivery.data.Constants.CAFE_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.PERIOD_PARAMETER
 import com.bunbeauty.fooddelivery.domain.feature.statistic.StatisticService
-import com.bunbeauty.fooddelivery.routing.extension.manager
-import com.bunbeauty.fooddelivery.routing.extension.respondNotFound
-import com.bunbeauty.fooddelivery.routing.extension.respondOkOrBad
-import com.bunbeauty.fooddelivery.routing.extension.safely
+import com.bunbeauty.fooddelivery.routing.extension.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
@@ -56,7 +53,8 @@ private fun Route.getLastMonthCompanyStatistic() {
 
     get("/statistic/last") {
         safely {
-            statisticService.getLastMonthCompanyStatistic()
+            val lastMonthCompanyStatistic = statisticService.getLastMonthCompanyStatistic()
+            call.respondOk(lastMonthCompanyStatistic)
         }
     }
 }
