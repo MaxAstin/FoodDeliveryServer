@@ -15,6 +15,7 @@ import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.DeliveryZoneWithCafe
 import com.bunbeauty.fooddelivery.domain.feature.order.mapper.*
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
+import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderAvailability
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.OrderInfo
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.PatchOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.PostOrder
@@ -222,8 +223,10 @@ class OrderService(
         orderRepository.disconnectFromSession(cafeUuid)
     }
     
-    suspend fun isOrderAvailable(companyUuid: String): Boolean {
-        return isOrderAvailableUseCase(companyUuid = companyUuid)
+    suspend fun getOrderAvailability(companyUuid: String): OrderAvailability {
+        return OrderAvailability(
+            isAvailable = isOrderAvailableUseCase(companyUuid = companyUuid)
+        )
     }
 
     private suspend fun createOrderInfo(postOrder: PostOrder, clientUserUuid: String): OrderInfo {
