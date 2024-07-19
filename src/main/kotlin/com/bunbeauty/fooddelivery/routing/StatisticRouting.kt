@@ -6,6 +6,7 @@ import com.bunbeauty.fooddelivery.domain.feature.statistic.StatisticService
 import com.bunbeauty.fooddelivery.routing.extension.manager
 import com.bunbeauty.fooddelivery.routing.extension.respondNotFound
 import com.bunbeauty.fooddelivery.routing.extension.respondOkOrBad
+import com.bunbeauty.fooddelivery.routing.extension.safely
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
@@ -14,6 +15,7 @@ import org.koin.ktor.ext.inject
 fun Application.configureStatisticRouting() {
 
     routing {
+        getLastMonthCompanyStatistic()
         authenticate {
             getStatistic()
             getStatisticDetails()
@@ -44,6 +46,17 @@ private fun Route.getStatisticDetails() {
     get("/statistic/details") {
         manager {
             call.respondNotFound()
+        }
+    }
+}
+
+private fun Route.getLastMonthCompanyStatistic() {
+
+    val statisticService: StatisticService by inject()
+
+    get("/statistic/last") {
+        safely {
+            statisticService.getLastMonthCompanyStatistic()
         }
     }
 }

@@ -1,11 +1,13 @@
-package com.bunbeauty.fooddelivery.data.repo.statistic
+package com.bunbeauty.fooddelivery.data.features.statistic
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.entity.statistic.CompanyStatisticEntity
 import com.bunbeauty.fooddelivery.data.entity.statistic.CompanyStatisticProductEntity
+import com.bunbeauty.fooddelivery.data.features.statistic.mapper.toCompanyStatistic
 import com.bunbeauty.fooddelivery.data.table.CompanyStatisticProductTable
 import com.bunbeauty.fooddelivery.data.table.CompanyStatisticTable
+import com.bunbeauty.fooddelivery.domain.feature.statistic.model.CompanyStatistic
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.GetStatistic
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.PeriodType
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.UpdateStatistic
@@ -16,9 +18,9 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import java.util.*
 
-class CompanyStatisticRepository : ICompanyStatisticRepository {
+class CompanyStatisticRepository {
 
-    override suspend fun getStatisticListByTimePeriodTypeCompany(
+    suspend fun getStatisticListByTimePeriodTypeCompany(
         time: Long,
         periodType: PeriodType,
         companyUuid: UUID,
@@ -32,20 +34,7 @@ class CompanyStatisticRepository : ICompanyStatisticRepository {
         }
     }
 
-    override suspend fun getStatisticByTimePeriodTypeCompany(
-        time: Long,
-        periodType: PeriodType,
-        companyUuid: UUID,
-    ): GetStatistic? = query {
-        CompanyStatisticEntity.find {
-            (CompanyStatisticTable.periodType eq periodType.name) and
-                    (CompanyStatisticTable.time eq time) and
-                    (CompanyStatisticTable.company eq companyUuid)
-        }.firstOrNull()
-            ?.toStatistic()
-    }
-
-    override suspend fun insetStatistic(insertCompanyStatistic: InsertCompanyStatistic) = query {
+    suspend fun insetStatistic(insertCompanyStatistic: InsertCompanyStatistic) = query {
         val companyStatisticEntity = CompanyStatisticEntity.new {
             time = insertCompanyStatistic.time
             periodType = insertCompanyStatistic.periodType.name
@@ -57,7 +46,7 @@ class CompanyStatisticRepository : ICompanyStatisticRepository {
         companyStatisticEntity.toStatistic()
     }
 
-    override suspend fun updateStatistic(statisticUuid: UUID, updateStatistic: UpdateStatistic): GetStatistic? = query {
+    suspend fun updateStatistic(statisticUuid: UUID, updateStatistic: UpdateStatistic): GetStatistic? = query {
         CompanyStatisticProductTable.deleteWhere { sqlBuilder ->
             sqlBuilder.run {
                 companyStatistic eq statisticUuid
@@ -69,6 +58,18 @@ class CompanyStatisticRepository : ICompanyStatisticRepository {
             statisticEntity.orderProceeds = updateStatistic.orderProceeds
             insertStatisticProducts(updateStatistic.statisticProductList, statisticEntity)
         }?.toStatistic()
+    }
+
+    suspend fun getStatisticByTimePeriodTypeCompany(
+        time: Long,
+        periodType: PeriodType,
+        companyUuid: UUID,
+    ): CompanyStatistic? = query {
+        CompanyStatisticEntity.find {
+            (CompanyStatisticTable.periodType eq periodType.name) and
+                    (CompanyStatisticTable.time eq time) and
+                    (CompanyStatisticTable.company eq companyUuid)
+        }.firstOrNull()?.toCompanyStatistic()
     }
 
     private fun insertStatisticProducts(

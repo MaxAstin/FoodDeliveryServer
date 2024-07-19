@@ -1,11 +1,11 @@
 package com.bunbeauty.fooddelivery.domain.feature.statistic
 
 import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
+import com.bunbeauty.fooddelivery.data.features.statistic.CompanyStatisticRepository
 import com.bunbeauty.fooddelivery.data.features.statistic.OrderStatisticRepository
 import com.bunbeauty.fooddelivery.data.features.user.UserRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICafeStatisticRepository
-import com.bunbeauty.fooddelivery.data.repo.statistic.ICompanyStatisticRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
 import com.bunbeauty.fooddelivery.domain.feature.company.Company
@@ -13,6 +13,9 @@ import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateCostWithDiscountUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderProductTotalUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderProductsNewCostUseCase
+import com.bunbeauty.fooddelivery.domain.feature.statistic.mapper.toGetLastMonthCompanyStatistic
+import com.bunbeauty.fooddelivery.domain.feature.statistic.model.GetLastMonthCompanyStatistic
+import com.bunbeauty.fooddelivery.domain.feature.statistic.model.OrderProductWithDiscount
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.GetStatistic
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.PeriodType
 import com.bunbeauty.fooddelivery.domain.model.new_statistic.UpdateStatistic
@@ -30,9 +33,10 @@ class StatisticService(
     private val calculateCostWithDiscountUseCase: CalculateCostWithDiscountUseCase,
     private val companyRepository: CompanyRepository,
     private val cafeRepository: CafeRepository,
-    private val companyStatisticRepository: ICompanyStatisticRepository,
+    private val companyStatisticRepository: CompanyStatisticRepository,
     private val cafeStatisticRepository: ICafeStatisticRepository,
     private val userRepository: UserRepository,
+    private val getLastMonthCompanyStatisticUseCase: GetLastMonthCompanyStatisticUseCase,
 ) {
 
     suspend fun getStatisticList(userUuid: String, cafeUuid: String?, period: String): List<GetStatistic> {
@@ -107,6 +111,10 @@ class StatisticService(
                     )
                 }
         }
+    }
+
+    suspend fun getLastMonthCompanyStatistic(): List<GetLastMonthCompanyStatistic> {
+        return getLastMonthCompanyStatisticUseCase().map(toGetLastMonthCompanyStatistic)
     }
 
     private suspend inline fun updateCompanyStatistic(

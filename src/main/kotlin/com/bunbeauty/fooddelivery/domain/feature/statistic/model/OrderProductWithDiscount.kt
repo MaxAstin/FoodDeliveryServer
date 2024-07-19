@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.domain.feature.statistic
+package com.bunbeauty.fooddelivery.domain.feature.statistic.model
 
 import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderProduct
 
