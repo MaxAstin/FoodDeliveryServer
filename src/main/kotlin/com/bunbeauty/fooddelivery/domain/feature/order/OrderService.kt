@@ -11,6 +11,7 @@ import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
 import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.features.order.OrderRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
+import com.bunbeauty.fooddelivery.domain.error.errorWithCode
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.DeliveryZoneWithCafe
 import com.bunbeauty.fooddelivery.domain.feature.order.mapper.*
@@ -38,6 +39,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.joda.time.DateTime
 
+private const val CAFE_IS_CLOSED_CODE = 901
+
 class OrderService(
     private val orderRepository: OrderRepository,
     private val addressRepository: AddressRepository,
@@ -55,13 +58,17 @@ class OrderService(
 
     suspend fun createOrder(clientUserUuid: String, postOrder: PostOrder): GetClientOrder {
         if (postOrder.orderProducts.isEmpty()) {
-            emptyProductListIsError()
+            productListIsEmptyError()
         }
 
         val orderInfo = createOrderInfo(
             postOrder = postOrder,
             clientUserUuid = clientUserUuid
         )
+        if (isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
+            cafeIsClosedError()
+        }
+
         val insertOrder = postOrder.mapPostOrder(orderInfo)
         val order = orderRepository.insertOrder(insertOrder)
         orderRepository.updateSession(
@@ -77,13 +84,17 @@ class OrderService(
 
     suspend fun createOrderV2(clientUserUuid: String, postOrder: PostOrderV2): GetClientOrderV2 {
         if (postOrder.orderProducts.isEmpty()) {
-            emptyProductListIsError()
+            productListIsEmptyError()
         }
 
         val orderInfo = createOrderInfoV2(
             postOrder = postOrder,
             clientUserUuid = clientUserUuid
         )
+        if (isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
+            cafeIsClosedError()
+        }
+
         val insertOrder = postOrder.mapPostOrderV2(orderInfo)
         val order = orderRepository.insertOrderV2(insertOrder)
         orderRepository.updateSession(
@@ -99,13 +110,17 @@ class OrderService(
 
     suspend fun createOrderV3(clientUserUuid: String, postOrder: PostOrderV3): GetClientOrderV2 {
         if (postOrder.orderProducts.isEmpty()) {
-            emptyProductListIsError()
+            productListIsEmptyError()
         }
 
         val orderInfo = createOrderInfoV2(
             postOrder = postOrder,
             clientUserUuid = clientUserUuid
         )
+        if (isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
+            cafeIsClosedError()
+        }
+
         val insertOrder = postOrder.mapPostOrderV3(orderInfo)
         val order = orderRepository.insertOrderV3(insertOrder)
         orderRepository.updateSession(
@@ -222,7 +237,7 @@ class OrderService(
     fun userDisconnect(cafeUuid: String) {
         orderRepository.disconnectFromSession(cafeUuid)
     }
-    
+
     suspend fun getOrderAvailability(companyUuid: String): OrderAvailability {
         return OrderAvailability(
             isAvailable = isOrderAvailableUseCase(companyUuid = companyUuid)
@@ -401,8 +416,15 @@ class OrderService(
         )
     }
 
-    private fun emptyProductListIsError(): Nothing {
+    private fun productListIsEmptyError(): Nothing {
         error("Product list is empty")
+    }
+
+    private fun cafeIsClosedError(): Nothing {
+        errorWithCode(
+            message = "Cafe is closed",
+            code = CAFE_IS_CLOSED_CODE
+        )
     }
 
     private fun noAddressUuidForDeliveryError(): Nothing {

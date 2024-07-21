@@ -245,7 +245,8 @@ class AuthorizationService(
     private fun noAttemptsError(): Nothing {
         errorWithCode(
             message = "There are no attempts left",
-            code = NO_ATTEMPTS_LEFT_CODE)
+            code = NO_ATTEMPTS_LEFT_CODE
+        )
     }
 
     private fun invalidCodeError(): Nothing {
