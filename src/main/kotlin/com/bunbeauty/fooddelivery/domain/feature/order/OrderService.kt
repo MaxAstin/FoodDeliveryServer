@@ -65,7 +65,7 @@ class OrderService(
             postOrder = postOrder,
             clientUserUuid = clientUserUuid
         )
-        if (isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
+        if (!isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
             cafeIsClosedError()
         }
 
@@ -91,7 +91,7 @@ class OrderService(
             postOrder = postOrder,
             clientUserUuid = clientUserUuid
         )
-        if (isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
+        if (!isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
             cafeIsClosedError()
         }
 
@@ -117,7 +117,7 @@ class OrderService(
             postOrder = postOrder,
             clientUserUuid = clientUserUuid
         )
-        if (isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
+        if (!isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
             cafeIsClosedError()
         }
 
