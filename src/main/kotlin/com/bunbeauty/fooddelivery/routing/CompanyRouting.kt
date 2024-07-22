@@ -7,6 +7,7 @@ import com.bunbeauty.fooddelivery.domain.model.company.PatchCompany
 import com.bunbeauty.fooddelivery.domain.model.company.PostCompany
 import com.bunbeauty.fooddelivery.routing.extension.adminWithBody
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
+import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
@@ -17,7 +18,7 @@ fun Application.configureCompanyRouting() {
     routing {
         authenticate {
             createCompany()
-            changeCompany()
+            patchCompany()
         }
     }
 }
@@ -33,12 +34,12 @@ private fun Route.createCompany() {
     }
 }
 
-private fun Route.changeCompany() {
+private fun Route.patchCompany() {
 
     val companyService: CompanyService by inject()
 
     patch("/company") {
-        adminWithBody<PatchCompany, GetCompany> { bodyRequest ->
+        managerWithBody<PatchCompany, GetCompany> { bodyRequest ->
             val companyUuid = call.getParameter(COMPANY_UUID_PARAMETER)
             companyService.changeCompanyByUuid(
                 companyUuid = companyUuid,
