@@ -1,6 +1,6 @@
-# 🍔 Food delivery API
+# 🍔 Food Delivery App
 
-RESTful API for restaurants and their clients
+Server-side app for food delivery interacting with client apps via RESTful API
 
 ### Stack
 - Kotlin
