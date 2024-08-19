@@ -45,7 +45,10 @@ private fun Route.postMenuProduct() {
 
     post("/menu_product") {
         managerWithBody<PostMenuProduct, GetMenuProduct> { bodyRequest ->
-            menuProductService.createMenuProduct(bodyRequest.body, bodyRequest.request.jwtUser.uuid)
+            menuProductService.createMenuProduct(
+                postMenuProduct = bodyRequest.body,
+                creatorUuid = bodyRequest.request.jwtUser.uuid
+            )
         }
     }
 }
@@ -57,7 +60,12 @@ private fun Route.patchMenuProduct() {
     patch("/menu_product") {
         managerWithBody<PatchMenuProduct, GetMenuProduct> { bodyRequest ->
             val menuProductUuid = call.getParameter(UUID_PARAMETER)
-            menuProductService.updateMenuProduct(menuProductUuid, bodyRequest.body)
+            val creatorUuid = bodyRequest.request.jwtUser.uuid
+            menuProductService.updateMenuProduct(
+                menuProductUuid = menuProductUuid,
+                creatorUuid = creatorUuid,
+                patchMenuProduct = bodyRequest.body
+            )
         }
     }
 }

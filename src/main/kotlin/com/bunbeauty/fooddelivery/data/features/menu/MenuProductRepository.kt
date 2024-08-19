@@ -23,7 +23,7 @@ class MenuProductRepository {
     private val menuProductCatch = MenuProductCatch()
 
     suspend fun insertMenuProduct(insertMenuProduct: InsertMenuProduct): MenuProduct = query {
-        menuProductCatch.clearCache(insertMenuProduct.companyUuid)
+        menuProductCatch.clearCache(key = insertMenuProduct.companyUuid)
 
         MenuProductEntity.new {
             name = insertMenuProduct.name
@@ -45,11 +45,12 @@ class MenuProductRepository {
     }
 
     suspend fun updateMenuProduct(
+        companyUuid: String,
         menuProductUuid: String,
         updateMenuProduct: UpdateMenuProduct,
     ): MenuProduct? = query {
         MenuProductEntity.findById(id = menuProductUuid.toUuid())?.apply {
-            menuProductCatch.clearCache(company.id.value)
+            menuProductCatch.clearCache(key = companyUuid.toUuid())
 
             name = updateMenuProduct.name ?: name
             newPrice = updateMenuProduct.newPrice ?: newPrice

@@ -59,10 +59,15 @@ class MenuProductService(
 
     suspend fun updateMenuProduct(
         menuProductUuid: String,
+        creatorUuid: String,
         patchMenuProduct: PatchMenuProduct,
     ): GetMenuProduct? {
+        val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
+            .orThrowNotFoundByUserUuidError(creatorUuid)
+            .uuid
         val updateMenuProduct = patchMenuProduct.mapPatchMenuProduct()
         return menuProductRepository.updateMenuProduct(
+            companyUuid = companyUuid,
             menuProductUuid = menuProductUuid,
             updateMenuProduct = updateMenuProduct
         )?.let { menuProduct ->
