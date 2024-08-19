@@ -12,7 +12,7 @@ abstract class BaseCache<K, V> {
     }
 
     fun clearCache(key: K) {
-        cacheMap[key] = null
+        cacheMap.remove(key)
     }
 
     fun getCache(key: K): V? {
