@@ -17,6 +17,7 @@ import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProd
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.UpdateMenuProduct
 import com.bunbeauty.fooddelivery.domain.toUuid
 import org.jetbrains.exposed.sql.SizedCollection
+import java.util.*
 
 class MenuProductRepository {
 
@@ -81,16 +82,22 @@ class MenuProductRepository {
 
     suspend fun getMenuProductListByCompanyUuid(companyUuid: String): List<MenuProduct> {
         return getMenuProductList(
-            companyUuid = companyUuid,
+            companyUuid = companyUuid.toUuid(),
             transform = mapMenuProductEntity
         )
     }
 
     suspend fun getMenuProductWithAdditionListByCompanyUuid(companyUuid: String): List<MenuProduct> {
-        return getMenuProductList(
-            companyUuid = companyUuid,
+        val menuProductList = getMenuProductList(
+            companyUuid = companyUuid.toUuid(),
             transform = ::getMenuProductWithAdditions
         )
+        menuProductCatch.setCache(
+            key = companyUuid.toUuid(),
+            value = menuProductList
+        )
+
+        return menuProductList
     }
 
     suspend fun getMenuProductByUuid(
@@ -116,20 +123,14 @@ class MenuProductRepository {
     }
 
     private suspend fun getMenuProductList(
-        companyUuid: String,
+        companyUuid: UUID,
         transform: (MenuProductEntity) -> MenuProduct,
     ): List<MenuProduct> {
-        val cache = menuProductCatch.getCache(key = companyUuid.toUuid())
+        val cache = menuProductCatch.getCache(key = companyUuid)
         return cache ?: query {
-            val menuProductList = MenuProductEntity.find {
-                MenuProductTable.company eq companyUuid.toUuid()
+            MenuProductEntity.find {
+                MenuProductTable.company eq companyUuid
             }.map(transform)
-            menuProductCatch.setCache(
-                key = companyUuid.toUuid(),
-                value = menuProductList,
-            )
-
-            menuProductList
         }
     }
 
