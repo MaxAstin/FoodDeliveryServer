@@ -264,8 +264,10 @@ class OrderService(
             deliveryZone = deliveryZoneWithCafe?.deliveryZone,
             clientUserUuid = clientUserUuid,
             orderProducts = postOrder.orderProducts.map { postOrderProduct ->
-                val menuProduct = menuProductRepository.getMenuProductByUuid(postOrderProduct.menuProductUuid)
-                    .orThrowNotFoundByUuidError(postOrderProduct.menuProductUuid)
+                val menuProduct = menuProductRepository.getMenuProductByUuid(
+                    companyUuid = company.uuid,
+                    uuid = postOrderProduct.menuProductUuid
+                ).orThrowNotFoundByUuidError(postOrderProduct.menuProductUuid)
                 postOrderProduct.mapPostOrderProductToOrderProduct(menuProduct)
             },
             percentDiscount = null,
@@ -305,8 +307,10 @@ class OrderService(
             deliveryZone = deliveryZoneWithCafe?.deliveryZone,
             clientUserUuid = clientUserUuid,
             orderProducts = postOrder.orderProducts.map { postOrderProduct ->
-                val menuProduct = menuProductRepository.getMenuProductByUuid(postOrderProduct.menuProductUuid)
-                    .orThrowNotFoundByUuidError(postOrderProduct.menuProductUuid)
+                val menuProduct = menuProductRepository.getMenuProductByUuid(
+                    companyUuid = company.uuid,
+                    uuid = postOrderProduct.menuProductUuid
+                ).orThrowNotFoundByUuidError(postOrderProduct.menuProductUuid)
                 postOrderProduct.mapPostOrderProductToOrderProduct(menuProduct)
             },
             percentDiscount = percentDiscount
@@ -351,6 +355,7 @@ class OrderService(
             clientUserUuid = clientUserUuid,
             orderProducts = postOrder.orderProducts.map { postOrderProduct ->
                 val menuProduct = menuProductRepository.getMenuProductWithAdditionListByUuid(
+                    companyUuid = company.uuid,
                     uuid = postOrderProduct.menuProductUuid
                 ).orThrowNotFoundByUuidError(postOrderProduct.menuProductUuid)
                 postOrderProduct.mapPostOrderProductV3ToOrderProduct(menuProduct)

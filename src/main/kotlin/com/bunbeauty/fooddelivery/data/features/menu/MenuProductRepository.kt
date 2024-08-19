@@ -6,6 +6,7 @@ import com.bunbeauty.fooddelivery.data.entity.menu.CategoryEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductWithAdditionGroupEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductWithAdditionGroupWithAdditionEntity
+import com.bunbeauty.fooddelivery.data.features.menu.cache.MenuProductCatch
 import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapMenuProductEntity
 import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapToMenuProduct
 import com.bunbeauty.fooddelivery.data.table.menu.MenuProductTable
@@ -16,11 +17,14 @@ import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProd
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.UpdateMenuProduct
 import com.bunbeauty.fooddelivery.domain.toUuid
 import org.jetbrains.exposed.sql.SizedCollection
-import java.util.*
 
 class MenuProductRepository {
 
+    private val menuProductCatch = MenuProductCatch()
+
     suspend fun insertMenuProduct(insertMenuProduct: InsertMenuProduct): MenuProduct = query {
+        menuProductCatch.clearCache(insertMenuProduct.companyUuid)
+
         MenuProductEntity.new {
             name = insertMenuProduct.name
             newPrice = insertMenuProduct.newPrice
@@ -41,10 +45,12 @@ class MenuProductRepository {
     }
 
     suspend fun updateMenuProduct(
-        menuProductUuid: UUID,
+        menuProductUuid: String,
         updateMenuProduct: UpdateMenuProduct,
     ): MenuProduct? = query {
-        MenuProductEntity.findById(menuProductUuid)?.apply {
+        MenuProductEntity.findById(id = menuProductUuid.toUuid())?.apply {
+            menuProductCatch.clearCache(company.id.value)
+
             name = updateMenuProduct.name ?: name
             newPrice = updateMenuProduct.newPrice ?: newPrice
             oldPrice = (updateMenuProduct.oldPrice ?: oldPrice)?.takeIf { oldPrice ->
@@ -72,25 +78,75 @@ class MenuProductRepository {
         }?.mapMenuProductEntity()
     }
 
-    suspend fun getMenuProductListByCompanyUuid(companyUuid: String): List<MenuProduct> = query {
-        MenuProductEntity.find {
-            MenuProductTable.company eq companyUuid.toUuid()
-        }.map(mapMenuProductEntity)
-            .toList()
+    suspend fun getMenuProductListByCompanyUuid(companyUuid: String): List<MenuProduct> {
+        return getMenuProductList(
+            companyUuid = companyUuid,
+            transform = mapMenuProductEntity
+        )
     }
 
-    suspend fun getMenuProductWithAdditionListByCompanyUuid(companyUuid: String): List<MenuProduct> = query {
-        MenuProductEntity.find {
-            MenuProductTable.company eq companyUuid.toUuid()
-        }.map(::getMenuProductWithAdditions)
+    suspend fun getMenuProductWithAdditionListByCompanyUuid(companyUuid: String): List<MenuProduct> {
+        return getMenuProductList(
+            companyUuid = companyUuid,
+            transform = ::getMenuProductWithAdditions
+        )
     }
 
-    suspend fun getMenuProductByUuid(uuid: String): MenuProduct? = query {
-        MenuProductEntity.findById(uuid.toUuid())?.mapMenuProductEntity()
+    suspend fun getMenuProductByUuid(
+        companyUuid: String,
+        uuid: String,
+    ): MenuProduct? {
+        return getMenuProductByUuid(
+            companyUuid = companyUuid,
+            uuid = uuid,
+            transform = mapMenuProductEntity
+        )
     }
 
-    suspend fun getMenuProductWithAdditionListByUuid(uuid: String): MenuProduct? = query {
-        MenuProductEntity.findById(uuid.toUuid())?.let(::getMenuProductWithAdditions)
+    suspend fun getMenuProductWithAdditionListByUuid(
+        companyUuid: String,
+        uuid: String,
+    ): MenuProduct? {
+        return getMenuProductByUuid(
+            companyUuid = companyUuid,
+            uuid = uuid,
+            transform = ::getMenuProductWithAdditions
+        )
+    }
+
+    private suspend fun getMenuProductList(
+        companyUuid: String,
+        transform: (MenuProductEntity) -> MenuProduct,
+    ): List<MenuProduct> {
+        val cache = menuProductCatch.getCache(key = companyUuid.toUuid())
+        return cache ?: query {
+            val menuProductList = MenuProductEntity.find {
+                MenuProductTable.company eq companyUuid.toUuid()
+            }.map(transform)
+            menuProductCatch.setCache(
+                key = companyUuid.toUuid(),
+                value = menuProductList,
+            )
+
+            menuProductList
+        }
+    }
+
+    private suspend fun getMenuProductByUuid(
+        companyUuid: String,
+        uuid: String,
+        transform: (MenuProductEntity) -> MenuProduct,
+    ): MenuProduct? {
+        val menuProduct = menuProductCatch.getCache(
+            key = companyUuid.toUuid()
+        )?.find { menuProduct ->
+            menuProduct.uuid == uuid
+        }
+        return menuProduct ?: query {
+            MenuProductEntity.findById(
+                id = uuid.toUuid()
+            )?.let(transform)
+        }
     }
 
     private fun getMenuProductWithAdditions(menuProductEntity: MenuProductEntity): MenuProduct {
@@ -112,4 +168,5 @@ class MenuProductRepository {
             menuProductWithAdditionEntities.toList().mapToMenuProduct()
         }
     }
+
 }

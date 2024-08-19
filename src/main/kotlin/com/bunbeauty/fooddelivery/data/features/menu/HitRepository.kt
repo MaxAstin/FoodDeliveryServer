@@ -8,9 +8,8 @@ class HitRepository {
         hitsCache[companyUuid] = menuProductUuidList
     }
 
-   fun getHitProductUuidListByCompanyUuid(companyUuid: String): List<String> {
+    fun getHitProductUuidListByCompanyUuid(companyUuid: String): List<String> {
         return hitsCache[companyUuid] ?: emptyList()
     }
-
 
 }

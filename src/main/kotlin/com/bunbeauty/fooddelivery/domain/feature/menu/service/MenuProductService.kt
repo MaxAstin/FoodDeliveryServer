@@ -63,7 +63,7 @@ class MenuProductService(
     ): GetMenuProduct? {
         val updateMenuProduct = patchMenuProduct.mapPatchMenuProduct()
         return menuProductRepository.updateMenuProduct(
-            menuProductUuid = menuProductUuid.toUuid(),
+            menuProductUuid = menuProductUuid,
             updateMenuProduct = updateMenuProduct
         )?.let { menuProduct ->
             orderAdditionGroups(menuProduct).mapMenuProduct()

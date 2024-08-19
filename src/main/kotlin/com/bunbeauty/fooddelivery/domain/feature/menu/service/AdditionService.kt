@@ -57,7 +57,10 @@ class AdditionService(
         )
 
         return postAdditionGroupToMenuProducts.menuProductUuids.map { menuProductUuid ->
-            menuProductRepository.getMenuProductWithAdditionListByUuid(uuid = menuProductUuid)
+            menuProductRepository.getMenuProductWithAdditionListByUuid(
+                companyUuid = companyUuid,
+                uuid = menuProductUuid
+            )
                 .orThrowNotFoundByUuidError(menuProductUuid)
                 .mapMenuProduct()
         }
@@ -141,6 +144,7 @@ class AdditionService(
             insertAdditionToGroup = postAdditionToGroup.mapPostAdditionToGroup()
         ).mapNotNull { menuProduct ->
             menuProductRepository.getMenuProductWithAdditionListByUuid(
+                companyUuid = companyUuid,
                 uuid = menuProduct.uuid
             )?.mapMenuProduct()
         }
@@ -190,8 +194,10 @@ class AdditionService(
         companyUuid: String,
     ) {
         menuProductUuids.forEach { menuProductUuid ->
-            val menuProduct = menuProductRepository.getMenuProductByUuid(uuid = menuProductUuid)
-                .orThrowNotFoundByUuidError(uuid = menuProductUuid)
+            val menuProduct = menuProductRepository.getMenuProductByUuid(
+                companyUuid = companyUuid,
+                uuid = menuProductUuid
+            ).orThrowNotFoundByUuidError(uuid = menuProductUuid)
             if (menuProduct.companyUuid != companyUuid) {
                 noAccessToMenuProductError(menuProductUuid)
             }
