@@ -1,14 +1,10 @@
 package com.bunbeauty.fooddelivery.routing
 
-import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientSettings
-import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientUser
-import com.bunbeauty.fooddelivery.domain.model.client_user.PatchClientUserSettings
-import com.bunbeauty.fooddelivery.domain.model.client_user.PostClientUserAuth
+import com.bunbeauty.fooddelivery.domain.model.client_user.*
 import com.bunbeauty.fooddelivery.routing.extension.*
 import com.bunbeauty.fooddelivery.service.client_user.IClientUserService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
@@ -31,10 +27,8 @@ private fun Routing.clientLogin() {
     val clientUserService: IClientUserService by inject()
 
     post("/client/login") {
-        safely {
-            val postClientUserAuth: PostClientUserAuth = call.receive()
-            val clientAuthResponse = clientUserService.login(postClientUserAuth)
-            call.respondOk(clientAuthResponse)
+        withBody<PostClientUserAuth, ClientAuthResponse> { postClientUserAuth ->
+            clientUserService.login(postClientUserAuth)
         }
     }
 }
@@ -44,9 +38,8 @@ private fun Route.getClient() {
     val clientUserService: IClientUserService by inject()
 
     get("/client") {
-        client { request ->
-            val clientUser = clientUserService.getClientUserByUuid(request.jwtUser.uuid)
-            call.respondOkOrBad(clientUser)
+        getClientWithResult { request ->
+            clientUserService.getClientUserByUuid(request.jwtUser.uuid)
         }
     }
 }

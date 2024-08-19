@@ -2,6 +2,7 @@ package com.bunbeauty.fooddelivery.service.client_user
 
 import com.bunbeauty.fooddelivery.auth.IJwtService
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
+import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUser
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUserToClientSettings
 import com.bunbeauty.fooddelivery.domain.model.client_user.*
@@ -39,9 +40,10 @@ class ClientUserService(
         )
     }
 
-    override suspend fun getClientUserByUuid(clientUserUuid: String): GetClientUser? {
+    override suspend fun getClientUserByUuid(clientUserUuid: String): GetClientUser {
         return clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
-            ?.mapClientUser()
+            .orThrowNotFoundByUuidError(uuid = clientUserUuid)
+            .mapClientUser()
     }
 
     override suspend fun getClientSettingsByUuid(clientUserUuid: String): GetClientSettings? {
