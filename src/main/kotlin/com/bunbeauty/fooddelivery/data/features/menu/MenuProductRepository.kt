@@ -19,65 +19,69 @@ import com.bunbeauty.fooddelivery.domain.toUuid
 import org.jetbrains.exposed.sql.SizedCollection
 import java.util.*
 
-class MenuProductRepository {
+class MenuProductRepository(
+    private val menuProductCatch: MenuProductCatch
+) {
 
-    private val menuProductCatch = MenuProductCatch()
+    suspend fun insertMenuProduct(insertMenuProduct: InsertMenuProduct): MenuProduct {
+        return query {
+            menuProductCatch.clearCache(key = insertMenuProduct.companyUuid)
 
-    suspend fun insertMenuProduct(insertMenuProduct: InsertMenuProduct): MenuProduct = query {
-        menuProductCatch.clearCache(key = insertMenuProduct.companyUuid)
-
-        MenuProductEntity.new {
-            name = insertMenuProduct.name
-            newPrice = insertMenuProduct.newPrice
-            oldPrice = insertMenuProduct.oldPrice
-            utils = insertMenuProduct.utils
-            nutrition = insertMenuProduct.nutrition
-            description = insertMenuProduct.description
-            comboDescription = insertMenuProduct.comboDescription
-            photoLink = insertMenuProduct.photoLink
-            barcode = insertMenuProduct.barcode
-            isRecommended = insertMenuProduct.isRecommended
-            isVisible = insertMenuProduct.isVisible
-            company = CompanyEntity[insertMenuProduct.companyUuid]
-            categories = SizedCollection(insertMenuProduct.categoryUuids.map { categoryUuid ->
-                CategoryEntity[categoryUuid]
-            })
-        }.mapMenuProductEntity()
+            MenuProductEntity.new {
+                name = insertMenuProduct.name
+                newPrice = insertMenuProduct.newPrice
+                oldPrice = insertMenuProduct.oldPrice
+                utils = insertMenuProduct.utils
+                nutrition = insertMenuProduct.nutrition
+                description = insertMenuProduct.description
+                comboDescription = insertMenuProduct.comboDescription
+                photoLink = insertMenuProduct.photoLink
+                barcode = insertMenuProduct.barcode
+                isRecommended = insertMenuProduct.isRecommended
+                isVisible = insertMenuProduct.isVisible
+                company = CompanyEntity[insertMenuProduct.companyUuid]
+                categories = SizedCollection(insertMenuProduct.categoryUuids.map { categoryUuid ->
+                    CategoryEntity[categoryUuid]
+                })
+            }.mapMenuProductEntity()
+        }
     }
 
     suspend fun updateMenuProduct(
         companyUuid: String,
         menuProductUuid: String,
         updateMenuProduct: UpdateMenuProduct,
-    ): MenuProduct? = query {
-        MenuProductEntity.findById(id = menuProductUuid.toUuid())?.apply {
-            menuProductCatch.clearCache(key = companyUuid.toUuid())
+    ): MenuProduct? {
+        return query {
+            MenuProductEntity.findById(id = menuProductUuid.toUuid())?.apply {
+                menuProductCatch.clearCache(key = companyUuid.toUuid())
 
-            name = updateMenuProduct.name ?: name
-            newPrice = updateMenuProduct.newPrice ?: newPrice
-            oldPrice = (updateMenuProduct.oldPrice ?: oldPrice)?.takeIf { oldPrice ->
-                oldPrice != 0
-            }
-            utils = (updateMenuProduct.utils ?: utils)?.takeIf { utils ->
-                utils.isNotEmpty() && (updateMenuProduct.nutrition ?: nutrition) != 0
-            }
-            nutrition = (updateMenuProduct.nutrition ?: nutrition)?.takeIf { nutrition ->
-                ((updateMenuProduct.utils ?: utils)?.isNotEmpty() == true) && nutrition != 0
-            }
-            description = updateMenuProduct.description ?: description
-            comboDescription = (updateMenuProduct.comboDescription ?: comboDescription)?.takeIf { comboDescription ->
-                comboDescription.isNotEmpty()
-            }
-            photoLink = updateMenuProduct.photoLink ?: photoLink
-            barcode = updateMenuProduct.barcode ?: barcode
-            isRecommended = updateMenuProduct.isRecommended ?: isRecommended
-            isVisible = updateMenuProduct.isVisible ?: isVisible
-            updateMenuProduct.categoryUuids?.let { categoryUuids ->
-                categories = SizedCollection(categoryUuids.map { categoryUuid ->
-                    CategoryEntity[categoryUuid]
-                })
-            }
-        }?.mapMenuProductEntity()
+                name = updateMenuProduct.name ?: name
+                newPrice = updateMenuProduct.newPrice ?: newPrice
+                oldPrice = (updateMenuProduct.oldPrice ?: oldPrice)?.takeIf { oldPrice ->
+                    oldPrice != 0
+                }
+                utils = (updateMenuProduct.utils ?: utils)?.takeIf { utils ->
+                    utils.isNotEmpty() && (updateMenuProduct.nutrition ?: nutrition) != 0
+                }
+                nutrition = (updateMenuProduct.nutrition ?: nutrition)?.takeIf { nutrition ->
+                    ((updateMenuProduct.utils ?: utils)?.isNotEmpty() == true) && nutrition != 0
+                }
+                description = updateMenuProduct.description ?: description
+                comboDescription = (updateMenuProduct.comboDescription ?: comboDescription)?.takeIf { comboDescription ->
+                    comboDescription.isNotEmpty()
+                }
+                photoLink = updateMenuProduct.photoLink ?: photoLink
+                barcode = updateMenuProduct.barcode ?: barcode
+                isRecommended = updateMenuProduct.isRecommended ?: isRecommended
+                isVisible = updateMenuProduct.isVisible ?: isVisible
+                updateMenuProduct.categoryUuids?.let { categoryUuids ->
+                    categories = SizedCollection(categoryUuids.map { categoryUuid ->
+                        CategoryEntity[categoryUuid]
+                    })
+                }
+            }?.mapMenuProductEntity()
+        }
     }
 
     suspend fun getMenuProductListByCompanyUuid(companyUuid: String): List<MenuProduct> {
