@@ -31,7 +31,7 @@ object Constants {
     const val CODE_LETTERS = "АБВГДЕИКЛМНПРСТУФХЦЧШЭЮЯ"
 
     // TIME
-    const val ORDER_HISTORY_DAY_COUNT = 2
+    const val ORDER_HISTORY_DAY_COUNT = 1
 
     // REQUEST
     const val REQUIRED_TIME_BETWEEN_REQUESTS = 60 * 1000L

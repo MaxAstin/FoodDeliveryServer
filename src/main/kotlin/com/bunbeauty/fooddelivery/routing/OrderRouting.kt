@@ -68,7 +68,7 @@ private fun Route.patchOrder() {
 
     patch("/order") {
         managerWithBody<PatchOrder, GetCafeOrder> { bodyRequest ->
-            val orderUuid = call.parameters[UUID_PARAMETER] ?: error("$UUID_PARAMETER is required")
+            val orderUuid = call.getParameter(UUID_PARAMETER)
             orderService.changeOrder(orderUuid, bodyRequest.body)
         }
     }
@@ -93,7 +93,7 @@ private fun Route.getCafeOrders() {
 
     get("/order") {
         manager {
-            val cafeUuid = call.parameters[CAFE_UUID_PARAMETER] ?: error("$CAFE_UUID_PARAMETER is required")
+            val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
             val orderList = orderService.getOrderListByCafeUuid(cafeUuid)
             call.respondOkWithList(orderList)
         }
@@ -106,7 +106,7 @@ private fun Route.getCafeOrderDetails() {
 
     get("/order/details") {
         manager {
-            val orderUuid = call.parameters[UUID_PARAMETER] ?: error("$UUID_PARAMETER is required")
+            val orderUuid = call.getParameter(UUID_PARAMETER)
             val order = orderService.getOrderByUuid(orderUuid)
             call.respondOkOrBad(order)
         }
@@ -140,13 +140,13 @@ private fun Route.observeManagerOrders() {
     webSocket("/user/order/subscribe") {
         managerSocket(
             block = {
-                val cafeUuid = call.parameters[CAFE_UUID_PARAMETER] ?: error("$CAFE_UUID_PARAMETER is required")
+                val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
                 orderService.observeCafeOrderUpdates(cafeUuid).onEach { cafeOrder ->
                     outgoing.send(Frame.Text(json.encodeToString(cafeOrder)))
                 }.launchIn(this)
             },
             onSocketClose = {
-                val cafeUuid = call.parameters[CAFE_UUID_PARAMETER] ?: error("$CAFE_UUID_PARAMETER is required")
+                val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
                 orderService.userDisconnect(cafeUuid)
             }
         )
@@ -187,7 +187,7 @@ private fun Route.getCafeOrderDetailsV2() {
 
     get("/v2/order/details") {
         manager {
-            val orderUuid = call.parameters[UUID_PARAMETER] ?: error("$UUID_PARAMETER is required")
+            val orderUuid = call.getParameter(UUID_PARAMETER)
             val order = orderService.getOrderByUuidV2(orderUuid)
             call.respondOkOrBad(order)
         }
