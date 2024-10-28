@@ -24,11 +24,11 @@ object OrderTable : UUIDTable() {
     val paymentMethod = varchar("paymentMethod", 512).nullable()
     val percentDiscount = integer("percentDiscount").nullable()
     val cafe = reference("cafe", CafeTable)
-    val company = reference("company", CompanyTable)
+    val company = reference("company", CompanyTable).index()
     val clientUser = reference("clientUser", ClientUserTable).index()
 
     init {
-        index(false, time, cafe)
+        index(false, cafe, time)
     }
 
 }
