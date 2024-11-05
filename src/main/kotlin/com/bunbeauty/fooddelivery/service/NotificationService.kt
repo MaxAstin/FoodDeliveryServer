@@ -35,6 +35,12 @@ class NotificationService(
     fun sendNotification(cafeUuid: String, orderCode: String) {
         firebaseMessaging.send(
             Message.builder()
+                .setNotification(
+                    Notification.builder()
+                        .setTitle(orderCode)
+                        .setBody("Новый заказ")
+                        .build()
+                )
                 .putData(ORDER_CODE_KEY, orderCode)
                 .setTopic(cafeUuid)
                 .build()
