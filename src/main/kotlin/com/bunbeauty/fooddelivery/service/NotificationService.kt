@@ -33,6 +33,7 @@ class NotificationService(
     }
 
     fun sendNotification(cafeUuid: String, orderCode: String) {
+        println("sendNotification $cafeUuid")
         firebaseMessaging.send(
             Message.builder()
                 .setNotification(
