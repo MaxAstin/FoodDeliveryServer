@@ -5,7 +5,6 @@ import com.bunbeauty.fooddelivery.data.Constants.CODE_LETTERS
 import com.bunbeauty.fooddelivery.data.Constants.CODE_NUMBER_COUNT
 import com.bunbeauty.fooddelivery.data.Constants.CODE_NUMBER_STEP
 import com.bunbeauty.fooddelivery.data.Constants.ORDER_HISTORY_DAY_COUNT
-import com.bunbeauty.fooddelivery.data.Constants.ORDER_KOD_KEY
 import com.bunbeauty.fooddelivery.data.features.address.AddressRepository
 import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
 import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
@@ -15,7 +14,6 @@ import com.bunbeauty.fooddelivery.domain.error.errorWithCode
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.DeliveryZoneWithCafe
 import com.bunbeauty.fooddelivery.domain.feature.order.mapper.*
-import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderAvailability
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.OrderInfo
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.PatchOrder
@@ -33,8 +31,7 @@ import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderTot
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.FindDeliveryZoneByCityUuidAndCoordinatesUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.GetDeliveryCostUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.IsOrderAvailableUseCase
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.Message
+import com.bunbeauty.fooddelivery.service.NotificationService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.joda.time.DateTime
@@ -47,7 +44,7 @@ class OrderService(
     private val clientUserRepository: ClientUserRepository,
     private val menuProductRepository: MenuProductRepository,
     private val cafeRepository: CafeRepository,
-    private val firebaseMessaging: FirebaseMessaging,
+    private val notificationService: NotificationService,
     private val findDeliveryZoneByCityUuidAndCoordinatesUseCase: FindDeliveryZoneByCityUuidAndCoordinatesUseCase,
     private val calculateOrderTotalUseCase: CalculateOrderTotalUseCase,
     private val getDeliveryCostUseCase: GetDeliveryCostUseCase,
@@ -76,7 +73,10 @@ class OrderService(
             order = order
         )
 
-        sendNotification(order)
+        notificationService.sendNotification(
+            cafeUuid = orderInfo.cafeUuid,
+            orderCode = order.code
+        )
 
         val orderTotal = calculateOrderTotalUseCase(order)
         return order.mapOrder(orderTotal)
@@ -102,7 +102,10 @@ class OrderService(
             order = order
         )
 
-        sendNotification(order)
+        notificationService.sendNotification(
+            cafeUuid = orderInfo.cafeUuid,
+            orderCode = order.code
+        )
 
         val orderTotal = calculateOrderTotalUseCase(order)
         return order.mapOrderToV2(orderTotal)
@@ -128,7 +131,10 @@ class OrderService(
             order = order
         )
 
-        sendNotification(order)
+        notificationService.sendNotification(
+            cafeUuid = orderInfo.cafeUuid,
+            orderCode = order.code
+        )
 
         val orderTotal = calculateOrderTotalUseCase(order)
         return order.mapOrderToV2(orderTotal)
@@ -410,15 +416,6 @@ class OrderService(
         }
 
         return codeLetter + CODE_DIVIDER + codeNumberString
-    }
-
-    private fun sendNotification(order: Order) {
-        firebaseMessaging.send(
-            Message.builder()
-                .putData(ORDER_KOD_KEY, order.code)
-                .setTopic(order.cafeWithCity.cafe.uuid)
-                .build()
-        )
     }
 
     private fun productListIsEmptyError(): Nothing {

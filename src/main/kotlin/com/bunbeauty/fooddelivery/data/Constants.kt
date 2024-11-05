@@ -42,6 +42,4 @@ object Constants {
     const val HITS_COUNT = 6
     const val HITS_ORDER_DAY_COUNT = 30
 
-    // NOTIFICATION KEYS
-    const val ORDER_KOD_KEY = "orderCode"
 }

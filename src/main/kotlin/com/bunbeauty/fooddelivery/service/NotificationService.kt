@@ -9,6 +9,7 @@ import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.Notification
 
 private const val NEWS_NOTIFICATION_PREFIX = "NEWS_"
+private const val ORDER_CODE_KEY = "orderCode"
 
 class NotificationService(
     private val userRepository: UserRepository,
@@ -30,4 +31,14 @@ class NotificationService(
                 .build()
         )
     }
+
+    fun sendNotification(cafeUuid: String, orderCode: String) {
+        firebaseMessaging.send(
+            Message.builder()
+                .putData(ORDER_CODE_KEY, orderCode)
+                .setTopic(cafeUuid)
+                .build()
+        )
+    }
+
 }
