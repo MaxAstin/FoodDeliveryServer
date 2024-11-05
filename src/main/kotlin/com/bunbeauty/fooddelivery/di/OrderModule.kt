@@ -53,7 +53,7 @@ val orderModule = module(createdAtStart = true) {
             clientUserRepository = get(),
             menuProductRepository = get(),
             cafeRepository = get(),
-            firebaseMessaging = get(),
+            notificationService = get(),
             findDeliveryZoneByCityUuidAndCoordinatesUseCase = get(),
             calculateOrderTotalUseCase = get(),
             getDeliveryCostUseCase = get(),
