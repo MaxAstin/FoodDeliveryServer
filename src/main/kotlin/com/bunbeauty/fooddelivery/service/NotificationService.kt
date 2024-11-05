@@ -34,22 +34,26 @@ class NotificationService(
     }
 
     fun sendNotification(cafeUuid: String, orderCode: String) {
-        println("sendNotification $cafeUuid")
-        firebaseMessaging.send(
-            Message.builder()
-                .setNotification(
-                    Notification.builder()
-                        .setTitle(orderCode)
-                        .setBody("Новый заказ")
-                        .build()
-                )
-                .putData(ORDER_CODE_KEY, orderCode)
-                .setTopic(cafeUuid)
-                .setFcmOptions(
-                    FcmOptions.withAnalyticsLabel("order")
-                )
-                .build()
-        )
+        try {
+            val messageId = firebaseMessaging.send(
+                Message.builder()
+                    .setNotification(
+                        Notification.builder()
+                            .setTitle(orderCode)
+                            .setBody("Новый заказ")
+                            .build()
+                    )
+                    .putData(ORDER_CODE_KEY, orderCode)
+                    .setTopic(cafeUuid)
+                    .setFcmOptions(
+                        FcmOptions.withAnalyticsLabel("order")
+                    )
+                    .build()
+            )
+            println("sendNotification messageId: $messageId")
+        } catch (exception: Exception) {
+            println("sendNotification exception: ${exception.message}")
+        }
     }
 
 }
