@@ -11,6 +11,7 @@ fun UserEntity.toUser(): User {
         username = username,
         passwordHash = passwordHash,
         role = role.roleName,
+        notificationToken = notificationToken,
         cityWithCafes = city.mapCityEntityToCityWithCafes(),
         company = city.company.mapCompanyEntity(),
     )

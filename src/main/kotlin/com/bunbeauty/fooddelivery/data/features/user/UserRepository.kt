@@ -21,6 +21,12 @@ class UserRepository {
         UserEntity.findById(uuid)?.toUser()
     }
 
+    suspend fun getUserListByCityUuid(cityUuid: UUID): List<User> = query {
+        UserEntity.find {
+            UserTable.city eq cityUuid
+        }.map(UserEntity::toUser)
+    }
+
     suspend fun getUserByUsername(username: String): User? = query {
         UserEntity.find {
             UserTable.username eq username

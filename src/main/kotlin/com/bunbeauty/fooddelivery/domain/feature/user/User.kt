@@ -8,6 +8,7 @@ class User(
     val username: String,
     val passwordHash: String,
     val role: String,
+    val notificationToken: String?,
     val cityWithCafes: CityWithCafes,
     val company: Company,
 ) {
