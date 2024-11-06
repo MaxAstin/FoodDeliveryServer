@@ -69,7 +69,8 @@ class NotificationService(
 
             println("sendNotification success")
         } catch (exception: Exception) {
-            println("sendNotification exception: ${exception.message}")
+            println("sendNotification exception:")
+            exception.printStackTrace()
         }
     }
 
