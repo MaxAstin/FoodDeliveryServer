@@ -59,6 +59,11 @@ class NotificationService(
                     .setNotification(
                         createNewOrderNotification(orderCode = orderCode)
                     )
+                    .setAndroidConfig(
+                        AndroidConfig.builder()
+                            .setPriority(AndroidConfig.Priority.HIGH)
+                            .build()
+                    )
                     .setTopic(cafeUuid)
                     .putData(ORDER_CODE_KEY, orderCode)
                     .setFcmOptions(
@@ -75,7 +80,7 @@ class NotificationService(
     }
 
     private fun createNewOrderNotification(orderCode: String): Notification {
-        return  Notification.builder()
+        return Notification.builder()
             .setTitle(orderCode)
             .setBody("Новый заказ")
             .build()
