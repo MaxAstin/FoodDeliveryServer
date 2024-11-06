@@ -42,18 +42,25 @@ class NotificationService(
                 user.notificationToken
             }
 
-            firebaseMessaging.sendEachForMulticast(
-                MulticastMessage.builder()
-                    .setNotification(
-                        createNewOrderNotification(orderCode = orderCode)
-                    )
-                    .addAllTokens(userTokenList)
-                    .putData(ORDER_CODE_KEY, orderCode)
-                    .setFcmOptions(
-                        FcmOptions.withAnalyticsLabel("order")
-                    )
-                    .build()
-            )
+            if (userTokenList.isNotEmpty()) {
+                firebaseMessaging.sendEachForMulticast(
+                    MulticastMessage.builder()
+                        .setNotification(
+                            createNewOrderNotification(orderCode = orderCode)
+                        )
+                        .setAndroidConfig(
+                            AndroidConfig.builder()
+                                .setPriority(AndroidConfig.Priority.HIGH)
+                                .build()
+                        )
+                        .addAllTokens(userTokenList)
+                        .putData(ORDER_CODE_KEY, orderCode)
+                        .setFcmOptions(
+                            FcmOptions.withAnalyticsLabel("order")
+                        )
+                        .build()
+                )
+            }
             firebaseMessaging.send(
                 Message.builder()
                     .setNotification(
