@@ -4,8 +4,8 @@ import com.bunbeauty.fooddelivery.domain.feature.city.mapper.mapCityWithCafes
 import com.bunbeauty.fooddelivery.domain.feature.user.User
 import com.bunbeauty.fooddelivery.domain.model.user.GetUser
 
-val mapUser: User.() -> GetUser = {
-    GetUser(
+fun User.toGetUser(): GetUser {
+    return GetUser(
         uuid = uuid,
         username = username,
         passwordHash = passwordHash,

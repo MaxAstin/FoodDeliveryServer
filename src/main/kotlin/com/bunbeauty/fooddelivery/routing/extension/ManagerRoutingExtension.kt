@@ -29,6 +29,14 @@ suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>
     }
 }
 
+suspend inline fun <reified B> PipelineContext<Unit, ApplicationCall>.managerWithBody(
+    block: (BodyRequest<B>) -> Unit,
+) {
+    manager { request ->
+        handleRequestWithBody(request, block)
+    }
+}
+
 suspend inline fun <reified R> PipelineContext<Unit, ApplicationCall>.managerDelete(
     deleteBlock: (String) -> R?,
 ) {

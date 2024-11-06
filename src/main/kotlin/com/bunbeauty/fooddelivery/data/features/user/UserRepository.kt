@@ -4,6 +4,7 @@ import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.CityEntity
 import com.bunbeauty.fooddelivery.data.entity.UserEntity
 import com.bunbeauty.fooddelivery.data.features.company.mapper.mapCompanyEntity
+import com.bunbeauty.fooddelivery.data.features.user.mapper.toUser
 import com.bunbeauty.fooddelivery.data.table.UserTable
 import com.bunbeauty.fooddelivery.domain.feature.company.Company
 import com.bunbeauty.fooddelivery.domain.feature.user.User
@@ -17,13 +18,13 @@ class UserRepository {
     }
 
     suspend fun getUserByUuid(uuid: UUID): User? = query {
-        UserEntity.findById(uuid)?.mapUserEntity()
+        UserEntity.findById(uuid)?.toUser()
     }
 
     suspend fun getUserByUsername(username: String): User? = query {
         UserEntity.find {
             UserTable.username eq username
-        }.firstOrNull()?.mapUserEntity()
+        }.firstOrNull()?.toUser()
     }
 
     suspend fun insertUser(insertUser: InsertUser): User = query {
@@ -32,6 +33,18 @@ class UserRepository {
             passwordHash = insertUser.passwordHash
             role = insertUser.role
             city = CityEntity[insertUser.cityUuid]
-        }.mapUserEntity()
+        }.toUser()
+    }
+
+    suspend fun updateUserNotificationToken(
+        uuid: UUID,
+        token: String
+    ): User? {
+        return query {
+            UserEntity.findById(id = uuid)
+                ?.apply {
+                    notificationToken = token
+                }?.toUser()
+        }
     }
 }

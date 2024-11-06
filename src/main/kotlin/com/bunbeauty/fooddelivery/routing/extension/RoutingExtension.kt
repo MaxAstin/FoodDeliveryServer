@@ -102,6 +102,20 @@ suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>
     )
 }
 
+suspend inline fun <reified B> PipelineContext<Unit, ApplicationCall>.handleRequestWithBody(
+    request: Request,
+    block: (BodyRequest<B>) -> Unit,
+) {
+    val body: B = call.receive()
+    block(
+        BodyRequest(
+            request = request,
+            body = body
+        )
+    )
+    call.respondOk()
+}
+
 suspend inline fun <reified R> PipelineContext<Unit, ApplicationCall>.delete(
     deleteBlock: (String) -> R?,
 ) {

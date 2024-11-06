@@ -7,6 +7,7 @@ object UserTable : UUIDTable() {
 
     val username = varchar("username", 512).uniqueIndex()
     val passwordHash = varchar("passwordHash", 512)
+    val notificationToken = varchar("notificationToken", 512).nullable()
     val role = enumeration("role", UserRole::class)
     val city = reference("city", CityTable)
 }
