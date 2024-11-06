@@ -38,7 +38,7 @@ class NotificationService(
                 .orThrowNotFoundByUuidError(uuid = cafeUuid)
             val userTokenList = userRepository.getUserListByCityUuid(
                 cityUuid = cafe.cityUuid.toUuid()
-            ).map { user ->
+            ).mapNotNull { user ->
                 user.notificationToken
             }
 
