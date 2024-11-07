@@ -45,9 +45,6 @@ class NotificationService(
             if (userTokenList.isNotEmpty()) {
                 firebaseMessaging.sendEachForMulticast(
                     MulticastMessage.builder()
-                        .setNotification(
-                            createNewOrderNotification(orderCode = orderCode)
-                        )
                         .setAndroidConfig(
                             AndroidConfig.builder()
                                 .setPriority(AndroidConfig.Priority.HIGH)
