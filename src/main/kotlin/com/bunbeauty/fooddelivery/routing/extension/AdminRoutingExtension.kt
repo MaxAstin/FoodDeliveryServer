@@ -33,11 +33,3 @@ suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>
         handleRequestWithBody(request, errorMessage, block)
     }
 }
-
-suspend inline fun <reified R> PipelineContext<Unit, ApplicationCall>.adminDelete(
-    deleteBlock: (String) -> R?,
-) {
-    admin {
-        delete(deleteBlock)
-    }
-}

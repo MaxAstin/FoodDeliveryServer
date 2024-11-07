@@ -116,12 +116,20 @@ suspend inline fun <reified B> PipelineContext<Unit, ApplicationCall>.handleRequ
     call.respondOk()
 }
 
-suspend inline fun <reified R> PipelineContext<Unit, ApplicationCall>.delete(
-    deleteBlock: (String) -> R?,
+suspend inline fun PipelineContext<Unit, ApplicationCall>.deleteByUserUuid(
+    request: Request,
+    deleteBlock: (String) -> Unit,
+) {
+    deleteBlock(request.jwtUser.uuid)
+    call.respondNoContent()
+}
+
+suspend inline fun PipelineContext<Unit, ApplicationCall>.deleteByUuid(
+    deleteBlock: (String) -> Unit,
 ) {
     val uuid = call.getParameter(UUID_PARAMETER)
-    val result = deleteBlock(uuid)
-    call.respondOkOrBad(model = result)
+    deleteBlock(uuid)
+    call.respondNoContent()
 }
 
 val PipelineContext<Unit, ApplicationCall>.clientIp: String
@@ -156,4 +164,8 @@ suspend inline fun ApplicationCall.respondBad(message: String) {
 
 suspend inline fun ApplicationCall.respondNotFound() {
     respond(HttpStatusCode.NotFound)
+}
+
+suspend inline fun ApplicationCall.respondNoContent() {
+    respond(HttpStatusCode.NoContent)
 }

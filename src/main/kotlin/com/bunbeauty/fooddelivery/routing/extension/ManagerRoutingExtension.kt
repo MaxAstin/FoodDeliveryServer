@@ -36,11 +36,3 @@ suspend inline fun <reified B> PipelineContext<Unit, ApplicationCall>.managerWit
         handleRequestWithBody(request, block)
     }
 }
-
-suspend inline fun <reified R> PipelineContext<Unit, ApplicationCall>.managerDelete(
-    deleteBlock: (String) -> R?,
-) {
-    manager {
-        delete(deleteBlock)
-    }
-}
