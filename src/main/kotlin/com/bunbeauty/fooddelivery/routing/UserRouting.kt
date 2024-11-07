@@ -7,6 +7,7 @@ import com.bunbeauty.fooddelivery.domain.model.user.PostUser
 import com.bunbeauty.fooddelivery.domain.model.user.PostUserAuth
 import com.bunbeauty.fooddelivery.domain.model.user.UserAuthResponse
 import com.bunbeauty.fooddelivery.routing.extension.adminWithBody
+import com.bunbeauty.fooddelivery.routing.extension.manager
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import com.bunbeauty.fooddelivery.routing.extension.withBody
 import io.ktor.server.application.*
@@ -21,7 +22,9 @@ fun Application.configureUserRouting() {
 
         authenticate {
             createUser()
+
             updateNotificationToken()
+            clearNotificationToken()
         }
     }
 }
@@ -32,7 +35,7 @@ private fun Routing.userLogin() {
 
     post("/user/login") {
         withBody<PostUserAuth, UserAuthResponse>(errorMessage = "Unable to log in with provided credentials") { body ->
-            userService.login(body)
+            userService.login(postUserAuth = body)
         }
     }
 }
@@ -43,7 +46,7 @@ private fun Route.createUser() {
 
     post("/user") {
         adminWithBody<PostUser, GetUser> { bodyRequest ->
-            userService.createUser(bodyRequest.body)
+            userService.createUser(postUser = bodyRequest.body)
         }
     }
 }
@@ -55,8 +58,21 @@ private fun Route.updateNotificationToken() {
     put("/user/notification_token") {
         managerWithBody<PutNotificationToken> { bodyRequest ->
             userService.updateNotificationToken(
-                bodyRequest.request.jwtUser.uuid,
-                bodyRequest.body
+                userUuid = bodyRequest.request.jwtUser.uuid,
+                putNotificationToken = bodyRequest.body
+            )
+        }
+    }
+}
+
+private fun Route.clearNotificationToken() {
+
+    val userService: UserService by inject()
+
+    delete("/user/notification_token") {
+        manager { request ->
+            userService.clearNotificationToken(
+                userUuid = request.jwtUser.uuid
             )
         }
     }

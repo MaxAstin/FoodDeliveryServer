@@ -44,7 +44,7 @@ class UserRepository {
 
     suspend fun updateUserNotificationToken(
         uuid: UUID,
-        token: String
+        token: String?
     ): User? {
         return query {
             UserEntity.findById(id = uuid)

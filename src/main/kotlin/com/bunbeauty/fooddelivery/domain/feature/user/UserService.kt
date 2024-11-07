@@ -60,4 +60,11 @@ class UserService(
         ).orThrowNotFoundByUuidError(uuid = userUuid)
     }
 
+    suspend fun clearNotificationToken(userUuid: String) {
+        userRepository.updateUserNotificationToken(
+            uuid = userUuid.toUuid(),
+            token = null
+        ).orThrowNotFoundByUuidError(uuid = userUuid)
+    }
+
 }
