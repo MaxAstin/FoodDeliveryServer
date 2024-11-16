@@ -77,4 +77,11 @@ class UserService(
         ).orThrowNotFoundByUuidError(uuid = userUuid)
     }
 
+    suspend fun getUser(userUuid: String): GetUser {
+        return userRepository.getUserByUuid(
+            uuid = userUuid.toUuid()
+        )?.toGetUser()
+            .orThrowNotFoundByUuidError(uuid = userUuid)
+    }
+
 }

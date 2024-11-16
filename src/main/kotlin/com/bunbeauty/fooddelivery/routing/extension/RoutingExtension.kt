@@ -116,6 +116,10 @@ suspend inline fun <reified B> PipelineContext<Unit, ApplicationCall>.handleRequ
     call.respondOk()
 }
 
+suspend inline fun <reified T : Any>  PipelineContext<Unit, ApplicationCall>.respond(block: () -> T) {
+    call.respond(block())
+}
+
 suspend inline fun PipelineContext<Unit, ApplicationCall>.deleteByUserUuid(
     request: Request,
     deleteBlock: (String) -> Unit,

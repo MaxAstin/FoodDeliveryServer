@@ -10,6 +10,7 @@ fun User.toGetUser(): GetUser {
         username = username,
         passwordHash = passwordHash,
         role = role,
+        unlimitedNotification = unlimitedNotification,
         city = cityWithCafes.mapCityWithCafes()
     )
 }

@@ -20,6 +20,7 @@ fun Application.configureUserRouting() {
 
         authenticate {
             createUser()
+            getUser()
 
             updateNotificationToken()
             clearNotificationToken()
@@ -46,6 +47,19 @@ private fun Route.createUser() {
     post("/user") {
         adminWithBody<PostUser, GetUser> { bodyRequest ->
             userService.createUser(postUser = bodyRequest.body)
+        }
+    }
+}
+
+private fun Route.getUser() {
+
+    val userService: UserService by inject()
+
+    get("/user") {
+        manager { request ->
+            respond<GetUser> {
+                userService.getUser(userUuid = request.jwtUser.uuid)
+            }
         }
     }
 }
