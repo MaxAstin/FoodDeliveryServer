@@ -3,6 +3,7 @@ package com.bunbeauty.fooddelivery.service
 import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
 import com.bunbeauty.fooddelivery.data.features.user.UserRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
+import com.bunbeauty.fooddelivery.domain.feature.user.User
 import com.bunbeauty.fooddelivery.domain.model.notification.PostNotification
 import com.bunbeauty.fooddelivery.domain.toUuid
 import com.google.firebase.messaging.*
@@ -41,31 +42,38 @@ class NotificationService(
             userRepository.getUserListByCityUuid(
                 cityUuid = cafe.cityUuid.toUuid()
             ).forEach { user ->
-                firebaseMessaging.send(
-                    Message.builder()
-                        .setAndroidConfig(
-                            AndroidConfig.builder()
-                                .setPriority(AndroidConfig.Priority.HIGH)
-                                .build()
-                        )
-                        .setToken(user.notificationToken)
-                        .putAllData(
-                            mapOf(
-                                ORDER_CODE_KEY to orderCode,
-                                UNLIMITED_KEY to user.unlimitedNotification.toString()
-                            )
-                        )
-                        .setFcmOptions(
-                            FcmOptions.withAnalyticsLabel(ANALYTICS_LABEL)
-                        )
-                        .build()
-                )
+                buildMessage(
+                    user = user,
+                    orderCode = orderCode
+                )?.let(firebaseMessaging::send)
             }
             println("sendNotification success")
         } catch (exception: Exception) {
             println("sendNotification exception:")
             exception.printStackTrace()
         }
+    }
+
+    private fun buildMessage(user: User, orderCode: String): Message? {
+        val notificationToken = user.notificationToken ?: return null
+
+        return Message.builder()
+            .setAndroidConfig(
+                AndroidConfig.builder()
+                    .setPriority(AndroidConfig.Priority.HIGH)
+                    .build()
+            )
+            .setToken(notificationToken)
+            .putAllData(
+                mapOf(
+                    ORDER_CODE_KEY to orderCode,
+                    UNLIMITED_KEY to user.unlimitedNotification.toString()
+                )
+            )
+            .setFcmOptions(
+                FcmOptions.withAnalyticsLabel(ANALYTICS_LABEL)
+            )
+            .build()
     }
 
 }
