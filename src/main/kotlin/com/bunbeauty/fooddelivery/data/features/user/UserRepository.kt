@@ -42,7 +42,7 @@ class UserRepository {
         }.toUser()
     }
 
-    suspend fun updateUserNotificationToken(
+    suspend fun updateNotificationToken(
         uuid: UUID,
         token: String?
     ): User? {
@@ -50,6 +50,18 @@ class UserRepository {
             UserEntity.findById(id = uuid)
                 ?.apply {
                     notificationToken = token
+                }?.toUser()
+        }
+    }
+
+    suspend fun updateUnlimitedNotification(
+        uuid: UUID,
+        isEnabled: Boolean
+    ): User? {
+        return query {
+            UserEntity.findById(id = uuid)
+                ?.apply {
+                    unlimitedNotification = isEnabled
                 }?.toUser()
         }
     }

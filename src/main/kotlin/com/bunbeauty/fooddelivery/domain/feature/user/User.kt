@@ -9,6 +9,7 @@ class User(
     val passwordHash: String,
     val role: String,
     val notificationToken: String?,
+    val unlimitedNotification: Boolean,
     val cityWithCafes: CityWithCafes,
     val company: Company,
 ) {

@@ -1,6 +1,7 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.domain.feature.user.PutNotificationToken
+import com.bunbeauty.fooddelivery.domain.feature.user.PutUnlimitedNotification
 import com.bunbeauty.fooddelivery.domain.feature.user.UserService
 import com.bunbeauty.fooddelivery.domain.model.user.GetUser
 import com.bunbeauty.fooddelivery.domain.model.user.PostUser
@@ -22,6 +23,7 @@ fun Application.configureUserRouting() {
 
             updateNotificationToken()
             clearNotificationToken()
+            updateUnlimitedNotification()
         }
     }
 }
@@ -71,6 +73,20 @@ private fun Route.clearNotificationToken() {
             deleteByUserUuid(request = request) { userUuid ->
                 userService.clearNotificationToken(userUuid = userUuid)
             }
+        }
+    }
+}
+
+private fun Route.updateUnlimitedNotification() {
+
+    val userService: UserService by inject()
+
+    put("/user/unlimited_notification") {
+        managerWithBody<PutUnlimitedNotification> { bodyRequest ->
+            userService.updateUnlimitedNotification(
+                userUuid = bodyRequest.request.jwtUser.uuid,
+                putUnlimitedNotification = bodyRequest.body
+            )
         }
     }
 }

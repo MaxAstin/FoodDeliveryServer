@@ -9,6 +9,8 @@ import com.google.firebase.messaging.*
 
 private const val NEWS_NOTIFICATION_PREFIX = "NEWS_"
 private const val ORDER_CODE_KEY = "orderCode"
+private const val UNLIMITED_KEY = "unlimited"
+private const val ANALYTICS_LABEL = "order"
 
 class NotificationService(
     private val cafeRepository: CafeRepository,
@@ -36,58 +38,34 @@ class NotificationService(
         try {
             val cafe = cafeRepository.getCafeByUuid(uuid = cafeUuid.toUuid())
                 .orThrowNotFoundByUuidError(uuid = cafeUuid)
-            val userTokenList = userRepository.getUserListByCityUuid(
+            userRepository.getUserListByCityUuid(
                 cityUuid = cafe.cityUuid.toUuid()
-            ).mapNotNull { user ->
-                user.notificationToken
-            }
-
-            if (userTokenList.isNotEmpty()) {
-                firebaseMessaging.sendEachForMulticast(
-                    MulticastMessage.builder()
+            ).forEach { user ->
+                firebaseMessaging.send(
+                    Message.builder()
                         .setAndroidConfig(
                             AndroidConfig.builder()
                                 .setPriority(AndroidConfig.Priority.HIGH)
                                 .build()
                         )
-                        .addAllTokens(userTokenList)
-                        .putData(ORDER_CODE_KEY, orderCode)
+                        .setToken(user.notificationToken)
+                        .putAllData(
+                            mapOf(
+                                ORDER_CODE_KEY to orderCode,
+                                UNLIMITED_KEY to user.unlimitedNotification.toString()
+                            )
+                        )
                         .setFcmOptions(
-                            FcmOptions.withAnalyticsLabel("order")
+                            FcmOptions.withAnalyticsLabel(ANALYTICS_LABEL)
                         )
                         .build()
                 )
             }
-            firebaseMessaging.send(
-                Message.builder()
-                    .setNotification(
-                        createNewOrderNotification(orderCode = orderCode)
-                    )
-                    .setAndroidConfig(
-                        AndroidConfig.builder()
-                            .setPriority(AndroidConfig.Priority.HIGH)
-                            .build()
-                    )
-                    .setTopic(cafeUuid)
-                    .putData(ORDER_CODE_KEY, orderCode)
-                    .setFcmOptions(
-                        FcmOptions.withAnalyticsLabel("order")
-                    )
-                    .build()
-            )
-
             println("sendNotification success")
         } catch (exception: Exception) {
             println("sendNotification exception:")
             exception.printStackTrace()
         }
-    }
-
-    private fun createNewOrderNotification(orderCode: String): Notification {
-        return Notification.builder()
-            .setTitle(orderCode)
-            .setBody("Новый заказ")
-            .build()
     }
 
 }

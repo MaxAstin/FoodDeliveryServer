@@ -54,16 +54,26 @@ class UserService(
         userUuid: String,
         putNotificationToken: PutNotificationToken
     ) {
-        userRepository.updateUserNotificationToken(
+        userRepository.updateNotificationToken(
             uuid = userUuid.toUuid(),
             token = putNotificationToken.token
         ).orThrowNotFoundByUuidError(uuid = userUuid)
     }
 
     suspend fun clearNotificationToken(userUuid: String) {
-        userRepository.updateUserNotificationToken(
+        userRepository.updateNotificationToken(
             uuid = userUuid.toUuid(),
             token = null
+        ).orThrowNotFoundByUuidError(uuid = userUuid)
+    }
+
+    suspend fun updateUnlimitedNotification(
+        userUuid: String,
+        putUnlimitedNotification: PutUnlimitedNotification
+    ) {
+        userRepository.updateUnlimitedNotification(
+            uuid = userUuid.toUuid(),
+            isEnabled = putUnlimitedNotification.isEnabled
         ).orThrowNotFoundByUuidError(uuid = userUuid)
     }
 
