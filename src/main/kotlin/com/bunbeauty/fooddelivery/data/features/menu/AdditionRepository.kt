@@ -5,8 +5,8 @@ import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.*
 import com.bunbeauty.fooddelivery.data.features.menu.cache.MenuProductCatch
 import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapMenuProductEntity
-import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapToAddition
 import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapToAdditionGroup
+import com.bunbeauty.fooddelivery.data.features.menu.mapper.toAddition
 import com.bunbeauty.fooddelivery.data.table.menu.AdditionGroupTable
 import com.bunbeauty.fooddelivery.data.table.menu.AdditionTable
 import com.bunbeauty.fooddelivery.data.table.menu.MenuProductToAdditionGroupTable
@@ -109,10 +109,11 @@ class AdditionRepository(
                 fullName = insertAddition.fullName
                 price = insertAddition.price
                 photoLink = insertAddition.photoLink
+                tag = insertAddition.tag
                 priority = insertAddition.priority
                 isVisible = insertAddition.isVisible
                 company = CompanyEntity[insertAddition.companyUuid]
-            }.mapToAddition()
+            }.toAddition()
         }
     }
 
@@ -148,19 +149,22 @@ class AdditionRepository(
 
     suspend fun getAdditionByUuid(uuid: UUID): Addition? {
         return query {
-            AdditionEntity.findById(uuid)?.mapToAddition()
+            AdditionEntity.findById(uuid)?.toAddition()
         }
     }
 
-    suspend fun getAdditionByName(
+    suspend fun getAdditionByNameAndTag(
         name: String,
+        tag: String?,
         companyUuid: UUID,
     ): Addition? {
         return query {
             AdditionEntity.find {
                 (AdditionTable.name eq name) and
+                        (AdditionTable.tag eq tag) and
                         (AdditionTable.company eq companyUuid)
-            }.firstOrNull()?.mapToAddition()
+            }.firstOrNull()
+                ?.toAddition()
         }
     }
 
@@ -168,7 +172,7 @@ class AdditionRepository(
         return query {
             AdditionEntity.find {
                 AdditionTable.company eq companyUuid
-            }.map(mapToAddition)
+            }.map(AdditionEntity::toAddition)
         }
     }
 
@@ -188,8 +192,9 @@ class AdditionRepository(
                     }
                     photoLink = updateAddition.photoLink ?: photoLink
                     priority = updateAddition.priority ?: priority
+                    tag = updateAddition.tag ?: tag
                     isVisible = updateAddition.isVisible ?: isVisible
-                }?.mapToAddition()
+                }?.toAddition()
                 ?.also { addition ->
                     val companyUuid = addition.companyUuid.toUuid()
                     menuProductCatch.clearCache(key = companyUuid)

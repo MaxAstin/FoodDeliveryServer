@@ -111,17 +111,18 @@ class AdditionService(
             .uuid
             .toUuid()
 
-        val additionGroup = additionRepository.getAdditionByName(
+        val addition = additionRepository.getAdditionByNameAndTag(
             name = postAddition.name,
+            tag = postAddition.tag,
             companyUuid = companyUuid
         )
-        if (additionGroup != null) {
-            additionAlreadyExistsError(name = additionGroup.name)
+        if (addition != null) {
+            additionAlreadyExistsError(name = addition.name, tag = addition.tag)
         }
 
         return additionRepository.insertAddition(
-            insertAddition = postAddition.mapPostAddition(companyUuid)
-        ).mapAddition()
+            insertAddition = postAddition.toInsertAddition(companyUuid = companyUuid)
+        ).toGetAddition()
     }
 
     suspend fun addAdditionToAdditionGroup(
@@ -156,7 +157,7 @@ class AdditionService(
             .uuid
             .toUuid()
         return additionRepository.getAdditionListByCompanyUuid(companyUuid = companyUuid)
-            .map(mapAddition)
+            .map(Addition::toGetAddition)
     }
 
     suspend fun patchAddition(
@@ -172,21 +173,31 @@ class AdditionService(
             additionUuids = listOf(additionUuid),
             companyUuid = companyUuid
         )
-        if (patchAddition.name != null) {
-            val addition = additionRepository.getAdditionByName(
-                name = patchAddition.name,
-                companyUuid = companyUuid.toUuid(),
+
+        val addition = additionRepository.getAdditionByUuid(
+            uuid = additionUuid.toUuid()
+        ).orThrowNotFoundByUuidError(uuid = additionUuid)
+        if ((patchAddition.name != null && patchAddition.name != addition.name) ||
+            (patchAddition.tag != null && patchAddition.tag != addition.tag)
+        ) {
+            val conflictingAddition = additionRepository.getAdditionByNameAndTag(
+                name = patchAddition.name ?: addition.name,
+                tag = patchAddition.tag ?: addition.tag,
+                companyUuid = companyUuid.toUuid()
             )
-            if (addition != null && additionUuid != addition.uuid) {
-                additionAlreadyExistsError(name = patchAddition.name)
+            if (conflictingAddition != null) {
+                additionAlreadyExistsError(
+                    name = conflictingAddition.name,
+                    tag = conflictingAddition.tag
+                )
             }
         }
 
         return additionRepository.updateAddition(
             additionUuid = additionUuid.toUuid(),
-            updateAddition = patchAddition.mapPatchAddition()
-        ).orThrowNotFoundByUuidError(additionUuid)
-            .mapAddition()
+            updateAddition = patchAddition.toUpdateAddition()
+        ).orThrowNotFoundByUuidError(uuid = additionUuid)
+            .toGetAddition()
     }
 
     private suspend fun checkMenuProductsAvailability(
@@ -244,8 +255,8 @@ class AdditionService(
         error("Addition group with name \"$name\" already exists")
     }
 
-    private fun additionAlreadyExistsError(name: String): Nothing {
-        error("Addition with name \"$name\" already exists")
+    private fun additionAlreadyExistsError(name: String, tag: String?): Nothing {
+        error("Addition with name \"$name\" and tag \"$tag\" already exists")
     }
 
 }

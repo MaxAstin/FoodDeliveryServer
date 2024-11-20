@@ -8,6 +8,7 @@ class PatchAddition(
     val fullName: String? = null,
     val price: Int? = null,
     val photoLink: String? = null,
+    val tag: String? = null,
     val priority: Int? = null,
     val isVisible: Boolean? = null,
 )

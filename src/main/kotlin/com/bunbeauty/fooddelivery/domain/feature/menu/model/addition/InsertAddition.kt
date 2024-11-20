@@ -7,6 +7,7 @@ class InsertAddition(
     val fullName: String?,
     val price: Int?,
     val photoLink: String,
+    val tag: String?,
     val priority: Int,
     val isVisible: Boolean,
     val companyUuid: UUID
