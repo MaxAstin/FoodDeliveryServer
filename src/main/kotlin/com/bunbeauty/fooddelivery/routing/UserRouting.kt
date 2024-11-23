@@ -69,7 +69,7 @@ private fun Route.updateNotificationToken() {
     val userService: UserService by inject()
 
     put("/user/notification_token") {
-        managerWithBody<PutNotificationToken> { bodyRequest ->
+        managerWithBody<PutNotificationToken, Unit> { bodyRequest ->
             userService.updateNotificationToken(
                 userUuid = bodyRequest.request.jwtUser.uuid,
                 putNotificationToken = bodyRequest.body
@@ -96,7 +96,7 @@ private fun Route.updateUnlimitedNotification() {
     val userService: UserService by inject()
 
     put("/user/unlimited_notification") {
-        managerWithBody<PutUnlimitedNotification> { bodyRequest ->
+        managerWithBody<PutUnlimitedNotification, Unit> { bodyRequest ->
             userService.updateUnlimitedNotification(
                 userUuid = bodyRequest.request.jwtUser.uuid,
                 putUnlimitedNotification = bodyRequest.body

@@ -13,26 +13,33 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.manager(
     }
 }
 
-suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getManagerWithListResult(block: (Request) -> List<R>) {
+suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.managerGetResult(
+    block: (Request) -> R
+) {
     manager { request ->
-        val result = block(request)
-        call.respondOkWithList(result)
+        getResult {
+            block(request)
+        }
     }
 }
 
-suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>.managerWithBody(
-    errorMessage: String? = null,
-    block: (BodyRequest<B>) -> R?,
+suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.managerGetListResult(
+    block: (Request) -> List<R>
 ) {
     manager { request ->
-        handleRequestWithBody(request, errorMessage, block)
+        getListResult {
+            block(request)
+        }
     }
 }
 
-suspend inline fun <reified B> PipelineContext<Unit, ApplicationCall>.managerWithBody(
-    block: (BodyRequest<B>) -> Unit,
+suspend inline fun <reified B, reified R: Any> PipelineContext<Unit, ApplicationCall>.managerWithBody(
+    block: (BodyRequest<B>) -> R,
 ) {
     manager { request ->
-        handleRequestWithBody(request, block)
+        handleRequestWithBody(
+            request = request,
+            block = block
+        )
     }
 }

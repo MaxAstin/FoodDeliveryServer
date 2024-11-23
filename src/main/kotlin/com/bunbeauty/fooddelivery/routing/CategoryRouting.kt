@@ -6,10 +6,9 @@ import com.bunbeauty.fooddelivery.domain.feature.menu.model.category.GetCategory
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.category.PatchCategory
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.category.PostCategory
 import com.bunbeauty.fooddelivery.domain.feature.menu.service.CategoryService
+import com.bunbeauty.fooddelivery.routing.extension.getListResult
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
-import com.bunbeauty.fooddelivery.routing.extension.respondOkWithList
-import com.bunbeauty.fooddelivery.routing.extension.safely
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
@@ -31,10 +30,9 @@ private fun Routing.getCategories() {
     val categoryService: CategoryService by inject()
 
     get("/category") {
-        safely {
+        getListResult {
             val companyUuid = call.getParameter(COMPANY_UUID_PARAMETER)
-            val categoryList = categoryService.getCategoryListByCompanyUuid(companyUuid)
-            call.respondOkWithList(categoryList)
+            categoryService.getCategoryListByCompanyUuid(companyUuid = companyUuid)
         }
     }
 }

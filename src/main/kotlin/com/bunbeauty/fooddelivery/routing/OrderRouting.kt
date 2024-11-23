@@ -79,10 +79,9 @@ private fun Route.getClientOrders() {
     val orderService: OrderService by inject()
 
     get("/client/order") {
-        client { request ->
+        clientGetListResult { request ->
             val count = call.parameters[COUNT_PARAMETER]?.toIntOrNull()
-            val orderList = orderService.getOrderListByUserUuid(request.jwtUser.uuid, count)
-            call.respondOkWithList(orderList)
+            orderService.getOrderListByUserUuid(request.jwtUser.uuid, count)
         }
     }
 }
@@ -92,10 +91,9 @@ private fun Route.getCafeOrders() {
     val orderService: OrderService by inject()
 
     get("/order") {
-        manager {
+        managerGetListResult {
             val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
-            val orderList = orderService.getOrderListByCafeUuid(cafeUuid)
-            call.respondOkWithList(orderList)
+            orderService.getOrderListByCafeUuid(cafeUuid)
         }
     }
 }
@@ -105,10 +103,9 @@ private fun Route.getCafeOrderDetails() {
     val orderService: OrderService by inject()
 
     get("/order/details") {
-        manager {
+        managerGetResult {
             val orderUuid = call.getParameter(UUID_PARAMETER)
-            val order = orderService.getOrderByUuid(orderUuid)
-            call.respondOkOrBad(order)
+            orderService.getOrderByUuid(orderUuid)
         }
     }
 }
@@ -172,11 +169,14 @@ private fun Route.getClientOrdersV2() {
     val orderService: OrderService by inject()
 
     get("/v2/client/order") {
-        client { request ->
+        clientGetListResult { request ->
             val count = call.parameters[COUNT_PARAMETER]?.toIntOrNull()
             val uuid = call.parameters[UUID_PARAMETER]
-            val orderList = orderService.getOrderListByUserUuidV2(request.jwtUser.uuid, count, uuid)
-            call.respondOkWithList(orderList)
+            orderService.getOrderListByUserUuidV2(
+                userUuid = request.jwtUser.uuid,
+                count = count,
+                orderUuid = uuid
+            )
         }
     }
 }
@@ -186,10 +186,9 @@ private fun Route.getCafeOrderDetailsV2() {
     val orderService: OrderService by inject()
 
     get("/v2/order/details") {
-        manager {
+        managerGetResult {
             val orderUuid = call.getParameter(UUID_PARAMETER)
-            val order = orderService.getOrderByUuidV2(orderUuid)
-            call.respondOkOrBad(order)
+            orderService.getOrderByUuidV2(uuid = orderUuid)
         }
     }
 }
@@ -232,10 +231,9 @@ private fun Route.getIsOrderAvailable() {
     val orderService: OrderService by inject()
 
     get("/order_availability") {
-        safely {
+        getResult {
             val companyUuid = call.getParameter(COMPANY_UUID_PARAMETER)
-            val orderAvailability = orderService.getOrderAvailability(companyUuid = companyUuid)
-            call.respondOk(orderAvailability)
+            orderService.getOrderAvailability(companyUuid = companyUuid)
         }
     }
 }

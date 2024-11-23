@@ -2,8 +2,8 @@ package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.CAFE_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.domain.feature.cafe.DeliveryZoneService
-import com.bunbeauty.fooddelivery.routing.extension.getManagerWithListResult
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
+import com.bunbeauty.fooddelivery.routing.extension.managerGetListResult
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -25,7 +25,7 @@ private fun Route.getDeliveryZoneByCafeUuid() {
     val deliveryZoneService: DeliveryZoneService by inject()
 
     get("/delivery_zone") {
-        getManagerWithListResult { request ->
+        managerGetListResult { request ->
             val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
             deliveryZoneService.getDeliveryZoneListByCafeUuid(
                 userUuid = request.jwtUser.uuid,

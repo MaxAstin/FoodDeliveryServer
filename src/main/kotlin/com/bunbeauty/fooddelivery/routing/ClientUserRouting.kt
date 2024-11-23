@@ -1,7 +1,9 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.domain.model.client_user.*
-import com.bunbeauty.fooddelivery.routing.extension.*
+import com.bunbeauty.fooddelivery.routing.extension.clientGetResult
+import com.bunbeauty.fooddelivery.routing.extension.clientWithBody
+import com.bunbeauty.fooddelivery.routing.extension.withBody
 import com.bunbeauty.fooddelivery.service.client_user.IClientUserService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -38,7 +40,7 @@ private fun Route.getClient() {
     val clientUserService: IClientUserService by inject()
 
     get("/client") {
-        getClientWithResult { request ->
+        clientGetResult { request ->
             clientUserService.getClientUserByUuid(request.jwtUser.uuid)
         }
     }
@@ -49,9 +51,8 @@ private fun Route.getClientSettings() {
     val clientUserService: IClientUserService by inject()
 
     get("/client/settings") {
-        client { request ->
-            val clientSettings = clientUserService.getClientSettingsByUuid(request.jwtUser.uuid)
-            call.respondOkOrBad(clientSettings)
+        clientGetResult { request ->
+            clientUserService.getClientSettingsByUuid(request.jwtUser.uuid)
         }
     }
 }
@@ -62,12 +63,13 @@ private fun Route.patchClientUser() {
 
     patch("/client") {
         clientWithBody<PatchClientUserSettings, GetClientUser> { bodyRequest ->
-            // Client activation is forbidden for clients
             if (bodyRequest.body.isActive == true) {
-                null
+                error("Client activation is forbidden for clients")
             } else {
-                val clientUserUuid = bodyRequest.request.jwtUser.uuid
-                clientUserService.updateClientUserByUuid(clientUserUuid, bodyRequest.body)
+                clientUserService.updateClientUserByUuid(
+                    clientUserUuid = bodyRequest.request.jwtUser.uuid,
+                    patchClientUser = bodyRequest.body
+                )
             }
         }
     }
@@ -79,12 +81,13 @@ private fun Route.patchClientSettings() {
 
     patch("/client/settings") {
         clientWithBody<PatchClientUserSettings, GetClientSettings> { bodyRequest ->
-            // Client activation is forbidden for clients
             if (bodyRequest.body.isActive == true) {
-                null
+                error("Client activation is forbidden for clients")
             } else {
-                val clientUserUuid = bodyRequest.request.jwtUser.uuid
-                clientUserService.updateClientUserSettingsByUuid(clientUserUuid, bodyRequest.body)
+                clientUserService.updateClientUserSettingsByUuid(
+                    clientUserUuid = bodyRequest.request.jwtUser.uuid,
+                    patchClientUser = bodyRequest.body
+                )
             }
         }
     }

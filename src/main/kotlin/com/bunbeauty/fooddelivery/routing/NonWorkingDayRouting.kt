@@ -5,10 +5,9 @@ import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
 import com.bunbeauty.fooddelivery.domain.model.non_working_day.GetNonWorkingDay
 import com.bunbeauty.fooddelivery.domain.model.non_working_day.PatchNonWorkingDay
 import com.bunbeauty.fooddelivery.domain.model.non_working_day.PostNonWorkingDay
+import com.bunbeauty.fooddelivery.routing.extension.getListResult
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
-import com.bunbeauty.fooddelivery.routing.extension.respondOkWithList
-import com.bunbeauty.fooddelivery.routing.extension.safely
 import com.bunbeauty.fooddelivery.service.NonWorkingDayService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -31,10 +30,9 @@ private fun Routing.getNonWorkingDaysByCafeUuid() {
     val nonWorkingDayService: NonWorkingDayService by inject()
 
     get("/non_working_day") {
-        safely {
+        getListResult {
             val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
-            val nonWorkingDayList = nonWorkingDayService.getNonWorkingDayListByCafeUuid(cafeUuid)
-            call.respondOkWithList(nonWorkingDayList)
+            nonWorkingDayService.getNonWorkingDayListByCafeUuid(cafeUuid = cafeUuid)
         }
     }
 }

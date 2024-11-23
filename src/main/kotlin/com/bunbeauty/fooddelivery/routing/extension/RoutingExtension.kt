@@ -16,7 +16,7 @@ import io.ktor.util.pipeline.*
 import java.sql.DriverManager.println
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(block: () -> Unit) {
-    println("request ${context.request.path()}")
+    println("Request: ${context.request.path()}")
     try {
         block()
     } catch (exception: Exception) {
@@ -41,17 +41,17 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(block: () -> Un
     }
 }
 
-suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getWithResult(block: () -> R) {
+suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getResult(block: () -> R) {
     safely {
         val result = block()
         call.respondOk(result)
     }
 }
 
-suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getWithListResult(block: () -> List<R>) {
+suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getListResult(block: () -> List<R>) {
     safely {
-        val result = block()
-        call.respondOkWithList(result)
+        val listResult = block()
+        call.respondOk(listResult.toListWrapper())
     }
 }
 
@@ -73,47 +73,30 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.checkRights(
     }
 }
 
-suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>.withBody(
-    errorMessage: String? = null,
-    block: (B) -> R?,
-) {
+suspend inline fun <reified B, reified R: Any> PipelineContext<Unit, ApplicationCall>.withBody(block: (B) -> R) {
     safely {
         val bodyModel: B = call.receive()
-        val getModel: R? = block(bodyModel)
-        call.respondOkOrBad(model = getModel, errorMessage = errorMessage)
+        val result = block(bodyModel)
+        call.respondOk(model = result)
     }
 }
 
-suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>.handleRequestWithBody(
+suspend inline fun <reified B, reified R : Any> PipelineContext<Unit, ApplicationCall>.handleRequestWithBody(
     request: Request,
-    errorMessage: String? = null,
-    block: (BodyRequest<B>) -> R?,
+    block: (BodyRequest<B>) -> R,
 ) {
     val body: B = call.receive()
-    val result: R? = block(
+    val result = block(
         BodyRequest(
             request = request,
             body = body
         )
     )
-    call.respondOkOrBad(
-        model = result,
-        errorMessage = errorMessage ?: "Something went wrong"
-    )
-}
-
-suspend inline fun <reified B> PipelineContext<Unit, ApplicationCall>.handleRequestWithBody(
-    request: Request,
-    block: (BodyRequest<B>) -> Unit,
-) {
-    val body: B = call.receive()
-    block(
-        BodyRequest(
-            request = request,
-            body = body
-        )
-    )
-    call.respondOk()
+    if (result == Unit) {
+        call.respondOk()
+    } else {
+        call.respondOk(result)
+    }
 }
 
 suspend inline fun <reified T : Any>  PipelineContext<Unit, ApplicationCall>.respond(block: () -> T) {
@@ -145,21 +128,6 @@ suspend inline fun ApplicationCall.respondOk() {
 
 suspend inline fun <reified T : Any> ApplicationCall.respondOk(model: T) {
     respond(HttpStatusCode.OK, model)
-}
-
-suspend inline fun <reified T : Any> ApplicationCall.respondOkOrBad(
-    model: T?,
-    errorMessage: String? = null,
-) {
-    if (model == null) {
-        respondBad(errorMessage ?: "Data not found")
-    } else {
-        respondOk(model)
-    }
-}
-
-suspend inline fun <reified T : Any> ApplicationCall.respondOkWithList(list: List<T>) {
-    respond(HttpStatusCode.OK, list.toListWrapper())
 }
 
 suspend inline fun ApplicationCall.respondBad(message: String) {
