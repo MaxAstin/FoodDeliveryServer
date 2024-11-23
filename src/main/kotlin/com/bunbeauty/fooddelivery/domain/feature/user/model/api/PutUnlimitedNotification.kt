@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.domain.feature.user
+package com.bunbeauty.fooddelivery.domain.feature.user.model.api
 
 import kotlinx.serialization.Serializable
 

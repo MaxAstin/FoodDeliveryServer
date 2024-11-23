@@ -7,7 +7,8 @@ import com.bunbeauty.fooddelivery.data.features.company.mapper.mapCompanyEntity
 import com.bunbeauty.fooddelivery.data.features.user.mapper.toUser
 import com.bunbeauty.fooddelivery.data.table.UserTable
 import com.bunbeauty.fooddelivery.domain.feature.company.Company
-import com.bunbeauty.fooddelivery.domain.feature.user.User
+import com.bunbeauty.fooddelivery.domain.feature.user.model.domain.NotificationData
+import com.bunbeauty.fooddelivery.domain.feature.user.model.domain.User
 import com.bunbeauty.fooddelivery.domain.model.user.InsertUser
 import java.util.*
 
@@ -44,12 +45,27 @@ class UserRepository {
 
     suspend fun updateNotificationToken(
         uuid: UUID,
-        token: String?
+        notificationData: NotificationData
     ): User? {
         return query {
             UserEntity.findById(id = uuid)
                 ?.apply {
-                    notificationToken = token
+                    notificationToken = notificationData.token
+                    notificationDevice = notificationData.device
+                    updateNotificationTokenDateTime = notificationData.updateTokenDateTime
+                }?.toUser()
+        }
+    }
+
+    suspend fun clearNotificationToken(
+        uuid: UUID,
+        dateTime: String
+    ): User? {
+        return query {
+            UserEntity.findById(id = uuid)
+                ?.apply {
+                    notificationToken = null
+                    updateNotificationTokenDateTime = dateTime
                 }?.toUser()
         }
     }

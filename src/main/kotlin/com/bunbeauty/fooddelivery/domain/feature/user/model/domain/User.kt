@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.domain.feature.user
+package com.bunbeauty.fooddelivery.domain.feature.user.model.domain
 
 import com.bunbeauty.fooddelivery.domain.feature.city.CityWithCafes
 import com.bunbeauty.fooddelivery.domain.feature.company.Company

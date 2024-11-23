@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.service
 import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
 import com.bunbeauty.fooddelivery.data.features.user.UserRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
-import com.bunbeauty.fooddelivery.domain.feature.user.User
+import com.bunbeauty.fooddelivery.domain.feature.user.model.domain.User
 import com.bunbeauty.fooddelivery.domain.model.notification.PostNotification
 import com.bunbeauty.fooddelivery.domain.toUuid
 import com.google.firebase.messaging.*

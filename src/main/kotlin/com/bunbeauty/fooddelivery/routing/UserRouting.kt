@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.routing
 
-import com.bunbeauty.fooddelivery.domain.feature.user.PutNotificationToken
-import com.bunbeauty.fooddelivery.domain.feature.user.PutUnlimitedNotification
 import com.bunbeauty.fooddelivery.domain.feature.user.UserService
+import com.bunbeauty.fooddelivery.domain.feature.user.model.api.PutNotificationToken
+import com.bunbeauty.fooddelivery.domain.feature.user.model.api.PutUnlimitedNotification
 import com.bunbeauty.fooddelivery.domain.model.user.GetUser
 import com.bunbeauty.fooddelivery.domain.model.user.PostUser
 import com.bunbeauty.fooddelivery.domain.model.user.PostUserAuth
@@ -34,7 +34,7 @@ private fun Routing.userLogin() {
     val userService: UserService by inject()
 
     post("/user/login") {
-        withBody<PostUserAuth, UserAuthResponse>(errorMessage = "Unable to log in with provided credentials") { body ->
+        withBody<PostUserAuth, UserAuthResponse> { body ->
             userService.login(postUserAuth = body)
         }
     }
