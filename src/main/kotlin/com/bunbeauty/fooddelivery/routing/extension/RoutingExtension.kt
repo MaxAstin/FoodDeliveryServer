@@ -6,6 +6,7 @@ import com.bunbeauty.fooddelivery.domain.error.ExceptionWithCode
 import com.bunbeauty.fooddelivery.domain.toListWrapper
 import com.bunbeauty.fooddelivery.routing.model.BodyRequest
 import com.bunbeauty.fooddelivery.routing.model.Request
+import com.bunbeauty.fooddelivery.util.fullMessage
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -27,16 +28,16 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(block: () -> Un
                         value = exception.code,
                         description = exception.message
                     ),
-                    exception.message
+                    exception.fullMessage
                 )
             }
 
             else -> {
-                call.respondBad("Exception: ${exception.message}")
+                call.respondBad("Exception: ${exception.fullMessage}")
             }
         }
 
-        println("Exception: ${exception.message}")
+        println("Exception: ${exception.fullMessage}")
         exception.printStackTrace()
     }
 }
