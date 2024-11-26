@@ -5,7 +5,6 @@ import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.table.order.OrderProductTable
 import com.bunbeauty.fooddelivery.data.table.order.OrderTable
-import com.bunbeauty.fooddelivery.domain.model.statistic.GetStatisticOrder
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -38,14 +37,5 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     val oderProducts: SizedIterable<OrderProductEntity> by OrderProductEntity referrersOn OrderProductTable.order
 
     companion object : UUIDEntityClass<OrderEntity>(OrderTable)
-
-    fun toStatisticOrder() = GetStatisticOrder(
-        uuid = uuid,
-        code = code,
-        time = time,
-        statisticOrderProductList = oderProducts.map { oderProductEntity ->
-            oderProductEntity.toStatisticOrderProduct()
-        }
-    )
 
 }

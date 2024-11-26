@@ -4,9 +4,6 @@ import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.CafeWithCity
 import com.bunbeauty.fooddelivery.domain.feature.city.City
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUserLight
-import com.bunbeauty.fooddelivery.domain.feature.company.Company
-import com.bunbeauty.fooddelivery.domain.feature.company.Delivery
-import com.bunbeauty.fooddelivery.domain.feature.company.Payment
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderProduct
 
@@ -58,22 +55,9 @@ object FakeOrder {
                     isVisible = true,
                 ),
             ),
-            company = Company(
-                uuid = "",
-                name = "",
-                offset = 3,
-                delivery = Delivery(
-                    forFree = 0,
-                    cost = 0,
-                ),
-                forceUpdateVersion = 0,
-                payment = Payment(
-                    phoneNumber = null,
-                    cardNumber = null,
-                ),
-                percentDiscount = null,
-                maxVisibleRecommendationCount = 0,
-                citiesWithCafes = emptyList(),
+            company = FakeCompany.create(
+                forFreeDelivery = 0,
+                deliveryCost = 0
             ),
             clientUser = ClientUserLight(
                 uuid = "",

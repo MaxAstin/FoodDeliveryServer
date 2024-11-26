@@ -2,7 +2,6 @@ package com.bunbeauty.fooddelivery.data.features.order
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.ClientUserEntity
-import com.bunbeauty.fooddelivery.data.entity.StatisticOrderEntity
 import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductEntity
@@ -17,7 +16,6 @@ import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.InsertOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.InsertOrderV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v3.InsertOrderV3
-import com.bunbeauty.fooddelivery.domain.model.order.cafe.GetStatisticOrder
 import com.bunbeauty.fooddelivery.domain.toUuid
 import kotlinx.coroutines.flow.Flow
 import org.jetbrains.exposed.sql.SortOrder
@@ -198,35 +196,6 @@ class OrderRepository {
                     (OrderTable.time greater limitTime)
         }.orderBy(OrderTable.time to SortOrder.DESC)
             .map(mapOrderEntity)
-    }
-
-    suspend fun getOrderDetailsListByCafeUuid(
-        cafeUuid: String,
-        startTimeMillis: Long,
-        endTimeMillis: Long,
-    ): List<Order> = query {
-        OrderEntity.find {
-            (OrderTable.cafe eq cafeUuid.toUuid()) and
-                    OrderTable.time.greaterEq(startTimeMillis) and
-                    OrderTable.time.less(endTimeMillis)
-        }.orderBy(OrderTable.time to SortOrder.DESC)
-            .map(mapOrderEntity)
-    }
-
-    suspend fun getStatisticOrderListByCafeUuid(
-        cafeUuid: String,
-        startTimeMillis: Long,
-        endTimeMillis: Long,
-    ): List<GetStatisticOrder> = query {
-        StatisticOrderEntity.find {
-            (OrderTable.cafe eq cafeUuid.toUuid()) and
-                    OrderTable.time.greaterEq(startTimeMillis) and
-                    OrderTable.time.less(endTimeMillis) and
-                    (OrderTable.status eq "DELIVERED")
-        }.orderBy(OrderTable.time to SortOrder.DESC)
-            .map { orderEntity ->
-                orderEntity.toStatisticOrder()
-            }
     }
 
     suspend fun updateOrderStatusByUuid(orderUuid: String, status: String): Order? = query {

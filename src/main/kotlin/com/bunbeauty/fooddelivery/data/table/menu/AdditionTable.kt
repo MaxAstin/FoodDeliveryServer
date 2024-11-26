@@ -9,6 +9,7 @@ object AdditionTable : UUIDTable() {
     val fullName = varchar("fullName", 512).nullable()
     val price = integer("price").nullable()
     val photoLink = varchar("photoLink", 512)
+    val tag = varchar("tag", 512).nullable()
     val priority = integer("priority")
     val isVisible = bool("isVisible")
 

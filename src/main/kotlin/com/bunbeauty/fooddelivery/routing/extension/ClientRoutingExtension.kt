@@ -11,25 +11,31 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.client(block: (Request
     }
 }
 
-suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getClientWithResult(block: (Request) -> R) {
+suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.clientGetResult(block: (Request) -> R) {
     client { request ->
-        val result = block(request)
-        call.respondOk(result)
+        getResult {
+            block(request)
+        }
     }
 }
 
-suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getClientWithListResult(block: (Request) -> List<R>) {
-    client { request ->
-        val result = block(request)
-        call.respondOkWithList(result)
-    }
-}
-
-suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>.clientWithBody(
-    errorMessage: String? = null,
-    block: (BodyRequest<B>) -> R?,
+suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.clientGetListResult(
+    block: (Request) -> List<R>
 ) {
     client { request ->
-        handleRequestWithBody(request, errorMessage, block)
+        getListResult {
+            block(request)
+        }
+    }
+}
+
+suspend inline fun <reified B, reified R : Any> PipelineContext<Unit, ApplicationCall>.clientWithBody(
+    block: (BodyRequest<B>) -> R,
+) {
+    client { request ->
+        handleRequestWithBody(
+            request = request,
+            block = block
+        )
     }
 }

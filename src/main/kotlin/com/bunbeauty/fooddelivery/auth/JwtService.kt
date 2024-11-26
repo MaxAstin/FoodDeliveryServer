@@ -6,7 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.bunbeauty.fooddelivery.data.Constants.JWT_SECRET
 import com.bunbeauty.fooddelivery.data.enums.UserRole
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUser
-import com.bunbeauty.fooddelivery.domain.feature.user.User
+import com.bunbeauty.fooddelivery.domain.feature.user.model.domain.User
 import io.ktor.server.auth.jwt.*
 
 class JwtService : IJwtService {

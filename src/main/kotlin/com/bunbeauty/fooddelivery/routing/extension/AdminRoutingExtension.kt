@@ -11,33 +11,29 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.admin(block: (Request)
     }
 }
 
-suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getAdminWithResult(block: (Request) -> R) {
+suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.adminGetResult(block: (Request) -> R) {
     admin { request ->
-        val result = block(request)
-        call.respondOk(result)
+        getResult {
+            block(request)
+        }
     }
 }
 
 suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getAdminWithListResult(block: (Request) -> List<R>) {
     admin { request ->
-        val result = block(request)
-        call.respondOkWithList(result)
+        getListResult {
+            block(request)
+        }
     }
 }
 
-suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>.adminWithBody(
-    errorMessage: String? = null,
-    block: (BodyRequest<B>) -> R?,
+suspend inline fun <reified B, reified R : Any> PipelineContext<Unit, ApplicationCall>.adminWithBody(
+    block: (BodyRequest<B>) -> R,
 ) {
     admin { request ->
-        handleRequestWithBody(request, errorMessage, block)
-    }
-}
-
-suspend inline fun <reified R> PipelineContext<Unit, ApplicationCall>.adminDelete(
-    deleteBlock: (String) -> R?,
-) {
-    admin {
-        delete(deleteBlock)
+        handleRequestWithBody(
+            request = request,
+            block = block
+        )
     }
 }

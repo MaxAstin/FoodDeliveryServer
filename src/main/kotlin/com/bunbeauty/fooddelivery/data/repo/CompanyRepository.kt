@@ -2,14 +2,15 @@ package com.bunbeauty.fooddelivery.data.repo
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.domain.model.company.GetCompany
+import com.bunbeauty.fooddelivery.data.features.company.mapper.mapCompanyEntity
+import com.bunbeauty.fooddelivery.domain.feature.company.Company
 import com.bunbeauty.fooddelivery.domain.model.company.InsertCompany
 import com.bunbeauty.fooddelivery.domain.model.company.UpdateCompany
 import java.util.*
 
 class CompanyRepository {
 
-    suspend fun insertCompany(insertCompany: InsertCompany): GetCompany = query {
+    suspend fun insertCompany(insertCompany: InsertCompany): Company = query {
         CompanyEntity.new {
             name = insertCompany.name
             forFreeDelivery = insertCompany.forFreeDelivery
@@ -18,10 +19,10 @@ class CompanyRepository {
             percentDiscount = insertCompany.percentDiscount?.takeIf { percentDiscount ->
                 percentDiscount != 0
             }
-        }.toCompany()
+        }.mapCompanyEntity()
     }
 
-    suspend fun updateCompany(updateCompany: UpdateCompany): GetCompany? = query {
+    suspend fun updateCompany(updateCompany: UpdateCompany): Company? = query {
         CompanyEntity.findById(updateCompany.uuid)?.apply {
             name = updateCompany.name ?: name
             forFreeDelivery = updateCompany.forFreeDelivery ?: forFreeDelivery
@@ -30,16 +31,15 @@ class CompanyRepository {
             percentDiscount = (updateCompany.percentDiscount ?: percentDiscount).takeIf { percentDiscount ->
                 percentDiscount != 0
             }
-        }?.toCompany()
+            isOpen = updateCompany.isOpen ?: isOpen
+        }?.mapCompanyEntity()
     }
 
-    suspend fun getCompanyByUuid(uuid: UUID): GetCompany? = query {
-        CompanyEntity.findById(uuid)?.toCompany()
+    suspend fun getCompanyByUuid(uuid: UUID): Company? = query {
+        CompanyEntity.findById(uuid)?.mapCompanyEntity()
     }
 
-    suspend fun getCompanyList(): List<GetCompany> = query {
-        CompanyEntity.all().map { companyEntity ->
-            companyEntity.toCompany()
-        }
+    suspend fun getCompanyList(): List<Company> = query {
+        CompanyEntity.all().map(mapCompanyEntity)
     }
 }

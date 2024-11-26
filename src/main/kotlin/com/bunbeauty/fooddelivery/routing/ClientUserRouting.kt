@@ -1,14 +1,12 @@
 package com.bunbeauty.fooddelivery.routing
 
-import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientSettings
-import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientUser
-import com.bunbeauty.fooddelivery.domain.model.client_user.PatchClientUserSettings
-import com.bunbeauty.fooddelivery.domain.model.client_user.PostClientUserAuth
-import com.bunbeauty.fooddelivery.routing.extension.*
+import com.bunbeauty.fooddelivery.domain.model.client_user.*
+import com.bunbeauty.fooddelivery.routing.extension.clientGetResult
+import com.bunbeauty.fooddelivery.routing.extension.clientWithBody
+import com.bunbeauty.fooddelivery.routing.extension.withBody
 import com.bunbeauty.fooddelivery.service.client_user.IClientUserService
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
@@ -31,10 +29,8 @@ private fun Routing.clientLogin() {
     val clientUserService: IClientUserService by inject()
 
     post("/client/login") {
-        safely {
-            val postClientUserAuth: PostClientUserAuth = call.receive()
-            val clientAuthResponse = clientUserService.login(postClientUserAuth)
-            call.respondOk(clientAuthResponse)
+        withBody<PostClientUserAuth, ClientAuthResponse> { postClientUserAuth ->
+            clientUserService.login(postClientUserAuth)
         }
     }
 }
@@ -44,9 +40,8 @@ private fun Route.getClient() {
     val clientUserService: IClientUserService by inject()
 
     get("/client") {
-        client { request ->
-            val clientUser = clientUserService.getClientUserByUuid(request.jwtUser.uuid)
-            call.respondOkOrBad(clientUser)
+        clientGetResult { request ->
+            clientUserService.getClientUserByUuid(request.jwtUser.uuid)
         }
     }
 }
@@ -56,9 +51,8 @@ private fun Route.getClientSettings() {
     val clientUserService: IClientUserService by inject()
 
     get("/client/settings") {
-        client { request ->
-            val clientSettings = clientUserService.getClientSettingsByUuid(request.jwtUser.uuid)
-            call.respondOkOrBad(clientSettings)
+        clientGetResult { request ->
+            clientUserService.getClientSettingsByUuid(request.jwtUser.uuid)
         }
     }
 }
@@ -69,12 +63,13 @@ private fun Route.patchClientUser() {
 
     patch("/client") {
         clientWithBody<PatchClientUserSettings, GetClientUser> { bodyRequest ->
-            // Client activation is forbidden for clients
             if (bodyRequest.body.isActive == true) {
-                null
+                error("Client activation is forbidden for clients")
             } else {
-                val clientUserUuid = bodyRequest.request.jwtUser.uuid
-                clientUserService.updateClientUserByUuid(clientUserUuid, bodyRequest.body)
+                clientUserService.updateClientUserByUuid(
+                    clientUserUuid = bodyRequest.request.jwtUser.uuid,
+                    patchClientUser = bodyRequest.body
+                )
             }
         }
     }
@@ -86,12 +81,13 @@ private fun Route.patchClientSettings() {
 
     patch("/client/settings") {
         clientWithBody<PatchClientUserSettings, GetClientSettings> { bodyRequest ->
-            // Client activation is forbidden for clients
             if (bodyRequest.body.isActive == true) {
-                null
+                error("Client activation is forbidden for clients")
             } else {
-                val clientUserUuid = bodyRequest.request.jwtUser.uuid
-                clientUserService.updateClientUserSettingsByUuid(clientUserUuid, bodyRequest.body)
+                clientUserService.updateClientUserSettingsByUuid(
+                    clientUserUuid = bodyRequest.request.jwtUser.uuid,
+                    patchClientUser = bodyRequest.body
+                )
             }
         }
     }

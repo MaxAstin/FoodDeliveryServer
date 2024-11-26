@@ -1,6 +1,7 @@
 package com.bunbeauty.fooddelivery.domain.feature.cafe
 
 import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
+import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.mapper.cafe.mapCafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.mapper.cafe.mapPatchCafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.mapper.cafe.mapPostCafe
@@ -30,7 +31,7 @@ class CafeService(
             .map(mapCafe)
     }
 
-    suspend fun updateCafe(userUuid: String, cafeUuid: String, patchCafe: PatchCafe): GetCafe? {
+    suspend fun updateCafe(userUuid: String, cafeUuid: String, patchCafe: PatchCafe): GetCafe {
         privacyCheckService.checkIsCafeAvailable(
             userUuid = userUuid,
             cafeUuid = cafeUuid
@@ -39,7 +40,8 @@ class CafeService(
         return cafeRepository.updateCafe(
             cafeUuid = cafeUuid,
             updateCafe = patchCafe.mapPatchCafe()
-        )?.mapCafe()
+        ).orThrowNotFoundByUuidError(uuid = cafeUuid)
+            .mapCafe()
     }
 
 }

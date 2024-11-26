@@ -25,6 +25,7 @@ object FakeCompany {
             ),
             percentDiscount = null,
             maxVisibleRecommendationCount = 0,
+            isOpen = true,
             citiesWithCafes = emptyList(),
         )
     }

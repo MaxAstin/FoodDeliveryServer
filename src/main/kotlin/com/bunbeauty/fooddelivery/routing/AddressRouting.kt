@@ -7,8 +7,8 @@ import com.bunbeauty.fooddelivery.domain.feature.address.model.GetAddress
 import com.bunbeauty.fooddelivery.domain.feature.address.model.GetAddressV2
 import com.bunbeauty.fooddelivery.domain.feature.address.model.PostAddress
 import com.bunbeauty.fooddelivery.domain.feature.address.model.PostAddressV2
+import com.bunbeauty.fooddelivery.routing.extension.clientGetListResult
 import com.bunbeauty.fooddelivery.routing.extension.clientWithBody
-import com.bunbeauty.fooddelivery.routing.extension.getClientWithListResult
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -34,7 +34,7 @@ private fun Route.getAddresses() {
     val addressService: AddressService by inject()
 
     get("/address") {
-        getClientWithListResult { request ->
+        clientGetListResult { request ->
             val cityUuid = call.getParameter(CITY_UUID_PARAMETER)
             addressService.getAddressListByUserUuidAndCityUuid(
                 userUuid = request.jwtUser.uuid,
@@ -49,7 +49,7 @@ private fun Route.getAddressesV2() {
     val addressService: AddressService by inject()
 
     get("/v2/address") {
-        getClientWithListResult { request ->
+        clientGetListResult { request ->
             val cityUuid = call.getParameter(CITY_UUID_PARAMETER)
             addressService.getAddressListByUserUuidAndCityUuidV2(
                 userUuid = request.jwtUser.uuid,
@@ -64,7 +64,7 @@ private fun Route.getSuggestions() {
     val addressService: AddressService by inject()
 
     get("/street/suggestions") {
-        getClientWithListResult {
+        clientGetListResult {
             val query = call.getParameter(QUERY_PARAMETER)
             val cityUuid = call.getParameter(CITY_UUID_PARAMETER)
             addressService.getStreetSuggestionList(

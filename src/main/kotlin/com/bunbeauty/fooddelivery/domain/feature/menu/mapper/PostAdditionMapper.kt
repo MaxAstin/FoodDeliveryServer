@@ -4,12 +4,13 @@ import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.InsertAddit
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAddition
 import java.util.*
 
-val mapPostAddition: PostAddition.(UUID) -> InsertAddition = { companyUuid ->
-    InsertAddition(
+fun PostAddition.toInsertAddition(companyUuid: UUID): InsertAddition {
+    return InsertAddition(
         name = name,
         fullName = fullName,
         price = price,
         photoLink = photoLink,
+        tag = tag,
         priority = priority,
         isVisible = isVisible,
         companyUuid = companyUuid,

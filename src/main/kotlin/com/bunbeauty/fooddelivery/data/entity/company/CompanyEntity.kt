@@ -3,10 +3,6 @@ package com.bunbeauty.fooddelivery.data.entity.company
 import com.bunbeauty.fooddelivery.data.entity.CityEntity
 import com.bunbeauty.fooddelivery.data.table.CityTable
 import com.bunbeauty.fooddelivery.data.table.CompanyTable
-import com.bunbeauty.fooddelivery.domain.model.company.GetCompany
-import com.bunbeauty.fooddelivery.domain.model.company.delivery.GetDelivery
-import com.bunbeauty.fooddelivery.domain.model.company.payment_method.GetPayment
-import com.bunbeauty.fooddelivery.domain.model.company.update_version.GetForceUpdateVersion
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -24,27 +20,10 @@ class CompanyEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var paymentCardNumber: String? by CompanyTable.paymentCardNumber
     var percentDiscount: Int? by CompanyTable.percentDiscount
     var maxVisibleRecommendationCount: Int by CompanyTable.maxVisibleRecommendationCount
+    var isOpen: Boolean by CompanyTable.isOpen
 
     val cities: SizedIterable<CityEntity> by CityEntity referrersOn CityTable.company
 
     companion object : UUIDEntityClass<CompanyEntity>(CompanyTable)
 
-    fun toCompany() = GetCompany(
-        uuid = uuid,
-        name = name,
-        offset = 3,
-        delivery = GetDelivery(
-            forFree = forFreeDelivery,
-            cost = deliveryCost
-        ),
-        forceUpdateVersion = GetForceUpdateVersion(
-            version = forceUpdateVersion
-        ),
-        payment = GetPayment(
-            phoneNumber = paymentPhoneNumber,
-            cardNumber = paymentCardNumber
-        ),
-        percentDiscount = percentDiscount,
-        maxVisibleRecommendationCount = maxVisibleRecommendationCount,
-    )
 }

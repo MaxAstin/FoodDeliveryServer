@@ -23,7 +23,10 @@ private fun Route.postNotification() {
 
     post("/notification") {
         managerWithBody<PostNotification, String> { bodyRequest ->
-            notificationService.sendNotification(bodyRequest.request.jwtUser.uuid, bodyRequest.body)
+            notificationService.sendNotification(
+                userUuid = bodyRequest.request.jwtUser.uuid,
+                postNotification = bodyRequest.body
+            )
         }
     }
 

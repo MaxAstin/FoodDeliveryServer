@@ -6,6 +6,7 @@ import com.bunbeauty.fooddelivery.domain.error.ExceptionWithCode
 import com.bunbeauty.fooddelivery.domain.toListWrapper
 import com.bunbeauty.fooddelivery.routing.model.BodyRequest
 import com.bunbeauty.fooddelivery.routing.model.Request
+import com.bunbeauty.fooddelivery.util.fullMessage
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -16,7 +17,7 @@ import io.ktor.util.pipeline.*
 import java.sql.DriverManager.println
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(block: () -> Unit) {
-    println("request ${context.request.path()}")
+    println("Request: ${context.request.path()}")
     try {
         block()
     } catch (exception: Exception) {
@@ -27,31 +28,31 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.safely(block: () -> Un
                         value = exception.code,
                         description = exception.message
                     ),
-                    exception.message
+                    exception.fullMessage
                 )
             }
 
             else -> {
-                call.respondBad("Exception: ${exception.message}")
+                call.respondBad("Exception: ${exception.fullMessage}")
             }
         }
 
-        println("Exception: ${exception.message}")
+        println("Exception: ${exception.fullMessage}")
         exception.printStackTrace()
     }
 }
 
-suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getWithResult(block: () -> R) {
+suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getResult(block: () -> R) {
     safely {
         val result = block()
         call.respondOk(result)
     }
 }
 
-suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getWithListResult(block: () -> List<R>) {
+suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getListResult(block: () -> List<R>) {
     safely {
-        val result = block()
-        call.respondOkWithList(result)
+        val listResult = block()
+        call.respondOk(listResult.toListWrapper())
     }
 }
 
@@ -73,41 +74,50 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.checkRights(
     }
 }
 
-suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>.withBody(
-    errorMessage: String? = null,
-    block: (B) -> R?,
-) {
+suspend inline fun <reified B, reified R: Any> PipelineContext<Unit, ApplicationCall>.withBody(block: (B) -> R) {
     safely {
         val bodyModel: B = call.receive()
-        val getModel: R? = block(bodyModel)
-        call.respondOkOrBad(model = getModel, errorMessage = errorMessage)
+        val result = block(bodyModel)
+        call.respondOk(model = result)
     }
 }
 
-suspend inline fun <reified B, reified R> PipelineContext<Unit, ApplicationCall>.handleRequestWithBody(
+suspend inline fun <reified B, reified R : Any> PipelineContext<Unit, ApplicationCall>.handleRequestWithBody(
     request: Request,
-    errorMessage: String? = null,
-    block: (BodyRequest<B>) -> R?,
+    block: (BodyRequest<B>) -> R,
 ) {
     val body: B = call.receive()
-    val result: R? = block(
+    val result = block(
         BodyRequest(
             request = request,
             body = body
         )
     )
-    call.respondOkOrBad(
-        model = result,
-        errorMessage = errorMessage ?: "Something went wrong"
-    )
+    if (result == Unit) {
+        call.respondOk()
+    } else {
+        call.respondOk(result)
+    }
 }
 
-suspend inline fun <reified R> PipelineContext<Unit, ApplicationCall>.delete(
-    deleteBlock: (String) -> R?,
+suspend inline fun <reified T : Any>  PipelineContext<Unit, ApplicationCall>.respond(block: () -> T) {
+    call.respond(block())
+}
+
+suspend inline fun PipelineContext<Unit, ApplicationCall>.deleteByUserUuid(
+    request: Request,
+    deleteBlock: (String) -> Unit,
+) {
+    deleteBlock(request.jwtUser.uuid)
+    call.respondNoContent()
+}
+
+suspend inline fun PipelineContext<Unit, ApplicationCall>.deleteByUuid(
+    deleteBlock: (String) -> Unit,
 ) {
     val uuid = call.getParameter(UUID_PARAMETER)
-    val result = deleteBlock(uuid)
-    call.respondOkOrBad(model = result)
+    deleteBlock(uuid)
+    call.respondNoContent()
 }
 
 val PipelineContext<Unit, ApplicationCall>.clientIp: String
@@ -121,25 +131,14 @@ suspend inline fun <reified T : Any> ApplicationCall.respondOk(model: T) {
     respond(HttpStatusCode.OK, model)
 }
 
-suspend inline fun <reified T : Any> ApplicationCall.respondOkOrBad(
-    model: T?,
-    errorMessage: String? = null,
-) {
-    if (model == null) {
-        respondBad(errorMessage ?: "Data not found")
-    } else {
-        respondOk(model)
-    }
-}
-
-suspend inline fun <reified T : Any> ApplicationCall.respondOkWithList(list: List<T>) {
-    respond(HttpStatusCode.OK, list.toListWrapper())
-}
-
 suspend inline fun ApplicationCall.respondBad(message: String) {
     respond(HttpStatusCode.BadRequest, message)
 }
 
 suspend inline fun ApplicationCall.respondNotFound() {
     respond(HttpStatusCode.NotFound)
+}
+
+suspend inline fun ApplicationCall.respondNoContent() {
+    respond(HttpStatusCode.NoContent)
 }

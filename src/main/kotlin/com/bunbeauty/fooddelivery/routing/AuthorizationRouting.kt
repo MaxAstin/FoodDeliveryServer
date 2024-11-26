@@ -1,6 +1,7 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants
+import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
 import com.bunbeauty.fooddelivery.domain.model.client_user.ClientAuthResponse
 import com.bunbeauty.fooddelivery.domain.model.client_user.login.*
 import com.bunbeauty.fooddelivery.routing.extension.*
@@ -46,7 +47,7 @@ private fun Routing.checkCode() {
 
     put("/client/code_check") {
         withBody<PutClientCode, ClientAuthResponse> { putClientCode ->
-            val uuid = call.parameters[Constants.UUID_PARAMETER] ?: error("${Constants.UUID_PARAMETER} is required")
+            val uuid = call.getParameter(UUID_PARAMETER)
             authorizationService.checkCode(uuid, putClientCode)
         }
     }
@@ -58,8 +59,8 @@ private fun Routing.resendCode() {
 
     put("/client/code_resend") {
         safely {
-            val uuid = call.parameters[Constants.UUID_PARAMETER] ?: error("${Constants.UUID_PARAMETER} is required")
-            authorizationService.resendCode(uuid, clientIp)
+            val uuid = call.getParameter(UUID_PARAMETER)
+            authorizationService.resendCode(uuid = uuid, clientIp = clientIp)
             call.respondOk()
         }
     }
