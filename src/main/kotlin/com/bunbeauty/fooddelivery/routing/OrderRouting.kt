@@ -1,6 +1,7 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.CAFE_UUID_PARAMETER
+import com.bunbeauty.fooddelivery.data.Constants.COMPANY_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.COUNT_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
 import com.bunbeauty.fooddelivery.domain.feature.order.OrderService
@@ -26,6 +27,8 @@ import org.koin.ktor.ext.inject
 fun Application.configureOrderRouting() {
 
     routing {
+        getIsOrderAvailable()
+
         authenticate {
             postOrder()
             patchOrder()
@@ -65,7 +68,7 @@ private fun Route.patchOrder() {
 
     patch("/order") {
         managerWithBody<PatchOrder, GetCafeOrder> { bodyRequest ->
-            val orderUuid = call.parameters[UUID_PARAMETER] ?: error("$UUID_PARAMETER is required")
+            val orderUuid = call.getParameter(UUID_PARAMETER)
             orderService.changeOrder(orderUuid, bodyRequest.body)
         }
     }
@@ -76,10 +79,9 @@ private fun Route.getClientOrders() {
     val orderService: OrderService by inject()
 
     get("/client/order") {
-        client { request ->
+        clientGetListResult { request ->
             val count = call.parameters[COUNT_PARAMETER]?.toIntOrNull()
-            val orderList = orderService.getOrderListByUserUuid(request.jwtUser.uuid, count)
-            call.respondOkWithList(orderList)
+            orderService.getOrderListByUserUuid(request.jwtUser.uuid, count)
         }
     }
 }
@@ -89,10 +91,9 @@ private fun Route.getCafeOrders() {
     val orderService: OrderService by inject()
 
     get("/order") {
-        manager {
-            val cafeUuid = call.parameters[CAFE_UUID_PARAMETER] ?: error("$CAFE_UUID_PARAMETER is required")
-            val orderList = orderService.getOrderListByCafeUuid(cafeUuid)
-            call.respondOkWithList(orderList)
+        managerGetListResult {
+            val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
+            orderService.getOrderListByCafeUuid(cafeUuid)
         }
     }
 }
@@ -102,10 +103,9 @@ private fun Route.getCafeOrderDetails() {
     val orderService: OrderService by inject()
 
     get("/order/details") {
-        manager {
-            val orderUuid = call.parameters[UUID_PARAMETER] ?: error("$UUID_PARAMETER is required")
-            val order = orderService.getOrderByUuid(orderUuid)
-            call.respondOkOrBad(order)
+        managerGetResult {
+            val orderUuid = call.getParameter(UUID_PARAMETER)
+            orderService.getOrderByUuid(orderUuid)
         }
     }
 }
@@ -137,13 +137,13 @@ private fun Route.observeManagerOrders() {
     webSocket("/user/order/subscribe") {
         managerSocket(
             block = {
-                val cafeUuid = call.parameters[CAFE_UUID_PARAMETER] ?: error("$CAFE_UUID_PARAMETER is required")
+                val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
                 orderService.observeCafeOrderUpdates(cafeUuid).onEach { cafeOrder ->
                     outgoing.send(Frame.Text(json.encodeToString(cafeOrder)))
                 }.launchIn(this)
             },
             onSocketClose = {
-                val cafeUuid = call.parameters[CAFE_UUID_PARAMETER] ?: error("$CAFE_UUID_PARAMETER is required")
+                val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
                 orderService.userDisconnect(cafeUuid)
             }
         )
@@ -169,11 +169,14 @@ private fun Route.getClientOrdersV2() {
     val orderService: OrderService by inject()
 
     get("/v2/client/order") {
-        client { request ->
+        clientGetListResult { request ->
             val count = call.parameters[COUNT_PARAMETER]?.toIntOrNull()
             val uuid = call.parameters[UUID_PARAMETER]
-            val orderList = orderService.getOrderListByUserUuidV2(request.jwtUser.uuid, count, uuid)
-            call.respondOkWithList(orderList)
+            orderService.getOrderListByUserUuidV2(
+                userUuid = request.jwtUser.uuid,
+                count = count,
+                orderUuid = uuid
+            )
         }
     }
 }
@@ -183,10 +186,9 @@ private fun Route.getCafeOrderDetailsV2() {
     val orderService: OrderService by inject()
 
     get("/v2/order/details") {
-        manager {
-            val orderUuid = call.parameters[UUID_PARAMETER] ?: error("$UUID_PARAMETER is required")
-            val order = orderService.getOrderByUuidV2(orderUuid)
-            call.respondOkOrBad(order)
+        managerGetResult {
+            val orderUuid = call.getParameter(UUID_PARAMETER)
+            orderService.getOrderByUuidV2(uuid = orderUuid)
         }
     }
 }
@@ -220,6 +222,18 @@ private fun Route.postOrderV3() {
                 bodyRequest.request.jwtUser.uuid,
                 bodyRequest.body
             )
+        }
+    }
+}
+
+private fun Route.getIsOrderAvailable() {
+
+    val orderService: OrderService by inject()
+
+    get("/order_availability") {
+        getResult {
+            val companyUuid = call.getParameter(COMPANY_UUID_PARAMETER)
+            orderService.getOrderAvailability(companyUuid = companyUuid)
         }
     }
 }

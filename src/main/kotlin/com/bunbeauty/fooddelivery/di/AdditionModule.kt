@@ -12,5 +12,7 @@ val additionModule = module(createdAtStart = true) {
             menuProductRepository = get(),
         )
     }
-    single { AdditionRepository() }
+    single {
+        AdditionRepository(menuProductCatch = get())
+    }
 }

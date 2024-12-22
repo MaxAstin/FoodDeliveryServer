@@ -5,16 +5,16 @@ import com.bunbeauty.fooddelivery.data.Constants.CODE_LETTERS
 import com.bunbeauty.fooddelivery.data.Constants.CODE_NUMBER_COUNT
 import com.bunbeauty.fooddelivery.data.Constants.CODE_NUMBER_STEP
 import com.bunbeauty.fooddelivery.data.Constants.ORDER_HISTORY_DAY_COUNT
-import com.bunbeauty.fooddelivery.data.Constants.ORDER_KOD_KEY
 import com.bunbeauty.fooddelivery.data.features.address.AddressRepository
 import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
 import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.features.order.OrderRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
+import com.bunbeauty.fooddelivery.domain.error.errorWithCode
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
-import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.DeliveryZoneWithCafe
 import com.bunbeauty.fooddelivery.domain.feature.order.mapper.*
-import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
+import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderAvailability
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.OrderInfo
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.PatchOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.PostOrder
@@ -28,13 +28,15 @@ import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.cafe.GetCafeOrde
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetClientOrderV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v3.PostOrderV3
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderTotalUseCase
-import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CheckIsPointInPolygonUseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.FindDeliveryZoneByCityUuidAndCoordinatesUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.GetDeliveryCostUseCase
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.Message
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.IsOrderAvailableUseCase
+import com.bunbeauty.fooddelivery.service.NotificationService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.joda.time.DateTime
+
+private const val CAFE_IS_CLOSED_CODE = 901
 
 class OrderService(
     private val orderRepository: OrderRepository,
@@ -42,23 +44,28 @@ class OrderService(
     private val clientUserRepository: ClientUserRepository,
     private val menuProductRepository: MenuProductRepository,
     private val cafeRepository: CafeRepository,
-    private val firebaseMessaging: FirebaseMessaging,
-    private val checkIsPointInPolygonUseCase: CheckIsPointInPolygonUseCase,
+    private val notificationService: NotificationService,
+    private val findDeliveryZoneByCityUuidAndCoordinatesUseCase: FindDeliveryZoneByCityUuidAndCoordinatesUseCase,
     private val calculateOrderTotalUseCase: CalculateOrderTotalUseCase,
     private val getDeliveryCostUseCase: GetDeliveryCostUseCase,
+    private val isOrderAvailableUseCase: IsOrderAvailableUseCase,
 ) {
 
     private val codesCount = CODE_LETTERS.length * CODE_NUMBER_COUNT
 
     suspend fun createOrder(clientUserUuid: String, postOrder: PostOrder): GetClientOrder {
         if (postOrder.orderProducts.isEmpty()) {
-            emptyProductListIsError()
+            productListIsEmptyError()
         }
 
         val orderInfo = createOrderInfo(
             postOrder = postOrder,
             clientUserUuid = clientUserUuid
         )
+        if (!isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
+            cafeIsClosedError()
+        }
+
         val insertOrder = postOrder.mapPostOrder(orderInfo)
         val order = orderRepository.insertOrder(insertOrder)
         orderRepository.updateSession(
@@ -66,7 +73,10 @@ class OrderService(
             order = order
         )
 
-        sendNotification(order)
+        notificationService.sendNotification(
+            cafeUuid = orderInfo.cafeUuid,
+            orderCode = order.code
+        )
 
         val orderTotal = calculateOrderTotalUseCase(order)
         return order.mapOrder(orderTotal)
@@ -74,13 +84,17 @@ class OrderService(
 
     suspend fun createOrderV2(clientUserUuid: String, postOrder: PostOrderV2): GetClientOrderV2 {
         if (postOrder.orderProducts.isEmpty()) {
-            emptyProductListIsError()
+            productListIsEmptyError()
         }
 
         val orderInfo = createOrderInfoV2(
             postOrder = postOrder,
             clientUserUuid = clientUserUuid
         )
+        if (!isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
+            cafeIsClosedError()
+        }
+
         val insertOrder = postOrder.mapPostOrderV2(orderInfo)
         val order = orderRepository.insertOrderV2(insertOrder)
         orderRepository.updateSession(
@@ -88,7 +102,10 @@ class OrderService(
             order = order
         )
 
-        sendNotification(order)
+        notificationService.sendNotification(
+            cafeUuid = orderInfo.cafeUuid,
+            orderCode = order.code
+        )
 
         val orderTotal = calculateOrderTotalUseCase(order)
         return order.mapOrderToV2(orderTotal)
@@ -96,13 +113,17 @@ class OrderService(
 
     suspend fun createOrderV3(clientUserUuid: String, postOrder: PostOrderV3): GetClientOrderV2 {
         if (postOrder.orderProducts.isEmpty()) {
-            emptyProductListIsError()
+            productListIsEmptyError()
         }
 
         val orderInfo = createOrderInfoV2(
             postOrder = postOrder,
             clientUserUuid = clientUserUuid
         )
+        if (!isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
+            cafeIsClosedError()
+        }
+
         val insertOrder = postOrder.mapPostOrderV3(orderInfo)
         val order = orderRepository.insertOrderV3(insertOrder)
         orderRepository.updateSession(
@@ -110,7 +131,10 @@ class OrderService(
             order = order
         )
 
-        sendNotification(order)
+        notificationService.sendNotification(
+            cafeUuid = orderInfo.cafeUuid,
+            orderCode = order.code
+        )
 
         val orderTotal = calculateOrderTotalUseCase(order)
         return order.mapOrderToV2(orderTotal)
@@ -220,25 +244,36 @@ class OrderService(
         orderRepository.disconnectFromSession(cafeUuid)
     }
 
+    suspend fun getOrderAvailability(companyUuid: String): OrderAvailability {
+        return OrderAvailability(
+            isAvailable = isOrderAvailableUseCase(companyUuid = companyUuid)
+        )
+    }
+
     private suspend fun createOrderInfo(postOrder: PostOrder, clientUserUuid: String): OrderInfo {
-        val cafeUuid = if (postOrder.isDelivery) {
+        val deliveryZoneWithCafe: DeliveryZoneWithCafe?
+        val cafeUuid: String
+        if (postOrder.isDelivery) {
             val addressUuid = postOrder.addressUuid ?: noAddressUuidForDeliveryError()
-            addressRepository.getAddressByUuid(addressUuid)
-                .orThrowNotFoundByUuidError(uuid = addressUuid)
-                .street
-                .cafeUuid
+            deliveryZoneWithCafe = findDeliveryZone(addressUuid = addressUuid)
+            cafeUuid = deliveryZoneWithCafe.cafe.uuid
         } else {
-            postOrder.cafeUuid ?: noCafeUuidForPickupError()
+            deliveryZoneWithCafe = null
+            cafeUuid = postOrder.cafeUuid ?: noCafeUuidForPickupError()
         }
+
         val company = clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
             .orThrowNotFoundByUuidError(clientUserUuid)
             .company
         val deliveryCost = getDeliveryCostUseCase(
             isDelivery = postOrder.isDelivery,
+            deliveryZone = deliveryZoneWithCafe?.deliveryZone,
             clientUserUuid = clientUserUuid,
             orderProducts = postOrder.orderProducts.map { postOrderProduct ->
-                val menuProduct = menuProductRepository.getMenuProductByUuid(postOrderProduct.menuProductUuid)
-                    .orThrowNotFoundByUuidError(postOrderProduct.menuProductUuid)
+                val menuProduct = menuProductRepository.getMenuProductByUuid(
+                    companyUuid = company.uuid,
+                    uuid = postOrderProduct.menuProductUuid
+                ).orThrowNotFoundByUuidError(postOrderProduct.menuProductUuid)
                 postOrderProduct.mapPostOrderProductToOrderProduct(menuProduct)
             },
             percentDiscount = null,
@@ -255,15 +290,16 @@ class OrderService(
     }
 
     private suspend fun createOrderInfoV2(postOrder: PostOrderV2, clientUserUuid: String): OrderInfoV2 {
-        val cafeUuid = if (postOrder.isDelivery) {
-            val addressUuid = postOrder.address.uuid
-            addressRepository.getAddressByUuid(uuid = addressUuid)
-                .orThrowNotFoundByUuidError(uuid = addressUuid)
-                .street
-                .cafeUuid
+        val deliveryZoneWithCafe: DeliveryZoneWithCafe?
+        val cafeUuid: String
+        if (postOrder.isDelivery) {
+            deliveryZoneWithCafe = findDeliveryZone(addressUuid = postOrder.address.uuid)
+            cafeUuid = deliveryZoneWithCafe.cafe.uuid
         } else {
-            postOrder.address.uuid
+            deliveryZoneWithCafe = null
+            cafeUuid = postOrder.address.uuid
         }
+
         val company = clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
             .orThrowNotFoundByUuidError(clientUserUuid)
             .company
@@ -271,12 +307,16 @@ class OrderService(
             val orderCount = orderRepository.getOrderCountByUserUuid(userUuid = clientUserUuid)
             orderCount == 0L
         }
+
         val deliveryCost = getDeliveryCostUseCase(
             isDelivery = postOrder.isDelivery,
+            deliveryZone = deliveryZoneWithCafe?.deliveryZone,
             clientUserUuid = clientUserUuid,
             orderProducts = postOrder.orderProducts.map { postOrderProduct ->
-                val menuProduct = menuProductRepository.getMenuProductByUuid(postOrderProduct.menuProductUuid)
-                    .orThrowNotFoundByUuidError(postOrderProduct.menuProductUuid)
+                val menuProduct = menuProductRepository.getMenuProductByUuid(
+                    companyUuid = company.uuid,
+                    uuid = postOrderProduct.menuProductUuid
+                ).orThrowNotFoundByUuidError(postOrderProduct.menuProductUuid)
                 postOrderProduct.mapPostOrderProductToOrderProduct(menuProduct)
             },
             percentDiscount = percentDiscount
@@ -297,12 +337,16 @@ class OrderService(
         postOrder: PostOrderV3,
         clientUserUuid: String,
     ): OrderInfoV2 {
-        val cafeUuid = if (postOrder.isDelivery) {
-            val addressUuid = postOrder.address.uuid
-            findCafeByAddressUuid(addressUuid = addressUuid).uuid
+        val deliveryZoneWithCafe: DeliveryZoneWithCafe?
+        val cafeUuid: String
+        if (postOrder.isDelivery) {
+            deliveryZoneWithCafe = findDeliveryZone(addressUuid = postOrder.address.uuid)
+            cafeUuid = deliveryZoneWithCafe.cafe.uuid
         } else {
-            postOrder.address.uuid
+            deliveryZoneWithCafe = null
+            cafeUuid = postOrder.address.uuid
         }
+
         val company = clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
             .orThrowNotFoundByUuidError(clientUserUuid)
             .company
@@ -310,11 +354,14 @@ class OrderService(
             val orderCount = orderRepository.getOrderCountByUserUuid(userUuid = clientUserUuid)
             orderCount == 0L
         }
+
         val deliveryCost = getDeliveryCostUseCase(
             isDelivery = postOrder.isDelivery,
+            deliveryZone = deliveryZoneWithCafe?.deliveryZone,
             clientUserUuid = clientUserUuid,
             orderProducts = postOrder.orderProducts.map { postOrderProduct ->
                 val menuProduct = menuProductRepository.getMenuProductWithAdditionListByUuid(
+                    companyUuid = company.uuid,
                     uuid = postOrderProduct.menuProductUuid
                 ).orThrowNotFoundByUuidError(postOrderProduct.menuProductUuid)
                 postOrderProduct.mapPostOrderProductV3ToOrderProduct(menuProduct)
@@ -333,55 +380,23 @@ class OrderService(
         )
     }
 
-    private suspend fun findCafeByAddressUuid(addressUuid: String): Cafe {
+    private suspend fun findDeliveryZone(addressUuid: String): DeliveryZoneWithCafe {
         val addressV1 = addressRepository.getAddressByUuid(uuid = addressUuid)
         return if (addressV1 != null) {
-            findCafeByCoordinates(
-                addressUuid = addressUuid,
+            findDeliveryZoneByCityUuidAndCoordinatesUseCase(
                 cityUuid = addressV1.cityUuid,
                 latitude = addressV1.street.latitude,
                 longitude = addressV1.street.longitude,
+                addressUuid = addressUuid,
             )
         } else {
             val addressV2 = addressRepository.getAddressV2ByUuid(uuid = addressUuid)
                 .orThrowNotFoundByUuidError(uuid = addressUuid)
-            findCafeByCoordinates(
-                addressUuid = addressUuid,
+            findDeliveryZoneByCityUuidAndCoordinatesUseCase(
                 cityUuid = addressV2.cityUuid,
                 latitude = addressV2.street.latitude,
                 longitude = addressV2.street.longitude,
-            )
-        }
-    }
-
-    private suspend fun findCafeByCoordinates(
-        addressUuid: String,
-        cityUuid: String,
-        latitude: Double,
-        longitude: Double,
-    ): Cafe {
-        val cafeList = cafeRepository.getCafeListByCityUuid(cityUuid = cityUuid)
-        return cafeList.find { cafe ->
-            isCafeAvailableAtCoordinates(
-                cafe = cafe,
-                latitude = latitude,
-                longitude = longitude,
-            )
-        } ?: noCafeError(addressUuid = addressUuid)
-    }
-
-    private fun isCafeAvailableAtCoordinates(
-        cafe: Cafe,
-        latitude: Double,
-        longitude: Double,
-    ): Boolean {
-        return cafe.isVisible && cafe.zones.any { zone ->
-            zone.isVisible && checkIsPointInPolygonUseCase(
-                latitude = latitude,
-                longitude = longitude,
-                polygon = zone.points.map { point ->
-                    point.latitude to point.longitude
-                },
+                addressUuid = addressUuid,
             )
         }
     }
@@ -403,17 +418,15 @@ class OrderService(
         return codeLetter + CODE_DIVIDER + codeNumberString
     }
 
-    private fun sendNotification(order: Order) {
-        firebaseMessaging.send(
-            Message.builder()
-                .putData(ORDER_KOD_KEY, order.code)
-                .setTopic(order.cafeWithCity.cafe.uuid)
-                .build()
-        )
+    private fun productListIsEmptyError(): Nothing {
+        error("Product list is empty")
     }
 
-    private fun emptyProductListIsError(): Nothing {
-        error("Product list is empty")
+    private fun cafeIsClosedError(): Nothing {
+        errorWithCode(
+            message = "Cafe is closed",
+            code = CAFE_IS_CLOSED_CODE
+        )
     }
 
     private fun noAddressUuidForDeliveryError(): Nothing {
@@ -426,10 +439,6 @@ class OrderService(
 
     private fun codeCounterIncrementError(cafeUuid: String): Nothing {
         error("Failed to increment code counter - Cafe($cafeUuid)")
-    }
-
-    private fun noCafeError(addressUuid: String): Nothing {
-        error("no cafe associated with address ($addressUuid)")
     }
 
 }

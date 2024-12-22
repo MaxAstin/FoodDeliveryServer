@@ -14,6 +14,7 @@ class AdditionEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var fullName: String? by AdditionTable.fullName
     var price: Int? by AdditionTable.price
     var photoLink: String by AdditionTable.photoLink
+    var tag: String? by AdditionTable.tag
     var priority: Int by AdditionTable.priority
     var isVisible: Boolean by AdditionTable.isVisible
 

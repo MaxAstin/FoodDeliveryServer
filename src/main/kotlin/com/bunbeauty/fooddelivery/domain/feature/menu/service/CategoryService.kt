@@ -3,6 +3,7 @@ package com.bunbeauty.fooddelivery.domain.feature.menu.service
 import com.bunbeauty.fooddelivery.data.features.menu.CategoryRepository
 import com.bunbeauty.fooddelivery.data.features.user.UserRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUserUuidError
+import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapCategory
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.category.*
 import com.bunbeauty.fooddelivery.domain.toUuid
@@ -35,7 +36,7 @@ class CategoryService(
         return categoryRepository.insertCategory(insertCategory).mapCategory()
     }
 
-    suspend fun updateCategory(categoryUuid: String, patchCategory: PatchCategory): GetCategory? {
+    suspend fun updateCategory(categoryUuid: String, patchCategory: PatchCategory): GetCategory {
         val updateCategory = UpdateCategory(
             name = patchCategory.name,
             priority = patchCategory.priority
@@ -44,6 +45,7 @@ class CategoryService(
         return categoryRepository.updateCategory(
             categoryUuid = categoryUuid.toUuid(),
             category = updateCategory
-        )?.mapCategory()
+        ).orThrowNotFoundByUuidError(uuid = categoryUuid)
+            .mapCategory()
     }
 }

@@ -10,6 +10,7 @@ import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.InsertCafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.UpdateCafe
 import com.bunbeauty.fooddelivery.domain.toUuid
+import java.util.*
 
 class CafeRepository {
 
@@ -25,6 +26,12 @@ class CafeRepository {
             city = CityEntity[insertCafe.cityUuid]
             isVisible = insertCafe.isVisible
         }.mapCafeEntity()
+    }
+
+    suspend fun getCafeByUuid(uuid: UUID): Cafe? {
+        return query {
+            CafeEntity.findById(uuid)?.mapCafeEntity()
+        }
     }
 
     suspend fun getCafeListByCityUuid(cityUuid: String): List<Cafe> = query {

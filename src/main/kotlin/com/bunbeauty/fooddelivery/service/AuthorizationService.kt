@@ -28,6 +28,10 @@ private const val MESSAGE_TEXT = "ваш код подтверждения дл�
 private const val AUTH_SESSION_TIMEOUT = 5 * 60 * 1_000L // 5 min
 private const val INITIAL_ATTEMPTS_COUNT = 3
 
+private const val NO_ATTEMPTS_LEFT_CODE = 801
+private const val INVALID_CODE = 802
+private const val AUTH_SESSION_TIMEOUT_CODE = 803
+
 class AuthorizationService(
     private val requestService: RequestService,
     private val authorizationRepository: AuthorizationRepository,
@@ -225,8 +229,8 @@ class AuthorizationService(
     }
 
     private suspend fun getSmsText(otpCode: String, companyUuid: String): String {
-        val company = companyRepository.getCompanyByUuid(companyUuid.toUuid())
-            .orThrowNotFoundByUuidError(companyUuid)
+        val company = companyRepository.getCompanyByUuid(uuid = companyUuid.toUuid())
+            .orThrowNotFoundByUuidError(uuid = companyUuid)
         return "$otpCode $MESSAGE_TEXT ${company.name}"
     }
 
@@ -239,15 +243,24 @@ class AuthorizationService(
     }
 
     private fun noAttemptsError(): Nothing {
-        errorWithCode(message = "There are no attempts left", code = 801)
+        errorWithCode(
+            message = "There are no attempts left",
+            code = NO_ATTEMPTS_LEFT_CODE
+        )
     }
 
     private fun invalidCodeError(): Nothing {
-        errorWithCode(message = "Invalid code", code = 802)
+        errorWithCode(
+            message = "Invalid code",
+            code = INVALID_CODE
+        )
     }
 
     private fun authSessionTimoutError(): Nothing {
-        errorWithCode(message = "Auth session timout", code = 803)
+        errorWithCode(
+            message = "Auth session timout",
+            code = AUTH_SESSION_TIMEOUT_CODE
+        )
     }
 
     private fun alreadyConfirmedError(): Nothing {

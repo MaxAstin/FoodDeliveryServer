@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class PostDeliveryZone(
+    val name: String,
     val minOrderCost: Int?,
     val normalDeliveryCost: Int,
     val forLowDeliveryCost: Int?,

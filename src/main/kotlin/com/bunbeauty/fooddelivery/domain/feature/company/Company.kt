@@ -11,6 +11,7 @@ class Company(
     val payment: Payment,
     val percentDiscount: Int?,
     val maxVisibleRecommendationCount: Int,
+    val isOpen: Boolean,
     val citiesWithCafes: List<CityWithCafes>
 )
 

@@ -2,6 +2,8 @@ package com.bunbeauty.fooddelivery.service.client_user
 
 import com.bunbeauty.fooddelivery.auth.IJwtService
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
+import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUserUuidError
+import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUser
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUserToClientSettings
 import com.bunbeauty.fooddelivery.domain.model.client_user.*
@@ -39,40 +41,44 @@ class ClientUserService(
         )
     }
 
-    override suspend fun getClientUserByUuid(clientUserUuid: String): GetClientUser? {
+    override suspend fun getClientUserByUuid(clientUserUuid: String): GetClientUser {
         return clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
-            ?.mapClientUser()
+            .orThrowNotFoundByUuidError(uuid = clientUserUuid)
+            .mapClientUser()
     }
 
-    override suspend fun getClientSettingsByUuid(clientUserUuid: String): GetClientSettings? {
+    override suspend fun getClientSettingsByUuid(clientUserUuid: String): GetClientSettings {
         return clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
-            ?.mapClientUserToClientSettings()
+            .orThrowNotFoundByUserUuidError(uuid = clientUserUuid)
+            .mapClientUserToClientSettings()
     }
 
     override suspend fun updateClientUserByUuid(
         clientUserUuid: String,
         patchClientUser: PatchClientUserSettings,
-    ): GetClientUser? {
+    ): GetClientUser {
         return clientUserRepository.updateClientUserByUuid(
             UpdateClientUser(
                 uuid = clientUserUuid.toUuid(),
                 email = patchClientUser.email,
                 isActive = patchClientUser.isActive,
             )
-        )?.mapClientUser()
+        ).orThrowNotFoundByUuidError(uuid = clientUserUuid)
+            .mapClientUser()
     }
 
     override suspend fun updateClientUserSettingsByUuid(
         clientUserUuid: String,
         patchClientUser: PatchClientUserSettings,
-    ): GetClientSettings? {
+    ): GetClientSettings {
         return clientUserRepository.updateClientUserByUuid(
             UpdateClientUser(
                 uuid = clientUserUuid.toUuid(),
                 email = patchClientUser.email,
                 isActive = patchClientUser.isActive,
             )
-        )?.mapClientUserToClientSettings()
+        ).orThrowNotFoundByUuidError(uuid = clientUserUuid)
+            .mapClientUserToClientSettings()
     }
 
     private fun credentialsError() {

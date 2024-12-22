@@ -5,6 +5,7 @@ import com.bunbeauty.fooddelivery.data.features.menu.HitRepository
 import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.features.user.UserRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUserUuidError
+import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPatchMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPostMenuProduct
@@ -59,15 +60,20 @@ class MenuProductService(
 
     suspend fun updateMenuProduct(
         menuProductUuid: String,
+        creatorUuid: String,
         patchMenuProduct: PatchMenuProduct,
-    ): GetMenuProduct? {
+    ): GetMenuProduct {
+        val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
+            .orThrowNotFoundByUserUuidError(creatorUuid)
+            .uuid
         val updateMenuProduct = patchMenuProduct.mapPatchMenuProduct()
-        return menuProductRepository.updateMenuProduct(
-            menuProductUuid = menuProductUuid.toUuid(),
+        val menuProduct = menuProductRepository.updateMenuProduct(
+            companyUuid = companyUuid,
+            menuProductUuid = menuProductUuid,
             updateMenuProduct = updateMenuProduct
-        )?.let { menuProduct ->
-            orderAdditionGroups(menuProduct).mapMenuProduct()
-        }
+        ).orThrowNotFoundByUuidError(uuid = menuProductUuid)
+
+        return orderAdditionGroups(menuProduct).mapMenuProduct()
     }
 
     private fun orderAdditionGroups(menuProduct: MenuProduct): MenuProduct {

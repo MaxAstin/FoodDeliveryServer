@@ -9,5 +9,6 @@ class GetUser(
     val username: String,
     val passwordHash: String,
     val role: String,
-    val city: GetCity,
+    val unlimitedNotification: Boolean,
+    val city: GetCity
 )

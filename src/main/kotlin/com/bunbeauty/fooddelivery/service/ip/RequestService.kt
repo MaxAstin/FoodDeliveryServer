@@ -3,19 +3,22 @@ package com.bunbeauty.fooddelivery.service.ip
 import com.bunbeauty.fooddelivery.data.Constants.DAY_REQUEST_LIMIT
 import com.bunbeauty.fooddelivery.data.Constants.REQUIRED_TIME_BETWEEN_REQUESTS
 import com.bunbeauty.fooddelivery.data.repo.request.IRequestRepository
+import com.bunbeauty.fooddelivery.domain.error.ExceptionWithCode
 import com.bunbeauty.fooddelivery.domain.error.errorWithCode
 import com.bunbeauty.fooddelivery.domain.model.request.InsertRequest
 import org.joda.time.DateTime
 
+private const val TOO_MANY_REQUESTS_CODE = 800
+
 class RequestService(private val requestRepository: IRequestRepository) {
 
     /**
-        Params:
-         - ip - IP address of user
-         - requestName - name of specific request
-        Throws:
-         - exception if the time since the last request with the same [requestName] for the same [ip] was made less than [REQUIRED_TIME_BETWEEN_REQUESTS] ago
-         - exception if the count of requests with the same [requestName] for the same [ip] was made equal to or more than [DAY_REQUEST_LIMIT] times
+     * Checks the availability of a request based on the IP address and request name.
+     *
+     * @param ip The IP address of the requester.
+     * @param requestName The name of the request.
+     *
+     * @throws ExceptionWithCode indicating that there are too many requests.
      */
     suspend fun checkRequestAvailability(ip: String, requestName: String) {
         println("isRequestAvailable requestName: $requestName ip: $ip")
@@ -51,7 +54,10 @@ class RequestService(private val requestRepository: IRequestRepository) {
         if (seconds != null) {
             message += " $seconds s"
         }
-        errorWithCode(message, 800)
+        errorWithCode(
+            message = message,
+            code = TOO_MANY_REQUESTS_CODE
+        )
     }
 }
 

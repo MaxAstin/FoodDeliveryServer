@@ -33,7 +33,18 @@ val orderModule = module(createdAtStart = true) {
         )
     }
     factory {
+        FindDeliveryZoneByCityUuidAndCoordinatesUseCase(
+            cafeRepository = get(),
+            checkIsPointInPolygonUseCase = get(),
+        )
+    }
+    factory {
         CalculateCostWithDiscountUseCase()
+    }
+    factory {
+        IsOrderAvailableUseCase(
+            companyRepository = get()
+        )
     }
     factory {
         OrderService(
@@ -42,10 +53,11 @@ val orderModule = module(createdAtStart = true) {
             clientUserRepository = get(),
             menuProductRepository = get(),
             cafeRepository = get(),
-            firebaseMessaging = get(),
-            checkIsPointInPolygonUseCase = get(),
+            notificationService = get(),
+            findDeliveryZoneByCityUuidAndCoordinatesUseCase = get(),
             calculateOrderTotalUseCase = get(),
             getDeliveryCostUseCase = get(),
+            isOrderAvailableUseCase = get(),
         )
     }
     single { OrderRepository() }

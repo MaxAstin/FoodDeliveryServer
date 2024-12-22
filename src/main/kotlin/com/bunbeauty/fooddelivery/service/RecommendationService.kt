@@ -9,7 +9,7 @@ class RecommendationService(private val companyRepository: CompanyRepository) {
 
     suspend fun getRecommendationDataByCompanyUuid(companyUuid: String): GetRecommendationData {
         val company = companyRepository.getCompanyByUuid(uuid = companyUuid.toUuid())
-            .orThrowNotFoundByUuidError(companyUuid)
+            .orThrowNotFoundByUuidError(uuid = companyUuid)
         return GetRecommendationData(
             maxVisibleCount = company.maxVisibleRecommendationCount,
             recommendationList = emptyList(),
