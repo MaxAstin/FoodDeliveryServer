@@ -1,6 +1,7 @@
 package com.bunbeauty.fooddelivery.domain.feature.company
 
 import com.bunbeauty.fooddelivery.domain.feature.city.CityWithCafes
+import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkType
 
 class Company(
     val uuid: String,
@@ -12,6 +13,7 @@ class Company(
     val percentDiscount: Int?,
     val maxVisibleRecommendationCount: Int,
     val isOpen: Boolean,
+    val workType: WorkType,
     val citiesWithCafes: List<CityWithCafes>
 )
 

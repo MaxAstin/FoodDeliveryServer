@@ -21,7 +21,7 @@ class CompanyEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var percentDiscount: Int? by CompanyTable.percentDiscount
     var maxVisibleRecommendationCount: Int by CompanyTable.maxVisibleRecommendationCount
     var isOpen: Boolean by CompanyTable.isOpen
-
+    var workType: String by CompanyTable.workType
     val cities: SizedIterable<CityEntity> by CityEntity referrersOn CityTable.company
 
     companion object : UUIDEntityClass<CompanyEntity>(CompanyTable)

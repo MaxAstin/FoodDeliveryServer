@@ -3,12 +3,17 @@ package com.bunbeauty.fooddelivery.domain.feature.company
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUserUuidError
 import com.bunbeauty.fooddelivery.domain.feature.company.mapper.mapCompany
+import com.bunbeauty.fooddelivery.domain.feature.company.usecase.GetWorkInfoUseCase
 import com.bunbeauty.fooddelivery.domain.model.company.*
+import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkInfo
 import com.bunbeauty.fooddelivery.domain.toUuid
 
 private const val MAX_PERCENT_DISCOUNT = 99
 
-class CompanyService(private val companyRepository: CompanyRepository) {
+class CompanyService(
+    private val companyRepository: CompanyRepository,
+    private val getWorkInfoUseCase: GetWorkInfoUseCase
+) {
 
     suspend fun createCompany(postCompany: PostCompany): GetCompany {
         if ((postCompany.percentDiscount ?: 0) > MAX_PERCENT_DISCOUNT) {
@@ -43,6 +48,10 @@ class CompanyService(private val companyRepository: CompanyRepository) {
             .orThrowNotFoundByUserUuidError(uuid = companyUuid)
 
         return company.mapCompany()
+    }
+
+    suspend fun getWorkInfo(companyUuid: String): WorkInfo {
+        return getWorkInfoUseCase.invoke(companyUuid = companyUuid)
     }
 
     private fun errorMaxPercentDiscount() {

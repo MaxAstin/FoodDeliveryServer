@@ -5,6 +5,7 @@ import com.bunbeauty.fooddelivery.data.features.city.mapper.mapCityEntityToCityW
 import com.bunbeauty.fooddelivery.domain.feature.company.Company
 import com.bunbeauty.fooddelivery.domain.feature.company.Delivery
 import com.bunbeauty.fooddelivery.domain.feature.company.Payment
+import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkType
 
 val mapCompanyEntity: CompanyEntity.() -> Company = {
     Company(
@@ -23,6 +24,7 @@ val mapCompanyEntity: CompanyEntity.() -> Company = {
         percentDiscount = percentDiscount,
         maxVisibleRecommendationCount = maxVisibleRecommendationCount,
         isOpen = isOpen,
+        workType =  WorkType.valueOf(workType),
         citiesWithCafes = cities.map(mapCityEntityToCityWithCafes),
     )
 }

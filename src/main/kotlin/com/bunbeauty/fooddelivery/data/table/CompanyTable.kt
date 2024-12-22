@@ -1,5 +1,6 @@
 package com.bunbeauty.fooddelivery.data.table
 
+import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkType
 import org.jetbrains.exposed.dao.id.UUIDTable
 
 object CompanyTable : UUIDTable() {
@@ -13,5 +14,5 @@ object CompanyTable : UUIDTable() {
     val percentDiscount = integer("percentDiscount").nullable()
     val maxVisibleRecommendationCount = integer("maxVisibleRecommendationCount").default(4)
     val isOpen = bool("isOpen").default(true)
-
+    val workType = varchar("workType", 512).default(WorkType.DELIVERY_AND_PICKUP.name)
 }
