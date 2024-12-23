@@ -48,6 +48,7 @@ fun Application.configureOrderRouting() {
     }
 }
 
+@Deprecated("Use getClientOrdersV2")
 private fun Route.postOrder() {
 
     val orderService: OrderService by inject()
@@ -74,6 +75,7 @@ private fun Route.patchOrder() {
     }
 }
 
+@Deprecated("Use getClientOrdersV2")
 private fun Route.getClientOrders() {
 
     val orderService: OrderService by inject()
@@ -98,6 +100,7 @@ private fun Route.getCafeOrders() {
     }
 }
 
+@Deprecated("Use getCafeOrderDetailsV2")
 private fun Route.getCafeOrderDetails() {
 
     val orderService: OrderService by inject()
@@ -110,6 +113,7 @@ private fun Route.getCafeOrderDetails() {
     }
 }
 
+@Deprecated("Use observeClientOrdersV2")
 private fun Route.observeClientOrders() {
 
     val orderService: OrderService by inject()
@@ -150,6 +154,7 @@ private fun Route.observeManagerOrders() {
     }
 }
 
+@Deprecated("Use postOrderV3")
 private fun Route.postOrderV2() {
 
     val orderService: OrderService by inject()
@@ -226,6 +231,7 @@ private fun Route.postOrderV3() {
     }
 }
 
+@Deprecated("Used in 2.3.1 mobile app version, now need use getWorkInfo method with more information")
 private fun Route.getIsOrderAvailable() {
 
     val orderService: OrderService by inject()

@@ -7,6 +7,7 @@ import com.bunbeauty.fooddelivery.domain.model.company.PatchCompany
 import com.bunbeauty.fooddelivery.domain.model.company.PostCompany
 import com.bunbeauty.fooddelivery.routing.extension.adminWithBody
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
+import com.bunbeauty.fooddelivery.routing.extension.getResult
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -16,6 +17,8 @@ import org.koin.ktor.ext.inject
 fun Application.configureCompanyRouting() {
 
     routing {
+        getWorkInfo()
+
         authenticate {
             createCompany()
             patchCompany()
@@ -45,6 +48,21 @@ private fun Route.patchCompany() {
                 companyUuid = companyUuid,
                 patchCompany = bodyRequest.body
             )
+        }
+    }
+}
+
+/**
+ * endpoint which describe cafe work
+ * */
+private fun Route.getWorkInfo() {
+
+    val companyService: CompanyService by inject()
+
+    get("/work_info") {
+        getResult {
+            val companyUuid = call.getParameter(COMPANY_UUID_PARAMETER)
+            companyService.getWorkInfo(companyUuid = companyUuid)
         }
     }
 }
