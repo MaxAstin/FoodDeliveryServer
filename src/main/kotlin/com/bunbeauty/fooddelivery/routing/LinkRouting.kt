@@ -9,14 +9,12 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureLinkRouting() {
-
     routing {
         getLinks()
     }
 }
 
 private fun Routing.getLinks() {
-
     val linkService: LinkService by inject()
 
     get("/link") {

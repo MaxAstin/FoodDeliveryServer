@@ -11,5 +11,5 @@ class GetAddition(
     val photoLink: String,
     val tag: String?,
     val priority: Int,
-    val isVisible: Boolean,
+    val isVisible: Boolean
 )

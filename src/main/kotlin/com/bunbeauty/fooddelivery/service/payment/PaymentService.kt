@@ -6,7 +6,7 @@ import com.bunbeauty.fooddelivery.domain.feature.company.mapper.mapPayment
 import com.bunbeauty.fooddelivery.domain.model.company.payment_method.GetPayment
 
 class PaymentService(
-    private val clientUserRepository: ClientUserRepository,
+    private val clientUserRepository: ClientUserRepository
 ) : IPaymentService {
 
     override suspend fun getPaymentByClientUuid(clientUuid: String): GetPayment {
@@ -15,5 +15,4 @@ class PaymentService(
 
         return clientUser.company.payment.mapPayment()
     }
-
 }

@@ -7,7 +7,7 @@ import com.bunbeauty.fooddelivery.domain.toUuid
 import org.joda.time.DateTime
 
 class NonWorkingDayService(
-    private val nonWorkingDayRepository: NonWorkingDayRepository,
+    private val nonWorkingDayRepository: NonWorkingDayRepository
 ) {
 
     suspend fun getNonWorkingDayListByCafeUuid(cafeUuid: String): List<GetNonWorkingDay> {
@@ -22,7 +22,7 @@ class NonWorkingDayService(
     suspend fun createNonWorkingDay(postNonWorkingDay: PostNonWorkingDay): GetNonWorkingDay {
         val insertNonWorkingDay = InsertNonWorkingDay(
             timestamp = postNonWorkingDay.timestamp,
-            cafeUuid = postNonWorkingDay.cafeUuid.toUuid(),
+            cafeUuid = postNonWorkingDay.cafeUuid.toUuid()
         )
         return nonWorkingDayRepository.insertNonWorkingDay(insertNonWorkingDay)
     }
@@ -35,5 +35,4 @@ class NonWorkingDayService(
             )
         ).orThrowNotFoundByUuidError(uuid = uuid)
     }
-
 }

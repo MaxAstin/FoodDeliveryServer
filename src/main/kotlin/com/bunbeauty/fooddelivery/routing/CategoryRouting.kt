@@ -15,7 +15,6 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureCategoryRouting() {
-
     routing {
         getCategories()
         authenticate {
@@ -26,7 +25,6 @@ fun Application.configureCategoryRouting() {
 }
 
 private fun Routing.getCategories() {
-
     val categoryService: CategoryService by inject()
 
     get("/category") {
@@ -38,7 +36,6 @@ private fun Routing.getCategories() {
 }
 
 private fun Route.postCategory() {
-
     val categoryService: CategoryService by inject()
 
     post("/category") {
@@ -49,7 +46,6 @@ private fun Route.postCategory() {
 }
 
 private fun Route.patchCategory() {
-
     val categoryService: CategoryService by inject()
 
     patch("/category") {

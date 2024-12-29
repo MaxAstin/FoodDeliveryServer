@@ -16,7 +16,7 @@ private const val ANALYTICS_LABEL = "order"
 class NotificationService(
     private val cafeRepository: CafeRepository,
     private val userRepository: UserRepository,
-    private val firebaseMessaging: FirebaseMessaging,
+    private val firebaseMessaging: FirebaseMessaging
 ) {
 
     suspend fun sendNotification(userUuid: String, postNotification: PostNotification): String {
@@ -75,5 +75,4 @@ class NotificationService(
             )
             .build()
     }
-
 }

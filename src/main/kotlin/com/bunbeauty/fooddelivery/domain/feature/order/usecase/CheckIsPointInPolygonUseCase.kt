@@ -2,7 +2,7 @@ package com.bunbeauty.fooddelivery.domain.feature.order.usecase
 
 class CheckIsPointInPolygonUseCase {
 
-   operator fun invoke(
+    operator fun invoke(
         latitude: Double,
         longitude: Double,
         polygon: List<Pair<Double, Double>>

@@ -24,7 +24,7 @@ class CompanyService(
             forFreeDelivery = postCompany.forFreeDelivery,
             deliveryCost = postCompany.deliveryCost,
             forceUpdateVersion = postCompany.forceUpdateVersion,
-            percentDiscount = postCompany.percentDiscount,
+            percentDiscount = postCompany.percentDiscount
         )
         val company = companyRepository.insertCompany(insertCompany)
 
@@ -42,7 +42,7 @@ class CompanyService(
             deliveryCost = patchCompany.deliveryCost,
             forceUpdateVersion = patchCompany.forceUpdateVersion,
             percentDiscount = patchCompany.percentDiscount,
-            isOpen = patchCompany.isOpen,
+            isOpen = patchCompany.isOpen
         )
         val company = companyRepository.updateCompany(updateCompany)
             .orThrowNotFoundByUserUuidError(uuid = companyUuid)

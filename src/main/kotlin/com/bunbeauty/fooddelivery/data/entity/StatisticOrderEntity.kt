@@ -26,5 +26,4 @@ class StatisticOrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
             orderProductEntity.toStatisticOrderProduct()
         }
     )
-
 }

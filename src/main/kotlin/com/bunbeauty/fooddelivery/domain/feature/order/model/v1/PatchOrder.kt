@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class PatchOrder(
-    val status: String,
+    val status: String
 )

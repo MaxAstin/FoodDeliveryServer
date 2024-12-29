@@ -8,7 +8,7 @@ import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.toUuid
 
 class PrivacyCheckService(
-    private val userRepository: UserRepository,
+    private val userRepository: UserRepository
 ) {
 
     suspend fun checkIsCityAvailable(userUuid: String, cityUuid: String) {
@@ -40,5 +40,4 @@ class PrivacyCheckService(
             )
         }
     }
-
 }

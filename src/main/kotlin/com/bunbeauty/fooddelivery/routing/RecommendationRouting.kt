@@ -16,7 +16,6 @@ fun Application.configureRecommendationRouting() {
 }
 
 private fun Routing.getRecommendations() {
-
     val recommendationService: RecommendationService by inject()
 
     get("/recommendation") {

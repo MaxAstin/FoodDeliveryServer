@@ -5,12 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class SuggestionsResponse(
-    @SerialName("suggestions") val suggestions: List<Suggestion>,
+    @SerialName("suggestions") val suggestions: List<Suggestion>
 )
 
 @Serializable
 class Suggestion(
-    @SerialName("data") val data: SuggestionData,
+    @SerialName("data") val data: SuggestionData
 )
 
 @Serializable
@@ -20,5 +20,5 @@ class SuggestionData(
     @SerialName("settlement_with_type") val settlementWithType: String?,
     @SerialName("city_with_type") val cityWithType: String?,
     @SerialName("geo_lat") val latitude: Double,
-    @SerialName("geo_lon") val longitude: Double,
+    @SerialName("geo_lon") val longitude: Double
 )

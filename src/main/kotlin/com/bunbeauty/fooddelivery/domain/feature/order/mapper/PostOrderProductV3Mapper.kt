@@ -10,7 +10,7 @@ val mapPostOrderProductV3: PostOrderProductV3.() -> InsertOrderProductV3 = {
     InsertOrderProductV3(
         menuProductUuid = menuProductUuid,
         count = count,
-        additionUuids = additionUuids,
+        additionUuids = additionUuids
     )
 }
 
@@ -41,9 +41,9 @@ val mapPostOrderProductV3ToOrderProduct: PostOrderProductV3.(MenuProduct) -> Ord
                     uuid = menuProductAddition.uuid,
                     name = menuProductAddition.name,
                     price = menuProductAddition.price,
-                    priority = menuProductAddition.priority,
+                    priority = menuProductAddition.priority
                 )
             }
-        },
+        }
     )
 }

@@ -6,13 +6,13 @@ import io.ktor.http.*
 
 suspend inline fun <reified R> HttpClient.getData(
     path: String,
-    parameters: Map<String, Any> = mapOf(),
+    parameters: Map<String, Any> = mapOf()
 ): ApiResult<R> {
     return safeCall {
         get {
             buildRequest(
                 path = path,
-                parameters = parameters,
+                parameters = parameters
             )
         }
     }
@@ -21,14 +21,14 @@ suspend inline fun <reified R> HttpClient.getData(
 suspend inline fun <reified R> HttpClient.postData(
     path: String,
     body: Any,
-    parameters: Map<String, Any> = mapOf(),
+    parameters: Map<String, Any> = mapOf()
 ): ApiResult<R> {
     return safeCall {
         post {
             buildRequest(
                 path = path,
                 parameters = parameters,
-                body = body,
+                body = body
             )
         }
     }
@@ -41,7 +41,7 @@ fun <T> ApiResult<T>.getDataOrNull(): T? {
 fun HttpRequestBuilder.buildRequest(
     path: String,
     parameters: Map<String, Any> = mapOf(),
-    body: Any? = null,
+    body: Any? = null
 ) {
     if (body != null) {
         setBody(body)

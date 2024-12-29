@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class PatchNonWorkingDay(
-    val isVisible: Boolean? = null,
+    val isVisible: Boolean? = null
 )

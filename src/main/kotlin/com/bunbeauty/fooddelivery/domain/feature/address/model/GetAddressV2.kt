@@ -17,5 +17,5 @@ class GetAddressV2(
     val lowDeliveryCost: Int?,
     val userUuid: String,
     val cityUuid: String,
-    val isVisible: Boolean,
+    val isVisible: Boolean
 )

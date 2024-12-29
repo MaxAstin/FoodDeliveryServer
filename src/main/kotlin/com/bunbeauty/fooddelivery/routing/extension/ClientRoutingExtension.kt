@@ -30,7 +30,7 @@ suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.clie
 }
 
 suspend inline fun <reified B, reified R : Any> PipelineContext<Unit, ApplicationCall>.clientWithBody(
-    block: (BodyRequest<B>) -> R,
+    block: (BodyRequest<B>) -> R
 ) {
     client { request ->
         handleRequestWithBody(

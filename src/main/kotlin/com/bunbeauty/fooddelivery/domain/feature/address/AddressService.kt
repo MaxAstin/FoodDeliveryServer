@@ -19,7 +19,7 @@ class AddressService(
     private val clientUserRepository: ClientUserRepository,
     private val cityRepository: CityRepository,
     private val cafeRepository: CafeRepository,
-    private val checkIsPointInPolygonUseCase: CheckIsPointInPolygonUseCase,
+    private val checkIsPointInPolygonUseCase: CheckIsPointInPolygonUseCase
 ) {
 
     suspend fun createAddress(userUuid: String, postAddress: PostAddress): GetAddress {
@@ -43,12 +43,12 @@ class AddressService(
         val addressInfo = AddressInfoV2(
             userUuid = userUuid,
             streetLatitude = suggestion.latitude,
-            streetLongitude = suggestion.longitude,
+            streetLongitude = suggestion.longitude
         )
         val deliveryZone = getDeliveryZoneByCoordinates(
             cityUuid = postAddress.cityUuid,
             latitude = suggestion.latitude,
-            longitude = suggestion.longitude,
+            longitude = suggestion.longitude
         ) ?: deliveryNotAvailableAtThisAddress(suggestion.latitude, suggestion.longitude)
 
         val insertAddress = postAddress.mapPostAddressV2(addressInfo)
@@ -71,7 +71,7 @@ class AddressService(
             getDeliveryZoneByCoordinates(
                 cityUuid = cityUuid,
                 latitude = address.street.latitude,
-                longitude = address.street.longitude,
+                longitude = address.street.longitude
             )?.let { deliveryZone ->
                 address.mapAddressToV2(deliveryZone)
             }
@@ -83,7 +83,7 @@ class AddressService(
             getDeliveryZoneByCoordinates(
                 cityUuid = cityUuid,
                 latitude = address.street.latitude,
-                longitude = address.street.longitude,
+                longitude = address.street.longitude
             )?.let { deliveryZone ->
                 address.mapAddressV2(deliveryZone)
             }
@@ -105,7 +105,7 @@ class AddressService(
     private suspend fun getDeliveryZoneByCoordinates(
         cityUuid: String,
         latitude: Double,
-        longitude: Double,
+        longitude: Double
     ): DeliveryZone? {
         val cafeList = cafeRepository.getCafeListByCityUuid(cityUuid = cityUuid)
         return cafeList
@@ -123,7 +123,7 @@ class AddressService(
                         point.order
                     }.map { point ->
                         point.latitude to point.longitude
-                    },
+                    }
                 )
             }
     }
@@ -131,5 +131,4 @@ class AddressService(
     private fun deliveryNotAvailableAtThisAddress(latitude: Double, longitude: Double): Nothing {
         error("Delivery not available at this address: $latitude,$longitude")
     }
-
 }

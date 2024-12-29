@@ -18,5 +18,4 @@ class AdditionGroupEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var company: CompanyEntity by CompanyEntity referencedOn AdditionGroupTable.company
 
     companion object : UUIDEntityClass<AdditionGroupEntity>(AdditionGroupTable)
-
 }

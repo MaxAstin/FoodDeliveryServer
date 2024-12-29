@@ -58,7 +58,7 @@ suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getL
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.checkRights(
     block: (Request) -> Unit,
-    checkBlock: (JwtUser) -> Boolean,
+    checkBlock: (JwtUser) -> Boolean
 ) {
     safely {
         val jwtUser = call.authentication.principal() as? JwtUser
@@ -74,7 +74,7 @@ suspend inline fun PipelineContext<Unit, ApplicationCall>.checkRights(
     }
 }
 
-suspend inline fun <reified B, reified R: Any> PipelineContext<Unit, ApplicationCall>.withBody(block: (B) -> R) {
+suspend inline fun <reified B, reified R : Any> PipelineContext<Unit, ApplicationCall>.withBody(block: (B) -> R) {
     safely {
         val bodyModel: B = call.receive()
         val result = block(bodyModel)
@@ -84,7 +84,7 @@ suspend inline fun <reified B, reified R: Any> PipelineContext<Unit, Application
 
 suspend inline fun <reified B, reified R : Any> PipelineContext<Unit, ApplicationCall>.handleRequestWithBody(
     request: Request,
-    block: (BodyRequest<B>) -> R,
+    block: (BodyRequest<B>) -> R
 ) {
     val body: B = call.receive()
     val result = block(
@@ -100,20 +100,20 @@ suspend inline fun <reified B, reified R : Any> PipelineContext<Unit, Applicatio
     }
 }
 
-suspend inline fun <reified T : Any>  PipelineContext<Unit, ApplicationCall>.respond(block: () -> T) {
+suspend inline fun <reified T : Any> PipelineContext<Unit, ApplicationCall>.respond(block: () -> T) {
     call.respond(block())
 }
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.deleteByUserUuid(
     request: Request,
-    deleteBlock: (String) -> Unit,
+    deleteBlock: (String) -> Unit
 ) {
     deleteBlock(request.jwtUser.uuid)
     call.respondNoContent()
 }
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.deleteByUuid(
-    deleteBlock: (String) -> Unit,
+    deleteBlock: (String) -> Unit
 ) {
     val uuid = call.getParameter(UUID_PARAMETER)
     deleteBlock(uuid)

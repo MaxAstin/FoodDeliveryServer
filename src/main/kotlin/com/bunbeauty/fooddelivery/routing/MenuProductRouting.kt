@@ -15,7 +15,6 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureMenuProductRouting() {
-
     routing {
         getAllMenuProducts()
         authenticate {
@@ -26,7 +25,6 @@ fun Application.configureMenuProductRouting() {
 }
 
 private fun Routing.getAllMenuProducts() {
-
     val menuProductService: MenuProductService by inject()
 
     get("/menu_product") {
@@ -38,7 +36,6 @@ private fun Routing.getAllMenuProducts() {
 }
 
 private fun Route.postMenuProduct() {
-
     val menuProductService: MenuProductService by inject()
 
     post("/menu_product") {
@@ -52,7 +49,6 @@ private fun Route.postMenuProduct() {
 }
 
 private fun Route.patchMenuProduct() {
-
     val menuProductService: MenuProductService by inject()
 
     patch("/menu_product") {

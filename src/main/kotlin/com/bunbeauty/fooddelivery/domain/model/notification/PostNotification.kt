@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 class PostNotification(
     val title: String,
-    val body: String,
+    val body: String
 )

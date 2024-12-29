@@ -7,5 +7,5 @@ class InitCompany(
     val forceUpdateVersion: Int,
     val cityList: List<InitCity>,
     val categoryList: List<InitCategory>,
-    val menuList: List<InitMenuProduct>,
+    val menuList: List<InitMenuProduct>
 )

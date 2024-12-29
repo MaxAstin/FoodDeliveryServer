@@ -58,5 +58,4 @@ class JwtService : IJwtService {
         const val USER_UUID = "userUuid"
         const val USER_ROLE = "userRole"
     }
-
 }

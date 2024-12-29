@@ -10,7 +10,7 @@ import com.bunbeauty.fooddelivery.domain.toUuid
 
 class CategoryService(
     private val categoryRepository: CategoryRepository,
-    private val userRepository: UserRepository,
+    private val userRepository: UserRepository
 ) {
 
     suspend fun getCategoryListByCompanyUuid(companyUuid: String): List<GetCategory> {

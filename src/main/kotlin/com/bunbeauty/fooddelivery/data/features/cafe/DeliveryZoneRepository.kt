@@ -42,5 +42,4 @@ class DeliveryZoneRepository {
             DeliveryZoneTable.cafe eq cafeUuid
         }.map(mapDeliveryZoneEntity)
     }
-
 }

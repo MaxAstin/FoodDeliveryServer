@@ -13,7 +13,7 @@ class AuthorizationNetworkDataSource(private val client: HttpClient) {
             parameters = mapOf(
                 "number" to phoneNumber,
                 "sign" to sign,
-                "text" to text,
+                "text" to text
             )
         )
     }
@@ -24,9 +24,8 @@ class AuthorizationNetworkDataSource(private val client: HttpClient) {
             parameters = mapOf(
                 "number" to phoneNumber,
                 "sign" to sign,
-                "text" to text,
+                "text" to text
             )
         )
     }
-
 }

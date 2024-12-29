@@ -9,14 +9,12 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureDiscountRouting() {
-
     routing {
         getDiscount()
     }
 }
 
 private fun Routing.getDiscount() {
-
     val discountService: DiscountService by inject()
 
     get("/discount") {

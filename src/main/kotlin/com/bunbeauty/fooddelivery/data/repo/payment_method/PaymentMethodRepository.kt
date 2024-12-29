@@ -6,7 +6,7 @@ import com.bunbeauty.fooddelivery.data.table.PaymentMethodTable
 import com.bunbeauty.fooddelivery.domain.model.company.payment_method.GetPaymentMethod
 import java.util.*
 
-class PaymentMethodRepository: IPaymentMethodRepository {
+class PaymentMethodRepository : IPaymentMethodRepository {
 
     override suspend fun getPaymentMethodListByCompanyUuid(companyUuid: UUID): List<GetPaymentMethod> = query {
         PaymentMethodEntity.find {
@@ -15,5 +15,4 @@ class PaymentMethodRepository: IPaymentMethodRepository {
             paymentMethodEntity.toPaymentMethod()
         }
     }
-
 }

@@ -11,7 +11,6 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureClientUserRouting() {
-
     routing {
         clientLogin()
 
@@ -25,7 +24,6 @@ fun Application.configureClientUserRouting() {
 }
 
 private fun Routing.clientLogin() {
-
     val clientUserService: IClientUserService by inject()
 
     post("/client/login") {
@@ -36,7 +34,6 @@ private fun Routing.clientLogin() {
 }
 
 private fun Route.getClient() {
-
     val clientUserService: IClientUserService by inject()
 
     get("/client") {
@@ -47,7 +44,6 @@ private fun Route.getClient() {
 }
 
 private fun Route.getClientSettings() {
-
     val clientUserService: IClientUserService by inject()
 
     get("/client/settings") {
@@ -58,7 +54,6 @@ private fun Route.getClientSettings() {
 }
 
 private fun Route.patchClientUser() {
-
     val clientUserService: IClientUserService by inject()
 
     patch("/client") {
@@ -76,7 +71,6 @@ private fun Route.patchClientUser() {
 }
 
 private fun Route.patchClientSettings() {
-
     val clientUserService: IClientUserService by inject()
 
     patch("/client/settings") {

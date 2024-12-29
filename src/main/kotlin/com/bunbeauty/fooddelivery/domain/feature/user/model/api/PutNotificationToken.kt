@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 class PutNotificationToken(
     val token: String,
-    val device: String? = null,
+    val device: String? = null
 )

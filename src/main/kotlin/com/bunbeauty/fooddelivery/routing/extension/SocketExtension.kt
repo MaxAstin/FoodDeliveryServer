@@ -11,7 +11,7 @@ import java.sql.DriverManager.println
 
 suspend inline fun DefaultWebSocketServerSession.clientSocket(
     block: (Request) -> Unit,
-    crossinline closeBlock: (Request) -> Unit,
+    crossinline closeBlock: (Request) -> Unit
 ) {
     println("clientSocket")
     socket(block = block, closeBlock = closeBlock) { jwtUser ->
@@ -21,7 +21,7 @@ suspend inline fun DefaultWebSocketServerSession.clientSocket(
 
 suspend inline fun DefaultWebSocketServerSession.managerSocket(
     block: (Request) -> Unit,
-    crossinline onSocketClose: (Request) -> Unit,
+    crossinline onSocketClose: (Request) -> Unit
 ) {
     println("managerSocket")
     socket(block = block, closeBlock = onSocketClose) { jwtUser ->
@@ -33,7 +33,7 @@ suspend inline fun DefaultWebSocketServerSession.managerSocket(
 suspend inline fun DefaultWebSocketServerSession.socket(
     block: (Request) -> Unit,
     crossinline closeBlock: (Request) -> Unit,
-    checkAccess: (JwtUser) -> Boolean,
+    checkAccess: (JwtUser) -> Boolean
 ) {
     val jwtUser = call.authentication.principal() as? JwtUser
     if (jwtUser == null) {

@@ -6,5 +6,4 @@ import java.util.*
 interface IPaymentMethodRepository {
 
     suspend fun getPaymentMethodListByCompanyUuid(companyUuid: UUID): List<GetPaymentMethod>
-
 }

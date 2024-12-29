@@ -10,14 +10,12 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureVersionRouting() {
-
     routing {
         getForceUpdateVersion()
     }
 }
 
 private fun Routing.getForceUpdateVersion() {
-
     val versionService: VersionService by inject()
 
     get("/force_update_version") {

@@ -36,7 +36,7 @@ fun Application.configureKoin() {
             networkModule,
             deliveryZoneModule,
             privacyCheckModule,
-            additionModule,
+            additionModule
         )
     }
 }

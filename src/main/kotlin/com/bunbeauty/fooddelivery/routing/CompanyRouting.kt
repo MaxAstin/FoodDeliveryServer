@@ -15,7 +15,6 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureCompanyRouting() {
-
     routing {
         getWorkInfo()
 
@@ -27,7 +26,6 @@ fun Application.configureCompanyRouting() {
 }
 
 private fun Route.createCompany() {
-
     val companyService: CompanyService by inject()
 
     post("/company") {
@@ -38,7 +36,6 @@ private fun Route.createCompany() {
 }
 
 private fun Route.patchCompany() {
-
     val companyService: CompanyService by inject()
 
     patch("/company") {
@@ -56,7 +53,6 @@ private fun Route.patchCompany() {
  * endpoint which describe cafe work
  * */
 private fun Route.getWorkInfo() {
-
     val companyService: CompanyService by inject()
 
     get("/work_info") {

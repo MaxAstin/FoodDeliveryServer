@@ -23,19 +23,19 @@ val orderModule = module(createdAtStart = true) {
         CalculateOrderTotalUseCase(
             calculateOrderProductsNewCostUseCase = get(),
             calculateOrderProductsOldCostUseCase = get(),
-            calculateOrderProductTotalUseCase = get(),
+            calculateOrderProductTotalUseCase = get()
         )
     }
     factory {
         GetDeliveryCostUseCase(
             clientUserRepository = get(),
-            calculateOrderProductsNewCostUseCase = get(),
+            calculateOrderProductsNewCostUseCase = get()
         )
     }
     factory {
         FindDeliveryZoneByCityUuidAndCoordinatesUseCase(
             cafeRepository = get(),
-            checkIsPointInPolygonUseCase = get(),
+            checkIsPointInPolygonUseCase = get()
         )
     }
     factory {
@@ -57,7 +57,7 @@ val orderModule = module(createdAtStart = true) {
             findDeliveryZoneByCityUuidAndCoordinatesUseCase = get(),
             calculateOrderTotalUseCase = get(),
             getDeliveryCostUseCase = get(),
-            isOrderAvailableUseCase = get(),
+            isOrderAvailableUseCase = get()
         )
     }
     single { OrderRepository() }

@@ -13,6 +13,6 @@ fun PostAddition.toInsertAddition(companyUuid: UUID): InsertAddition {
         tag = tag,
         priority = priority,
         isVisible = isVisible,
-        companyUuid = companyUuid,
+        companyUuid = companyUuid
     )
 }

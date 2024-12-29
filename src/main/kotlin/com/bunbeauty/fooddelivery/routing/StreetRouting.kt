@@ -13,7 +13,6 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureStreetRouting() {
-
     routing {
         getStreetsByCityUuid()
         authenticate {
@@ -23,7 +22,6 @@ fun Application.configureStreetRouting() {
 }
 
 private fun Routing.getStreetsByCityUuid() {
-
     val streetService: StreetService by inject()
 
     get("/street") {
@@ -35,7 +33,6 @@ private fun Routing.getStreetsByCityUuid() {
 }
 
 private fun Route.postStreet() {
-
     val streetService: StreetService by inject()
 
     post("/street") {

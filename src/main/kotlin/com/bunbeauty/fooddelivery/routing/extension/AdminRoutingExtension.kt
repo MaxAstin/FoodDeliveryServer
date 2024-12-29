@@ -28,7 +28,7 @@ suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getA
 }
 
 suspend inline fun <reified B, reified R : Any> PipelineContext<Unit, ApplicationCall>.adminWithBody(
-    block: (BodyRequest<B>) -> R,
+    block: (BodyRequest<B>) -> R
 ) {
     admin { request ->
         handleRequestWithBody(

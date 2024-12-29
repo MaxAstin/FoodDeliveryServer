@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.plugins
 
-import java.time.*
 import io.ktor.server.application.*
 import io.ktor.server.websocket.*
+import java.time.*
 
 fun Application.configureSockets() {
     install(WebSockets) {

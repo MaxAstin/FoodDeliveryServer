@@ -13,7 +13,6 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureCityRouting() {
-
     routing {
         getAllCities()
         authenticate {
@@ -23,7 +22,6 @@ fun Application.configureCityRouting() {
 }
 
 private fun Routing.getAllCities() {
-
     val cityService: CityService by inject()
 
     get("/city") {
@@ -35,7 +33,6 @@ private fun Routing.getAllCities() {
 }
 
 private fun Route.postCity() {
-
     val cityService: CityService by inject()
 
     post("/city") {

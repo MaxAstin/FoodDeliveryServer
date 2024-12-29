@@ -26,6 +26,6 @@ val mapPostOrderProductToOrderProduct: PostOrderProduct.(MenuProduct) -> OrderPr
         photoLink = menuProduct.photoLink,
         barcode = menuProduct.barcode,
         menuProduct = menuProduct,
-        additions = emptyList(),
+        additions = emptyList()
     )
 }

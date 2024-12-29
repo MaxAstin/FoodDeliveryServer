@@ -6,5 +6,5 @@ data class MenuProductAdditionGroup(
     val singleChoice: Boolean,
     val priority: Int,
     val isVisible: Boolean,
-    val additions: List<MenuProductAddition>,
+    val additions: List<MenuProductAddition>
 )

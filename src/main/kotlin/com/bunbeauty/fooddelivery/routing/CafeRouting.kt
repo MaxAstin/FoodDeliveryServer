@@ -16,7 +16,6 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureCafeRouting() {
-
     routing {
         getCafesByCityUuid()
         authenticate {
@@ -27,7 +26,6 @@ fun Application.configureCafeRouting() {
 }
 
 private fun Routing.getCafesByCityUuid() {
-
     val cafeService: CafeService by inject()
 
     get("/cafe") {
@@ -39,7 +37,6 @@ private fun Routing.getCafesByCityUuid() {
 }
 
 private fun Route.postCafe() {
-
     val cafeService: CafeService by inject()
 
     post("/cafe") {
@@ -53,7 +50,6 @@ private fun Route.postCafe() {
 }
 
 private fun Route.patchCafe() {
-
     val cafeService: CafeService by inject()
 
     patch("/cafe") {

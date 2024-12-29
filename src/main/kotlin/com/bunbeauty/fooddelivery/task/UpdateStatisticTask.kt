@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit
 import kotlin.concurrent.scheduleAtFixedRate
 
 fun Application.scheduleUpdateStatisticTask() {
-
     val statisticService: StatisticService by inject()
 
     val now = DateTime.now()
@@ -21,7 +20,7 @@ fun Application.scheduleUpdateStatisticTask() {
     ).seconds
     Timer("Update statistic").scheduleAtFixedRate(
         delay = secondsUntilTomorrow * 1_000L,
-        period = TimeUnit.HOURS.toMillis(24),
+        period = TimeUnit.HOURS.toMillis(24)
     ) {
         launch {
             statisticService.updateStatistic()

@@ -51,7 +51,7 @@ val addressModule = module(createdAtStart = true) {
 
     single {
         AddressRepository(
-            addressNetworkDataSource = get(),
+            addressNetworkDataSource = get()
         )
     }
 
@@ -62,7 +62,7 @@ val addressModule = module(createdAtStart = true) {
             clientUserRepository = get(),
             cityRepository = get(),
             cafeRepository = get(),
-            checkIsPointInPolygonUseCase = get(),
+            checkIsPointInPolygonUseCase = get()
         )
     }
 }

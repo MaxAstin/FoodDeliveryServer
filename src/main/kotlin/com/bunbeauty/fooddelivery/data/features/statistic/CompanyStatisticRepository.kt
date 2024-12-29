@@ -23,12 +23,12 @@ class CompanyStatisticRepository {
     suspend fun getStatisticListByTimePeriodTypeCompany(
         time: Long,
         periodType: PeriodType,
-        companyUuid: UUID,
+        companyUuid: UUID
     ): List<GetStatistic> = query {
         CompanyStatisticEntity.find {
             (CompanyStatisticTable.periodType eq periodType.name) and
-                    (CompanyStatisticTable.time greaterEq time) and
-                    (CompanyStatisticTable.company eq companyUuid)
+                (CompanyStatisticTable.time greaterEq time) and
+                (CompanyStatisticTable.company eq companyUuid)
         }.orderBy(CompanyStatisticTable.time to SortOrder.DESC).map { companyStatisticEntity ->
             companyStatisticEntity.toStatistic()
         }
@@ -63,18 +63,18 @@ class CompanyStatisticRepository {
     suspend fun getStatisticByTimePeriodTypeCompany(
         time: Long,
         periodType: PeriodType,
-        companyUuid: UUID,
+        companyUuid: UUID
     ): CompanyStatistic? = query {
         CompanyStatisticEntity.find {
             (CompanyStatisticTable.periodType eq periodType.name) and
-                    (CompanyStatisticTable.time eq time) and
-                    (CompanyStatisticTable.company eq companyUuid)
+                (CompanyStatisticTable.time eq time) and
+                (CompanyStatisticTable.company eq companyUuid)
         }.firstOrNull()?.toCompanyStatistic()
     }
 
     private fun insertStatisticProducts(
         insertStatisticProductList: List<InsertStatisticProduct>,
-        companyStatisticEntity: CompanyStatisticEntity,
+        companyStatisticEntity: CompanyStatisticEntity
     ) {
         insertStatisticProductList.onEach { insertStatisticProduct ->
             CompanyStatisticProductEntity.new {
@@ -86,5 +86,4 @@ class CompanyStatisticRepository {
             }
         }
     }
-
 }

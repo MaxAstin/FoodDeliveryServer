@@ -15,7 +15,6 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureNonWorkingDayRouting() {
-
     routing {
         getNonWorkingDaysByCafeUuid()
         authenticate {
@@ -26,7 +25,6 @@ fun Application.configureNonWorkingDayRouting() {
 }
 
 private fun Routing.getNonWorkingDaysByCafeUuid() {
-
     val nonWorkingDayService: NonWorkingDayService by inject()
 
     get("/non_working_day") {
@@ -38,7 +36,6 @@ private fun Routing.getNonWorkingDaysByCafeUuid() {
 }
 
 private fun Route.postNonWorkingDay() {
-
     val nonWorkingDayService: NonWorkingDayService by inject()
 
     post("/non_working_day") {
@@ -49,7 +46,6 @@ private fun Route.postNonWorkingDay() {
 }
 
 private fun Route.patchNonWorkingDay() {
-
     val nonWorkingDayService: NonWorkingDayService by inject()
 
     patch("/non_working_day") {

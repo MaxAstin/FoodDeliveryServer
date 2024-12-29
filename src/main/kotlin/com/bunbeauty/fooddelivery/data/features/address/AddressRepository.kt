@@ -20,7 +20,7 @@ import org.jetbrains.exposed.sql.and
 private const val STREET_BOUND = "street"
 
 class AddressRepository(
-    private val addressNetworkDataSource: AddressNetworkDataSource,
+    private val addressNetworkDataSource: AddressNetworkDataSource
 ) {
 
     suspend fun insertAddress(insertAddress: InsertAddress): Address {
@@ -72,7 +72,7 @@ class AddressRepository(
         return query {
             AddressEntityV2.find {
                 (AddressV2Table.clientUser eq userUuid.toUuid()) and
-                        (AddressV2Table.city eq cityUuid.toUuid())
+                    (AddressV2Table.city eq cityUuid.toUuid())
             }.toList()
                 .map(mapAddressEntityV2)
         }
@@ -104,11 +104,10 @@ class AddressRepository(
                 query = query,
                 fromBound = Bound(value = STREET_BOUND),
                 toBound = Bound(value = STREET_BOUND),
-                locations = listOf(Location(city = city.name)),
+                locations = listOf(Location(city = city.name))
             )
         ).getDataOrNull()
             ?.mapSuggestionsResponse()
             .orEmpty()
     }
-
 }

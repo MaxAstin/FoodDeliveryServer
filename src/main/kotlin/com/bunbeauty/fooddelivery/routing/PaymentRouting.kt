@@ -9,7 +9,6 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configurePaymentRouting() {
-
     routing {
         authenticate {
             getPayment()
@@ -18,7 +17,6 @@ fun Application.configurePaymentRouting() {
 }
 
 private fun Route.getPayment() {
-
     val paymentService: IPaymentService by inject()
 
     get("/payment") {

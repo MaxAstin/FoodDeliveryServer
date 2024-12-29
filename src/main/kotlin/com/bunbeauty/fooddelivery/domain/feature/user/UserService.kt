@@ -17,7 +17,7 @@ import org.joda.time.DateTime
 
 class UserService(
     private val userRepository: UserRepository,
-    private val jwtService: IJwtService,
+    private val jwtService: IJwtService
 ) {
 
     suspend fun login(postUserAuth: PostUserAuth): UserAuthResponse {
@@ -102,5 +102,4 @@ class UserService(
     private fun getUpdateTokenDateTime(): String {
         return DateTime.now().toString("dd.MM.yyyy HH:mm:ss")
     }
-
 }

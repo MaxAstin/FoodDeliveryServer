@@ -7,5 +7,5 @@ class InsertAuthSession(
     val time: Long,
     val attemptsLeft: Int,
     val isConfirmed: Boolean,
-    val companyUuid: UUID,
+    val companyUuid: UUID
 )

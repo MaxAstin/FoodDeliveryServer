@@ -12,15 +12,14 @@ class AddressNetworkDataSource(private val client: HttpClient) {
     suspend fun requestAddressSuggestions(addressRequestBody: AddressRequestBody): ApiResult<SuggestionsResponse> {
         return client.postData(
             path = "suggest/address",
-            body = addressRequestBody,
+            body = addressRequestBody
         )
     }
 
     suspend fun requestAddressSuggestionById(addressByIdRequestBody: AddressByIdRequestBody): ApiResult<SuggestionsResponse> {
         return client.postData(
             path = "findById/address",
-            body = addressByIdRequestBody,
+            body = addressByIdRequestBody
         )
     }
-
 }

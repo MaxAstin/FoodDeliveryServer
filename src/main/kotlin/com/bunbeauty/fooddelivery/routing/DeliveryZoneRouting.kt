@@ -11,7 +11,6 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureDeliveryZoneRouting() {
-
     routing {
         authenticate {
             getDeliveryZoneByCafeUuid()
@@ -21,7 +20,6 @@ fun Application.configureDeliveryZoneRouting() {
 }
 
 private fun Route.getDeliveryZoneByCafeUuid() {
-
     val deliveryZoneService: DeliveryZoneService by inject()
 
     get("/delivery_zone") {
@@ -36,7 +34,6 @@ private fun Route.getDeliveryZoneByCafeUuid() {
 }
 
 private fun Route.postDeliveryZone() {
-
     val deliveryZoneService: DeliveryZoneService by inject()
 
     post("/delivery_zone") {

@@ -9,7 +9,6 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureNotificationRouting() {
-
     routing {
         authenticate {
             postNotification()
@@ -18,7 +17,6 @@ fun Application.configureNotificationRouting() {
 }
 
 private fun Route.postNotification() {
-
     val notificationService: NotificationService by inject()
 
     post("/notification") {
@@ -29,5 +27,4 @@ private fun Route.postNotification() {
             )
         }
     }
-
 }

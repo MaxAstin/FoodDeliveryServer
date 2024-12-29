@@ -9,12 +9,11 @@ import java.util.concurrent.TimeUnit
 import kotlin.concurrent.scheduleAtFixedRate
 
 fun Application.scheduleUpdateHitsTask() {
-
     val hitService: HitService by inject()
 
     Timer("Update hits").scheduleAtFixedRate(
         delay = 5_000L,
-        period = TimeUnit.HOURS.toMillis(24),
+        period = TimeUnit.HOURS.toMillis(24)
     ) {
         launch {
             hitService.updateHits()

@@ -9,14 +9,12 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureDeliveryRouting() {
-
     routing {
         getDelivery()
     }
 }
 
 private fun Routing.getDelivery() {
-
     val deliveryService: DeliveryService by inject()
 
     get("/delivery") {

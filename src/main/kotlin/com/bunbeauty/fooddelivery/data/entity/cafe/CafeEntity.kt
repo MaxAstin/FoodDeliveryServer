@@ -29,5 +29,4 @@ class CafeEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     val zones: SizedIterable<DeliveryZoneEntity> by DeliveryZoneEntity referrersOn DeliveryZoneTable.cafe
 
     companion object : UUIDEntityClass<CafeEntity>(CafeTable)
-
 }

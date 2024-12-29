@@ -13,5 +13,5 @@ class GetCafe(
     val longitude: Double,
     val address: String,
     val cityUuid: String,
-    val isVisible: Boolean,
+    val isVisible: Boolean
 )

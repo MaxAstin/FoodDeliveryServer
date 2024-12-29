@@ -6,7 +6,7 @@ import io.ktor.server.application.*
 import io.ktor.util.pipeline.*
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.manager(
-    block: (Request) -> Unit,
+    block: (Request) -> Unit
 ) {
     checkRights(block) { jwtUser ->
         jwtUser.isManager() || jwtUser.isAdmin()
@@ -33,8 +33,8 @@ suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.mana
     }
 }
 
-suspend inline fun <reified B, reified R: Any> PipelineContext<Unit, ApplicationCall>.managerWithBody(
-    block: (BodyRequest<B>) -> R,
+suspend inline fun <reified B, reified R : Any> PipelineContext<Unit, ApplicationCall>.managerWithBody(
+    block: (BodyRequest<B>) -> R
 ) {
     manager { request ->
         handleRequestWithBody(

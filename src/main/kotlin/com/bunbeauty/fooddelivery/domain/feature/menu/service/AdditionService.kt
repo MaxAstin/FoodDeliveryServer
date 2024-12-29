@@ -13,7 +13,7 @@ import com.bunbeauty.fooddelivery.domain.toUuid
 class AdditionService(
     private val userRepository: UserRepository,
     private val additionRepository: AdditionRepository,
-    private val menuProductRepository: MenuProductRepository,
+    private val menuProductRepository: MenuProductRepository
 ) {
 
     suspend fun createAdditionGroup(postAdditionGroup: PostAdditionGroup, creatorUuid: String): GetAdditionGroup {
@@ -24,7 +24,7 @@ class AdditionService(
 
         val additionGroup = additionRepository.getAdditionGroupByName(
             name = postAdditionGroup.name,
-            companyUuid = companyUuid,
+            companyUuid = companyUuid
         )
         if (additionGroup != null) {
             additionGroupAlreadyExistsError(name = postAdditionGroup.name)
@@ -37,7 +37,7 @@ class AdditionService(
 
     suspend fun addAdditionGroupToMenuProducts(
         postAdditionGroupToMenuProducts: PostAdditionGroupToMenuProducts,
-        creatorUuid: String,
+        creatorUuid: String
     ): List<GetMenuProduct> {
         val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
             .orThrowNotFoundByUserUuidError(creatorUuid)
@@ -78,7 +78,7 @@ class AdditionService(
     suspend fun patchAdditionGroup(
         creatorUuid: String,
         additionGroupUuid: String,
-        patchAdditionGroup: PatchAdditionGroup,
+        patchAdditionGroup: PatchAdditionGroup
     ): GetAdditionGroup {
         val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
             .orThrowNotFoundByUserUuidError(creatorUuid)
@@ -91,7 +91,7 @@ class AdditionService(
         if (patchAdditionGroup.name != null) {
             val additionGroup = additionRepository.getAdditionGroupByName(
                 name = patchAdditionGroup.name,
-                companyUuid = companyUuid.toUuid(),
+                companyUuid = companyUuid.toUuid()
             )
             if (additionGroup != null && additionGroupUuid != additionGroup.uuid) {
                 additionGroupAlreadyExistsError(name = patchAdditionGroup.name)
@@ -127,7 +127,7 @@ class AdditionService(
 
     suspend fun addAdditionToAdditionGroup(
         postAdditionToGroup: PostAdditionToGroup,
-        creatorUuid: String,
+        creatorUuid: String
     ): List<GetMenuProduct> {
         val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
             .orThrowNotFoundByUserUuidError(creatorUuid)
@@ -163,7 +163,7 @@ class AdditionService(
     suspend fun patchAddition(
         creatorUuid: String,
         additionUuid: String,
-        patchAddition: PatchAddition,
+        patchAddition: PatchAddition
     ): GetAddition {
         val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
             .orThrowNotFoundByUserUuidError(creatorUuid)
@@ -202,7 +202,7 @@ class AdditionService(
 
     private suspend fun checkMenuProductsAvailability(
         menuProductUuids: List<String>,
-        companyUuid: String,
+        companyUuid: String
     ) {
         menuProductUuids.forEach { menuProductUuid ->
             val menuProduct = menuProductRepository.getMenuProductByUuid(
@@ -217,7 +217,7 @@ class AdditionService(
 
     private suspend fun checkAdditionsAvailability(
         additionUuids: List<String>,
-        companyUuid: String,
+        companyUuid: String
     ) {
         additionUuids.forEach { additionUuid ->
             val addition = additionRepository.getAdditionByUuid(uuid = additionUuid.toUuid())
@@ -230,7 +230,7 @@ class AdditionService(
 
     private suspend fun checkAdditionGroupAvailability(
         additionGroupUuid: String,
-        companyUuid: String,
+        companyUuid: String
     ) {
         val additionGroup = additionRepository.getAdditionGroupByUuid(uuid = additionGroupUuid.toUuid())
             .orThrowNotFoundByUuidError(uuid = additionGroupUuid)
@@ -258,5 +258,4 @@ class AdditionService(
     private fun additionAlreadyExistsError(name: String, tag: String?): Nothing {
         error("Addition with name \"$name\" and tag \"$tag\" already exists")
     }
-
 }

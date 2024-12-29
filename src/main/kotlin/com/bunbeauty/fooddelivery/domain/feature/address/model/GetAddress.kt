@@ -13,5 +13,5 @@ class GetAddress(
     val comment: String?,
     val street: GetStreet,
     val userUuid: String,
-    val isVisible: Boolean,
+    val isVisible: Boolean
 )

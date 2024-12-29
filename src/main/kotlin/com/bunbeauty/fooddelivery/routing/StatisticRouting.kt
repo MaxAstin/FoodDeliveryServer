@@ -10,7 +10,6 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureStatisticRouting() {
-
     routing {
         getLastMonthCompanyStatistic()
         authenticate {
@@ -21,7 +20,6 @@ fun Application.configureStatisticRouting() {
 }
 
 private fun Route.getStatistic() {
-
     val statisticService: StatisticService by inject()
 
     get("/statistic") {
@@ -38,7 +36,6 @@ private fun Route.getStatistic() {
 }
 
 private fun Route.getStatisticDetails() {
-
     get("/statistic/details") {
         manager {
             call.respondNotFound()
@@ -47,7 +44,6 @@ private fun Route.getStatisticDetails() {
 }
 
 private fun Route.getLastMonthCompanyStatistic() {
-
     val statisticService: StatisticService by inject()
 
     get("/statistic/last") {

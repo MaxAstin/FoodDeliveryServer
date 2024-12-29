@@ -9,14 +9,14 @@ object FakeOrderProductTotal {
         newCommonPrice: Int = 0,
         oldCommonPrice: Int? = null,
         newTotalCost: Int = 0,
-        oldTotalCost: Int? = null,
+        oldTotalCost: Int? = null
     ): OrderProductTotal {
         return OrderProductTotal(
             additionsPrice = additionsPrice,
             newCommonPrice = newCommonPrice,
             oldCommonPrice = oldCommonPrice,
             newTotalCost = newTotalCost,
-            oldTotalCost = oldTotalCost,
+            oldTotalCost = oldTotalCost
         )
     }
 }

@@ -9,12 +9,12 @@ class InsertAddressV2(
     val comment: String?,
     val isVisible: Boolean,
     val clientUserUuid: String,
-    val cityUuid: String,
+    val cityUuid: String
 )
 
 class InsertStreetV2(
     val fiasId: String,
     val name: String,
     val latitude: Double,
-    val longitude: Double,
+    val longitude: Double
 )

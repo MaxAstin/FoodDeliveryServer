@@ -14,7 +14,6 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureUserRouting() {
-
     routing {
         userLogin()
 
@@ -30,7 +29,6 @@ fun Application.configureUserRouting() {
 }
 
 private fun Routing.userLogin() {
-
     val userService: UserService by inject()
 
     post("/user/login") {
@@ -41,7 +39,6 @@ private fun Routing.userLogin() {
 }
 
 private fun Route.createUser() {
-
     val userService: UserService by inject()
 
     post("/user") {
@@ -52,7 +49,6 @@ private fun Route.createUser() {
 }
 
 private fun Route.getUser() {
-
     val userService: UserService by inject()
 
     get("/user") {
@@ -65,7 +61,6 @@ private fun Route.getUser() {
 }
 
 private fun Route.updateNotificationToken() {
-
     val userService: UserService by inject()
 
     put("/user/notification_token") {
@@ -79,7 +74,6 @@ private fun Route.updateNotificationToken() {
 }
 
 private fun Route.clearNotificationToken() {
-
     val userService: UserService by inject()
 
     delete("/user/notification_token") {
@@ -92,7 +86,6 @@ private fun Route.clearNotificationToken() {
 }
 
 private fun Route.updateUnlimitedNotification() {
-
     val userService: UserService by inject()
 
     put("/user/unlimited_notification") {
@@ -104,4 +97,3 @@ private fun Route.updateUnlimitedNotification() {
         }
     }
 }
-

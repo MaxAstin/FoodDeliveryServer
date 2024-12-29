@@ -12,7 +12,6 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureAuthorizationRouting() {
-
     routing {
         sendCode()
         checkCode()
@@ -25,7 +24,6 @@ fun Application.configureAuthorizationRouting() {
 }
 
 private fun Routing.sendCode() {
-
     val authorizationService: AuthorizationService by inject()
 
     post("/client/code_request") {
@@ -42,7 +40,6 @@ private fun Routing.sendCode() {
 }
 
 private fun Routing.checkCode() {
-
     val authorizationService: AuthorizationService by inject()
 
     put("/client/code_check") {
@@ -54,7 +51,6 @@ private fun Routing.checkCode() {
 }
 
 private fun Routing.resendCode() {
-
     val authorizationService: AuthorizationService by inject()
 
     put("/client/code_resend") {
@@ -67,7 +63,6 @@ private fun Routing.resendCode() {
 }
 
 private fun Route.postTestClientUserPhone() {
-
     val authorizationService: AuthorizationService by inject()
 
     post("/test_phone") {
@@ -78,7 +73,6 @@ private fun Route.postTestClientUserPhone() {
 }
 
 private fun Route.getTestClientUserPhones() {
-
     val authorizationService: AuthorizationService by inject()
 
     get("/test_phone") {

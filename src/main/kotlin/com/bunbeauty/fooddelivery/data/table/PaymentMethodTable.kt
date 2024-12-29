@@ -8,5 +8,4 @@ object PaymentMethodTable : UUIDTable() {
     val value = PaymentMethodTable.varchar("value", 512).nullable()
     val valueToCopy = PaymentMethodTable.varchar("valueToCopy", 512).nullable()
     val company = PaymentMethodTable.reference("company", CompanyTable)
-
 }
