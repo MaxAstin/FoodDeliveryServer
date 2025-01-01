@@ -15,27 +15,6 @@ class OrderStatisticRepository {
         query {
             OrderEntity.find {
                 (OrderTable.cafe eq cafeUuid) and
-                        (OrderTable.time greater fromTime) and
-                        (OrderTable.time less toTime) and
-                        OrderTable.status.inList(
-                            listOf(
-                                OrderStatus.ACCEPTED.name,
-                                OrderStatus.PREPARING.name,
-                                OrderStatus.SENT_OUT.name,
-                                OrderStatus.DELIVERED.name,
-                                OrderStatus.DONE.name,
-                            )
-                        )
-            }.map(mapOrderEntity)
-        }
-
-    suspend fun getOrderListByCompanyUuid(
-        companyUuid: UUID,
-        fromTime: Long,
-        toTime: Long,
-    ): List<Order> = query {
-        OrderEntity.find {
-            (OrderTable.company eq companyUuid) and
                     (OrderTable.time greater fromTime) and
                     (OrderTable.time less toTime) and
                     OrderTable.status.inList(
@@ -44,10 +23,30 @@ class OrderStatisticRepository {
                             OrderStatus.PREPARING.name,
                             OrderStatus.SENT_OUT.name,
                             OrderStatus.DELIVERED.name,
-                            OrderStatus.DONE.name,
+                            OrderStatus.DONE.name
                         )
                     )
+            }.map(mapOrderEntity)
+        }
+
+    suspend fun getOrderListByCompanyUuid(
+        companyUuid: UUID,
+        fromTime: Long,
+        toTime: Long
+    ): List<Order> = query {
+        OrderEntity.find {
+            (OrderTable.company eq companyUuid) and
+                (OrderTable.time greater fromTime) and
+                (OrderTable.time less toTime) and
+                OrderTable.status.inList(
+                    listOf(
+                        OrderStatus.ACCEPTED.name,
+                        OrderStatus.PREPARING.name,
+                        OrderStatus.SENT_OUT.name,
+                        OrderStatus.DELIVERED.name,
+                        OrderStatus.DONE.name
+                    )
+                )
         }.map(mapOrderEntity)
     }
-
 }

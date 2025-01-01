@@ -28,6 +28,6 @@ val mapOrderEntity: OrderEntity.() -> Order = {
         cafeWithCity = cafe.mapCafeEntityToCafeWithCity(),
         company = company.mapCompanyEntity(),
         clientUser = clientUser.mapClientUserEntityToLight(),
-        orderProducts = oderProducts.map(mapOrderProductEntity),
+        orderProducts = oderProducts.map(mapOrderProductEntity)
     )
 }

@@ -3,12 +3,14 @@ package com.bunbeauty.fooddelivery.fake
 import com.bunbeauty.fooddelivery.domain.feature.company.Company
 import com.bunbeauty.fooddelivery.domain.feature.company.Delivery
 import com.bunbeauty.fooddelivery.domain.feature.company.Payment
+import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkType
 
 object FakeCompany {
 
     fun create(
         forFreeDelivery: Int,
         deliveryCost: Int,
+        workType: WorkType = WorkType.DELIVERY_AND_PICKUP
     ): Company {
         return Company(
             uuid = "uuid",
@@ -16,18 +18,18 @@ object FakeCompany {
             offset = 3,
             delivery = Delivery(
                 forFree = forFreeDelivery,
-                cost = deliveryCost,
+                cost = deliveryCost
             ),
             forceUpdateVersion = 0,
             payment = Payment(
                 phoneNumber = null,
-                cardNumber = null,
+                cardNumber = null
             ),
             percentDiscount = null,
             maxVisibleRecommendationCount = 0,
             isOpen = true,
             citiesWithCafes = emptyList(),
+            workType = workType
         )
     }
-
 }

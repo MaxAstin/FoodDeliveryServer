@@ -10,5 +10,4 @@ object DeliveryZonePointTable : UUIDTable() {
     val isVisible = bool("isVisible")
 
     val zone = reference("zone", DeliveryZoneTable)
-
 }

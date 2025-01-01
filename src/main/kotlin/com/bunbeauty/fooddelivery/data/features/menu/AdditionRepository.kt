@@ -2,7 +2,11 @@ package com.bunbeauty.fooddelivery.data.features.menu
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.data.entity.menu.*
+import com.bunbeauty.fooddelivery.data.entity.menu.AdditionEntity
+import com.bunbeauty.fooddelivery.data.entity.menu.AdditionGroupEntity
+import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductEntity
+import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductWithAdditionGroupEntity
+import com.bunbeauty.fooddelivery.data.entity.menu.MenuProductWithAdditionGroupWithAdditionEntity
 import com.bunbeauty.fooddelivery.data.features.menu.cache.MenuProductCatch
 import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapMenuProductEntity
 import com.bunbeauty.fooddelivery.data.features.menu.mapper.mapToAdditionGroup
@@ -11,14 +15,21 @@ import com.bunbeauty.fooddelivery.data.table.menu.AdditionGroupTable
 import com.bunbeauty.fooddelivery.data.table.menu.AdditionTable
 import com.bunbeauty.fooddelivery.data.table.menu.MenuProductToAdditionGroupTable
 import com.bunbeauty.fooddelivery.data.table.menu.MenuProductToAdditionGroupToAdditionTable
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.*
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.Addition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.AdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.InsertAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.InsertAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.InsertAdditionGroupToMenuProducts
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.InsertAdditionToGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.UpdateAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.UpdateAdditionGroup
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProduct
 import com.bunbeauty.fooddelivery.domain.toUuid
 import org.jetbrains.exposed.sql.and
-import java.util.*
+import java.util.UUID
 
 class AdditionRepository(
-    private val menuProductCatch: MenuProductCatch,
+    private val menuProductCatch: MenuProductCatch
 ) {
 
     suspend fun insertAdditionGroup(insertAdditionGroup: InsertAdditionGroup): AdditionGroup {
@@ -38,7 +49,7 @@ class AdditionRepository(
             insertAdditionGroupToMenuProducts.menuProductUuids.map { menuProductUuid ->
                 MenuProductWithAdditionGroupEntity.find {
                     (MenuProductToAdditionGroupTable.menuProduct eq menuProductUuid) and
-                            (MenuProductToAdditionGroupTable.additionGroup eq insertAdditionGroupToMenuProducts.additionGroupUuid)
+                        (MenuProductToAdditionGroupTable.additionGroup eq insertAdditionGroupToMenuProducts.additionGroupUuid)
                 }.firstOrNull()
                     ?: MenuProductWithAdditionGroupEntity.new {
                         menuProduct = MenuProductEntity[menuProductUuid]
@@ -78,14 +89,14 @@ class AdditionRepository(
         return query {
             AdditionGroupEntity.find {
                 (AdditionGroupTable.name eq name) and
-                        (AdditionGroupTable.company eq companyUuid)
+                    (AdditionGroupTable.company eq companyUuid)
             }.firstOrNull()?.mapToAdditionGroup()
         }
     }
 
     suspend fun updateAdditionGroup(
         additionGroupUuid: UUID,
-        updateAdditionGroup: UpdateAdditionGroup,
+        updateAdditionGroup: UpdateAdditionGroup
     ): AdditionGroup? {
         return query {
             AdditionGroupEntity.findById(additionGroupUuid)
@@ -124,10 +135,14 @@ class AdditionRepository(
             }.map { menuProductWithAdditionGroupEntity ->
                 val menuProductWithAdditionGroupWithAdditionEntity =
                     MenuProductWithAdditionGroupWithAdditionEntity.find {
-                        (MenuProductToAdditionGroupToAdditionTable.menuProductToAdditionGroup eq
-                                menuProductWithAdditionGroupEntity.uuid.toUuid()) and
-                                (MenuProductToAdditionGroupToAdditionTable.addition eq
-                                        insertAdditionToGroup.additionUuid)
+                        (
+                            MenuProductToAdditionGroupToAdditionTable.menuProductToAdditionGroup eq
+                                menuProductWithAdditionGroupEntity.uuid.toUuid()
+                            ) and
+                            (
+                                MenuProductToAdditionGroupToAdditionTable.addition eq
+                                    insertAdditionToGroup.additionUuid
+                                )
                     }
 
                 if (menuProductWithAdditionGroupWithAdditionEntity.empty()) {
@@ -156,13 +171,13 @@ class AdditionRepository(
     suspend fun getAdditionByNameAndTag(
         name: String,
         tag: String?,
-        companyUuid: UUID,
+        companyUuid: UUID
     ): Addition? {
         return query {
             AdditionEntity.find {
                 (AdditionTable.name eq name) and
-                        (AdditionTable.tag eq tag) and
-                        (AdditionTable.company eq companyUuid)
+                    (AdditionTable.tag eq tag) and
+                    (AdditionTable.company eq companyUuid)
             }.firstOrNull()
                 ?.toAddition()
         }
@@ -178,7 +193,7 @@ class AdditionRepository(
 
     suspend fun updateAddition(
         additionUuid: UUID,
-        updateAddition: UpdateAddition,
+        updateAddition: UpdateAddition
     ): Addition? {
         return query {
             AdditionEntity.findById(additionUuid)
@@ -201,5 +216,4 @@ class AdditionRepository(
                 }
         }
     }
-
 }

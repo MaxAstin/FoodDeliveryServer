@@ -9,5 +9,6 @@ package com.bunbeauty.fooddelivery.domain.model.company.work_info
 enum class WorkType {
     DELIVERY,
     PICKUP,
-    DELIVERY_AND_PICKUP
+    DELIVERY_AND_PICKUP,
+    CLOSED
 }

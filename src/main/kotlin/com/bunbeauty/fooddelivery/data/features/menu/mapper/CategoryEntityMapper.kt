@@ -7,6 +7,6 @@ val mapCategoryEntity: CategoryEntity.() -> Category = {
     Category(
         uuid = uuid,
         name = name,
-        priority = priority,
+        priority = priority
     )
 }

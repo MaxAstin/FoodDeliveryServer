@@ -6,6 +6,6 @@ import com.bunbeauty.fooddelivery.domain.model.company.payment_method.GetPayment
 val mapPayment: Payment.() -> GetPayment = {
     GetPayment(
         phoneNumber = phoneNumber,
-        cardNumber = cardNumber,
+        cardNumber = cardNumber
     )
 }

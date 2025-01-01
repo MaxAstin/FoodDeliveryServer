@@ -6,5 +6,5 @@ class GetStatisticOrder(
     val uuid: String,
     val status: String,
     val time: Long,
-    val oderProductList: List<GetStatisticOrderProduct>,
+    val oderProductList: List<GetStatisticOrderProduct>
 )

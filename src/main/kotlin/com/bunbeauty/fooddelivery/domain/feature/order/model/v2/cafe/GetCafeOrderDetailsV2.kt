@@ -24,5 +24,5 @@ class GetCafeOrderDetailsV2(
     val percentDiscount: Int?,
     val paymentMethod: String?,
     val oderProductList: List<GetOrderProduct>,
-    val availableStatusList: List<String>,
+    val availableStatusList: List<String>
 )

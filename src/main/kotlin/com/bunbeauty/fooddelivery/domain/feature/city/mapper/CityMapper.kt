@@ -9,7 +9,7 @@ val mapCity: City.() -> GetCity = {
         uuid = uuid,
         name = name,
         timeZone = timeZone,
-        isVisible = isVisible,
+        isVisible = isVisible
     )
 }
 
@@ -18,6 +18,6 @@ val mapCityWithCafes: CityWithCafes.() -> GetCity = {
         uuid = city.uuid,
         name = city.name,
         timeZone = city.timeZone,
-        isVisible = city.isVisible,
+        isVisible = city.isVisible
     )
 }

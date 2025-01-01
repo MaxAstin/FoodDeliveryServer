@@ -8,7 +8,7 @@ val deliveryZoneModule = module(createdAtStart = true) {
     factory {
         DeliveryZoneService(
             deliveryZoneRepository = get(),
-            privacyCheckService = get(),
+            privacyCheckService = get()
         )
     }
     single { DeliveryZoneRepository() }

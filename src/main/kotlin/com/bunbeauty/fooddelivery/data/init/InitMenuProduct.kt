@@ -11,5 +11,5 @@ class InitMenuProduct(
     val photoLink: String,
     val barcode: Int,
     val isVisible: Boolean,
-    val categories: List<String>,
+    val categories: List<String>
 )

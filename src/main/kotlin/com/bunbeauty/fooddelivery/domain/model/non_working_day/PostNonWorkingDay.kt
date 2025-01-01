@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 class PostNonWorkingDay(
     val timestamp: Long,
-    val cafeUuid: String,
+    val cafeUuid: String
 )

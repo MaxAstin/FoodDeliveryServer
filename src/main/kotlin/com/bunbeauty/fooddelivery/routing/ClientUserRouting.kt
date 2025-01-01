@@ -1,17 +1,25 @@
 package com.bunbeauty.fooddelivery.routing
 
-import com.bunbeauty.fooddelivery.domain.model.client_user.*
+import com.bunbeauty.fooddelivery.domain.model.client_user.ClientAuthResponse
+import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientSettings
+import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientUser
+import com.bunbeauty.fooddelivery.domain.model.client_user.PatchClientUserSettings
+import com.bunbeauty.fooddelivery.domain.model.client_user.PostClientUserAuth
 import com.bunbeauty.fooddelivery.routing.extension.clientGetResult
 import com.bunbeauty.fooddelivery.routing.extension.clientWithBody
 import com.bunbeauty.fooddelivery.routing.extension.withBody
 import com.bunbeauty.fooddelivery.service.client_user.IClientUserService
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.routing.*
+import io.ktor.server.application.Application
+import io.ktor.server.auth.authenticate
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.Routing
+import io.ktor.server.routing.get
+import io.ktor.server.routing.patch
+import io.ktor.server.routing.post
+import io.ktor.server.routing.routing
 import org.koin.ktor.ext.inject
 
 fun Application.configureClientUserRouting() {
-
     routing {
         clientLogin()
 
@@ -25,7 +33,6 @@ fun Application.configureClientUserRouting() {
 }
 
 private fun Routing.clientLogin() {
-
     val clientUserService: IClientUserService by inject()
 
     post("/client/login") {
@@ -36,7 +43,6 @@ private fun Routing.clientLogin() {
 }
 
 private fun Route.getClient() {
-
     val clientUserService: IClientUserService by inject()
 
     get("/client") {
@@ -47,7 +53,6 @@ private fun Route.getClient() {
 }
 
 private fun Route.getClientSettings() {
-
     val clientUserService: IClientUserService by inject()
 
     get("/client/settings") {
@@ -58,7 +63,6 @@ private fun Route.getClientSettings() {
 }
 
 private fun Route.patchClientUser() {
-
     val clientUserService: IClientUserService by inject()
 
     patch("/client") {
@@ -76,7 +80,6 @@ private fun Route.patchClientUser() {
 }
 
 private fun Route.patchClientSettings() {
-
     val clientUserService: IClientUserService by inject()
 
     patch("/client/settings") {

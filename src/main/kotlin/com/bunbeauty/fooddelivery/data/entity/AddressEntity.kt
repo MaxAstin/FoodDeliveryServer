@@ -34,6 +34,6 @@ class AddressEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         comment = comment,
         street = street.toStreet(),
         userUuid = clientUser.uuid,
-        isVisible = isVisible,
+        isVisible = isVisible
     )
 }

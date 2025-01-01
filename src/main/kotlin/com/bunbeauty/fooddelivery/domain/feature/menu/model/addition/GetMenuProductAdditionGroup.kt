@@ -9,5 +9,5 @@ class GetMenuProductAdditionGroup(
     val singleChoice: Boolean,
     val priority: Int,
     val isVisible: Boolean,
-    val additions: List<GetMenuProductAddition>,
+    val additions: List<GetMenuProductAddition>
 )

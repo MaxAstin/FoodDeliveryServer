@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 class PostStreet(
     val name: String,
     val cafeUuid: String,
-    val isVisible: Boolean,
+    val isVisible: Boolean
 )

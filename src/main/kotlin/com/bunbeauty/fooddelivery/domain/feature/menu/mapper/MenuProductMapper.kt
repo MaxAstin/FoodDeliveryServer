@@ -20,7 +20,7 @@ val mapMenuProduct: MenuProduct.() -> GetMenuProduct = {
         isRecommended = isRecommended,
         isVisible = isVisible,
         categories = categories.map(mapCategory),
-        additionGroups = additionGroups.map(mapMenuProductAdditionGroup),
+        additionGroups = additionGroups.map(mapMenuProductAdditionGroup)
     )
 }
 
@@ -31,6 +31,6 @@ private val mapMenuProductAdditionGroup: MenuProductAdditionGroup.() -> GetMenuP
         singleChoice = singleChoice,
         priority = priority,
         isVisible = isVisible,
-        additions = additions.map(mapMenuProductAddition),
+        additions = additions.map(mapMenuProductAddition)
     )
 }

@@ -8,5 +8,4 @@ object OrderProductAdditionTable : UUIDTable() {
     val price = integer("price").nullable()
     val priority = integer("priority").default(1)
     val orderProduct = reference("orderProduct", OrderProductTable)
-
 }

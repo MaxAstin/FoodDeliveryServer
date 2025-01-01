@@ -1,6 +1,10 @@
 package com.bunbeauty.fooddelivery.service.client_user
 
-import com.bunbeauty.fooddelivery.domain.model.client_user.*
+import com.bunbeauty.fooddelivery.domain.model.client_user.ClientAuthResponse
+import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientSettings
+import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientUser
+import com.bunbeauty.fooddelivery.domain.model.client_user.PatchClientUserSettings
+import com.bunbeauty.fooddelivery.domain.model.client_user.PostClientUserAuth
 
 interface IClientUserService {
 

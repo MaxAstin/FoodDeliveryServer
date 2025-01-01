@@ -36,7 +36,7 @@ class StatisticService(
     private val companyStatisticRepository: CompanyStatisticRepository,
     private val cafeStatisticRepository: ICafeStatisticRepository,
     private val userRepository: UserRepository,
-    private val getLastMonthCompanyStatisticUseCase: GetLastMonthCompanyStatisticUseCase,
+    private val getLastMonthCompanyStatisticUseCase: GetLastMonthCompanyStatisticUseCase
 ) {
 
     suspend fun getStatisticList(userUuid: String, cafeUuid: String?, period: String): List<GetStatistic> {
@@ -53,13 +53,13 @@ class StatisticService(
             companyStatisticRepository.getStatisticListByTimePeriodTypeCompany(
                 time = startTimeMillis,
                 periodType = periodType,
-                companyUuid = user.companyUuid.toUuid(),
+                companyUuid = user.companyUuid.toUuid()
             )
         } else {
             cafeStatisticRepository.getStatisticListByTimePeriodTypeCafe(
                 time = startTimeMillis,
                 periodType = periodType,
-                cafeUuid = cafeUuid.toUuid(),
+                cafeUuid = cafeUuid.toUuid()
             )
         }
     }
@@ -75,19 +75,19 @@ class StatisticService(
                 company = company,
                 periodType = PeriodType.DAY,
                 fromDateTime = dayPeriodFromDateTime,
-                toDateTime = toDateTime,
+                toDateTime = toDateTime
             )
             updateCompanyStatistic(
                 company = company,
                 periodType = PeriodType.WEEK,
                 fromDateTime = weekPeriodFromDateTime,
-                toDateTime = toDateTime,
+                toDateTime = toDateTime
             )
             updateCompanyStatistic(
                 company = company,
                 periodType = PeriodType.MONTH,
                 fromDateTime = monthPeriodFromDateTime,
-                toDateTime = toDateTime,
+                toDateTime = toDateTime
             )
             cafeRepository.getCafeListByCompanyUuid(companyUuid = company.uuid)
                 .forEach { cafe ->
@@ -95,19 +95,19 @@ class StatisticService(
                         cafe = cafe,
                         periodType = PeriodType.DAY,
                         fromDateTime = dayPeriodFromDateTime,
-                        toDateTime = toDateTime,
+                        toDateTime = toDateTime
                     )
                     updateCafeStatistic(
                         cafe = cafe,
                         periodType = PeriodType.WEEK,
                         fromDateTime = weekPeriodFromDateTime,
-                        toDateTime = toDateTime,
+                        toDateTime = toDateTime
                     )
                     updateCafeStatistic(
                         cafe = cafe,
                         periodType = PeriodType.MONTH,
                         fromDateTime = monthPeriodFromDateTime,
-                        toDateTime = toDateTime,
+                        toDateTime = toDateTime
                     )
                 }
         }
@@ -121,18 +121,18 @@ class StatisticService(
         company: Company,
         periodType: PeriodType,
         fromDateTime: DateTime,
-        toDateTime: DateTime,
+        toDateTime: DateTime
     ) {
         val orderList = orderStatisticRepository.getOrderListByCompanyUuid(
             companyUuid = company.uuid.toUuid(),
             fromTime = fromDateTime.millis,
-            toTime = toDateTime.millis,
+            toTime = toDateTime.millis
         )
 
         val getStatistic = companyStatisticRepository.getStatisticByTimePeriodTypeCompany(
             time = fromDateTime.millis,
             periodType = periodType,
-            companyUuid = company.uuid.toUuid(),
+            companyUuid = company.uuid.toUuid()
         )
         if (getStatistic == null) {
             val insertCompanyStatisticDay = InsertCompanyStatistic(
@@ -141,7 +141,7 @@ class StatisticService(
                 orderCount = orderList.size,
                 orderProceeds = calculateOrderProceeds(orderList),
                 statisticProductList = calculateStatisticProductList(orderList),
-                companyUuid = company.uuid.toUuid(),
+                companyUuid = company.uuid.toUuid()
             )
             companyStatisticRepository.insetStatistic(insertCompanyStatisticDay)
         } else {
@@ -158,18 +158,18 @@ class StatisticService(
         cafe: Cafe,
         periodType: PeriodType,
         fromDateTime: DateTime,
-        toDateTime: DateTime,
+        toDateTime: DateTime
     ) {
         val statisticOrderList = orderStatisticRepository.getOrderListByCafeUuid(
             cafeUuid = cafe.uuid.toUuid(),
             fromTime = fromDateTime.millis,
-            toTime = toDateTime.millis,
+            toTime = toDateTime.millis
         )
 
         val getStatistic = cafeStatisticRepository.getStatisticByTimePeriodTypeCafe(
             time = fromDateTime.millis,
             periodType = periodType,
-            cafeUuid = cafe.uuid.toUuid(),
+            cafeUuid = cafe.uuid.toUuid()
         )
         if (getStatistic == null) {
             val insertCompanyStatisticDay = InsertCafeStatistic(
@@ -179,7 +179,7 @@ class StatisticService(
                 orderProceeds =
                 calculateOrderProceeds(statisticOrderList),
                 statisticProductList = calculateStatisticProductList(statisticOrderList),
-                cafeUuid = cafe.uuid.toUuid(),
+                cafeUuid = cafe.uuid.toUuid()
             )
             cafeStatisticRepository.insetStatistic(insertCompanyStatisticDay)
         } else {
@@ -254,7 +254,7 @@ class StatisticService(
                         calculateOrderProductTotalUseCase(orderProduct = orderProductWithDiscount.orderProduct)
                     val orderProductCostWithDiscount = calculateCostWithDiscountUseCase(
                         cost = productTotal.newTotalCost,
-                        percentDiscount = orderProductWithDiscount.percentDiscount,
+                        percentDiscount = orderProductWithDiscount.percentDiscount
                     )
 
                     orderProductCostWithDiscount
@@ -262,5 +262,4 @@ class StatisticService(
             )
         }
     }
-
 }

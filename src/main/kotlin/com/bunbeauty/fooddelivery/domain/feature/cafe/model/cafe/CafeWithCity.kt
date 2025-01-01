@@ -4,5 +4,5 @@ import com.bunbeauty.fooddelivery.domain.feature.city.City
 
 class CafeWithCity(
     val cafe: Cafe,
-    val city: City,
+    val city: City
 )

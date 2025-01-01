@@ -10,6 +10,6 @@ val mapToAdditionGroup: AdditionGroupEntity.() -> AdditionGroup = {
         singleChoice = singleChoice,
         priority = priority,
         isVisible = isVisible,
-        companyUuid = company.uuid,
+        companyUuid = company.uuid
     )
 }

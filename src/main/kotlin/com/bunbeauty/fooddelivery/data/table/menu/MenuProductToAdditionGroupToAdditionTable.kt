@@ -9,5 +9,4 @@ object MenuProductToAdditionGroupToAdditionTable : UUIDTable() {
 
     val menuProductToAdditionGroup = reference("menuProductToAdditionGroup", MenuProductToAdditionGroupTable)
     val addition = reference("addition", AdditionTable)
-
 }

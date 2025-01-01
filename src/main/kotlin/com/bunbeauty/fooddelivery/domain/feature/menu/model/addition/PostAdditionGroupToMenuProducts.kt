@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 class PostAdditionGroupToMenuProducts(
     val additionGroupUuid: String,
     val additionUuids: List<String>,
-    val menuProductUuids: List<String>,
+    val menuProductUuids: List<String>
 )

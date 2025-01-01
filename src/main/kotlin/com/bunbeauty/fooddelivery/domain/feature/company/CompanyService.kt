@@ -4,7 +4,11 @@ import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUserUuidError
 import com.bunbeauty.fooddelivery.domain.feature.company.mapper.mapCompany
 import com.bunbeauty.fooddelivery.domain.feature.company.usecase.GetWorkInfoUseCase
-import com.bunbeauty.fooddelivery.domain.model.company.*
+import com.bunbeauty.fooddelivery.domain.model.company.GetCompany
+import com.bunbeauty.fooddelivery.domain.model.company.InsertCompany
+import com.bunbeauty.fooddelivery.domain.model.company.PatchCompany
+import com.bunbeauty.fooddelivery.domain.model.company.PostCompany
+import com.bunbeauty.fooddelivery.domain.model.company.UpdateCompany
 import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkInfo
 import com.bunbeauty.fooddelivery.domain.toUuid
 
@@ -24,7 +28,7 @@ class CompanyService(
             forFreeDelivery = postCompany.forFreeDelivery,
             deliveryCost = postCompany.deliveryCost,
             forceUpdateVersion = postCompany.forceUpdateVersion,
-            percentDiscount = postCompany.percentDiscount,
+            percentDiscount = postCompany.percentDiscount
         )
         val company = companyRepository.insertCompany(insertCompany)
 
@@ -42,7 +46,7 @@ class CompanyService(
             deliveryCost = patchCompany.deliveryCost,
             forceUpdateVersion = patchCompany.forceUpdateVersion,
             percentDiscount = patchCompany.percentDiscount,
-            isOpen = patchCompany.isOpen,
+            isOpen = patchCompany.isOpen
         )
         val company = companyRepository.updateCompany(updateCompany)
             .orThrowNotFoundByUserUuidError(uuid = companyUuid)

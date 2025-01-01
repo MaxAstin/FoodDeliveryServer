@@ -21,12 +21,12 @@ class GetOrderProduct(
     val oldCommonPrice: Int?,
     val newTotalCost: Int,
     val oldTotalCost: Int?,
-    val additions: List<GetOrderProductAddition>,
+    val additions: List<GetOrderProductAddition>
 )
 
 @Serializable
 class GetOrderProductAddition(
     val uuid: String,
     val name: String,
-    val priority: Int,
+    val priority: Int
 )

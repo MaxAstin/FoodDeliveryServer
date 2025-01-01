@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 class GetLink(
     val uuid: String,
     val type: String,
-    val value: String,
+    val value: String
 )

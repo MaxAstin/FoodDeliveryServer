@@ -9,9 +9,9 @@ val mapPostAddressV2: PostAddressV2.(AddressInfoV2) -> InsertAddressV2 = { addre
     InsertAddressV2(
         street = InsertStreetV2(
             fiasId = street.fiasId,
-                    name = street.name,
-                    latitude = addressInfo.streetLatitude,
-                    longitude = addressInfo.streetLongitude,
+            name = street.name,
+            latitude = addressInfo.streetLatitude,
+            longitude = addressInfo.streetLongitude
         ),
         house = house,
         flat = flat,
@@ -20,6 +20,6 @@ val mapPostAddressV2: PostAddressV2.(AddressInfoV2) -> InsertAddressV2 = { addre
         comment = comment,
         isVisible = isVisible,
         clientUserUuid = addressInfo.userUuid,
-        cityUuid = cityUuid,
+        cityUuid = cityUuid
     )
 }

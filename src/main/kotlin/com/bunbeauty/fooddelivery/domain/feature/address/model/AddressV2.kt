@@ -10,5 +10,5 @@ class AddressV2(
     val comment: String?,
     val userUuid: String,
     val cityUuid: String,
-    val isVisible: Boolean,
+    val isVisible: Boolean
 )

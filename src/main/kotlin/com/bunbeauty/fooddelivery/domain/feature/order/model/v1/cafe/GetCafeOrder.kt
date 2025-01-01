@@ -10,5 +10,5 @@ class GetCafeOrder(
     val time: Long,
     val timeZone: String,
     val deferredTime: Long?,
-    val cafeUuid: String,
+    val cafeUuid: String
 )

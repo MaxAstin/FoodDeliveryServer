@@ -11,5 +11,5 @@ class GetMenuProductAddition(
     val price: Int?,
     val photoLink: String,
     val priority: Int,
-    val isVisible: Boolean,
+    val isVisible: Boolean
 )

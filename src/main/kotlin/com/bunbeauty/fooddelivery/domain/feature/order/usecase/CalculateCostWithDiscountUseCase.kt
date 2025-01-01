@@ -4,7 +4,7 @@ class CalculateCostWithDiscountUseCase {
 
     operator fun invoke(
         cost: Int,
-        percentDiscount: Int?,
+        percentDiscount: Int?
     ): Int {
         if (percentDiscount == null) {
             return cost

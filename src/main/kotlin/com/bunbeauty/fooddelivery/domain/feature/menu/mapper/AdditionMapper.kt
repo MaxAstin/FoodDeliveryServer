@@ -4,7 +4,7 @@ import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.Addition
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.GetAddition
 
 fun Addition.toGetAddition(): GetAddition {
-    return  GetAddition(
+    return GetAddition(
         uuid = uuid,
         name = name,
         fullName = fullName,
@@ -12,6 +12,6 @@ fun Addition.toGetAddition(): GetAddition {
         photoLink = photoLink,
         tag = tag,
         priority = priority,
-        isVisible = isVisible,
+        isVisible = isVisible
     )
 }

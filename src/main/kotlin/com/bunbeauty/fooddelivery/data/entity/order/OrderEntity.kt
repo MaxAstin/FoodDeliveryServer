@@ -37,5 +37,4 @@ class OrderEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     val oderProducts: SizedIterable<OrderProductEntity> by OrderProductEntity referrersOn OrderProductTable.order
 
     companion object : UUIDEntityClass<OrderEntity>(OrderTable)
-
 }

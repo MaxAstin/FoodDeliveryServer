@@ -17,7 +17,7 @@ class NonWorkingDayRepository {
         query {
             NonWorkingDayEntity.find {
                 (NonWorkingDayTable.cafe eq cafeUuid) and
-                        (NonWorkingDayTable.timestamp greaterEq timestamp)
+                    (NonWorkingDayTable.timestamp greaterEq timestamp)
             }.orderBy(NonWorkingDayTable.timestamp to SortOrder.DESC)
                 .map { nonWorkingDayEntity ->
                     nonWorkingDayEntity.toNonWorkingDay()
@@ -35,7 +35,7 @@ class NonWorkingDayRepository {
 
     suspend fun updateNonWorkingDay(
         uuid: UUID,
-        updateNonWorkingDay: UpdateNonWorkingDay,
+        updateNonWorkingDay: UpdateNonWorkingDay
     ): GetNonWorkingDay? = query {
         NonWorkingDayEntity.findById(uuid)?.apply {
             isVisible = updateNonWorkingDay.isVisible ?: isVisible

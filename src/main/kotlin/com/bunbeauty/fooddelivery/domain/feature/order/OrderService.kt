@@ -13,7 +13,16 @@ import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.domain.error.errorWithCode
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.DeliveryZoneWithCafe
-import com.bunbeauty.fooddelivery.domain.feature.order.mapper.*
+import com.bunbeauty.fooddelivery.domain.feature.order.mapper.mapOrder
+import com.bunbeauty.fooddelivery.domain.feature.order.mapper.mapOrderToCafeOrder
+import com.bunbeauty.fooddelivery.domain.feature.order.mapper.mapOrderToCafeOrderDetails
+import com.bunbeauty.fooddelivery.domain.feature.order.mapper.mapOrderToCafeOrderDetailsV2
+import com.bunbeauty.fooddelivery.domain.feature.order.mapper.mapOrderToV2
+import com.bunbeauty.fooddelivery.domain.feature.order.mapper.mapPostOrder
+import com.bunbeauty.fooddelivery.domain.feature.order.mapper.mapPostOrderProductToOrderProduct
+import com.bunbeauty.fooddelivery.domain.feature.order.mapper.mapPostOrderProductV3ToOrderProduct
+import com.bunbeauty.fooddelivery.domain.feature.order.mapper.mapPostOrderV2
+import com.bunbeauty.fooddelivery.domain.feature.order.mapper.mapPostOrderV3
 import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderAvailability
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.OrderInfo
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.PatchOrder
@@ -48,7 +57,7 @@ class OrderService(
     private val findDeliveryZoneByCityUuidAndCoordinatesUseCase: FindDeliveryZoneByCityUuidAndCoordinatesUseCase,
     private val calculateOrderTotalUseCase: CalculateOrderTotalUseCase,
     private val getDeliveryCostUseCase: GetDeliveryCostUseCase,
-    private val isOrderAvailableUseCase: IsOrderAvailableUseCase,
+    private val isOrderAvailableUseCase: IsOrderAvailableUseCase
 ) {
 
     private val codesCount = CODE_LETTERS.length * CODE_NUMBER_COUNT
@@ -161,7 +170,7 @@ class OrderService(
     suspend fun getOrderListByUserUuidV2(
         userUuid: String,
         count: Int?,
-        orderUuid: String?,
+        orderUuid: String?
     ): List<GetClientOrderV2> {
         val orderEntityList = if (orderUuid == null) {
             orderRepository.getOrderListByUserUuid(
@@ -227,7 +236,7 @@ class OrderService(
             GetClientOrderUpdate(
                 uuid = order.uuid,
                 status = order.status,
-                clientUserUuid = order.clientUser.uuid,
+                clientUserUuid = order.clientUser.uuid
             )
         }
     }
@@ -276,7 +285,7 @@ class OrderService(
                 ).orThrowNotFoundByUuidError(postOrderProduct.menuProductUuid)
                 postOrderProduct.mapPostOrderProductToOrderProduct(menuProduct)
             },
-            percentDiscount = null,
+            percentDiscount = null
         )
 
         return OrderInfo(
@@ -285,7 +294,7 @@ class OrderService(
             deliveryCost = deliveryCost,
             cafeUuid = cafeUuid,
             companyUuid = company.uuid,
-            clientUserUuid = clientUserUuid,
+            clientUserUuid = clientUserUuid
         )
     }
 
@@ -329,13 +338,13 @@ class OrderService(
             percentDiscount = percentDiscount,
             cafeUuid = cafeUuid,
             companyUuid = company.uuid,
-            clientUserUuid = clientUserUuid,
+            clientUserUuid = clientUserUuid
         )
     }
 
     private suspend fun createOrderInfoV2(
         postOrder: PostOrderV3,
-        clientUserUuid: String,
+        clientUserUuid: String
     ): OrderInfoV2 {
         val deliveryZoneWithCafe: DeliveryZoneWithCafe?
         val cafeUuid: String
@@ -376,7 +385,7 @@ class OrderService(
             percentDiscount = percentDiscount,
             cafeUuid = cafeUuid,
             companyUuid = company.uuid,
-            clientUserUuid = clientUserUuid,
+            clientUserUuid = clientUserUuid
         )
     }
 
@@ -387,7 +396,7 @@ class OrderService(
                 cityUuid = addressV1.cityUuid,
                 latitude = addressV1.street.latitude,
                 longitude = addressV1.street.longitude,
-                addressUuid = addressUuid,
+                addressUuid = addressUuid
             )
         } else {
             val addressV2 = addressRepository.getAddressV2ByUuid(uuid = addressUuid)
@@ -396,7 +405,7 @@ class OrderService(
                 cityUuid = addressV2.cityUuid,
                 latitude = addressV2.street.latitude,
                 longitude = addressV2.street.longitude,
-                addressUuid = addressUuid,
+                addressUuid = addressUuid
             )
         }
     }
@@ -440,5 +449,4 @@ class OrderService(
     private fun codeCounterIncrementError(cafeUuid: String): Nothing {
         error("Failed to increment code counter - Cafe($cafeUuid)")
     }
-
 }

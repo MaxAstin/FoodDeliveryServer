@@ -19,5 +19,4 @@ class StreetService(private val streetRepository: StreetRepository) {
         return streetRepository.getStreetListByCityUuid(cityUuid = cityUuid.toUuid())
             .map(mapStreet)
     }
-
 }

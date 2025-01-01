@@ -28,5 +28,4 @@ class StreetRepository {
     suspend fun getStreetByUuid(streetUuid: UUID): Street? = query {
         StreetEntity.findById(streetUuid)?.mapStreetEntity()
     }
-
 }

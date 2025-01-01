@@ -11,6 +11,6 @@ fun PatchAddition.toUpdateAddition(): UpdateAddition {
         photoLink = photoLink,
         tag = tag,
         priority = priority,
-        isVisible = isVisible,
+        isVisible = isVisible
     )
 }

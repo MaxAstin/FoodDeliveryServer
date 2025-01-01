@@ -15,5 +15,4 @@ object AddressTable : UUIDTable() {
 
     val street = reference("street", StreetTable)
     val clientUser = reference("clientUser", ClientUserTable)
-
 }

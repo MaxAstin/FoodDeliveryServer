@@ -38,5 +38,4 @@ class ThrowableExtensionsTest {
 
         assertEquals(expected, result)
     }
-
 }

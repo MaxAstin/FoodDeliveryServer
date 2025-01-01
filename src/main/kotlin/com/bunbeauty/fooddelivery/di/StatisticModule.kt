@@ -20,13 +20,13 @@ val statisticModule = module {
             companyStatisticRepository = get(),
             cafeStatisticRepository = get(),
             userRepository = get(),
-            getLastMonthCompanyStatisticUseCase = get(),
+            getLastMonthCompanyStatisticUseCase = get()
         )
     }
     factory {
         GetLastMonthCompanyStatisticUseCase(
             companyRepository = get(),
-            companyStatisticRepository = get(),
+            companyStatisticRepository = get()
         )
     }
     single {

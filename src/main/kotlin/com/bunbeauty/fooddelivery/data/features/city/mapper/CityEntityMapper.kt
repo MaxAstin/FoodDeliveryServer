@@ -10,7 +10,7 @@ val mapCityEntity: CityEntity.() -> City = {
         uuid = uuid,
         name = name,
         timeZone = timeZone,
-        isVisible = isVisible,
+        isVisible = isVisible
     )
 }
 

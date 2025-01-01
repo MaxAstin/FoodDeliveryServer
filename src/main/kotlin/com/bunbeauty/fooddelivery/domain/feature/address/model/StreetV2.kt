@@ -4,5 +4,5 @@ class StreetV2(
     val fiasId: String,
     val name: String,
     val latitude: Double,
-    val longitude: Double,
+    val longitude: Double
 )
