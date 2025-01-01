@@ -2,9 +2,10 @@ package com.bunbeauty.fooddelivery.routing.extension
 
 import com.bunbeauty.fooddelivery.auth.JwtUser
 import com.bunbeauty.fooddelivery.routing.model.Request
-import io.ktor.server.auth.*
-import io.ktor.server.websocket.*
-import io.ktor.websocket.*
+import io.ktor.server.auth.authentication
+import io.ktor.server.websocket.DefaultWebSocketServerSession
+import io.ktor.websocket.CloseReason
+import io.ktor.websocket.close
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.delay
 import java.sql.DriverManager.println

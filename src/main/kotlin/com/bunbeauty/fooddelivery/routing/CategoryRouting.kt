@@ -9,9 +9,15 @@ import com.bunbeauty.fooddelivery.domain.feature.menu.service.CategoryService
 import com.bunbeauty.fooddelivery.routing.extension.getListResult
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.routing.*
+import io.ktor.server.application.Application
+import io.ktor.server.application.call
+import io.ktor.server.auth.authenticate
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.Routing
+import io.ktor.server.routing.get
+import io.ktor.server.routing.patch
+import io.ktor.server.routing.post
+import io.ktor.server.routing.routing
 import org.koin.ktor.ext.inject
 
 fun Application.configureCategoryRouting() {

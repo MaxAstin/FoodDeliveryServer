@@ -1,10 +1,10 @@
 package com.bunbeauty.fooddelivery.task
 
 import com.bunbeauty.fooddelivery.domain.feature.menu.service.HitService
-import io.ktor.server.application.*
+import io.ktor.server.application.Application
 import kotlinx.coroutines.launch
 import org.koin.ktor.ext.inject
-import java.util.*
+import java.util.Timer
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.scheduleAtFixedRate
 

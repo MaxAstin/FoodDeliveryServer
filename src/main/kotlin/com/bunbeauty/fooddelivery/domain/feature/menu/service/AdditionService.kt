@@ -5,8 +5,24 @@ import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.features.user.UserRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUserUuidError
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
-import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.*
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.*
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPatchAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPostAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPostAdditionGroupToMenuProducts
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPostAdditionToGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.toGetAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.toInsertAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.toUpdateAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.Addition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.GetAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.GetAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PatchAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PatchAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditionGroupToMenuProducts
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditionToGroup
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
 import com.bunbeauty.fooddelivery.domain.toUuid
 
@@ -119,7 +135,6 @@ class AdditionService(
         if (addition != null) {
             additionAlreadyExistsError(name = addition.name, tag = addition.tag)
         }
-
         return additionRepository.insertAddition(
             insertAddition = postAddition.toInsertAddition(companyUuid = companyUuid)
         ).toGetAddition()
@@ -192,7 +207,6 @@ class AdditionService(
                 )
             }
         }
-
         return additionRepository.updateAddition(
             additionUuid = additionUuid.toUuid(),
             updateAddition = patchAddition.toUpdateAddition()

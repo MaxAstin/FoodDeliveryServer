@@ -7,8 +7,18 @@ import com.bunbeauty.fooddelivery.data.features.city.CityRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.domain.error.noAccessToCompanyError
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
-import com.bunbeauty.fooddelivery.domain.feature.address.mapper.*
-import com.bunbeauty.fooddelivery.domain.feature.address.model.*
+import com.bunbeauty.fooddelivery.domain.feature.address.mapper.mapAddress
+import com.bunbeauty.fooddelivery.domain.feature.address.mapper.mapAddressToV2
+import com.bunbeauty.fooddelivery.domain.feature.address.mapper.mapAddressV2
+import com.bunbeauty.fooddelivery.domain.feature.address.mapper.mapPostAddress
+import com.bunbeauty.fooddelivery.domain.feature.address.mapper.mapPostAddressV2
+import com.bunbeauty.fooddelivery.domain.feature.address.mapper.mapSuggestion
+import com.bunbeauty.fooddelivery.domain.feature.address.model.AddressInfoV2
+import com.bunbeauty.fooddelivery.domain.feature.address.model.GetAddress
+import com.bunbeauty.fooddelivery.domain.feature.address.model.GetAddressV2
+import com.bunbeauty.fooddelivery.domain.feature.address.model.GetSuggestion
+import com.bunbeauty.fooddelivery.domain.feature.address.model.PostAddress
+import com.bunbeauty.fooddelivery.domain.feature.address.model.PostAddressV2
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.DeliveryZone
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CheckIsPointInPolygonUseCase
 import com.bunbeauty.fooddelivery.domain.toUuid
@@ -30,7 +40,6 @@ class AddressService(
         if (street.companyUuid != clientUser.company.uuid) {
             noAccessToCompanyError(street.companyUuid)
         }
-
         val insertAddress = postAddress.mapPostAddress(userUuid)
         return addressRepository.insertAddress(insertAddress = insertAddress)
             .mapAddress()
@@ -50,7 +59,6 @@ class AddressService(
             latitude = suggestion.latitude,
             longitude = suggestion.longitude
         ) ?: deliveryNotAvailableAtThisAddress(suggestion.latitude, suggestion.longitude)
-
         val insertAddress = postAddress.mapPostAddressV2(addressInfo)
         return addressRepository.insertAddressV2(insertAddress = insertAddress)
             .mapAddressV2(deliveryZone)

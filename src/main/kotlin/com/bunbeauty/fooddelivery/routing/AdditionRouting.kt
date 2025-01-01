@@ -1,15 +1,27 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.*
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.GetAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.GetAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PatchAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PatchAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditionGroupToMenuProducts
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditionToGroup
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.service.AdditionService
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.managerGetListResult
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.routing.*
+import io.ktor.server.application.Application
+import io.ktor.server.application.call
+import io.ktor.server.auth.authenticate
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
+import io.ktor.server.routing.patch
+import io.ktor.server.routing.post
+import io.ktor.server.routing.routing
 import org.koin.ktor.ext.inject
 
 fun Application.configureAdditionRouting() {

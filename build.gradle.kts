@@ -25,6 +25,9 @@ plugins {
 
 application {
     mainClass.set("ApplicationKt")
+    ktlint {
+        enableExperimentalRules.set(true)
+    }
 }
 
 repositories {

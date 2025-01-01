@@ -2,8 +2,8 @@ package com.bunbeauty.fooddelivery.routing.extension
 
 import com.bunbeauty.fooddelivery.routing.model.BodyRequest
 import com.bunbeauty.fooddelivery.routing.model.Request
-import io.ktor.server.application.*
-import io.ktor.util.pipeline.*
+import io.ktor.server.application.ApplicationCall
+import io.ktor.util.pipeline.PipelineContext
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.admin(block: (Request) -> Unit) {
     checkRights(block) { jwtUser ->

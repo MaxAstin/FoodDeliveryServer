@@ -5,7 +5,7 @@ import com.bunbeauty.fooddelivery.data.features.address.remotemodel.AddressReque
 import com.bunbeauty.fooddelivery.data.features.address.remotemodel.SuggestionsResponse
 import com.bunbeauty.fooddelivery.network.ApiResult
 import com.bunbeauty.fooddelivery.network.postData
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 
 class AddressNetworkDataSource(private val client: HttpClient) {
 

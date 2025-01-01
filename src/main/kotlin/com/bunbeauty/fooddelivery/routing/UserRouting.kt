@@ -7,10 +7,21 @@ import com.bunbeauty.fooddelivery.domain.model.user.GetUser
 import com.bunbeauty.fooddelivery.domain.model.user.PostUser
 import com.bunbeauty.fooddelivery.domain.model.user.PostUserAuth
 import com.bunbeauty.fooddelivery.domain.model.user.UserAuthResponse
-import com.bunbeauty.fooddelivery.routing.extension.*
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.routing.*
+import com.bunbeauty.fooddelivery.routing.extension.adminWithBody
+import com.bunbeauty.fooddelivery.routing.extension.deleteByUserUuid
+import com.bunbeauty.fooddelivery.routing.extension.manager
+import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
+import com.bunbeauty.fooddelivery.routing.extension.respond
+import com.bunbeauty.fooddelivery.routing.extension.withBody
+import io.ktor.server.application.Application
+import io.ktor.server.auth.authenticate
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.Routing
+import io.ktor.server.routing.delete
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.put
+import io.ktor.server.routing.routing
 import org.koin.ktor.ext.inject
 
 fun Application.configureUserRouting() {

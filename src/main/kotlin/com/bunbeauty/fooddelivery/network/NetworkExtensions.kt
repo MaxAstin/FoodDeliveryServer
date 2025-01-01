@@ -1,8 +1,7 @@
 package com.bunbeauty.fooddelivery.network
 
-import io.ktor.client.*
-import io.ktor.client.request.*
-import io.ktor.http.*
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
 
 suspend inline fun <reified R> HttpClient.getData(
     path: String,

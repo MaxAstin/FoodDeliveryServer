@@ -6,7 +6,13 @@ import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUserUuidError
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUser
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUserToClientSettings
-import com.bunbeauty.fooddelivery.domain.model.client_user.*
+import com.bunbeauty.fooddelivery.domain.model.client_user.ClientAuthResponse
+import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientSettings
+import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientUser
+import com.bunbeauty.fooddelivery.domain.model.client_user.InsertClientUser
+import com.bunbeauty.fooddelivery.domain.model.client_user.PatchClientUserSettings
+import com.bunbeauty.fooddelivery.domain.model.client_user.PostClientUserAuth
+import com.bunbeauty.fooddelivery.domain.model.client_user.UpdateClientUser
 import com.bunbeauty.fooddelivery.domain.toUuid
 import com.google.firebase.auth.FirebaseAuth
 

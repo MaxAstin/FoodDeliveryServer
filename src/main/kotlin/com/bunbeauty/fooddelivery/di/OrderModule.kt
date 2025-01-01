@@ -2,7 +2,15 @@ package com.bunbeauty.fooddelivery.di
 
 import com.bunbeauty.fooddelivery.data.features.order.OrderRepository
 import com.bunbeauty.fooddelivery.domain.feature.order.OrderService
-import com.bunbeauty.fooddelivery.domain.feature.order.usecase.*
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateCostWithDiscountUseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderProductTotalUseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderProductsNewCostUseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderProductsOldCostUseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderTotalUseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CheckIsPointInPolygonUseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.FindDeliveryZoneByCityUuidAndCoordinatesUseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.GetDeliveryCostUseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.IsOrderAvailableUseCase
 import org.koin.dsl.module
 
 val orderModule = module(createdAtStart = true) {

@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.auth
 
 import com.bunbeauty.fooddelivery.data.enums.UserRole
-import io.ktor.server.auth.*
+import io.ktor.server.auth.Principal
 
 class JwtUser(
     val uuid: String,

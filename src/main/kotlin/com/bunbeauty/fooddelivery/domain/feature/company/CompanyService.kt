@@ -4,7 +4,11 @@ import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUserUuidError
 import com.bunbeauty.fooddelivery.domain.feature.company.mapper.mapCompany
 import com.bunbeauty.fooddelivery.domain.feature.company.usecase.GetWorkInfoUseCase
-import com.bunbeauty.fooddelivery.domain.model.company.*
+import com.bunbeauty.fooddelivery.domain.model.company.GetCompany
+import com.bunbeauty.fooddelivery.domain.model.company.InsertCompany
+import com.bunbeauty.fooddelivery.domain.model.company.PatchCompany
+import com.bunbeauty.fooddelivery.domain.model.company.PostCompany
+import com.bunbeauty.fooddelivery.domain.model.company.UpdateCompany
 import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkInfo
 import com.bunbeauty.fooddelivery.domain.toUuid
 
