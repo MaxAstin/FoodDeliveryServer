@@ -13,5 +13,5 @@ class Cafe(
     val address: String,
     val cityUuid: String,
     val isVisible: Boolean,
-    val zones: List<DeliveryZone>
+    val zones: List<DeliveryZone>,
 )

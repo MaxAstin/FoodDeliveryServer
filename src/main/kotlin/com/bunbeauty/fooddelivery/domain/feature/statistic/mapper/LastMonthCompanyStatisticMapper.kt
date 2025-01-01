@@ -7,6 +7,6 @@ val toGetLastMonthCompanyStatistic: LastMonthCompanyStatistic.() -> GetLastMonth
     GetLastMonthCompanyStatistic(
         period = period,
         companyName = companyName,
-        orderProceeds = orderProceeds
+        orderProceeds = orderProceeds,
     )
 }

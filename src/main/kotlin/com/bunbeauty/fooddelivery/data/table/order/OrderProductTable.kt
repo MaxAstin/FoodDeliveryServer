@@ -17,4 +17,5 @@ object OrderProductTable : UUIDTable() {
     val barcode = integer("barcode")
     val order = reference("order", OrderTable)
     val menuProduct = reference("menuProduct", MenuProductTable)
+
 }

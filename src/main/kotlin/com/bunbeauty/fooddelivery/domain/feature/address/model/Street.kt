@@ -8,5 +8,5 @@ class Street(
     val isVisible: Boolean,
     val cityUuid: String,
     val cafeUuid: String,
-    val companyUuid: String
+    val companyUuid: String,
 )

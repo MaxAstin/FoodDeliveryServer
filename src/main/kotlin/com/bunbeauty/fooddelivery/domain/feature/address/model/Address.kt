@@ -10,5 +10,5 @@ class Address(
     val street: Street,
     val cityUuid: String,
     val userUuid: String,
-    val isVisible: Boolean
+    val isVisible: Boolean,
 )

@@ -14,7 +14,7 @@ class RequestRepository : IRequestRepository {
         query {
             RequestEntity.find {
                 (RequestTable.ip eq ip) and
-                    (RequestTable.name eq name)
+                        (RequestTable.name eq name)
             }.orderBy(RequestTable.time to SortOrder.DESC)
                 .firstOrNull()
                 ?.toRequest()
@@ -23,7 +23,7 @@ class RequestRepository : IRequestRepository {
     override suspend fun getRequestCountByIpAndName(ip: String, name: String): Long = query {
         RequestEntity.find {
             (RequestTable.ip eq ip) and
-                (RequestTable.name eq name)
+                    (RequestTable.name eq name)
         }.count()
     }
 

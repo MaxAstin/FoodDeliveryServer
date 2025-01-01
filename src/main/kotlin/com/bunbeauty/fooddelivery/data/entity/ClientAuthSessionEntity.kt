@@ -30,6 +30,6 @@ class ClientAuthSessionEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         time = time,
         attemptsLeft = attemptsLeft,
         isConfirmed = isConfirmed,
-        companyUuid = company.uuid
+        companyUuid = company.uuid,
     )
 }

@@ -1,7 +1,6 @@
 package com.bunbeauty.fooddelivery.di
 
-import io.ktor.server.application.Application
-import io.ktor.server.application.install
+import io.ktor.server.application.*
 import org.koin.ktor.plugin.Koin
 
 fun Application.configureKoin() {
@@ -37,7 +36,7 @@ fun Application.configureKoin() {
             networkModule,
             deliveryZoneModule,
             privacyCheckModule,
-            additionModule
+            additionModule,
         )
     }
 }

@@ -12,6 +12,6 @@ val mapPatchCafe: PatchCafe.() -> UpdateCafe = {
         latitude = latitude,
         longitude = longitude,
         address = address,
-        isVisible = isVisible
+        isVisible = isVisible,
     )
 }

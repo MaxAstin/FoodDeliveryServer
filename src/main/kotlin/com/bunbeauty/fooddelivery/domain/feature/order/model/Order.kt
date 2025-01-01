@@ -26,7 +26,7 @@ class Order(
     val cafeWithCity: CafeWithCity,
     val company: Company,
     val clientUser: ClientUserLight,
-    val orderProducts: List<OrderProduct>
+    val orderProducts: List<OrderProduct>,
 )
 
 class OrderProduct(
@@ -42,12 +42,12 @@ class OrderProduct(
     val photoLink: String,
     val barcode: Int,
     val menuProduct: MenuProduct,
-    val additions: List<OrderProductAddition>
+    val additions: List<OrderProductAddition>,
 )
 
 class OrderProductAddition(
     val uuid: String,
     val name: String,
     val price: Int?,
-    val priority: Int
+    val priority: Int,
 )

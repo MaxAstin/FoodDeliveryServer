@@ -22,12 +22,12 @@ class CafeStatisticRepository : ICafeStatisticRepository {
     override suspend fun getStatisticListByTimePeriodTypeCafe(
         time: Long,
         periodType: PeriodType,
-        cafeUuid: UUID
+        cafeUuid: UUID,
     ): List<GetStatistic> = query {
         CafeStatisticEntity.find {
             (CafeStatisticTable.time greaterEq time) and
-                (CafeStatisticTable.periodType eq periodType.name) and
-                (CafeStatisticTable.cafe eq cafeUuid)
+                    (CafeStatisticTable.periodType eq periodType.name) and
+                    (CafeStatisticTable.cafe eq cafeUuid)
         }.orderBy(CafeStatisticTable.time to SortOrder.DESC).map { cafeStatisticEntity ->
             cafeStatisticEntity.toStatistic()
         }
@@ -36,12 +36,12 @@ class CafeStatisticRepository : ICafeStatisticRepository {
     override suspend fun getStatisticByTimePeriodTypeCafe(
         time: Long,
         periodType: PeriodType,
-        cafeUuid: UUID
+        cafeUuid: UUID,
     ): GetStatistic? = query {
         CafeStatisticEntity.find {
             (CafeStatisticTable.periodType eq periodType.name) and
-                (CafeStatisticTable.time eq time) and
-                (CafeStatisticTable.cafe eq cafeUuid)
+                    (CafeStatisticTable.time eq time) and
+                    (CafeStatisticTable.cafe eq cafeUuid)
         }.firstOrNull()
             ?.toStatistic()
     }
@@ -58,7 +58,7 @@ class CafeStatisticRepository : ICafeStatisticRepository {
         cafeStatisticEntity.toStatistic()
     }
 
-    override suspend fun updateStatistic(statisticUuid: UUID, updateStatistic: UpdateStatistic): GetStatistic? = transaction {
+    override suspend fun updateStatistic(statisticUuid: UUID, updateStatistic: UpdateStatistic): GetStatistic? =  transaction {
         CafeStatisticProductTable.deleteWhere { sqlBuilder ->
             sqlBuilder.run {
                 cafeStatistic eq statisticUuid
@@ -74,7 +74,7 @@ class CafeStatisticRepository : ICafeStatisticRepository {
 
     private fun insertStatisticProducts(
         insertStatisticProductList: List<InsertStatisticProduct>,
-        cafeStatisticEntity: CafeStatisticEntity
+        cafeStatisticEntity: CafeStatisticEntity,
     ) {
         insertStatisticProductList.onEach { insertStatisticProduct ->
             CafeStatisticProductEntity.new {
@@ -86,4 +86,5 @@ class CafeStatisticRepository : ICafeStatisticRepository {
             }
         }
     }
+
 }

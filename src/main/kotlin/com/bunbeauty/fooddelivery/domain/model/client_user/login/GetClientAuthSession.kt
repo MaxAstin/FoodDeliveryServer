@@ -9,5 +9,5 @@ class GetClientAuthSession(
     val time: Long,
     val attemptsLeft: Int,
     val isConfirmed: Boolean,
-    val companyUuid: String
+    val companyUuid: String,
 )

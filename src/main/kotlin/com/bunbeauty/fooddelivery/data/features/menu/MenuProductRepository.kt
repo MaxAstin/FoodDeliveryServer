@@ -40,11 +40,9 @@ class MenuProductRepository(
                 isRecommended = insertMenuProduct.isRecommended
                 isVisible = insertMenuProduct.isVisible
                 company = CompanyEntity[insertMenuProduct.companyUuid]
-                categories = SizedCollection(
-                    insertMenuProduct.categoryUuids.map { categoryUuid ->
-                        CategoryEntity[categoryUuid]
-                    }
-                )
+                categories = SizedCollection(insertMenuProduct.categoryUuids.map { categoryUuid ->
+                    CategoryEntity[categoryUuid]
+                })
             }.mapMenuProductEntity()
         }
     }
@@ -52,7 +50,7 @@ class MenuProductRepository(
     suspend fun updateMenuProduct(
         companyUuid: String,
         menuProductUuid: String,
-        updateMenuProduct: UpdateMenuProduct
+        updateMenuProduct: UpdateMenuProduct,
     ): MenuProduct? {
         return query {
             MenuProductEntity.findById(id = menuProductUuid.toUuid())?.apply {
@@ -78,11 +76,9 @@ class MenuProductRepository(
                 isRecommended = updateMenuProduct.isRecommended ?: isRecommended
                 isVisible = updateMenuProduct.isVisible ?: isVisible
                 updateMenuProduct.categoryUuids?.let { categoryUuids ->
-                    categories = SizedCollection(
-                        categoryUuids.map { categoryUuid ->
-                            CategoryEntity[categoryUuid]
-                        }
-                    )
+                    categories = SizedCollection(categoryUuids.map { categoryUuid ->
+                        CategoryEntity[categoryUuid]
+                    })
                 }
             }?.mapMenuProductEntity()
         }
@@ -110,7 +106,7 @@ class MenuProductRepository(
 
     suspend fun getMenuProductByUuid(
         companyUuid: String,
-        uuid: String
+        uuid: String,
     ): MenuProduct? {
         return getMenuProductByUuid(
             companyUuid = companyUuid,
@@ -121,7 +117,7 @@ class MenuProductRepository(
 
     suspend fun getMenuProductWithAdditionListByUuid(
         companyUuid: String,
-        uuid: String
+        uuid: String,
     ): MenuProduct? {
         return getMenuProductByUuid(
             companyUuid = companyUuid,
@@ -132,7 +128,7 @@ class MenuProductRepository(
 
     private suspend fun getMenuProductList(
         companyUuid: UUID,
-        transform: (MenuProductEntity) -> MenuProduct
+        transform: (MenuProductEntity) -> MenuProduct,
     ): List<MenuProduct> {
         val cache = menuProductCatch.getCache(key = companyUuid)
         return cache ?: query {
@@ -145,7 +141,7 @@ class MenuProductRepository(
     private suspend fun getMenuProductByUuid(
         companyUuid: String,
         uuid: String,
-        transform: (MenuProductEntity) -> MenuProduct
+        transform: (MenuProductEntity) -> MenuProduct,
     ): MenuProduct? {
         val menuProduct = menuProductCatch.getCache(
             key = companyUuid.toUuid()
@@ -178,4 +174,5 @@ class MenuProductRepository(
             menuProductWithAdditionEntities.toList().mapToMenuProduct()
         }
     }
+
 }

@@ -5,4 +5,5 @@ import com.bunbeauty.fooddelivery.domain.model.company.payment_method.GetPayment
 interface IPaymentMethodService {
 
     suspend fun getPaymentMethodByCompanyUuid(companyUuid: String): List<GetPaymentMethod>
+
 }

@@ -15,4 +15,5 @@ object CafeTable : UUIDTable() {
     val codeCounter = integer("codeCounter").default(0)
     val city = reference("city", CityTable)
     val isVisible = bool("isVisible")
+
 }

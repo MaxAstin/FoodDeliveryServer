@@ -15,5 +15,5 @@ class GetCompany(
     val payment: GetPayment,
     val percentDiscount: Int?,
     val maxVisibleRecommendationCount: Int,
-    val isOpen: Boolean
+    val isOpen: Boolean,
 )

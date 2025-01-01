@@ -9,4 +9,5 @@ object ClientAuthSessionTable : UUIDTable() {
     val attemptsLeft = integer("attemptsLeft")
     val isConfirmed = bool("isConfirmed")
     val company = reference("company", CompanyTable)
+
 }

@@ -6,5 +6,5 @@ class Suggestion(
     val settlement: String?,
     val city: String?,
     val latitude: Double,
-    val longitude: Double
+    val longitude: Double,
 )

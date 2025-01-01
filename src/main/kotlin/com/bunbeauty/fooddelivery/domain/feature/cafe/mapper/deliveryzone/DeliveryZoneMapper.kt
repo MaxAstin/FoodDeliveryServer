@@ -25,6 +25,6 @@ val mapPoint: Point.() -> GetPoint = {
         order = order,
         latitude = latitude,
         longitude = longitude,
-        isVisible = isVisible
+        isVisible = isVisible,
     )
 }

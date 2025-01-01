@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 class GetStatisticOrderProduct(
     val uuid: String,
     val count: Int,
-    val newPrice: Int
+    val newPrice: Int,
 )

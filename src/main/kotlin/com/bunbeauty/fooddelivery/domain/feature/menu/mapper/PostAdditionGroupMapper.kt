@@ -10,6 +10,6 @@ val mapPostAdditionGroup: PostAdditionGroup.(UUID) -> InsertAdditionGroup = { co
         singleChoice = singleChoice,
         priority = priority,
         isVisible = isVisible,
-        companyUuid = companyUuid
+        companyUuid = companyUuid,
     )
 }

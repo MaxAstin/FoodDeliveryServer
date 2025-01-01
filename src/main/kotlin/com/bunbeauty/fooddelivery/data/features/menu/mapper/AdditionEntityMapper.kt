@@ -13,6 +13,6 @@ fun AdditionEntity.toAddition(): Addition {
         tag = tag,
         priority = priority,
         isVisible = isVisible,
-        companyUuid = company.uuid
+        companyUuid = company.uuid,
     )
 }

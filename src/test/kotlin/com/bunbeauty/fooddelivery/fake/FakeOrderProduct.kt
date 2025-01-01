@@ -12,7 +12,7 @@ object FakeOrderProduct {
         count: Int = 1,
         newPrice: Int = 0,
         oldPrice: Int? = null,
-        additions: List<OrderProductAddition> = emptyList()
+        additions: List<OrderProductAddition> = emptyList(),
     ): OrderProduct {
         return OrderProduct(
             uuid = uuid,
@@ -41,9 +41,9 @@ object FakeOrderProduct {
                 isVisible = true,
                 categories = listOf(),
                 additionGroups = listOf(),
-                companyUuid = ""
+                companyUuid = "",
             ),
-            additions = additions
+            additions = additions,
         )
     }
 }

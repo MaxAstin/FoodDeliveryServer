@@ -5,13 +5,8 @@ import com.bunbeauty.fooddelivery.data.entity.ClientAuthSessionEntity
 import com.bunbeauty.fooddelivery.data.entity.TestClientUserPhoneEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.table.TestClientUserPhoneTable
-import com.bunbeauty.fooddelivery.domain.model.client_user.login.GetClientAuthSession
-import com.bunbeauty.fooddelivery.domain.model.client_user.login.GetClientAuthSessionUuid
-import com.bunbeauty.fooddelivery.domain.model.client_user.login.GetTestClientUserPhone
-import com.bunbeauty.fooddelivery.domain.model.client_user.login.InsertAuthSession
-import com.bunbeauty.fooddelivery.domain.model.client_user.login.InsertTestClientUserPhone
-import com.bunbeauty.fooddelivery.domain.model.client_user.login.UpdateAuthSession
-import java.util.UUID
+import com.bunbeauty.fooddelivery.domain.model.client_user.login.*
+import java.util.*
 
 class AuthorizationRepository {
 

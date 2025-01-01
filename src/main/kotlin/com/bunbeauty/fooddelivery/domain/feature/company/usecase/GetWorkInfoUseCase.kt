@@ -5,8 +5,9 @@ import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkInfo
 import com.bunbeauty.fooddelivery.domain.toUuid
 
+//todo tests
 class GetWorkInfoUseCase(
-    private val companyRepository: CompanyRepository
+    private val companyRepository: CompanyRepository,
 ) {
 
     suspend operator fun invoke(companyUuid: String): WorkInfo {
@@ -14,6 +15,7 @@ class GetWorkInfoUseCase(
             .orThrowNotFoundByUuidError(uuid = companyUuid)
 
         return WorkInfo(
+            isOpen = company.isOpen,
             workType = company.workType
         )
     }

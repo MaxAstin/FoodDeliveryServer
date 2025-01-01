@@ -8,4 +8,5 @@ object ClientUserTable : UUIDTable() {
     val email = varchar("email", 512).nullable()
     val isActive = bool("isActive").default(true)
     val company = reference("company", CompanyTable)
+
 }

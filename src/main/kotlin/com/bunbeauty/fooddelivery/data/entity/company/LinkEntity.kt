@@ -20,6 +20,6 @@ class LinkEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     fun toLink() = GetLink(
         uuid = uuid,
         type = type,
-        value = value
+        value = value,
     )
 }

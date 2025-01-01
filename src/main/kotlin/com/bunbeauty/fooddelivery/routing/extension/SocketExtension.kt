@@ -2,17 +2,16 @@ package com.bunbeauty.fooddelivery.routing.extension
 
 import com.bunbeauty.fooddelivery.auth.JwtUser
 import com.bunbeauty.fooddelivery.routing.model.Request
-import io.ktor.server.auth.authentication
-import io.ktor.server.websocket.DefaultWebSocketServerSession
-import io.ktor.websocket.CloseReason
-import io.ktor.websocket.close
+import io.ktor.server.auth.*
+import io.ktor.server.websocket.*
+import io.ktor.websocket.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.delay
 import java.sql.DriverManager.println
 
 suspend inline fun DefaultWebSocketServerSession.clientSocket(
     block: (Request) -> Unit,
-    crossinline closeBlock: (Request) -> Unit
+    crossinline closeBlock: (Request) -> Unit,
 ) {
     println("clientSocket")
     socket(block = block, closeBlock = closeBlock) { jwtUser ->
@@ -22,7 +21,7 @@ suspend inline fun DefaultWebSocketServerSession.clientSocket(
 
 suspend inline fun DefaultWebSocketServerSession.managerSocket(
     block: (Request) -> Unit,
-    crossinline onSocketClose: (Request) -> Unit
+    crossinline onSocketClose: (Request) -> Unit,
 ) {
     println("managerSocket")
     socket(block = block, closeBlock = onSocketClose) { jwtUser ->
@@ -34,7 +33,7 @@ suspend inline fun DefaultWebSocketServerSession.managerSocket(
 suspend inline fun DefaultWebSocketServerSession.socket(
     block: (Request) -> Unit,
     crossinline closeBlock: (Request) -> Unit,
-    checkAccess: (JwtUser) -> Boolean
+    checkAccess: (JwtUser) -> Boolean,
 ) {
     val jwtUser = call.authentication.principal() as? JwtUser
     if (jwtUser == null) {

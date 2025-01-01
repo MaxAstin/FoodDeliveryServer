@@ -5,7 +5,7 @@ import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.toUuid
 
 class IsOrderAvailableUseCase(
-    private val companyRepository: CompanyRepository
+    private val companyRepository: CompanyRepository,
 ) {
 
     suspend operator fun invoke(companyUuid: String): Boolean {

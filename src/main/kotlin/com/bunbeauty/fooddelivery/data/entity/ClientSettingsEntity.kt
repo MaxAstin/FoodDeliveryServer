@@ -21,7 +21,8 @@ class ClientSettingsEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
             uuid = uuid,
             phoneNumber = phoneNumber,
             email = email,
-            isActive = isActive
+            isActive = isActive,
         )
     }
+
 }

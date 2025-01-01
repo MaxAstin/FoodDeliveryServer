@@ -18,5 +18,5 @@ class GetClientOrder(
     val oldTotalCost: Int?,
     val newTotalCost: Int,
     val clientUserUuid: String,
-    val oderProductList: List<GetOrderProduct>
+    val oderProductList: List<GetOrderProduct>,
 )

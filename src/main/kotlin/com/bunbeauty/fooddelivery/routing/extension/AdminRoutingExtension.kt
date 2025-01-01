@@ -2,8 +2,8 @@ package com.bunbeauty.fooddelivery.routing.extension
 
 import com.bunbeauty.fooddelivery.routing.model.BodyRequest
 import com.bunbeauty.fooddelivery.routing.model.Request
-import io.ktor.server.application.ApplicationCall
-import io.ktor.util.pipeline.PipelineContext
+import io.ktor.server.application.*
+import io.ktor.util.pipeline.*
 
 suspend inline fun PipelineContext<Unit, ApplicationCall>.admin(block: (Request) -> Unit) {
     checkRights(block) { jwtUser ->
@@ -28,7 +28,7 @@ suspend inline fun <reified R : Any> PipelineContext<Unit, ApplicationCall>.getA
 }
 
 suspend inline fun <reified B, reified R : Any> PipelineContext<Unit, ApplicationCall>.adminWithBody(
-    block: (BodyRequest<B>) -> R
+    block: (BodyRequest<B>) -> R,
 ) {
     admin { request ->
         handleRequestWithBody(

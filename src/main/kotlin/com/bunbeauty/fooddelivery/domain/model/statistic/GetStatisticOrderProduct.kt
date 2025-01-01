@@ -6,5 +6,5 @@ class GetStatisticOrderProduct(
     val menuProductUuid: String,
     val name: String,
     val newPrice: Int,
-    val photoLink: String
+    val photoLink: String,
 )

@@ -7,5 +7,5 @@ class PatchAdditionGroup(
     val name: String? = null,
     val singleChoice: Boolean? = null,
     val priority: Int? = null,
-    val isVisible: Boolean? = null
+    val isVisible: Boolean? = null,
 )

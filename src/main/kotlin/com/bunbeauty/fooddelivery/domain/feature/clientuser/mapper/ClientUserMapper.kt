@@ -30,7 +30,7 @@ val mapClientUser: ClientUser.() -> GetClientUser = {
                 OrderTotal(
                     oldTotalCost = null,
                     newTotalCost = 0,
-                    productTotalMap = emptyMap()
+                    productTotalMap = emptyMap(),
                 )
             )
         }
@@ -42,6 +42,6 @@ val mapClientUserToClientSettings: ClientUser.() -> GetClientSettings = {
         uuid = uuid,
         phoneNumber = phoneNumber,
         email = email,
-        isActive = isActive
+        isActive = isActive,
     )
 }

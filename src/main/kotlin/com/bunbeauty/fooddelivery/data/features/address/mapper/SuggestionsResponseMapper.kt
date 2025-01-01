@@ -11,7 +11,7 @@ val mapSuggestionsResponse: SuggestionsResponse.() -> List<Suggestion> = {
             settlement = suggestion.data.settlementWithType,
             city = suggestion.data.cityWithType,
             latitude = suggestion.data.latitude,
-            longitude = suggestion.data.longitude
+            longitude = suggestion.data.longitude,
         )
     }
 }

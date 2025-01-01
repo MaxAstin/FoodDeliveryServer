@@ -9,4 +9,5 @@ object CompanyStatisticTable : UUIDTable() {
     val orderCount = integer("orderCount")
     val orderProceeds = integer("orderProceeds")
     val company = reference("company", CompanyTable)
+
 }

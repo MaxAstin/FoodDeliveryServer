@@ -7,6 +7,6 @@ val mapSuggestion: Suggestion.() -> GetSuggestion = {
     GetSuggestion(
         fiasId = fiasId,
         street = street,
-        details = settlement ?: city ?: ""
+        details = settlement ?: city ?: "",
     )
 }

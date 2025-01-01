@@ -5,16 +5,13 @@ import com.bunbeauty.fooddelivery.domain.feature.cafe.DeliveryZoneService
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.managerGetListResult
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
-import io.ktor.server.application.Application
-import io.ktor.server.application.call
-import io.ktor.server.auth.authenticate
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.get
-import io.ktor.server.routing.post
-import io.ktor.server.routing.routing
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureDeliveryZoneRouting() {
+
     routing {
         authenticate {
             getDeliveryZoneByCafeUuid()
@@ -24,6 +21,7 @@ fun Application.configureDeliveryZoneRouting() {
 }
 
 private fun Route.getDeliveryZoneByCafeUuid() {
+
     val deliveryZoneService: DeliveryZoneService by inject()
 
     get("/delivery_zone") {
@@ -38,6 +36,7 @@ private fun Route.getDeliveryZoneByCafeUuid() {
 }
 
 private fun Route.postDeliveryZone() {
+
     val deliveryZoneService: DeliveryZoneService by inject()
 
     post("/delivery_zone") {

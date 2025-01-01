@@ -4,5 +4,5 @@ import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
 
 class CityWithCafes(
     val city: City,
-    val cafes: List<Cafe>
+    val cafes: List<Cafe>,
 )

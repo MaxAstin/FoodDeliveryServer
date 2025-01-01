@@ -6,5 +6,5 @@ class InsertCity(
     val name: String,
     val timeZone: String,
     val company: UUID,
-    val isVisible: Boolean
+    val isVisible: Boolean,
 )

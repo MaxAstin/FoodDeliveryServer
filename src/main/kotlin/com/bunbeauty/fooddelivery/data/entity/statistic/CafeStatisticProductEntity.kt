@@ -17,4 +17,5 @@ class CafeStatisticProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var cafeStatistic: CafeStatisticEntity by CafeStatisticEntity referencedOn CafeStatisticProductTable.cafeStatistic
 
     companion object : UUIDEntityClass<CafeStatisticProductEntity>(CafeStatisticProductTable)
+
 }

@@ -5,5 +5,5 @@ import java.util.*
 class InsertClientUser(
     val phoneNumber: String,
     val email: String?,
-    val companyUuid: UUID
+    val companyUuid: UUID,
 )

@@ -10,11 +10,11 @@ class PostOrder(
     val deferredTime: Long?,
     val addressUuid: String?,
     val cafeUuid: String?,
-    val orderProducts: List<PostOrderProduct>
+    val orderProducts: List<PostOrderProduct>,
 )
 
 @Serializable
 class PostOrderProduct(
     val menuProductUuid: String,
-    val count: Int
+    val count: Int,
 )

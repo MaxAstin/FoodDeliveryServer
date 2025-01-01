@@ -12,7 +12,8 @@ class RecommendationService(private val companyRepository: CompanyRepository) {
             .orThrowNotFoundByUuidError(uuid = companyUuid)
         return GetRecommendationData(
             maxVisibleCount = company.maxVisibleRecommendationCount,
-            recommendationList = emptyList()
+            recommendationList = emptyList(),
         )
     }
+
 }

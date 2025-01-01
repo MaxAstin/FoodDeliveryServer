@@ -7,6 +7,6 @@ fun PutNotificationToken.toNotificationData(dateTime: String): NotificationData 
     return NotificationData(
         token = token,
         device = device,
-        updateTokenDateTime = dateTime
+        updateTokenDateTime = dateTime,
     )
 }

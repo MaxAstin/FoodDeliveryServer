@@ -67,4 +67,5 @@ class CafeRepository {
             isVisible = updateCafe.isVisible ?: isVisible
         }?.mapCafeEntity()
     }
+
 }

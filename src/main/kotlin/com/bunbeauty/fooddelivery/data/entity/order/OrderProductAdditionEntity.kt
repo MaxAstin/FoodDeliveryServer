@@ -16,4 +16,5 @@ class OrderProductAdditionEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var orderProduct: OrderProductEntity by OrderProductEntity referencedOn OrderProductAdditionTable.orderProduct
 
     companion object : UUIDEntityClass<OrderProductAdditionEntity>(OrderProductAdditionTable)
+
 }

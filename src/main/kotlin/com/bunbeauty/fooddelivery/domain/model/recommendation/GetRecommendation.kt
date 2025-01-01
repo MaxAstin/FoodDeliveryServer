@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 data class GetRecommendation(
     val uuid: String,
     val isVisible: Boolean,
-    val menuProduct: GetMenuProduct
+    val menuProduct: GetMenuProduct,
 )

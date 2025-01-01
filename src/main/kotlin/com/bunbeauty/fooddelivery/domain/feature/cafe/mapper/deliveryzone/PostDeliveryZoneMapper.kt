@@ -24,6 +24,6 @@ val mapPostPoint: PostPoint.() -> InsertPoint = {
         order = order,
         latitude = latitude,
         longitude = longitude,
-        isVisible = isVisible
+        isVisible = isVisible,
     )
 }

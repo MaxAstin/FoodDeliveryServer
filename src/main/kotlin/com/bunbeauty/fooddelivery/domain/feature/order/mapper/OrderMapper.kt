@@ -67,7 +67,7 @@ val mapOrderToCafeOrder: Order.() -> GetCafeOrder = {
         time = time,
         timeZone = cafeWithCity.city.timeZone,
         deferredTime = deferredTime,
-        cafeUuid = cafeWithCity.cafe.uuid
+        cafeUuid = cafeWithCity.cafe.uuid,
     )
 }
 
@@ -92,7 +92,7 @@ val mapOrderToCafeOrderDetails: Order.(OrderTotal) -> GetCafeOrderDetails = { or
                 oderProduct.mapOrderProduct(uuid, orderProductTotal)
             }
         },
-        availableStatusList = availableStatusList
+        availableStatusList = availableStatusList,
     )
 }
 
@@ -119,18 +119,18 @@ val mapOrderToCafeOrderDetailsV2: Order.(OrderTotal) -> GetCafeOrderDetailsV2 = 
                 oderProduct.mapOrderProduct(uuid, orderProductTotal)
             }
         },
-        availableStatusList = availableStatusList
+        availableStatusList = availableStatusList,
     )
 }
 
 private val Order.compositeAddress: String
     get() {
         return addressStreet +
-            getAddressPart(data = addressHouse, prefix = ", д. ") +
-            getAddressPart(data = addressFlat, prefix = ", кв. ") +
-            getAddressPart(data = addressEntrance, prefix = ", ", postfix = " подъезд") +
-            getAddressPart(data = addressFloor, prefix = ", ", postfix = " этаж") +
-            getAddressPart(data = addressComment, prefix = ", ")
+                getAddressPart(data = addressHouse, prefix = ", д. ") +
+                getAddressPart(data = addressFlat, prefix = ", кв. ") +
+                getAddressPart(data = addressEntrance, prefix = ", ", postfix = " подъезд") +
+                getAddressPart(data = addressFloor, prefix = ", ", postfix = " этаж") +
+                getAddressPart(data = addressComment, prefix = ", ")
     }
 
 private fun getAddressPart(data: String?, prefix: String = "", postfix: String = ""): String {
@@ -165,5 +165,5 @@ private val Order.addressV2: GetOrderAddressV2
         flat = addressFlat,
         entrance = addressEntrance,
         floor = addressFloor,
-        comment = addressComment
+        comment = addressComment,
     )

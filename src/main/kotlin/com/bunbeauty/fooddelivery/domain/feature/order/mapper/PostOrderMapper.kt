@@ -18,6 +18,6 @@ val mapPostOrder: PostOrder.(OrderInfo) -> InsertOrder = { orderInfo ->
         cafeUuid = orderInfo.cafeUuid,
         companyUuid = orderInfo.companyUuid,
         clientUserUuid = orderInfo.clientUserUuid,
-        orderProductList = orderProducts.map(mapPostOrderProduct)
+        orderProductList = orderProducts.map(mapPostOrderProduct),
     )
 }

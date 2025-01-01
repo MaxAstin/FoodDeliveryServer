@@ -8,7 +8,7 @@ object FakeDeliveryZone {
         minOrderCost: Int? = null,
         normalDeliveryCost: Int = 0,
         forLowDeliveryCost: Int? = null,
-        lowDeliveryCost: Int? = null
+        lowDeliveryCost: Int? = null,
     ): DeliveryZone {
         return DeliveryZone(
             uuid = "",
@@ -19,7 +19,8 @@ object FakeDeliveryZone {
             lowDeliveryCost = lowDeliveryCost,
             isVisible = true,
             cafeUuid = "",
-            points = emptyList()
+            points = emptyList(),
         )
     }
+
 }

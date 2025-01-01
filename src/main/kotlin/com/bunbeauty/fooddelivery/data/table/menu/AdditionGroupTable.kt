@@ -11,4 +11,5 @@ object AdditionGroupTable : UUIDTable() {
     val isVisible = bool("isVisible")
 
     val company = reference("company", CompanyTable)
+
 }

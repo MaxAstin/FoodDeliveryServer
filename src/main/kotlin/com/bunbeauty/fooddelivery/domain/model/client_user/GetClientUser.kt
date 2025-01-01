@@ -12,5 +12,5 @@ class GetClientUser(
     val email: String?,
     val company: GetCompany,
     val addresses: List<GetAddress>,
-    val orders: List<GetClientOrder>
+    val orders: List<GetClientOrder>,
 )

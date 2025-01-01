@@ -17,7 +17,7 @@ private val MONTH_MAP = mapOf(
     9 to "сентябрь",
     10 to "октябрь",
     11 to "ноябрь",
-    12 to "декабрь"
+    12 to "декабрь",
 )
 
 private const val DEFAULT_MONTH_IN_GENITIVE = "декабря"
@@ -33,7 +33,7 @@ private val MONTH_IN_GENITIVE_MAP = mapOf(
     9 to "сентября",
     10 to "октября",
     11 to "ноября",
-    12 to "декабря"
+    12 to "декабря",
 )
 
 class DateTimeService : IDateTimeService {
@@ -42,8 +42,8 @@ class DateTimeService : IDateTimeService {
         val dateTime = DateTime(millis)
 
         return dateTime.dayOfMonth.toString() + " " +
-            MONTH_IN_GENITIVE_MAP.getOrDefault(dateTime.monthOfYear, DEFAULT_MONTH_IN_GENITIVE) + " " +
-            dateTime.year
+                MONTH_IN_GENITIVE_MAP.getOrDefault(dateTime.monthOfYear, DEFAULT_MONTH_IN_GENITIVE) + " " +
+                dateTime.year
     }
 
     override fun getWeekPeriod(millis: Long): String {

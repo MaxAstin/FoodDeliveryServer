@@ -9,7 +9,8 @@ object FakeOrderProductAddition {
             uuid = "",
             name = "",
             price = price,
-            priority = 1
+            priority = 1,
         )
     }
+
 }

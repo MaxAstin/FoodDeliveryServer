@@ -11,8 +11,9 @@ class User(
     val notificationToken: String?,
     val unlimitedNotification: Boolean,
     val cityWithCafes: CityWithCafes,
-    val company: Company
+    val company: Company,
 ) {
 
     val companyUuid = company.uuid
+
 }

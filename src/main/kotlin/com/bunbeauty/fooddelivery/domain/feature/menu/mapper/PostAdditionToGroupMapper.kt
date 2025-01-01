@@ -9,6 +9,6 @@ val mapPostAdditionToGroup: PostAdditionToGroup.() -> InsertAdditionToGroup = {
         additionGroupUuid = groupUuid.toUuid(),
         additionUuid = additionUuid.toUuid(),
         isSelected = isSelected,
-        isVisible = isVisible
+        isVisible = isVisible,
     )
 }

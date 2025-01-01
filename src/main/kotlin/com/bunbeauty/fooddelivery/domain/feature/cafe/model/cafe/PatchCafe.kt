@@ -11,5 +11,5 @@ class PatchCafe(
     val latitude: Double? = null,
     val longitude: Double? = null,
     val address: String? = null,
-    val isVisible: Boolean? = null
+    val isVisible: Boolean? = null,
 )

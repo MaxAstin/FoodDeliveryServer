@@ -10,7 +10,7 @@ val hitModule = module(createdAtStart = true) {
             companyRepository = get(),
             menuProductRepository = get(),
             orderRepository = get(),
-            hitRepository = get()
+            hitRepository = get(),
         )
     }
     single { HitRepository() }

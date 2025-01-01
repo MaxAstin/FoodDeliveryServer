@@ -9,18 +9,13 @@ import com.bunbeauty.fooddelivery.domain.feature.menu.service.MenuProductService
 import com.bunbeauty.fooddelivery.routing.extension.getListResult
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
-import io.ktor.server.application.Application
-import io.ktor.server.application.call
-import io.ktor.server.auth.authenticate
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.Routing
-import io.ktor.server.routing.get
-import io.ktor.server.routing.patch
-import io.ktor.server.routing.post
-import io.ktor.server.routing.routing
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureMenuProductRouting() {
+
     routing {
         getAllMenuProducts()
         authenticate {
@@ -31,6 +26,7 @@ fun Application.configureMenuProductRouting() {
 }
 
 private fun Routing.getAllMenuProducts() {
+
     val menuProductService: MenuProductService by inject()
 
     get("/menu_product") {
@@ -42,6 +38,7 @@ private fun Routing.getAllMenuProducts() {
 }
 
 private fun Route.postMenuProduct() {
+
     val menuProductService: MenuProductService by inject()
 
     post("/menu_product") {
@@ -55,6 +52,7 @@ private fun Route.postMenuProduct() {
 }
 
 private fun Route.patchMenuProduct() {
+
     val menuProductService: MenuProductService by inject()
 
     patch("/menu_product") {

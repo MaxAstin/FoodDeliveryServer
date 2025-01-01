@@ -11,4 +11,5 @@ class HitRepository {
     fun getHitProductUuidListByCompanyUuid(companyUuid: String): List<String> {
         return hitsCache[companyUuid] ?: emptyList()
     }
+
 }

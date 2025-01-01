@@ -9,5 +9,5 @@ data class Addition(
     val tag: String?,
     val priority: Int,
     val isVisible: Boolean,
-    val companyUuid: String
+    val companyUuid: String,
 )

@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class PutClientCode(
-    val code: String
+    val code: String,
 )

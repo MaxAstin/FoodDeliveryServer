@@ -14,4 +14,5 @@ class DeliveryService(private val companyRepository: CompanyRepository) {
 
         return company.delivery.mapDelivery()
     }
+
 }

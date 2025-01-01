@@ -14,17 +14,17 @@ val mapCompanyEntity: CompanyEntity.() -> Company = {
         offset = 3,
         delivery = Delivery(
             forFree = forFreeDelivery,
-            cost = deliveryCost
+            cost = deliveryCost,
         ),
         forceUpdateVersion = forceUpdateVersion,
         payment = Payment(
             phoneNumber = paymentPhoneNumber,
-            cardNumber = paymentCardNumber
+            cardNumber = paymentCardNumber,
         ),
         percentDiscount = percentDiscount,
         maxVisibleRecommendationCount = maxVisibleRecommendationCount,
         isOpen = isOpen,
-        workType = WorkType.valueOf(workType),
-        citiesWithCafes = cities.map(mapCityEntityToCityWithCafes)
+        workType =  WorkType.valueOf(workType),
+        citiesWithCafes = cities.map(mapCityEntityToCityWithCafes),
     )
 }

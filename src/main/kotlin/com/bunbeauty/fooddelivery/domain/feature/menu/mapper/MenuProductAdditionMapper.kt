@@ -12,6 +12,6 @@ val mapMenuProductAddition: MenuProductAddition.() -> GetMenuProductAddition = {
         price = price,
         photoLink = photoLink,
         priority = priority,
-        isVisible = isVisible
+        isVisible = isVisible,
     )
 }

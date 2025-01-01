@@ -10,7 +10,7 @@ private const val ORDER_COST_IS_LOWER_THEN_MINIMAL_CODE = 900
 
 class GetDeliveryCostUseCase(
     private val clientUserRepository: ClientUserRepository,
-    private val calculateOrderProductsNewCostUseCase: CalculateOrderProductsNewCostUseCase
+    private val calculateOrderProductsNewCostUseCase: CalculateOrderProductsNewCostUseCase,
 ) {
 
     suspend operator fun invoke(
@@ -18,7 +18,7 @@ class GetDeliveryCostUseCase(
         deliveryZone: DeliveryZone?,
         clientUserUuid: String,
         orderProducts: List<OrderProduct>,
-        percentDiscount: Int?
+        percentDiscount: Int?,
     ): Int? {
         if (!isDelivery) {
             return null
@@ -43,9 +43,9 @@ class GetDeliveryCostUseCase(
                 costLowerThemMinimalError(minOrderCost = deliveryZone.minOrderCost)
             }
 
-            if ((deliveryZone.forLowDeliveryCost != null) &&
-                (deliveryZone.lowDeliveryCost != null) &&
-                (orderProductsNewCost >= deliveryZone.forLowDeliveryCost)
+            if ((deliveryZone.forLowDeliveryCost != null)
+                && (deliveryZone.lowDeliveryCost != null)
+                && (orderProductsNewCost >= deliveryZone.forLowDeliveryCost)
             ) {
                 deliveryZone.lowDeliveryCost
             } else {

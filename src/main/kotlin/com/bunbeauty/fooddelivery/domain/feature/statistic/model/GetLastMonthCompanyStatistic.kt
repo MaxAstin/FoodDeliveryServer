@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 class GetLastMonthCompanyStatistic(
     val period: String,
     val companyName: String,
-    val orderProceeds: Int?
+    val orderProceeds: Int?,
 )

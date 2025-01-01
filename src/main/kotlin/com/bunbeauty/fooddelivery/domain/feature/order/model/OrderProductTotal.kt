@@ -5,5 +5,5 @@ data class OrderProductTotal(
     val newCommonPrice: Int,
     val oldCommonPrice: Int?,
     val newTotalCost: Int,
-    val oldTotalCost: Int?
+    val oldTotalCost: Int?,
 )

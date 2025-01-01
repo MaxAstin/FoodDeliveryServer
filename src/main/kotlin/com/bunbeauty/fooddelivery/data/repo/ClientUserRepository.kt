@@ -16,12 +16,12 @@ class ClientUserRepository {
 
     suspend fun getClientUserByPhoneNumberAndCompanyUuid(
         phoneNumber: String,
-        companyUuid: UUID
+        companyUuid: UUID,
     ): ClientUser? = query {
         ClientUserEntity.find {
             (ClientUserTable.phoneNumber eq phoneNumber) and
-                (ClientUserTable.company eq companyUuid) and
-                (ClientUserTable.isActive eq true)
+                    (ClientUserTable.company eq companyUuid) and
+                    (ClientUserTable.isActive eq true)
         }.singleOrNull()
             ?.mapClientUserEntity()
     }

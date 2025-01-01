@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.data.features.auth
 import com.bunbeauty.fooddelivery.data.features.auth.remotemodel.BaseResponse
 import com.bunbeauty.fooddelivery.network.ApiResult
 import com.bunbeauty.fooddelivery.network.getData
-import io.ktor.client.HttpClient
+import io.ktor.client.*
 
 class AuthorizationNetworkDataSource(private val client: HttpClient) {
 
@@ -13,7 +13,7 @@ class AuthorizationNetworkDataSource(private val client: HttpClient) {
             parameters = mapOf(
                 "number" to phoneNumber,
                 "sign" to sign,
-                "text" to text
+                "text" to text,
             )
         )
     }
@@ -24,8 +24,9 @@ class AuthorizationNetworkDataSource(private val client: HttpClient) {
             parameters = mapOf(
                 "number" to phoneNumber,
                 "sign" to sign,
-                "text" to text
+                "text" to text,
             )
         )
     }
+
 }

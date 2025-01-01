@@ -27,13 +27,13 @@ class CheckIsPointInPolygonUseCaseTest {
             0.0 to 1.0,
             1.0 to 2.0,
             2.0 to 1.0,
-            1.0 to 0.0
+            1.0 to 0.0,
         )
 
         val result = checkIsPointInPolygonUseCase(
             latitude = latitude,
             longitude = longitude,
-            polygon = polygon
+            polygon = polygon,
         )
 
         assertTrue(result)
@@ -52,13 +52,13 @@ class CheckIsPointInPolygonUseCaseTest {
             0.0 to 1.0,
             1.0 to 2.0,
             3.0 to 2.0,
-            2.0 to 1.0
+            2.0 to 1.0,
         )
 
         val result = checkIsPointInPolygonUseCase(
             latitude = latitude,
             longitude = longitude,
-            polygon = polygon
+            polygon = polygon,
         )
 
         assertFalse(result)
@@ -79,13 +79,13 @@ class CheckIsPointInPolygonUseCaseTest {
             0.0 to 3.0,
             3.0 to 3.0,
             2.0 to 0.0,
-            1.0 to 1.0
+            1.0 to 1.0,
         )
 
         val result = checkIsPointInPolygonUseCase(
             latitude = latitude,
             longitude = longitude,
-            polygon = polygon
+            polygon = polygon,
         )
 
         assertTrue(result)
@@ -106,13 +106,13 @@ class CheckIsPointInPolygonUseCaseTest {
             0.0 to 3.0,
             3.0 to 3.0,
             2.0 to 0.0,
-            1.0 to 2.0
+            1.0 to 2.0,
         )
 
         val result = checkIsPointInPolygonUseCase(
             latitude = latitude,
             longitude = longitude,
-            polygon = polygon
+            polygon = polygon,
         )
 
         assertFalse(result)
@@ -140,13 +140,13 @@ class CheckIsPointInPolygonUseCaseTest {
             2.0 to 3.0,
             2.0 to 4.0,
             4.0 to 4.0,
-            0.0 to 4.0
+            0.0 to 4.0,
         )
 
         val result = checkIsPointInPolygonUseCase(
             latitude = latitude,
             longitude = longitude,
-            polygon = polygon
+            polygon = polygon,
         )
 
         assertFalse(result)
@@ -174,13 +174,13 @@ class CheckIsPointInPolygonUseCaseTest {
             2.0 to 3.0,
             2.0 to 4.0,
             4.0 to 4.0,
-            0.0 to 4.0
+            0.0 to 4.0,
         )
 
         val result = checkIsPointInPolygonUseCase(
             latitude = latitude,
             longitude = longitude,
-            polygon = polygon
+            polygon = polygon,
         )
 
         assertFalse(result)

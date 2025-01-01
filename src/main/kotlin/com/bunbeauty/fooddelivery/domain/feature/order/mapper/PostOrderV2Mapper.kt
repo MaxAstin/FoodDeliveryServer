@@ -18,17 +18,17 @@ val mapPostOrderV2: PostOrderV2.(OrderInfoV2) -> InsertOrderV2 = { orderInfo ->
             flat = address.flat,
             entrance = address.entrance,
             floor = address.floor,
-            comment = address.comment
+            comment = address.comment,
         ),
         comment = comment,
         deferredTime = deferredTime,
         status = OrderStatus.NOT_ACCEPTED.name,
-        deliveryCost = orderInfo.deliveryCost,
+        deliveryCost =  orderInfo.deliveryCost,
         paymentMethod = paymentMethod,
         percentDiscount = orderInfo.percentDiscount,
-        cafeUuid = orderInfo.cafeUuid,
-        companyUuid = orderInfo.companyUuid,
-        clientUserUuid = orderInfo.clientUserUuid,
-        orderProductList = orderProducts.map(mapPostOrderProduct)
+        cafeUuid =  orderInfo.cafeUuid,
+        companyUuid =  orderInfo.companyUuid,
+        clientUserUuid =  orderInfo.clientUserUuid,
+        orderProductList = orderProducts.map(mapPostOrderProduct),
     )
 }

@@ -14,6 +14,6 @@ val mapAddressEntity: AddressEntity.() -> Address = {
         street = street.mapStreetEntity(),
         cityUuid = street.cafe.city.uuid,
         userUuid = clientUser.uuid,
-        isVisible = isVisible
+        isVisible = isVisible,
     )
 }

@@ -22,7 +22,7 @@ val mapMenuProductEntity: MenuProductEntity.() -> MenuProduct = {
         isVisible = isVisible,
         companyUuid = company.uuid,
         categories = categories.map(mapCategoryEntity),
-        additionGroups = emptyList()
+        additionGroups = emptyList(),
     )
 }
 
@@ -46,7 +46,7 @@ private val mapToMenuProductAdditionGroup: List<MenuProductWithAdditionGroupWith
         isVisible = additionGroup.isVisible && any {
             it.isVisible && it.addition.isVisible
         },
-        additions = map(mapToMenuProductAddition)
+        additions = map(mapToMenuProductAddition),
     )
 }
 
@@ -59,6 +59,6 @@ private val mapToMenuProductAddition: MenuProductWithAdditionGroupWithAdditionEn
         price = addition.price,
         photoLink = addition.photoLink,
         priority = addition.priority,
-        isVisible = isVisible && addition.isVisible
+        isVisible = isVisible && addition.isVisible,
     )
 }

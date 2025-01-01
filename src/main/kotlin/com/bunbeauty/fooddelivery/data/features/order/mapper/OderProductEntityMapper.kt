@@ -20,7 +20,7 @@ val mapOrderProductEntity: OrderProductEntity.() -> OrderProduct = {
         photoLink = photoLink,
         barcode = barcode,
         menuProduct = menuProduct.mapMenuProductEntity(),
-        additions = additions.map(mapOrderProductAdditionEntity)
+        additions = additions.map(mapOrderProductAdditionEntity),
     )
 }
 
@@ -29,6 +29,6 @@ val mapOrderProductAdditionEntity: OrderProductAdditionEntity.() -> OrderProduct
         uuid = uuid,
         name = name,
         price = price,
-        priority = priority
+        priority = priority,
     )
 }

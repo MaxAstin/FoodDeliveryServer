@@ -8,4 +8,5 @@ object NonWorkingDayTable : UUIDTable() {
     val isVisible = bool("isVisible").default(true)
 
     val cafe = reference("cafe", CafeTable)
+
 }

@@ -5,5 +5,5 @@ import java.util.*
 class InsertStreet(
     val name: String,
     val cafeUuid: UUID,
-    val isVisible: Boolean
+    val isVisible: Boolean,
 )

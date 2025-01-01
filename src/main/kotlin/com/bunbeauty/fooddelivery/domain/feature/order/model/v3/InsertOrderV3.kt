@@ -16,11 +16,11 @@ class InsertOrderV3(
     val cafeUuid: String,
     val companyUuid: String,
     val clientUserUuid: String,
-    val orderProductList: List<InsertOrderProductV3>
+    val orderProductList: List<InsertOrderProductV3>,
 )
 
 class InsertOrderProductV3(
     val menuProductUuid: String,
     val count: Int,
-    val additionUuids: List<String>
+    val additionUuids: List<String>,
 )

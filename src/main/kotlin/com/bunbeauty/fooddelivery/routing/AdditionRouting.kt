@@ -1,27 +1,15 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.UUID_PARAMETER
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.GetAddition
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.GetAdditionGroup
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PatchAddition
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PatchAdditionGroup
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAddition
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditionGroup
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditionGroupToMenuProducts
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditionToGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.*
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
 import com.bunbeauty.fooddelivery.domain.feature.menu.service.AdditionService
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.managerGetListResult
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
-import io.ktor.server.application.Application
-import io.ktor.server.application.call
-import io.ktor.server.auth.authenticate
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.get
-import io.ktor.server.routing.patch
-import io.ktor.server.routing.post
-import io.ktor.server.routing.routing
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureAdditionRouting() {
@@ -41,6 +29,7 @@ fun Application.configureAdditionRouting() {
 }
 
 private fun Route.postAdditionGroup() {
+
     val additionService: AdditionService by inject()
 
     post("/addition_group") {
@@ -54,6 +43,7 @@ private fun Route.postAdditionGroup() {
 }
 
 private fun Route.postAdditionGroupToMenuProducts() {
+
     val additionService: AdditionService by inject()
 
     post("/addition_group_to_menu_products") {
@@ -67,6 +57,7 @@ private fun Route.postAdditionGroupToMenuProducts() {
 }
 
 private fun Route.getAdditionGroups() {
+
     val additionService: AdditionService by inject()
 
     get("/addition_group") {
@@ -77,6 +68,7 @@ private fun Route.getAdditionGroups() {
 }
 
 private fun Route.patchAdditionGroup() {
+
     val additionService: AdditionService by inject()
 
     patch("/addition_group") {
@@ -92,6 +84,7 @@ private fun Route.patchAdditionGroup() {
 }
 
 private fun Route.postAddition() {
+
     val additionService: AdditionService by inject()
 
     post("/addition") {
@@ -105,6 +98,7 @@ private fun Route.postAddition() {
 }
 
 private fun Route.postAdditionToGroup() {
+
     val additionService: AdditionService by inject()
 
     post("/addition_to_group") {
@@ -118,6 +112,7 @@ private fun Route.postAdditionToGroup() {
 }
 
 private fun Route.getAdditions() {
+
     val additionService: AdditionService by inject()
 
     get("/addition") {
@@ -128,6 +123,7 @@ private fun Route.getAdditions() {
 }
 
 private fun Route.patchAddition() {
+
     val additionService: AdditionService by inject()
 
     patch("/addition") {

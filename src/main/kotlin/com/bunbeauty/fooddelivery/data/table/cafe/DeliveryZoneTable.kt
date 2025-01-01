@@ -12,4 +12,5 @@ object DeliveryZoneTable : UUIDTable() {
     val isVisible = bool("isVisible")
 
     val cafe = reference("cafe", CafeTable)
+
 }

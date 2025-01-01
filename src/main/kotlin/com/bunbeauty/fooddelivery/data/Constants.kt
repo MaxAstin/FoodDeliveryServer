@@ -41,4 +41,5 @@ object Constants {
     const val HITS_CATEGORY_NAME = "Хиты"
     const val HITS_COUNT = 6
     const val HITS_ORDER_DAY_COUNT = 30
+
 }

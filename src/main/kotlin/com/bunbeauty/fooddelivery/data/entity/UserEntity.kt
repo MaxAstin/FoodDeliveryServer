@@ -21,4 +21,5 @@ class UserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var city: CityEntity by CityEntity referencedOn UserTable.city
 
     companion object : UUIDEntityClass<UserEntity>(UserTable)
+
 }

@@ -12,7 +12,7 @@ import com.bunbeauty.fooddelivery.domain.feature.privacy.PrivacyCheckService
 
 class CafeService(
     private val cafeRepository: CafeRepository,
-    private val privacyCheckService: PrivacyCheckService
+    private val privacyCheckService: PrivacyCheckService,
 ) {
 
     suspend fun createCafe(userUuid: String, postCafe: PostCafe): GetCafe {
@@ -43,4 +43,5 @@ class CafeService(
         ).orThrowNotFoundByUuidError(uuid = cafeUuid)
             .mapCafe()
     }
+
 }

@@ -14,7 +14,7 @@ object FakeOrder {
         status: String = "DELIVERED",
         deliveryCost: Int? = null,
         percentDiscount: Int? = null,
-        orderProductList: List<OrderProduct> = emptyList()
+        orderProductList: List<OrderProduct> = emptyList(),
     ): Order {
         return Order(
             uuid = "",
@@ -46,14 +46,14 @@ object FakeOrder {
                     address = "",
                     cityUuid = "",
                     isVisible = true,
-                    zones = emptyList()
+                    zones = emptyList(),
                 ),
                 city = City(
                     uuid = "",
                     name = "",
                     timeZone = "",
-                    isVisible = true
-                )
+                    isVisible = true,
+                ),
             ),
             company = FakeCompany.create(
                 forFreeDelivery = 0,
@@ -62,9 +62,10 @@ object FakeOrder {
             clientUser = ClientUserLight(
                 uuid = "",
                 phoneNumber = "",
-                email = ""
+                email = "",
             ),
-            orderProducts = orderProductList
+            orderProducts = orderProductList,
         )
     }
+
 }

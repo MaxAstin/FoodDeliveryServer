@@ -6,5 +6,5 @@ class OrderInfo(
     val deliveryCost: Int?,
     val cafeUuid: String,
     val companyUuid: String,
-    val clientUserUuid: String
+    val clientUserUuid: String,
 )

@@ -5,14 +5,14 @@ import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.Deliver
 
 class FindDeliveryZoneByCityUuidAndCoordinatesUseCase(
     private val cafeRepository: CafeRepository,
-    private val checkIsPointInPolygonUseCase: CheckIsPointInPolygonUseCase
+    private val checkIsPointInPolygonUseCase: CheckIsPointInPolygonUseCase,
 ) {
 
     suspend operator fun invoke(
         cityUuid: String,
         latitude: Double,
         longitude: Double,
-        addressUuid: String
+        addressUuid: String,
     ): DeliveryZoneWithCafe {
         val cafeList = cafeRepository.getCafeListByCityUuid(cityUuid = cityUuid)
         return cafeList.filter { cafe ->
@@ -24,7 +24,7 @@ class FindDeliveryZoneByCityUuidAndCoordinatesUseCase(
                 }.map { deliveryZone ->
                     DeliveryZoneWithCafe(
                         cafe = cafe,
-                        deliveryZone = deliveryZone
+                        deliveryZone = deliveryZone,
                     )
                 }
         }.find { deliveryZoneWithCafe ->
@@ -36,7 +36,7 @@ class FindDeliveryZoneByCityUuidAndCoordinatesUseCase(
                         point.order
                     }.map { point ->
                         point.latitude to point.longitude
-                    }
+                    },
             )
         } ?: noCafeError(addressUuid = addressUuid)
     }
@@ -44,4 +44,5 @@ class FindDeliveryZoneByCityUuidAndCoordinatesUseCase(
     private fun noCafeError(addressUuid: String): Nothing {
         error("No cafe associated with address ($addressUuid)")
     }
+
 }

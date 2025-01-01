@@ -12,10 +12,10 @@ class InsertOrder(
     val cafeUuid: String,
     val companyUuid: String,
     val clientUserUuid: String,
-    val orderProductList: List<InsertOrderProduct>
+    val orderProductList: List<InsertOrderProduct>,
 )
 
 class InsertOrderProduct(
     val menuProductUuid: String,
-    val count: Int
+    val count: Int,
 )

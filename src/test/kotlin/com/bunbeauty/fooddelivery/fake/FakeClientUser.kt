@@ -13,7 +13,7 @@ object FakeClientUser {
             isActive = true,
             company = company,
             addresses = emptyList(),
-            orders = emptyList()
+            orders = emptyList(),
         )
     }
 }

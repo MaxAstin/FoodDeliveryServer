@@ -10,7 +10,7 @@ class PostOrderV2(
     val comment: String?,
     val deferredTime: Long?,
     val paymentMethod: String? = null,
-    val orderProducts: List<PostOrderProduct>
+    val orderProducts: List<PostOrderProduct>,
 )
 
 @Serializable

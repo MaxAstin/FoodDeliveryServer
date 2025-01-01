@@ -12,6 +12,6 @@ val mapStreetEntity: StreetEntity.() -> Street = {
         cityUuid = cafe.city.uuid,
         cafeUuid = cafe.uuid,
         companyUuid = cafe.city.company.uuid,
-        isVisible = isVisible
+        isVisible = isVisible,
     )
 }

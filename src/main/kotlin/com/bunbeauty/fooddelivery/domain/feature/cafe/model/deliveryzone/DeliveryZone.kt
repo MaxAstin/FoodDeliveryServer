@@ -17,5 +17,5 @@ class Point(
     var order: Int,
     var latitude: Double,
     var longitude: Double,
-    val isVisible: Boolean
+    val isVisible: Boolean,
 )

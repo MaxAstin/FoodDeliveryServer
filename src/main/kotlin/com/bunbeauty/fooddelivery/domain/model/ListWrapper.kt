@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 class ListWrapper<T : Any>(
     val count: Int,
-    val results: List<T>
+    val results: List<T>,
 )

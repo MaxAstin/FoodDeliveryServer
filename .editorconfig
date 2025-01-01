@@ -1,4 +1,0 @@
-root = true
-
-[*.{kt,kts}]
-ktlint_disabled_rules=package-name

@@ -8,5 +8,5 @@ class InitCafe(
     val longitude: Double,
     val address: String,
     val isVisible: Boolean,
-    val streetList: List<String>
+    val streetList: List<String>,
 )

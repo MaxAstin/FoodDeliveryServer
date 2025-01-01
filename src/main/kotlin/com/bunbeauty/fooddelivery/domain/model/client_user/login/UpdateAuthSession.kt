@@ -7,5 +7,5 @@ class UpdateAuthSession(
     val phoneNumber: String? = null,
     val time: Long? = null,
     val attemptsLeft: Int? = null,
-    val isConfirmed: Boolean? = null
+    val isConfirmed: Boolean? = null,
 )

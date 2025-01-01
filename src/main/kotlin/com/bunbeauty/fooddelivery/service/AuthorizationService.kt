@@ -11,15 +11,7 @@ import com.bunbeauty.fooddelivery.domain.error.somethingWentWrongError
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUser
 import com.bunbeauty.fooddelivery.domain.model.client_user.ClientAuthResponse
 import com.bunbeauty.fooddelivery.domain.model.client_user.InsertClientUser
-import com.bunbeauty.fooddelivery.domain.model.client_user.login.GetClientAuthSession
-import com.bunbeauty.fooddelivery.domain.model.client_user.login.GetClientAuthSessionUuid
-import com.bunbeauty.fooddelivery.domain.model.client_user.login.GetTestClientUserPhone
-import com.bunbeauty.fooddelivery.domain.model.client_user.login.InsertAuthSession
-import com.bunbeauty.fooddelivery.domain.model.client_user.login.InsertTestClientUserPhone
-import com.bunbeauty.fooddelivery.domain.model.client_user.login.PostClientCodeRequest
-import com.bunbeauty.fooddelivery.domain.model.client_user.login.PostTestClientUserPhone
-import com.bunbeauty.fooddelivery.domain.model.client_user.login.PutClientCode
-import com.bunbeauty.fooddelivery.domain.model.client_user.login.UpdateAuthSession
+import com.bunbeauty.fooddelivery.domain.model.client_user.login.*
 import com.bunbeauty.fooddelivery.domain.toUuid
 import com.bunbeauty.fooddelivery.network.ApiResult
 import com.bunbeauty.fooddelivery.service.ip.RequestService
@@ -46,7 +38,7 @@ class AuthorizationService(
     private val companyRepository: CompanyRepository,
     private val authorizationNetworkDataSource: AuthorizationNetworkDataSource,
     private val clientUserRepository: ClientUserRepository,
-    private val jwtService: IJwtService
+    private val jwtService: IJwtService,
 ) {
 
     private val otpGenerator by lazy {
@@ -62,7 +54,7 @@ class AuthorizationService(
     suspend fun sendCode(
         companyUuid: String,
         postClientCodeRequest: PostClientCodeRequest,
-        clientIp: String
+        clientIp: String,
     ): GetClientAuthSessionUuid {
         requestService.checkRequestAvailability(clientIp, SEND_CODE_OPERATION_NAME)
 
@@ -76,13 +68,13 @@ class AuthorizationService(
             authorizationNetworkDataSource.sendSms(
                 phoneNumber = phoneNumber,
                 sign = DEFAULT_SIGN,
-                text = getSmsText(code, companyUuid)
+                text = getSmsText(code, companyUuid),
             )
         } else {
             authorizationNetworkDataSource.testSendSms(
                 phoneNumber = phoneNumber,
                 sign = DEFAULT_SIGN,
-                text = getSmsText(code, companyUuid)
+                text = getSmsText(code, companyUuid),
             )
         }
 
@@ -94,7 +86,7 @@ class AuthorizationService(
                         time = currentMillis,
                         attemptsLeft = INITIAL_ATTEMPTS_COUNT,
                         isConfirmed = false,
-                        companyUuid = companyUuid.toUuid()
+                        companyUuid = companyUuid.toUuid(),
                     )
                     return authorizationRepository.insertAuthSession(insertAuthSession)
                 } else {
@@ -123,7 +115,7 @@ class AuthorizationService(
         if (!isCodeValid) {
             val updateAuthSession = UpdateAuthSession(
                 uuid = authSession.uuid.toUuid(),
-                attemptsLeft = authSession.attemptsLeft - 1
+                attemptsLeft = authSession.attemptsLeft - 1,
             )
             authorizationRepository.updateAuthSession(updateAuthSession)
             invalidCodeError()
@@ -141,13 +133,13 @@ class AuthorizationService(
         authorizationRepository.updateAuthSession(
             UpdateAuthSession(
                 uuid = authSession.uuid.toUuid(),
-                isConfirmed = true
+                isConfirmed = true,
             )
         )
 
         val clientUser = clientUserRepository.getClientUserByPhoneNumberAndCompanyUuid(
             authSession.phoneNumber,
-            authSession.companyUuid.toUuid()
+            authSession.companyUuid.toUuid(),
         ) ?: registerClientUser(authSession)
 
         return ClientAuthResponse(
@@ -174,13 +166,13 @@ class AuthorizationService(
             authorizationNetworkDataSource.sendSms(
                 phoneNumber = phoneNumber,
                 sign = DEFAULT_SIGN,
-                text = getSmsText(code, authSession.companyUuid)
+                text = getSmsText(code, authSession.companyUuid),
             )
         } else {
             authorizationNetworkDataSource.testSendSms(
                 phoneNumber = phoneNumber,
                 sign = DEFAULT_SIGN,
-                text = getSmsText(code, authSession.companyUuid)
+                text = getSmsText(code, authSession.companyUuid),
             )
         }
 
@@ -190,7 +182,7 @@ class AuthorizationService(
                     val updateAuthSession = UpdateAuthSession(
                         uuid = authSession.uuid.toUuid(),
                         attemptsLeft = INITIAL_ATTEMPTS_COUNT,
-                        time = currentMillis
+                        time = currentMillis,
                     )
                     authorizationRepository.updateAuthSession(updateAuthSession)
                 } else {
@@ -225,7 +217,7 @@ class AuthorizationService(
         val insertClientUser = InsertClientUser(
             phoneNumber = authSession.phoneNumber,
             email = null,
-            companyUuid = authSession.companyUuid.toUuid()
+            companyUuid = authSession.companyUuid.toUuid(),
         )
         return clientUserRepository.insertClientUser(insertClientUser)
     }
@@ -278,4 +270,5 @@ class AuthorizationService(
     private fun codeLengthError(): Nothing {
         error("Code length must be $CODE_LENGTH")
     }
+
 }

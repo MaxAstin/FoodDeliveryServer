@@ -18,4 +18,5 @@ object MenuProductTable : UUIDTable() {
     val isVisible = bool("isVisible")
 
     val company = reference("company", CompanyTable)
+
 }

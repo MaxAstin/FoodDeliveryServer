@@ -13,6 +13,6 @@ val mapPostAddress: PostAddress.(String) -> InsertAddress = { userUuid ->
         comment = comment,
         streetUuid = streetUuid.toUuid(),
         clientUserUuid = userUuid.toUuid(),
-        isVisible = isVisible
+        isVisible = isVisible,
     )
 }

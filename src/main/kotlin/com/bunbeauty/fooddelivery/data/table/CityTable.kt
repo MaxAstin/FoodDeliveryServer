@@ -8,4 +8,5 @@ object CityTable : UUIDTable() {
     val timeZone = varchar("timeZone", 512).default("UTC+3")
     val company = reference("company", CompanyTable)
     val isVisible = bool("isVisible")
+
 }

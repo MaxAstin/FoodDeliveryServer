@@ -10,12 +10,12 @@ class InsertDeliveryZone(
     val lowDeliveryCost: Int?,
     val isVisible: Boolean,
     val cafeUuid: UUID,
-    val points: List<InsertPoint>
+    val points: List<InsertPoint>,
 )
 
 class InsertPoint(
     var order: Int,
     var latitude: Double,
     var longitude: Double,
-    val isVisible: Boolean
+    val isVisible: Boolean,
 )

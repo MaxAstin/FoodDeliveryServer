@@ -28,4 +28,5 @@ class MenuProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var categories: SizedIterable<CategoryEntity> by CategoryEntity via MenuProductCategoryTable
 
     companion object : UUIDEntityClass<MenuProductEntity>(MenuProductTable)
+
 }

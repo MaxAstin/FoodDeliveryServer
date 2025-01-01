@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 class GetCafeClientUser(
     val uuid: String,
     val phoneNumber: String,
-    val email: String?
+    val email: String?,
 )

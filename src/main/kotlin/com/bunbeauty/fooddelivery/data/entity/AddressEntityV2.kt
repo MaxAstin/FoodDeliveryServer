@@ -24,4 +24,5 @@ class AddressEntityV2(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var city: CityEntity by CityEntity referencedOn AddressV2Table.city
 
     companion object : UUIDEntityClass<AddressEntityV2>(AddressV2Table)
+
 }

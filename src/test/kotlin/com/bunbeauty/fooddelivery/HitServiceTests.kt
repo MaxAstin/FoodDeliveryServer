@@ -50,18 +50,18 @@ class HitServiceTests {
                     FakeOrderProduct.create(
                         menuProductUuid = "1",
                         count = 20,
-                        newPrice = 400
+                        newPrice = 400,
                     ),
                     FakeOrderProduct.create(
                         menuProductUuid = "2",
                         count = 15,
-                        newPrice = 100
+                        newPrice = 100,
                     ),
                     FakeOrderProduct.create(
                         menuProductUuid = "3",
                         count = 10,
-                        newPrice = 500
-                    )
+                        newPrice = 500,
+                    ),
                 )
             ),
             FakeOrder.create(
@@ -69,18 +69,18 @@ class HitServiceTests {
                     FakeOrderProduct.create(
                         menuProductUuid = "4",
                         count = 1,
-                        newPrice = 20
+                        newPrice = 20,
                     ),
                     FakeOrderProduct.create(
                         menuProductUuid = "5",
                         count = 5,
-                        newPrice = 100
+                        newPrice = 100,
                     ),
                     FakeOrderProduct.create(
                         menuProductUuid = "6",
                         count = 14,
-                        newPrice = 200
-                    )
+                        newPrice = 200,
+                    ),
                 )
             ),
             FakeOrder.create(
@@ -88,18 +88,18 @@ class HitServiceTests {
                     FakeOrderProduct.create(
                         menuProductUuid = "5",
                         count = 25,
-                        newPrice = 100
+                        newPrice = 100,
                     ),
                     FakeOrderProduct.create(
                         menuProductUuid = "7",
                         count = 5,
-                        newPrice = 1000
+                        newPrice = 1000,
                     ),
                     FakeOrderProduct.create(
                         menuProductUuid = "8",
                         count = 6,
-                        newPrice = 400
-                    )
+                        newPrice = 400,
+                    ),
                 )
             )
         )
@@ -116,4 +116,5 @@ class HitServiceTests {
 
         assertContentEquals(expectedMenuProductUuidList, hitMenuProductUuidList)
     }
+
 }

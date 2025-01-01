@@ -9,6 +9,6 @@ val mapPostAdditionGroupToMenuProducts: PostAdditionGroupToMenuProducts.() -> In
     InsertAdditionGroupToMenuProducts(
         additionGroupUuid = additionGroupUuid.toUuid(),
         additionUuids = additionUuids.map(mapUuid),
-        menuProductUuids = menuProductUuids.map(mapUuid)
+        menuProductUuids = menuProductUuids.map(mapUuid),
     )
 }

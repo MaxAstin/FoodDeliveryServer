@@ -14,6 +14,6 @@ val mapPostCafe: PostCafe.() -> InsertCafe = {
         longitude = longitude,
         address = address,
         cityUuid = cityUuid.toUuid(),
-        isVisible = isVisible
+        isVisible = isVisible,
     )
 }

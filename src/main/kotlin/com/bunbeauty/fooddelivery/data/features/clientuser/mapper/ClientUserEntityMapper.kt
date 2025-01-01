@@ -11,7 +11,7 @@ val mapClientUserEntityToLight: ClientUserEntity.() -> ClientUserLight = {
     ClientUserLight(
         uuid = uuid,
         phoneNumber = phoneNumber,
-        email = email
+        email = email,
     )
 }
 
@@ -23,6 +23,6 @@ val mapClientUserEntity: ClientUserEntity.() -> ClientUser = {
         isActive = isActive,
         company = company.mapCompanyEntity(),
         addresses = addresses.map(mapAddressEntity),
-        orders = orders.map(mapOrderEntity)
+        orders = orders.map(mapOrderEntity),
     )
 }

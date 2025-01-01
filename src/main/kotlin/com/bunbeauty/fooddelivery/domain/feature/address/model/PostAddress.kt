@@ -10,5 +10,5 @@ class PostAddress(
     val floor: String?,
     val comment: String?,
     val streetUuid: String,
-    val isVisible: Boolean
+    val isVisible: Boolean,
 )

@@ -6,7 +6,7 @@ import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderTotal
 class CalculateOrderTotalUseCase(
     private val calculateOrderProductsNewCostUseCase: CalculateOrderProductsNewCostUseCase,
     private val calculateOrderProductsOldCostUseCase: CalculateOrderProductsOldCostUseCase,
-    private val calculateOrderProductTotalUseCase: CalculateOrderProductTotalUseCase
+    private val calculateOrderProductTotalUseCase: CalculateOrderProductTotalUseCase,
 ) {
 
     operator fun invoke(order: Order): OrderTotal {
@@ -29,4 +29,5 @@ class CalculateOrderTotalUseCase(
             }
         )
     }
+
 }

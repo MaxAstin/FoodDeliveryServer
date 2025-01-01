@@ -14,6 +14,6 @@ val mapCafe: Cafe.() -> GetCafe = {
         longitude = longitude,
         address = address,
         cityUuid = cityUuid,
-        isVisible = isVisible
+        isVisible = isVisible,
     )
 }

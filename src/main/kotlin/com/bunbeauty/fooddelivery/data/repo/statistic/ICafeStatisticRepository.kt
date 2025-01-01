@@ -11,16 +11,17 @@ interface ICafeStatisticRepository {
     suspend fun getStatisticListByTimePeriodTypeCafe(
         time: Long,
         periodType: PeriodType,
-        cafeUuid: UUID
+        cafeUuid: UUID,
     ): List<GetStatistic>
 
     suspend fun getStatisticByTimePeriodTypeCafe(
         time: Long,
         periodType: PeriodType,
-        cafeUuid: UUID
+        cafeUuid: UUID,
     ): GetStatistic?
 
     suspend fun insetStatistic(insertCafeStatistic: InsertCafeStatistic): GetStatistic
 
     suspend fun updateStatistic(statisticUuid: UUID, updateStatistic: UpdateStatistic): GetStatistic?
+
 }

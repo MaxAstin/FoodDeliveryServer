@@ -17,13 +17,13 @@ val mapCafeEntity: CafeEntity.() -> Cafe = {
         address = address,
         cityUuid = city.uuid,
         isVisible = isVisible,
-        zones = zones.map(mapDeliveryZoneEntity)
+        zones = zones.map(mapDeliveryZoneEntity),
     )
 }
 
 val mapCafeEntityToCafeWithCity: CafeEntity.() -> CafeWithCity = {
     CafeWithCity(
         cafe = mapCafeEntity(),
-        city = city.mapCityEntity()
+        city = city.mapCityEntity(),
     )
 }

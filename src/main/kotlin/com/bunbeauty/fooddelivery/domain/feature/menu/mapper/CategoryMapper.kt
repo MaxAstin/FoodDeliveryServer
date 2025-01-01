@@ -7,6 +7,6 @@ val mapCategory: Category.() -> GetCategory = {
     GetCategory(
         uuid = uuid,
         name = name,
-        priority = priority
+        priority = priority,
     )
 }
