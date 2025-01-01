@@ -29,7 +29,7 @@ class CalculateOrderProductsNewCostUseCaseTest {
     fun setup() {
         calculateOrderProductsNewCostUseCase = CalculateOrderProductsNewCostUseCase(
             calculateOrderProductTotalUseCase = calculateOrderProductTotalUseCase,
-            calculateCostWithDiscountUseCase = calculateCostWithDiscountUseCase,
+            calculateCostWithDiscountUseCase = calculateCostWithDiscountUseCase
         )
     }
 
@@ -41,7 +41,7 @@ class CalculateOrderProductsNewCostUseCaseTest {
         val orderProductsNewCost = calculateOrderProductsNewCostUseCase(
             orderProductList = listOf(
                 orderProduct1,
-                orderProduct2,
+                orderProduct2
             ),
             percentDiscount = null
         )
@@ -57,12 +57,11 @@ class CalculateOrderProductsNewCostUseCaseTest {
         val orderProductsNewCost = calculateOrderProductsNewCostUseCase(
             orderProductList = listOf(
                 orderProduct1,
-                orderProduct2,
+                orderProduct2
             ),
             percentDiscount = 10
         )
 
         assertEquals(expected, orderProductsNewCost)
     }
-
 }

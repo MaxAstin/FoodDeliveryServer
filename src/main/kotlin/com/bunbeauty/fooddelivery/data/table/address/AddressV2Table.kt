@@ -19,5 +19,4 @@ object AddressV2Table : UUIDTable() {
 
     val clientUser = reference("clientUser", ClientUserTable)
     val city = reference("city", CityTable)
-
 }

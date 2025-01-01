@@ -7,5 +7,5 @@ class OrderInfoV2(
     val percentDiscount: Int?,
     val cafeUuid: String,
     val companyUuid: String,
-    val clientUserUuid: String,
+    val clientUserUuid: String
 )

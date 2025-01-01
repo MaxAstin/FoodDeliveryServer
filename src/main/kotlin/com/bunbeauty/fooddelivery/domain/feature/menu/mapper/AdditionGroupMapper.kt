@@ -9,6 +9,6 @@ val mapAdditionGroup: AdditionGroup.() -> GetAdditionGroup = {
         name = name,
         singleChoice = singleChoice,
         priority = priority,
-        isVisible = isVisible,
+        isVisible = isVisible
     )
 }

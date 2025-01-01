@@ -19,6 +19,6 @@ val mapPostMenuProduct: PostMenuProduct.(UUID) -> InsertMenuProduct = { companyU
         companyUuid = companyUuid,
         categoryUuids = categoryUuids.map(mapUuid),
         isRecommended = isRecommended,
-        isVisible = isVisible,
+        isVisible = isVisible
     )
 }

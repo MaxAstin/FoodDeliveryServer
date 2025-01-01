@@ -36,6 +36,6 @@ class OrderProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         menuProductUuid = menuProduct.uuid,
         name = name,
         newPrice = newPrice,
-        photoLink = photoLink,
+        photoLink = photoLink
     )
 }

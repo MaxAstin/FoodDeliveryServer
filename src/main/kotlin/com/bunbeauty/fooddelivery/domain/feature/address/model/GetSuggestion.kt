@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 class GetSuggestion(
     val fiasId: String,
     val street: String,
-    val details: String,
+    val details: String
 )

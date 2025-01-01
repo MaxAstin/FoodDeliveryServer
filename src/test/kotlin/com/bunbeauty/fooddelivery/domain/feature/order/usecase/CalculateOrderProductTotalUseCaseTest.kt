@@ -22,14 +22,14 @@ class CalculateOrderProductTotalUseCaseTest {
             uuid = "1",
             count = 1,
             newPrice = 100,
-            oldPrice = null,
+            oldPrice = null
         )
         val expected = OrderProductTotal(
             additionsPrice = null,
             newCommonPrice = 100,
             oldCommonPrice = null,
             newTotalCost = 100,
-            oldTotalCost = null,
+            oldTotalCost = null
         )
 
         val total = calculateOrderProductTotalUseCase(orderProduct)
@@ -43,14 +43,14 @@ class CalculateOrderProductTotalUseCaseTest {
             uuid = "1",
             count = 2,
             newPrice = 100,
-            oldPrice = null,
+            oldPrice = null
         )
         val expected = OrderProductTotal(
             additionsPrice = null,
             newCommonPrice = 100,
             oldCommonPrice = null,
             newTotalCost = 200,
-            oldTotalCost = null,
+            oldTotalCost = null
         )
 
         val total = calculateOrderProductTotalUseCase(orderProduct)
@@ -64,14 +64,14 @@ class CalculateOrderProductTotalUseCaseTest {
             uuid = "1",
             count = 2,
             newPrice = 100,
-            oldPrice = 200,
+            oldPrice = 200
         )
         val expected = OrderProductTotal(
             additionsPrice = null,
             newCommonPrice = 100,
             oldCommonPrice = 200,
             newTotalCost = 200,
-            oldTotalCost = 400,
+            oldTotalCost = 400
         )
 
         val total = calculateOrderProductTotalUseCase(orderProduct)
@@ -88,7 +88,7 @@ class CalculateOrderProductTotalUseCaseTest {
             oldPrice = 200,
             additions = listOf(
                 FakeOrderProductAddition.create(10),
-                FakeOrderProductAddition.create(20),
+                FakeOrderProductAddition.create(20)
             )
         )
         val expected = OrderProductTotal(
@@ -96,12 +96,11 @@ class CalculateOrderProductTotalUseCaseTest {
             newCommonPrice = 130,
             oldCommonPrice = 230,
             newTotalCost = 260,
-            oldTotalCost = 460,
+            oldTotalCost = 460
         )
 
         val total = calculateOrderProductTotalUseCase(orderProduct)
 
         assertEquals(expected, total)
     }
-
 }

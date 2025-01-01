@@ -22,5 +22,4 @@ class ClientUserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     val orders: SizedIterable<OrderEntity> by OrderEntity referrersOn OrderTable.clientUser
 
     companion object : UUIDEntityClass<ClientUserEntity>(ClientUserTable)
-
 }

@@ -26,7 +26,7 @@ class MenuProductWithAdditionGroupWithAdditionEntity(uuid: EntityID<UUID>) : UUI
 
         override fun createInstance(
             entityId: EntityID<UUID>,
-            row: ResultRow?,
+            row: ResultRow?
         ): MenuProductWithAdditionGroupWithAdditionEntity {
             row?.getOrNull(MenuProductToAdditionGroupTable.id)?.let { id ->
                 MenuProductWithAdditionGroupEntity.wrap(id, row)
@@ -38,5 +38,4 @@ class MenuProductWithAdditionGroupWithAdditionEntity(uuid: EntityID<UUID>) : UUI
             return super.createInstance(entityId, row)
         }
     }
-
 }

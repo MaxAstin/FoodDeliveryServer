@@ -45,7 +45,7 @@ object InitPapaKarloData {
             InitCategory(name = "Соусы", priority = 8),
             InitCategory(name = "Выпечка", priority = 9)
         ),
-        menuList = getMenuProductList(),
+        menuList = getMenuProductList()
     )
 
     fun getStreetList() = listOf(
@@ -1075,6 +1075,6 @@ object InitPapaKarloData {
             barcode = 0,
             isVisible = true,
             categories = listOf("На мангале")
-        ),
+        )
     )
 }

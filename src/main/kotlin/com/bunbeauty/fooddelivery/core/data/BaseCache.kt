@@ -18,5 +18,4 @@ abstract class BaseCache<K, V> {
     fun getCache(key: K): V? {
         return cacheMap[key]
     }
-
 }

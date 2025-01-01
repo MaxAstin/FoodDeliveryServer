@@ -11,7 +11,7 @@ val mapAddressEntityV2: AddressEntityV2.() -> AddressV2 = {
             fiasId = streetFiasId,
             name = streetName,
             latitude = streetLatitude,
-            longitude = streetLongitude,
+            longitude = streetLongitude
         ),
         house = house,
         flat = flat,
@@ -20,6 +20,6 @@ val mapAddressEntityV2: AddressEntityV2.() -> AddressV2 = {
         comment = comment,
         userUuid = clientUser.uuid,
         cityUuid = city.uuid,
-        isVisible = isVisible,
+        isVisible = isVisible
     )
 }

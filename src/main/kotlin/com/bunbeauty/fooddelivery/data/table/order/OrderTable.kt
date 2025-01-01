@@ -30,5 +30,4 @@ object OrderTable : UUIDTable() {
     init {
         index(false, cafe, time)
     }
-
 }

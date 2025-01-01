@@ -12,7 +12,7 @@ class CalculateOrderProductTotalUseCase {
             newCommonPrice = orderProduct.newCommonPrice,
             oldCommonPrice = orderProduct.oldCommonPrice,
             oldTotalCost = orderProduct.oldTotalCost,
-            newTotalCost = orderProduct.newTotalCost,
+            newTotalCost = orderProduct.newTotalCost
         )
     }
 
@@ -53,5 +53,4 @@ class CalculateOrderProductTotalUseCase {
                 }
             }
         }
-
 }

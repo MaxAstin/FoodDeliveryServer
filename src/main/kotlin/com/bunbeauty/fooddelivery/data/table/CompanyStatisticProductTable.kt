@@ -9,5 +9,4 @@ object CompanyStatisticProductTable : UUIDTable() {
     val productCount = integer("productCount")
     val productProceeds = integer("productProceeds")
     val companyStatistic = reference("companyStatistic", CompanyStatisticTable)
-
 }

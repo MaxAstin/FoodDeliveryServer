@@ -1,7 +1,11 @@
 package com.bunbeauty.fooddelivery.data.features.address
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.*
+import com.bunbeauty.fooddelivery.data.entity.AddressEntity
+import com.bunbeauty.fooddelivery.data.entity.AddressEntityV2
+import com.bunbeauty.fooddelivery.data.entity.CityEntity
+import com.bunbeauty.fooddelivery.data.entity.ClientUserEntity
+import com.bunbeauty.fooddelivery.data.entity.StreetEntity
 import com.bunbeauty.fooddelivery.data.features.address.mapper.mapAddressEntity
 import com.bunbeauty.fooddelivery.data.features.address.mapper.mapAddressEntityV2
 import com.bunbeauty.fooddelivery.data.features.address.mapper.mapSuggestionsResponse
@@ -11,7 +15,11 @@ import com.bunbeauty.fooddelivery.data.features.address.remotemodel.Bound
 import com.bunbeauty.fooddelivery.data.features.address.remotemodel.Location
 import com.bunbeauty.fooddelivery.data.table.address.AddressTable
 import com.bunbeauty.fooddelivery.data.table.address.AddressV2Table
-import com.bunbeauty.fooddelivery.domain.feature.address.model.*
+import com.bunbeauty.fooddelivery.domain.feature.address.model.Address
+import com.bunbeauty.fooddelivery.domain.feature.address.model.AddressV2
+import com.bunbeauty.fooddelivery.domain.feature.address.model.InsertAddress
+import com.bunbeauty.fooddelivery.domain.feature.address.model.InsertAddressV2
+import com.bunbeauty.fooddelivery.domain.feature.address.model.Suggestion
 import com.bunbeauty.fooddelivery.domain.feature.city.City
 import com.bunbeauty.fooddelivery.domain.toUuid
 import com.bunbeauty.fooddelivery.network.getDataOrNull
@@ -20,7 +28,7 @@ import org.jetbrains.exposed.sql.and
 private const val STREET_BOUND = "street"
 
 class AddressRepository(
-    private val addressNetworkDataSource: AddressNetworkDataSource,
+    private val addressNetworkDataSource: AddressNetworkDataSource
 ) {
 
     suspend fun insertAddress(insertAddress: InsertAddress): Address {
@@ -72,7 +80,7 @@ class AddressRepository(
         return query {
             AddressEntityV2.find {
                 (AddressV2Table.clientUser eq userUuid.toUuid()) and
-                        (AddressV2Table.city eq cityUuid.toUuid())
+                    (AddressV2Table.city eq cityUuid.toUuid())
             }.toList()
                 .map(mapAddressEntityV2)
         }
@@ -104,11 +112,10 @@ class AddressRepository(
                 query = query,
                 fromBound = Bound(value = STREET_BOUND),
                 toBound = Bound(value = STREET_BOUND),
-                locations = listOf(Location(city = city.name)),
+                locations = listOf(Location(city = city.name))
             )
         ).getDataOrNull()
             ?.mapSuggestionsResponse()
             .orEmpty()
     }
-
 }

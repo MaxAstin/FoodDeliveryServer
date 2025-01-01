@@ -16,7 +16,7 @@ class InsertOrderV2(
     val cafeUuid: String,
     val companyUuid: String,
     val clientUserUuid: String,
-    val orderProductList: List<InsertOrderProduct>,
+    val orderProductList: List<InsertOrderProduct>
 )
 
 class InsertOrderAddressV2(

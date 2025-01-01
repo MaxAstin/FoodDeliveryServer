@@ -10,5 +10,5 @@ class PatchAddition(
     val photoLink: String? = null,
     val tag: String? = null,
     val priority: Int? = null,
-    val isVisible: Boolean? = null,
+    val isVisible: Boolean? = null
 )

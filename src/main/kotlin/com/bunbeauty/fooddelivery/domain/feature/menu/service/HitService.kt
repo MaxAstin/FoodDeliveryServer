@@ -16,7 +16,7 @@ class HitService(
     private val companyRepository: CompanyRepository,
     private val menuProductRepository: MenuProductRepository,
     private val orderRepository: OrderRepository,
-    private val hitRepository: HitRepository,
+    private val hitRepository: HitRepository
 ) {
 
     suspend fun updateHits() = coroutineScope {
@@ -53,7 +53,7 @@ class HitService(
     fun getHitMenuProductUuidList(
         orderList: List<Order>,
         invisibleMenuProductUuidList: List<String>,
-        count: Int,
+        count: Int
     ): List<String> {
         return orderList.filter { order ->
             order.status == OrderStatus.DELIVERED.name

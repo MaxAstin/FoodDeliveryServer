@@ -17,5 +17,4 @@ class CompanyStatisticProductEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var companyStatistic: CompanyStatisticEntity by CompanyStatisticEntity referencedOn CompanyStatisticProductTable.companyStatistic
 
     companion object : UUIDEntityClass<CompanyStatisticProductEntity>(CompanyStatisticProductTable)
-
 }

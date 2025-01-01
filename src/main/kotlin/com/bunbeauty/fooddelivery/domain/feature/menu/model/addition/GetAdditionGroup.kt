@@ -8,5 +8,5 @@ class GetAdditionGroup(
     val name: String,
     val singleChoice: Boolean,
     val priority: Int,
-    val isVisible: Boolean,
+    val isVisible: Boolean
 )

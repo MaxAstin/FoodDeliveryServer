@@ -5,15 +5,31 @@ import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.features.user.UserRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUserUuidError
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
-import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.*
-import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.*
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapMenuProduct
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPatchAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPostAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPostAdditionGroupToMenuProducts
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.mapPostAdditionToGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.toGetAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.toInsertAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.mapper.toUpdateAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.Addition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.GetAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.GetAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PatchAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PatchAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAddition
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditionGroup
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditionGroupToMenuProducts
+import com.bunbeauty.fooddelivery.domain.feature.menu.model.addition.PostAdditionToGroup
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.GetMenuProduct
 import com.bunbeauty.fooddelivery.domain.toUuid
 
 class AdditionService(
     private val userRepository: UserRepository,
     private val additionRepository: AdditionRepository,
-    private val menuProductRepository: MenuProductRepository,
+    private val menuProductRepository: MenuProductRepository
 ) {
 
     suspend fun createAdditionGroup(postAdditionGroup: PostAdditionGroup, creatorUuid: String): GetAdditionGroup {
@@ -24,7 +40,7 @@ class AdditionService(
 
         val additionGroup = additionRepository.getAdditionGroupByName(
             name = postAdditionGroup.name,
-            companyUuid = companyUuid,
+            companyUuid = companyUuid
         )
         if (additionGroup != null) {
             additionGroupAlreadyExistsError(name = postAdditionGroup.name)
@@ -37,7 +53,7 @@ class AdditionService(
 
     suspend fun addAdditionGroupToMenuProducts(
         postAdditionGroupToMenuProducts: PostAdditionGroupToMenuProducts,
-        creatorUuid: String,
+        creatorUuid: String
     ): List<GetMenuProduct> {
         val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
             .orThrowNotFoundByUserUuidError(creatorUuid)
@@ -78,7 +94,7 @@ class AdditionService(
     suspend fun patchAdditionGroup(
         creatorUuid: String,
         additionGroupUuid: String,
-        patchAdditionGroup: PatchAdditionGroup,
+        patchAdditionGroup: PatchAdditionGroup
     ): GetAdditionGroup {
         val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
             .orThrowNotFoundByUserUuidError(creatorUuid)
@@ -91,7 +107,7 @@ class AdditionService(
         if (patchAdditionGroup.name != null) {
             val additionGroup = additionRepository.getAdditionGroupByName(
                 name = patchAdditionGroup.name,
-                companyUuid = companyUuid.toUuid(),
+                companyUuid = companyUuid.toUuid()
             )
             if (additionGroup != null && additionGroupUuid != additionGroup.uuid) {
                 additionGroupAlreadyExistsError(name = patchAdditionGroup.name)
@@ -119,7 +135,6 @@ class AdditionService(
         if (addition != null) {
             additionAlreadyExistsError(name = addition.name, tag = addition.tag)
         }
-
         return additionRepository.insertAddition(
             insertAddition = postAddition.toInsertAddition(companyUuid = companyUuid)
         ).toGetAddition()
@@ -127,7 +142,7 @@ class AdditionService(
 
     suspend fun addAdditionToAdditionGroup(
         postAdditionToGroup: PostAdditionToGroup,
-        creatorUuid: String,
+        creatorUuid: String
     ): List<GetMenuProduct> {
         val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
             .orThrowNotFoundByUserUuidError(creatorUuid)
@@ -163,7 +178,7 @@ class AdditionService(
     suspend fun patchAddition(
         creatorUuid: String,
         additionUuid: String,
-        patchAddition: PatchAddition,
+        patchAddition: PatchAddition
     ): GetAddition {
         val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
             .orThrowNotFoundByUserUuidError(creatorUuid)
@@ -192,7 +207,6 @@ class AdditionService(
                 )
             }
         }
-
         return additionRepository.updateAddition(
             additionUuid = additionUuid.toUuid(),
             updateAddition = patchAddition.toUpdateAddition()
@@ -202,7 +216,7 @@ class AdditionService(
 
     private suspend fun checkMenuProductsAvailability(
         menuProductUuids: List<String>,
-        companyUuid: String,
+        companyUuid: String
     ) {
         menuProductUuids.forEach { menuProductUuid ->
             val menuProduct = menuProductRepository.getMenuProductByUuid(
@@ -217,7 +231,7 @@ class AdditionService(
 
     private suspend fun checkAdditionsAvailability(
         additionUuids: List<String>,
-        companyUuid: String,
+        companyUuid: String
     ) {
         additionUuids.forEach { additionUuid ->
             val addition = additionRepository.getAdditionByUuid(uuid = additionUuid.toUuid())
@@ -230,7 +244,7 @@ class AdditionService(
 
     private suspend fun checkAdditionGroupAvailability(
         additionGroupUuid: String,
-        companyUuid: String,
+        companyUuid: String
     ) {
         val additionGroup = additionRepository.getAdditionGroupByUuid(uuid = additionGroupUuid.toUuid())
             .orThrowNotFoundByUuidError(uuid = additionGroupUuid)
@@ -258,5 +272,4 @@ class AdditionService(
     private fun additionAlreadyExistsError(name: String, tag: String?): Nothing {
         error("Addition with name \"$name\" and tag \"$tag\" already exists")
     }
-
 }

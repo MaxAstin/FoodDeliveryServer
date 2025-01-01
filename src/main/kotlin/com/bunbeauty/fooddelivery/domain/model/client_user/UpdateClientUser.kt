@@ -5,5 +5,5 @@ import java.util.*
 class UpdateClientUser(
     val uuid: UUID,
     val email: String?,
-    val isActive: Boolean?,
+    val isActive: Boolean?
 )

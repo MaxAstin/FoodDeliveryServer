@@ -11,7 +11,7 @@ import com.bunbeauty.fooddelivery.domain.toUuid
 
 class CityService(
     private val cityRepository: CityRepository,
-    private val userRepository: UserRepository,
+    private val userRepository: UserRepository
 ) {
 
     suspend fun createCity(creatorUuid: String, postCity: PostCity): GetCity {
@@ -21,7 +21,7 @@ class CityService(
             name = postCity.name,
             timeZone = postCity.timeZone,
             company = user.companyUuid.toUuid(),
-            isVisible = postCity.isVisible,
+            isVisible = postCity.isVisible
         )
 
         return cityRepository.insertCity(insertCity).mapCity()
@@ -31,5 +31,4 @@ class CityService(
         return cityRepository.getCityListByCompanyUuid(companyUuid = companyUuid)
             .map(mapCity)
     }
-
 }

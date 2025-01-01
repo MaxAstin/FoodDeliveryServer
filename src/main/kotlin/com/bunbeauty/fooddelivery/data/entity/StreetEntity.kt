@@ -25,6 +25,6 @@ class StreetEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         name = name,
         cityUuid = cafe.city.uuid,
         cafeUuid = cafe.uuid,
-        isVisible = isVisible,
+        isVisible = isVisible
     )
 }

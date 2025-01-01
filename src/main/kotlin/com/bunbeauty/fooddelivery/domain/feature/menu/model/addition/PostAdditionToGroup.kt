@@ -7,5 +7,5 @@ class PostAdditionToGroup(
     val additionUuid: String,
     val groupUuid: String,
     val isSelected: Boolean,
-    val isVisible: Boolean,
+    val isVisible: Boolean
 )

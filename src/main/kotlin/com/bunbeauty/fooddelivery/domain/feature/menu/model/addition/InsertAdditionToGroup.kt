@@ -6,5 +6,5 @@ class InsertAdditionToGroup(
     val additionGroupUuid: UUID,
     val additionUuid: UUID,
     val isSelected: Boolean,
-    val isVisible: Boolean,
+    val isVisible: Boolean
 )

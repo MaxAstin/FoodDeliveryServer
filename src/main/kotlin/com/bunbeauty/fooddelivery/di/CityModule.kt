@@ -8,7 +8,7 @@ val cityModule = module(createdAtStart = true) {
     factory {
         CityService(
             cityRepository = get(),
-            userRepository = get(),
+            userRepository = get()
         )
     }
     single { CityRepository() }

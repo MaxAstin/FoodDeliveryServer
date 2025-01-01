@@ -6,5 +6,4 @@ object TestClientUserPhoneTable : UUIDTable() {
 
     val phoneNumber = varchar("phoneNumber", 512)
     val code = varchar("code", 512)
-
 }

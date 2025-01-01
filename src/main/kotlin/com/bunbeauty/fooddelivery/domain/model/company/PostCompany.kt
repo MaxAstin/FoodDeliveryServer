@@ -8,5 +8,5 @@ class PostCompany(
     val forFreeDelivery: Int,
     val deliveryCost: Int,
     val forceUpdateVersion: Int,
-    val percentDiscount: Int?,
+    val percentDiscount: Int?
 )

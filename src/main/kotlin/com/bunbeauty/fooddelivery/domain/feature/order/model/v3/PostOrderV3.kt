@@ -10,12 +10,12 @@ class PostOrderV3(
     val comment: String?,
     val deferredTime: Long?,
     val paymentMethod: String? = null,
-    val orderProducts: List<PostOrderProductV3>,
+    val orderProducts: List<PostOrderProductV3>
 )
 
 @Serializable
 class PostOrderProductV3(
     val menuProductUuid: String,
     val count: Int,
-    val additionUuids: List<String>,
+    val additionUuids: List<String>
 )

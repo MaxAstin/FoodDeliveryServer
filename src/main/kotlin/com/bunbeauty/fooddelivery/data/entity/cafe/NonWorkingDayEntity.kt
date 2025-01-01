@@ -21,7 +21,6 @@ class NonWorkingDayEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         uuid = uuid,
         timestamp = timestamp,
         isVisible = isVisible,
-        cafeUuid = cafe.uuid,
+        cafeUuid = cafe.uuid
     )
-
 }

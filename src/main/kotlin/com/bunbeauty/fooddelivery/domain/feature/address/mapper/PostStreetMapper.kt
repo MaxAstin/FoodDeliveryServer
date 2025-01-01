@@ -8,6 +8,6 @@ val mapPostStreet: PostStreet.() -> InsertStreet = {
     InsertStreet(
         name = name,
         cafeUuid = cafeUuid.toUuid(),
-        isVisible = isVisible,
+        isVisible = isVisible
     )
 }

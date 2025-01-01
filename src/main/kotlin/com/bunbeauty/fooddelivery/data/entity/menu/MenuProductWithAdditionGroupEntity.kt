@@ -32,5 +32,4 @@ class MenuProductWithAdditionGroupEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid
             return super.createInstance(entityId, row)
         }
     }
-
 }

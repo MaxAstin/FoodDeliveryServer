@@ -9,6 +9,6 @@ val mapStreet: Street.() -> GetStreet = {
         name = name,
         cityUuid = cityUuid,
         cafeUuid = cafeUuid,
-        isVisible = isVisible,
+        isVisible = isVisible
     )
 }

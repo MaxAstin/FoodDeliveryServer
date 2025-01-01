@@ -22,6 +22,6 @@ class PaymentMethodEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         uuid = uuid,
         name = name,
         value = value,
-        valueToCopy = valueToCopy,
+        valueToCopy = valueToCopy
     )
 }

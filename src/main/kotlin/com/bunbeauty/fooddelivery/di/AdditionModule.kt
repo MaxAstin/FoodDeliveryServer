@@ -9,7 +9,7 @@ val additionModule = module(createdAtStart = true) {
         AdditionService(
             userRepository = get(),
             additionRepository = get(),
-            menuProductRepository = get(),
+            menuProductRepository = get()
         )
     }
     single {
