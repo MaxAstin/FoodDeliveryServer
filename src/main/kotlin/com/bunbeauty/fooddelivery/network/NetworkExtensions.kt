@@ -24,7 +24,7 @@ suspend inline fun <reified R> HttpClient.getData(
 
 suspend inline fun <reified R> HttpClient.postData(
     path: String,
-    body: Any  ,
+    body: Any,
     parameters: Map<String, Any> = mapOf()
 ): ApiResult<R> {
     return safeCall {
