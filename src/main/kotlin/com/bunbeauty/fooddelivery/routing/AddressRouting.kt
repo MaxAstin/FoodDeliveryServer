@@ -10,13 +10,16 @@ import com.bunbeauty.fooddelivery.domain.feature.address.model.PostAddressV2
 import com.bunbeauty.fooddelivery.routing.extension.clientGetListResult
 import com.bunbeauty.fooddelivery.routing.extension.clientWithBody
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.routing.*
+import io.ktor.server.application.Application
+import io.ktor.server.application.call
+import io.ktor.server.auth.authenticate
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.routing
 import org.koin.ktor.ext.inject
 
 fun Application.configureAddressRouting() {
-
     routing {
         authenticate {
             getAddresses()
@@ -30,7 +33,6 @@ fun Application.configureAddressRouting() {
 }
 
 private fun Route.getAddresses() {
-
     val addressService: AddressService by inject()
 
     get("/address") {
@@ -45,7 +47,6 @@ private fun Route.getAddresses() {
 }
 
 private fun Route.getAddressesV2() {
-
     val addressService: AddressService by inject()
 
     get("/v2/address") {
@@ -60,7 +61,6 @@ private fun Route.getAddressesV2() {
 }
 
 private fun Route.getSuggestions() {
-
     val addressService: AddressService by inject()
 
     get("/street/suggestions") {
@@ -76,7 +76,6 @@ private fun Route.getSuggestions() {
 }
 
 private fun Route.postAddress() {
-
     val addressService: AddressService by inject()
 
     post("/address") {
@@ -90,7 +89,6 @@ private fun Route.postAddress() {
 }
 
 private fun Route.postAddressV2() {
-
     val addressService: AddressService by inject()
 
     post("/v2/address") {

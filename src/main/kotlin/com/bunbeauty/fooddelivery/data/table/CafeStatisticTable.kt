@@ -10,5 +10,4 @@ object CafeStatisticTable : UUIDTable() {
     val orderCount = integer("orderCount")
     val orderProceeds = integer("orderProceeds")
     val cafe = reference("cafe", CafeTable)
-
 }

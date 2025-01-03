@@ -22,5 +22,4 @@ class DeliveryZoneEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var cafe: CafeEntity by CafeEntity referencedOn DeliveryZoneTable.cafe
 
     companion object : UUIDEntityClass<DeliveryZoneEntity>(DeliveryZoneTable)
-
 }

@@ -20,7 +20,7 @@ class GetClientOrderV2(
     val paymentMethod: String?,
     val percentDiscount: Int?,
     val clientUserUuid: String,
-    val oderProductList: List<GetOrderProduct>,
+    val oderProductList: List<GetOrderProduct>
 )
 
 @Serializable
@@ -31,6 +31,5 @@ class GetOrderAddressV2(
     val flat: String?,
     val entrance: String?,
     val floor: String?,
-    val comment: String?,
+    val comment: String?
 )
-

@@ -12,12 +12,25 @@ import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.client.GetClient
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.PostOrderV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.client.GetClientOrderV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v3.PostOrderV3
-import com.bunbeauty.fooddelivery.routing.extension.*
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.routing.*
-import io.ktor.server.websocket.*
-import io.ktor.websocket.*
+import com.bunbeauty.fooddelivery.routing.extension.clientGetListResult
+import com.bunbeauty.fooddelivery.routing.extension.clientSocket
+import com.bunbeauty.fooddelivery.routing.extension.clientWithBody
+import com.bunbeauty.fooddelivery.routing.extension.getParameter
+import com.bunbeauty.fooddelivery.routing.extension.getResult
+import com.bunbeauty.fooddelivery.routing.extension.managerGetListResult
+import com.bunbeauty.fooddelivery.routing.extension.managerGetResult
+import com.bunbeauty.fooddelivery.routing.extension.managerSocket
+import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
+import io.ktor.server.application.Application
+import io.ktor.server.application.call
+import io.ktor.server.auth.authenticate
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
+import io.ktor.server.routing.patch
+import io.ktor.server.routing.post
+import io.ktor.server.routing.routing
+import io.ktor.server.websocket.webSocket
+import io.ktor.websocket.Frame
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.encodeToString
@@ -25,7 +38,6 @@ import kotlinx.serialization.json.Json
 import org.koin.ktor.ext.inject
 
 fun Application.configureOrderRouting() {
-
     routing {
         getIsOrderAvailable()
 
@@ -50,7 +62,6 @@ fun Application.configureOrderRouting() {
 
 @Deprecated("Use getClientOrdersV2")
 private fun Route.postOrder() {
-
     val orderService: OrderService by inject()
 
     post("/order") {
@@ -64,7 +75,6 @@ private fun Route.postOrder() {
 }
 
 private fun Route.patchOrder() {
-
     val orderService: OrderService by inject()
 
     patch("/order") {
@@ -77,7 +87,6 @@ private fun Route.patchOrder() {
 
 @Deprecated("Use getClientOrdersV2")
 private fun Route.getClientOrders() {
-
     val orderService: OrderService by inject()
 
     get("/client/order") {
@@ -89,7 +98,6 @@ private fun Route.getClientOrders() {
 }
 
 private fun Route.getCafeOrders() {
-
     val orderService: OrderService by inject()
 
     get("/order") {
@@ -109,7 +117,6 @@ private fun Route.getCafeOrders() {
 
 @Deprecated("Use getCafeOrderDetailsV2")
 private fun Route.getCafeOrderDetails() {
-
     val orderService: OrderService by inject()
 
     get("/order/details") {
@@ -122,7 +129,6 @@ private fun Route.getCafeOrderDetails() {
 
 @Deprecated("Use observeClientOrdersV2")
 private fun Route.observeClientOrders() {
-
     val orderService: OrderService by inject()
     val json: Json by inject()
 
@@ -141,7 +147,6 @@ private fun Route.observeClientOrders() {
 }
 
 private fun Route.observeManagerOrders() {
-
     val orderService: OrderService by inject()
     val json: Json by inject()
 
@@ -163,7 +168,6 @@ private fun Route.observeManagerOrders() {
 
 @Deprecated("Use postOrderV3")
 private fun Route.postOrderV2() {
-
     val orderService: OrderService by inject()
 
     post("/v2/order") {
@@ -177,7 +181,6 @@ private fun Route.postOrderV2() {
 }
 
 private fun Route.getClientOrdersV2() {
-
     val orderService: OrderService by inject()
 
     get("/v2/client/order") {
@@ -194,7 +197,6 @@ private fun Route.getClientOrdersV2() {
 }
 
 private fun Route.getCafeOrderDetailsV2() {
-
     val orderService: OrderService by inject()
 
     get("/v2/order/details") {
@@ -206,7 +208,6 @@ private fun Route.getCafeOrderDetailsV2() {
 }
 
 private fun Route.observeClientOrdersV2() {
-
     val orderService: OrderService by inject()
     val json: Json by inject()
 
@@ -225,7 +226,6 @@ private fun Route.observeClientOrdersV2() {
 }
 
 private fun Route.postOrderV3() {
-
     val orderService: OrderService by inject()
 
     post("/v3/order") {
@@ -240,7 +240,6 @@ private fun Route.postOrderV3() {
 
 @Deprecated("Used in 2.3.1 mobile app version, now need use getWorkInfo method with more information")
 private fun Route.getIsOrderAvailable() {
-
     val orderService: OrderService by inject()
 
     get("/order_availability") {

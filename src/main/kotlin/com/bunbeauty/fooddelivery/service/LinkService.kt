@@ -11,5 +11,4 @@ class LinkService(
     suspend fun getLinksByCompanyUuid(companyUuid: String): List<GetLink> {
         return linkRepository.getLinkListByCompanyUuid(companyUuid.toUuid())
     }
-
 }

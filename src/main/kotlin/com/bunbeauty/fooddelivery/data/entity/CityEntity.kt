@@ -21,5 +21,4 @@ class CityEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     val cafes: SizedIterable<CafeEntity> by CafeEntity referrersOn CafeTable.city
 
     companion object : UUIDEntityClass<CityEntity>(CityTable)
-
 }

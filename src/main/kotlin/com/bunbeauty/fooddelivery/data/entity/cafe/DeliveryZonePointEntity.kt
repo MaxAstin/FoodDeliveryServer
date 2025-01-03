@@ -17,5 +17,4 @@ class DeliveryZonePointEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var zone: DeliveryZoneEntity by DeliveryZoneEntity referencedOn DeliveryZonePointTable.zone
 
     companion object : UUIDEntityClass<DeliveryZonePointEntity>(DeliveryZonePointTable)
-
 }

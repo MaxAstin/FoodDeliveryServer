@@ -20,6 +20,6 @@ class CategoryEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     fun toCategory() = GetCategory(
         uuid = uuid,
         name = name,
-        priority = priority,
+        priority = priority
     )
 }

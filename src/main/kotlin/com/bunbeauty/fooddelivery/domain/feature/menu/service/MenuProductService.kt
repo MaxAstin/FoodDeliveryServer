@@ -20,7 +20,7 @@ class MenuProductService(
     private val menuProductRepository: MenuProductRepository,
     private val userRepository: UserRepository,
     private val categoryRepository: CategoryRepository,
-    private val hitRepository: HitRepository,
+    private val hitRepository: HitRepository
 ) {
 
     suspend fun getMenuProductListByCompanyUuid(companyUuid: String): List<GetMenuProduct> {
@@ -61,7 +61,7 @@ class MenuProductService(
     suspend fun updateMenuProduct(
         menuProductUuid: String,
         creatorUuid: String,
-        patchMenuProduct: PatchMenuProduct,
+        patchMenuProduct: PatchMenuProduct
     ): GetMenuProduct {
         val companyUuid = userRepository.getCompanyByUserUuid(creatorUuid.toUuid())
             .orThrowNotFoundByUserUuidError(creatorUuid)
@@ -91,5 +91,4 @@ class MenuProductService(
             }
         )
     }
-
 }

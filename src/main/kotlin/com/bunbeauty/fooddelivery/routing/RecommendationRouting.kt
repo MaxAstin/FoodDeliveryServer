@@ -5,8 +5,11 @@ import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.respondOk
 import com.bunbeauty.fooddelivery.routing.extension.safely
 import com.bunbeauty.fooddelivery.service.RecommendationService
-import io.ktor.server.application.*
-import io.ktor.server.routing.*
+import io.ktor.server.application.Application
+import io.ktor.server.application.call
+import io.ktor.server.routing.Routing
+import io.ktor.server.routing.get
+import io.ktor.server.routing.routing
 import org.koin.ktor.ext.inject
 
 fun Application.configureRecommendationRouting() {
@@ -16,7 +19,6 @@ fun Application.configureRecommendationRouting() {
 }
 
 private fun Routing.getRecommendations() {
-
     val recommendationService: RecommendationService by inject()
 
     get("/recommendation") {

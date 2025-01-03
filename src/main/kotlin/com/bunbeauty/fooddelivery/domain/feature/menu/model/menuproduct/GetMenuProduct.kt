@@ -19,5 +19,5 @@ class GetMenuProduct(
     val isRecommended: Boolean,
     val isVisible: Boolean,
     val categories: List<GetCategory>,
-    val additionGroups: List<GetMenuProductAdditionGroup>,
+    val additionGroups: List<GetMenuProductAdditionGroup>
 )

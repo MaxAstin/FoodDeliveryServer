@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 class GetCategory(
     val uuid: String,
     val name: String,
-    val priority: Int,
+    val priority: Int
 )

@@ -8,5 +8,5 @@ class UpdateCafe(
     val latitude: Double?,
     val longitude: Double?,
     val address: String?,
-    val isVisible: Boolean?,
+    val isVisible: Boolean?
 )

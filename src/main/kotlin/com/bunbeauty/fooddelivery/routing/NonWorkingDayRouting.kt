@@ -9,13 +9,18 @@ import com.bunbeauty.fooddelivery.routing.extension.getListResult
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import com.bunbeauty.fooddelivery.service.NonWorkingDayService
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.routing.*
+import io.ktor.server.application.Application
+import io.ktor.server.application.call
+import io.ktor.server.auth.authenticate
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.Routing
+import io.ktor.server.routing.get
+import io.ktor.server.routing.patch
+import io.ktor.server.routing.post
+import io.ktor.server.routing.routing
 import org.koin.ktor.ext.inject
 
 fun Application.configureNonWorkingDayRouting() {
-
     routing {
         getNonWorkingDaysByCafeUuid()
         authenticate {
@@ -26,7 +31,6 @@ fun Application.configureNonWorkingDayRouting() {
 }
 
 private fun Routing.getNonWorkingDaysByCafeUuid() {
-
     val nonWorkingDayService: NonWorkingDayService by inject()
 
     get("/non_working_day") {
@@ -38,7 +42,6 @@ private fun Routing.getNonWorkingDaysByCafeUuid() {
 }
 
 private fun Route.postNonWorkingDay() {
-
     val nonWorkingDayService: NonWorkingDayService by inject()
 
     post("/non_working_day") {
@@ -49,7 +52,6 @@ private fun Route.postNonWorkingDay() {
 }
 
 private fun Route.patchNonWorkingDay() {
-
     val nonWorkingDayService: NonWorkingDayService by inject()
 
     patch("/non_working_day") {

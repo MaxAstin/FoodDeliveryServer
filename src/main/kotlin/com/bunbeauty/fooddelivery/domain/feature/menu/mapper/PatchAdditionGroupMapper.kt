@@ -8,6 +8,6 @@ val mapPatchAdditionGroup: PatchAdditionGroup.() -> UpdateAdditionGroup = {
         name = name,
         singleChoice = singleChoice,
         priority = priority,
-        isVisible = isVisible,
+        isVisible = isVisible
     )
 }

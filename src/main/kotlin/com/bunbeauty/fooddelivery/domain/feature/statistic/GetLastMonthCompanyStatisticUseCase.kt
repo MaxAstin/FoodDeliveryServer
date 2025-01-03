@@ -11,7 +11,7 @@ import org.joda.time.DateTimeZone
 
 class GetLastMonthCompanyStatisticUseCase(
     private val companyRepository: CompanyRepository,
-    private val companyStatisticRepository: CompanyStatisticRepository,
+    private val companyStatisticRepository: CompanyStatisticRepository
 ) {
 
     suspend operator fun invoke(): List<LastMonthCompanyStatistic> {
@@ -38,7 +38,7 @@ class GetLastMonthCompanyStatisticUseCase(
         val companyStatistic = companyStatisticRepository.getStatisticByTimePeriodTypeCompany(
             time = statisticDateTime.millis,
             periodType = PeriodType.MONTH,
-            companyUuid = company.uuid.toUuid(),
+            companyUuid = company.uuid.toUuid()
         )
 
         return LastMonthCompanyStatistic(
@@ -47,5 +47,4 @@ class GetLastMonthCompanyStatisticUseCase(
             orderProceeds = companyStatistic?.orderProceeds
         )
     }
-
 }

@@ -11,11 +11,11 @@ class PostAddressV2(
     val floor: String?,
     val comment: String?,
     val isVisible: Boolean,
-    val cityUuid: String,
+    val cityUuid: String
 )
 
 @Serializable
 class PostAddressStreet(
     val fiasId: String,
-    val name: String,
+    val name: String
 )

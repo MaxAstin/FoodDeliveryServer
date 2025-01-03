@@ -25,6 +25,9 @@ plugins {
 
 application {
     mainClass.set("ApplicationKt")
+    ktlint {
+        enableExperimentalRules.set(true)
+    }
 }
 
 repositories {
@@ -86,5 +89,4 @@ dependencies {
     testImplementation("io.mockk:mockk:$mockk_version")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version")
     testImplementation(kotlin("test"))
-
 }

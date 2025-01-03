@@ -186,7 +186,7 @@ class OrderRepository {
     suspend fun getOrderListByCafeUuidLimited(cafeUuid: String, limitTime: Long): List<Order> = query {
         OrderEntity.find {
             (OrderTable.cafe eq cafeUuid.toUuid()) and
-                    (OrderTable.time greater limitTime)
+                (OrderTable.time greater limitTime)
         }.orderBy(OrderTable.time to SortOrder.DESC)
             .map(mapOrderEntity)
     }
@@ -217,11 +217,11 @@ class OrderRepository {
 
     suspend fun getOrderListByCompanyUuidLimited(
         companyUuid: String,
-        limitTime: Long,
+        limitTime: Long
     ): List<Order> = query {
         OrderEntity.find {
             (OrderTable.company eq companyUuid.toUuid()) and
-                    (OrderTable.time greater limitTime)
+                (OrderTable.time greater limitTime)
         }.orderBy(OrderTable.time to SortOrder.DESC)
             .map(mapOrderEntity)
     }
@@ -243,5 +243,4 @@ class OrderRepository {
     fun disconnectFromSession(key: String) {
         sessionHandler.disconnect(key)
     }
-
 }

@@ -15,7 +15,7 @@ val mapAddress: Address.() -> GetAddress = {
         comment = comment,
         street = street.mapStreet(),
         userUuid = userUuid,
-        isVisible = isVisible,
+        isVisible = isVisible
     )
 }
 
@@ -34,6 +34,6 @@ val mapAddressToV2: Address.(DeliveryZone) -> GetAddressV2 = { deliveryZone ->
         lowDeliveryCost = deliveryZone.lowDeliveryCost,
         userUuid = userUuid,
         cityUuid = street.cityUuid,
-        isVisible = isVisible,
+        isVisible = isVisible
     )
 }

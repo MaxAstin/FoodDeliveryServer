@@ -15,5 +15,5 @@ class PatchMenuProduct(
     val barcode: Int? = null,
     val categoryUuids: List<String>? = null,
     val isRecommended: Boolean? = null,
-    val isVisible: Boolean? = null,
+    val isVisible: Boolean? = null
 )

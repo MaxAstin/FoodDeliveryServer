@@ -10,7 +10,7 @@ import com.bunbeauty.fooddelivery.domain.toUuid
 
 class DeliveryZoneService(
     private val deliveryZoneRepository: DeliveryZoneRepository,
-    private val privacyCheckService: PrivacyCheckService,
+    private val privacyCheckService: PrivacyCheckService
 ) {
 
     suspend fun createDeliveryZone(userUuid: String, postDeliveryZone: PostDeliveryZone): GetDeliveryZone {
@@ -34,5 +34,4 @@ class DeliveryZoneService(
             cafeUuid = cafeUuid.toUuid()
         ).map(mapDeliveryZone)
     }
-
 }

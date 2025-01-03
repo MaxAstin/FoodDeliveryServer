@@ -57,15 +57,15 @@ class CalculateOrderTotalUseCaseTest {
             orderProductList = listOf(
                 orderProduct1,
                 orderProduct2
-            ),
+            )
         )
         val expected = OrderTotal(
             newTotalCost = 500,
             oldTotalCost = 600,
             productTotalMap = mapOf(
                 "1" to orderProductTotal1,
-                "2" to orderProductTotal2,
-            ),
+                "2" to orderProductTotal2
+            )
         )
 
         val result = calculateOrderTotalUseCase(order)
@@ -81,20 +81,19 @@ class CalculateOrderTotalUseCaseTest {
             orderProductList = listOf(
                 orderProduct1,
                 orderProduct2
-            ),
+            )
         )
         val expected = OrderTotal(
             newTotalCost = 600,
             oldTotalCost = 700,
             productTotalMap = mapOf(
                 "1" to orderProductTotal1,
-                "2" to orderProductTotal2,
-            ),
+                "2" to orderProductTotal2
+            )
         )
 
         val result = calculateOrderTotalUseCase(order)
 
         assertEquals(expected, result)
     }
-
 }

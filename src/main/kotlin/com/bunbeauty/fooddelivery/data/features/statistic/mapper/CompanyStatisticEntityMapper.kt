@@ -9,6 +9,6 @@ val toCompanyStatistic: CompanyStatisticEntity.() -> CompanyStatistic = {
         time = time,
         periodType = periodType,
         orderCount = orderCount,
-        orderProceeds = orderProceeds,
+        orderProceeds = orderProceeds
     )
 }

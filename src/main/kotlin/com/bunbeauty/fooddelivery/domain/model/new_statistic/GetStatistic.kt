@@ -8,5 +8,5 @@ class GetStatistic(
     val time: Long,
     val periodType: PeriodType,
     val orderCount: Int,
-    val orderProceeds: Int,
+    val orderProceeds: Int
 )

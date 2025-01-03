@@ -26,7 +26,6 @@ class CafeStatisticEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
         time = time,
         periodType = PeriodType.valueOf(periodType),
         orderCount = orderCount,
-        orderProceeds = orderProceeds,
+        orderProceeds = orderProceeds
     )
-
 }

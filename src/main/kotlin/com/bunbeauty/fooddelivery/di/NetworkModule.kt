@@ -13,5 +13,4 @@ val networkModule = module(createdAtStart = true) {
             encodeDefaults = true
         }
     }
-
 }
