@@ -148,6 +148,14 @@ class OrderService(
         ).map(mapOrderToCafeOrder)
     }
 
+    suspend fun getOrderListByCafeUuid2(cafeUuid: String): List<GetCafeOrder> {
+        val limitTime = DateTime.now().withTimeAtStartOfDay().minusDays(ORDER_HISTORY_DAY_COUNT).millis
+        return orderRepository.getLightOrder(
+            cafeUuid = cafeUuid,
+            limitTime = limitTime
+        )
+    }
+
     suspend fun getOrderListByUserUuid(userUuid: String, count: Int?): List<GetClientOrder> {
         return orderRepository.getOrderListByUserUuid(
             userUuid = userUuid,

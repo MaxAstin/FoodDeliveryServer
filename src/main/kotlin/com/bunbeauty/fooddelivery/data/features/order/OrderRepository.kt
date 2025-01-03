@@ -14,12 +14,14 @@ import com.bunbeauty.fooddelivery.data.session.SessionHandler
 import com.bunbeauty.fooddelivery.data.table.order.OrderTable
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.InsertOrder
+import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.cafe.GetCafeOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.InsertOrderV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v3.InsertOrderV3
 import com.bunbeauty.fooddelivery.domain.toUuid
 import kotlinx.coroutines.flow.Flow
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.select
 
 class OrderRepository {
 
@@ -153,6 +155,32 @@ class OrderRepository {
         }
 
         orderEntity.mapOrderEntity()
+    }
+
+    suspend fun getLightOrder(cafeUuid: String, limitTime: Long): List<GetCafeOrder> = query {
+        OrderTable.slice(
+            OrderTable.id,
+            OrderTable.code,
+            OrderTable.status,
+            OrderTable.time,
+            OrderTable.deferredTime,
+            OrderTable.cafe
+        ).select {
+            (OrderTable.cafe eq cafeUuid.toUuid()) and
+                    (OrderTable.time greater limitTime)
+        }.orderBy(OrderTable.time to SortOrder.DESC)
+            .map {
+                GetCafeOrder(
+                    uuid = it[OrderTable.id].value.toString(),
+                    code = it[OrderTable.code],
+                    status = it[OrderTable.status],
+                    time = it[OrderTable.time],
+                    timeZone = "UTC+3",
+                    deferredTime = it[OrderTable.deferredTime],
+                    cafeUuid = it[OrderTable.cafe].value.toString(),
+                )
+            }
+
     }
 
     suspend fun getOrderListByCafeUuidLimited(cafeUuid: String, limitTime: Long): List<Order> = query {
