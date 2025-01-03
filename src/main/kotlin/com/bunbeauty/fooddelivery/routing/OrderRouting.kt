@@ -103,7 +103,7 @@ private fun Route.getCafeOrders() {
     get("/order") {
         managerGetListResult {
             val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
-            orderService.getOrderListByCafeUuid(cafeUuid)
+            orderService.getOrderListByCafeUuid2(cafeUuid)
         }
     }
 
