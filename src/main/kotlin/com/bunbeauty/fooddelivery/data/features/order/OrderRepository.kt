@@ -11,6 +11,8 @@ import com.bunbeauty.fooddelivery.data.entity.order.OrderProductAdditionEntity
 import com.bunbeauty.fooddelivery.data.entity.order.OrderProductEntity
 import com.bunbeauty.fooddelivery.data.features.order.mapper.mapOrderEntity
 import com.bunbeauty.fooddelivery.data.session.SessionHandler
+import com.bunbeauty.fooddelivery.data.table.CityTable
+import com.bunbeauty.fooddelivery.data.table.cafe.CafeTable
 import com.bunbeauty.fooddelivery.data.table.order.OrderTable
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.InsertOrder
@@ -158,11 +160,12 @@ class OrderRepository {
     }
 
     suspend fun getLightOrder(cafeUuid: String, limitTime: Long): List<GetCafeOrder> = query {
-        OrderTable.slice(
+        (OrderTable innerJoin CafeTable innerJoin CityTable).slice(
             OrderTable.id,
             OrderTable.code,
             OrderTable.status,
             OrderTable.time,
+            CityTable.timeZone,
             OrderTable.deferredTime,
             OrderTable.cafe
         ).select {
@@ -175,18 +178,17 @@ class OrderRepository {
                     code = it[OrderTable.code],
                     status = it[OrderTable.status],
                     time = it[OrderTable.time],
-                    timeZone = "UTC+3",
+                    timeZone = it[CityTable.timeZone],
                     deferredTime = it[OrderTable.deferredTime],
                     cafeUuid = it[OrderTable.cafe].value.toString(),
                 )
             }
-
     }
 
     suspend fun getOrderListByCafeUuidLimited(cafeUuid: String, limitTime: Long): List<Order> = query {
         OrderEntity.find {
             (OrderTable.cafe eq cafeUuid.toUuid()) and
-                (OrderTable.time greater limitTime)
+                    (OrderTable.time greater limitTime)
         }.orderBy(OrderTable.time to SortOrder.DESC)
             .map(mapOrderEntity)
     }
@@ -221,7 +223,7 @@ class OrderRepository {
     ): List<Order> = query {
         OrderEntity.find {
             (OrderTable.company eq companyUuid.toUuid()) and
-                (OrderTable.time greater limitTime)
+                    (OrderTable.time greater limitTime)
         }.orderBy(OrderTable.time to SortOrder.DESC)
             .map(mapOrderEntity)
     }
