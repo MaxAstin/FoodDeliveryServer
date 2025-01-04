@@ -13,6 +13,7 @@ import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.domain.error.errorWithCode
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.DeliveryZoneWithCafe
+import com.bunbeauty.fooddelivery.domain.feature.order.mapper.mapLightOrderToGetCafeOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.mapper.mapOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.mapper.mapOrderToCafeOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.mapper.mapOrderToCafeOrderDetails
@@ -149,20 +150,12 @@ class OrderService(
         return order.mapOrderToV2(orderTotal)
     }
 
-    suspend fun getOrderListByCafeUuid(cafeUuid: String): List<GetCafeOrder> {
-        val limitTime = DateTime.now().withTimeAtStartOfDay().minusDays(ORDER_HISTORY_DAY_COUNT).millis
-        return orderRepository.getOrderListByCafeUuidLimited(
-            cafeUuid = cafeUuid,
-            limitTime = limitTime
-        ).map(mapOrderToCafeOrder)
-    }
-
     suspend fun getOrderListByCafeUuid2(cafeUuid: String): List<GetCafeOrder> {
         val limitTime = DateTime.now().withTimeAtStartOfDay().minusDays(ORDER_HISTORY_DAY_COUNT).millis
         return orderRepository.getLightOrder(
             cafeUuid = cafeUuid,
             limitTime = limitTime
-        )
+        ).map(mapLightOrderToGetCafeOrder)
     }
 
     suspend fun getOrderListByUserUuid(userUuid: String, count: Int?): List<GetClientOrder> {
