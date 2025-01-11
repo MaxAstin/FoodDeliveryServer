@@ -106,13 +106,6 @@ private fun Route.getCafeOrders() {
             orderService.getOrderListByCafeUuid2(cafeUuid)
         }
     }
-
-    get("/order2") {
-        managerGetListResult {
-            val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
-            orderService.getOrderListByCafeUuid2(cafeUuid)
-        }
-    }
 }
 
 @Deprecated("Use getCafeOrderDetailsV2")

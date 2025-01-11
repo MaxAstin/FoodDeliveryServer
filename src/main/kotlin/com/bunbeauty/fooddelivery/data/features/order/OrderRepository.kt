@@ -14,9 +14,9 @@ import com.bunbeauty.fooddelivery.data.session.SessionHandler
 import com.bunbeauty.fooddelivery.data.table.CityTable
 import com.bunbeauty.fooddelivery.data.table.cafe.CafeTable
 import com.bunbeauty.fooddelivery.data.table.order.OrderTable
+import com.bunbeauty.fooddelivery.domain.feature.order.model.LightOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.InsertOrder
-import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.cafe.GetCafeOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v2.InsertOrderV2
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v3.InsertOrderV3
 import com.bunbeauty.fooddelivery.domain.toUuid
@@ -159,7 +159,7 @@ class OrderRepository {
         orderEntity.mapOrderEntity()
     }
 
-    suspend fun getLightOrder(cafeUuid: String, limitTime: Long): List<GetCafeOrder> = query {
+    suspend fun getLightOrder(cafeUuid: String, limitTime: Long): List<LightOrder> = query {
         (OrderTable innerJoin CafeTable innerJoin CityTable).slice(
             OrderTable.id,
             OrderTable.code,
@@ -170,27 +170,19 @@ class OrderRepository {
             OrderTable.cafe
         ).select {
             (OrderTable.cafe eq cafeUuid.toUuid()) and
-                    (OrderTable.time greater limitTime)
+                (OrderTable.time greater limitTime)
         }.orderBy(OrderTable.time to SortOrder.DESC)
-            .map {
-                GetCafeOrder(
-                    uuid = it[OrderTable.id].value.toString(),
-                    code = it[OrderTable.code],
-                    status = it[OrderTable.status],
-                    time = it[OrderTable.time],
-                    timeZone = it[CityTable.timeZone],
-                    deferredTime = it[OrderTable.deferredTime],
-                    cafeUuid = it[OrderTable.cafe].value.toString(),
+            .map { orderTable ->
+                LightOrder(
+                    uuid = orderTable[OrderTable.id].value.toString(),
+                    code = orderTable[OrderTable.code],
+                    status = orderTable[OrderTable.status],
+                    time = orderTable[OrderTable.time],
+                    timeZone = orderTable[CityTable.timeZone],
+                    deferredTime = orderTable[OrderTable.deferredTime],
+                    cafeUuid = orderTable[OrderTable.cafe].value.toString()
                 )
             }
-    }
-
-    suspend fun getOrderListByCafeUuidLimited(cafeUuid: String, limitTime: Long): List<Order> = query {
-        OrderEntity.find {
-            (OrderTable.cafe eq cafeUuid.toUuid()) and
-                    (OrderTable.time greater limitTime)
-        }.orderBy(OrderTable.time to SortOrder.DESC)
-            .map(mapOrderEntity)
     }
 
     suspend fun getOrderListByUserUuid(userUuid: String, count: Int?): List<Order> = query {
@@ -223,7 +215,7 @@ class OrderRepository {
     ): List<Order> = query {
         OrderEntity.find {
             (OrderTable.company eq companyUuid.toUuid()) and
-                    (OrderTable.time greater limitTime)
+                (OrderTable.time greater limitTime)
         }.orderBy(OrderTable.time to SortOrder.DESC)
             .map(mapOrderEntity)
     }
