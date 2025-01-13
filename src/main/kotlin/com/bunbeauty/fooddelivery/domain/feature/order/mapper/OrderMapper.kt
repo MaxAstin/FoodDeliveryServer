@@ -2,6 +2,7 @@ package com.bunbeauty.fooddelivery.domain.feature.order.mapper
 
 import com.bunbeauty.fooddelivery.data.enums.OrderStatus
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUserLight
+import com.bunbeauty.fooddelivery.domain.feature.order.model.LightOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderTotal
 import com.bunbeauty.fooddelivery.domain.feature.order.model.v1.cafe.GetCafeOrder
@@ -120,6 +121,18 @@ val mapOrderToCafeOrderDetailsV2: Order.(OrderTotal) -> GetCafeOrderDetailsV2 = 
             }
         },
         availableStatusList = availableStatusList
+    )
+}
+
+val mapLightOrderToGetCafeOrder: LightOrder.() -> GetCafeOrder = {
+    GetCafeOrder(
+        uuid = uuid,
+        code = code,
+        status = status,
+        time = time,
+        timeZone = timeZone,
+        deferredTime = deferredTime,
+        cafeUuid = cafeUuid
     )
 }
 
