@@ -22,15 +22,18 @@ class CafeStatisticRepository : ICafeStatisticRepository {
     override suspend fun getStatisticListByTimePeriodTypeCafe(
         time: Long,
         periodType: PeriodType,
-        cafeUuid: UUID
+        cafeUuid: UUID,
+        limit: Int
     ): List<GetStatistic> = query {
         CafeStatisticEntity.find {
             (CafeStatisticTable.time greaterEq time) and
                 (CafeStatisticTable.periodType eq periodType.name) and
                 (CafeStatisticTable.cafe eq cafeUuid)
-        }.orderBy(CafeStatisticTable.time to SortOrder.DESC).map { cafeStatisticEntity ->
-            cafeStatisticEntity.toStatistic()
-        }
+        }.limit(limit)
+            .orderBy(CafeStatisticTable.time to SortOrder.DESC)
+            .map { cafeStatisticEntity ->
+                cafeStatisticEntity.toStatistic()
+            }
     }
 
     override suspend fun getStatisticByTimePeriodTypeCafe(
@@ -58,19 +61,20 @@ class CafeStatisticRepository : ICafeStatisticRepository {
         cafeStatisticEntity.toStatistic()
     }
 
-    override suspend fun updateStatistic(statisticUuid: UUID, updateStatistic: UpdateStatistic): GetStatistic? = transaction {
-        CafeStatisticProductTable.deleteWhere { sqlBuilder ->
-            sqlBuilder.run {
-                cafeStatistic eq statisticUuid
+    override suspend fun updateStatistic(statisticUuid: UUID, updateStatistic: UpdateStatistic): GetStatistic? =
+        transaction {
+            CafeStatisticProductTable.deleteWhere { sqlBuilder ->
+                sqlBuilder.run {
+                    cafeStatistic eq statisticUuid
+                }
             }
-        }
 
-        CafeStatisticEntity.findById(statisticUuid)?.also { statisticEntity ->
-            statisticEntity.orderCount = updateStatistic.orderCount
-            statisticEntity.orderProceeds = updateStatistic.orderProceeds
-            insertStatisticProducts(updateStatistic.statisticProductList, statisticEntity)
-        }?.toStatistic()
-    }
+            CafeStatisticEntity.findById(statisticUuid)?.also { statisticEntity ->
+                statisticEntity.orderCount = updateStatistic.orderCount
+                statisticEntity.orderProceeds = updateStatistic.orderProceeds
+                insertStatisticProducts(updateStatistic.statisticProductList, statisticEntity)
+            }?.toStatistic()
+        }
 
     private fun insertStatisticProducts(
         insertStatisticProductList: List<InsertStatisticProduct>,
