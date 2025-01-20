@@ -39,7 +39,12 @@ class StatisticService(
     private val getLastMonthCompanyStatisticUseCase: GetLastMonthCompanyStatisticUseCase
 ) {
 
-    suspend fun getStatisticList(userUuid: String, cafeUuid: String?, period: String): List<GetStatistic> {
+    suspend fun getStatisticList(
+        userUuid: String,
+        cafeUuid: String?,
+        period: String,
+        limit: Int
+    ): List<GetStatistic> {
         val periodType = PeriodType.valueOf(period)
         val user = userRepository.getUserByUuid(userUuid.toUuid())
             .orThrowNotFoundByUuidError(userUuid)
@@ -53,13 +58,15 @@ class StatisticService(
             companyStatisticRepository.getStatisticListByTimePeriodTypeCompany(
                 time = startTimeMillis,
                 periodType = periodType,
-                companyUuid = user.companyUuid.toUuid()
+                companyUuid = user.companyUuid.toUuid(),
+                limit = limit
             )
         } else {
             cafeStatisticRepository.getStatisticListByTimePeriodTypeCafe(
                 time = startTimeMillis,
                 periodType = periodType,
-                cafeUuid = cafeUuid.toUuid()
+                cafeUuid = cafeUuid.toUuid(),
+                limit = limit
             )
         }
     }
