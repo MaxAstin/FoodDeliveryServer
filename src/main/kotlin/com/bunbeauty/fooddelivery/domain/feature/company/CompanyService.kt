@@ -10,6 +10,7 @@ import com.bunbeauty.fooddelivery.domain.model.company.PatchCompany
 import com.bunbeauty.fooddelivery.domain.model.company.PostCompany
 import com.bunbeauty.fooddelivery.domain.model.company.UpdateCompany
 import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkInfo
+import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkType
 import com.bunbeauty.fooddelivery.domain.toUuid
 
 private const val MAX_PERCENT_DISCOUNT = 99
@@ -46,7 +47,10 @@ class CompanyService(
             deliveryCost = patchCompany.deliveryCost,
             forceUpdateVersion = patchCompany.forceUpdateVersion,
             percentDiscount = patchCompany.percentDiscount,
-            isOpen = patchCompany.isOpen
+            isOpen = patchCompany.isOpen,
+            workType = patchCompany.workType?.let { workType ->
+                WorkType.valueOf(workType)
+            }
         )
         val company = companyRepository.updateCompany(updateCompany)
             .orThrowNotFoundByUserUuidError(uuid = companyUuid)

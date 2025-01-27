@@ -32,6 +32,7 @@ class CompanyRepository {
                 percentDiscount != 0
             }
             isOpen = updateCompany.isOpen ?: isOpen
+            workType = updateCompany.workType?.name ?: workType
         }?.mapCompanyEntity()
     }
 
