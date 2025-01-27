@@ -9,5 +9,6 @@ class PatchCompany(
     val deliveryCost: Int? = null,
     val forceUpdateVersion: Int? = null,
     val percentDiscount: Int? = null,
-    val isOpen: Boolean? = null
+    val isOpen: Boolean? = null,
+    val workType: String? = null
 )
