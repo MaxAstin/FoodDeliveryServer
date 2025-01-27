@@ -21,6 +21,7 @@ object Constants {
     const val CAFE_UUID_PARAMETER = "cafeUuid"
     const val UUID_PARAMETER = "uuid"
     const val PERIOD_PARAMETER = "period"
+    const val LIMIT_PARAMETER = "limit"
     const val COUNT_PARAMETER = "count"
     const val QUERY_PARAMETER = "query"
 

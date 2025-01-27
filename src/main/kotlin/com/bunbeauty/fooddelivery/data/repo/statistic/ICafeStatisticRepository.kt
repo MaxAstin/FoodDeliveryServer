@@ -11,7 +11,8 @@ interface ICafeStatisticRepository {
     suspend fun getStatisticListByTimePeriodTypeCafe(
         time: Long,
         periodType: PeriodType,
-        cafeUuid: UUID
+        cafeUuid: UUID,
+        limit: Int
     ): List<GetStatistic>
 
     suspend fun getStatisticByTimePeriodTypeCafe(

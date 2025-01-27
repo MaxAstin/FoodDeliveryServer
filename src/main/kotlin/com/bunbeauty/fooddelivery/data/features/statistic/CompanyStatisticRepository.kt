@@ -23,15 +23,18 @@ class CompanyStatisticRepository {
     suspend fun getStatisticListByTimePeriodTypeCompany(
         time: Long,
         periodType: PeriodType,
-        companyUuid: UUID
+        companyUuid: UUID,
+        limit: Int
     ): List<GetStatistic> = query {
         CompanyStatisticEntity.find {
             (CompanyStatisticTable.periodType eq periodType.name) and
                 (CompanyStatisticTable.time greaterEq time) and
                 (CompanyStatisticTable.company eq companyUuid)
-        }.orderBy(CompanyStatisticTable.time to SortOrder.DESC).map { companyStatisticEntity ->
-            companyStatisticEntity.toStatistic()
-        }
+        }.limit(limit)
+            .orderBy(CompanyStatisticTable.time to SortOrder.DESC)
+            .map { companyStatisticEntity ->
+                companyStatisticEntity.toStatistic()
+            }
     }
 
     suspend fun insetStatistic(insertCompanyStatistic: InsertCompanyStatistic) = query {
