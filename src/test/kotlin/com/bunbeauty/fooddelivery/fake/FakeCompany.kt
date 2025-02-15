@@ -10,6 +10,7 @@ object FakeCompany {
     fun create(
         forFreeDelivery: Int,
         deliveryCost: Int,
+        isOpen: Boolean = false,
         workType: WorkType = WorkType.DELIVERY_AND_PICKUP
     ): Company {
         return Company(
@@ -27,7 +28,7 @@ object FakeCompany {
             ),
             percentDiscount = null,
             maxVisibleRecommendationCount = 0,
-            isOpen = true,
+            isOpen = isOpen,
             citiesWithCafes = emptyList(),
             workType = workType
         )

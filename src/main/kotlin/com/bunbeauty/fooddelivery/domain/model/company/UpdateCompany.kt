@@ -1,5 +1,6 @@
 package com.bunbeauty.fooddelivery.domain.model.company
 
+import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkType
 import java.util.*
 
 class UpdateCompany(
@@ -9,5 +10,6 @@ class UpdateCompany(
     val deliveryCost: Int? = null,
     val forceUpdateVersion: Int? = null,
     val percentDiscount: Int? = null,
-    val isOpen: Boolean? = null
+    val isOpen: Boolean? = null,
+    val workType: WorkType? = null
 )

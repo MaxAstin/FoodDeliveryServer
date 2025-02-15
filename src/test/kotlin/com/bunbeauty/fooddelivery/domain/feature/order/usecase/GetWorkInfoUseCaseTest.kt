@@ -16,21 +16,40 @@ class GetWorkInfoUseCaseTest {
     private val getWorkInfoUseCase: GetWorkInfoUseCase = GetWorkInfoUseCase(companyRepository)
 
     @Test
-    fun `returns work info when company exists`() = runTest {
-        // Given
+    fun `invoke should return WorkInfo with CLOSED workType when company is not open`() = runTest {
+        // Arrange
         val companyUuid = "123e4567-e89b-12d3-a456-426614174000"
         val company = FakeCompany.create(
             forFreeDelivery = 500,
             deliveryCost = 100,
+            isOpen = false,
             workType = WorkType.DELIVERY_AND_PICKUP
         )
-
         coEvery { companyRepository.getCompanyByUuid(companyUuid.toUuid()) } returns company
 
-        // When
-        val result = getWorkInfoUseCase.invoke(companyUuid)
+        // Act
+        val result = getWorkInfoUseCase(companyUuid)
 
-        // Then
+        // Assert
+        assertEquals(WorkType.CLOSED, result.workType)
+    }
+
+    @Test
+    fun `invoke should return WorkInfo with company workType when company is open`() = runTest {
+        // Arrange
+        val companyUuid = "123e4567-e89b-12d3-a456-426614174000"
+        val company = FakeCompany.create(
+            forFreeDelivery = 500,
+            deliveryCost = 100,
+            isOpen = true,
+            workType = WorkType.DELIVERY_AND_PICKUP
+        )
+        coEvery { companyRepository.getCompanyByUuid(companyUuid.toUuid()) } returns company
+
+        // Act
+        val result = getWorkInfoUseCase(companyUuid)
+
+        // Assert
         assertEquals(WorkType.DELIVERY_AND_PICKUP, result.workType)
     }
 }
