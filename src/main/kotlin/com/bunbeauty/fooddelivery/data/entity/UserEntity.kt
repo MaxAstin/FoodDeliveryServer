@@ -20,7 +20,7 @@ class UserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var role: UserRole by UserTable.role
 
     var city: CityEntity by CityEntity referencedOn UserTable.city
-    var cafe: CafeEntity by CafeEntity referencedOn UserTable.cafe
+    //var cafe: CafeEntity by CafeEntity referencedOn UserTable.cafe
 
     companion object : UUIDEntityClass<UserEntity>(UserTable)
 }
