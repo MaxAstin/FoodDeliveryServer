@@ -1,5 +1,6 @@
 package com.bunbeauty.fooddelivery.data.entity
 
+import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.enums.UserRole
 import com.bunbeauty.fooddelivery.data.table.UserTable
 import org.jetbrains.exposed.dao.UUIDEntity
@@ -19,6 +20,7 @@ class UserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var role: UserRole by UserTable.role
 
     var city: CityEntity by CityEntity referencedOn UserTable.city
+    //var cafe: CafeEntity by CafeEntity referencedOn UserTable.cafe
 
     companion object : UUIDEntityClass<UserEntity>(UserTable)
 }
