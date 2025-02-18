@@ -7,5 +7,5 @@ class PostUser(
     val username: String,
     val password: String,
     val role: String,
-    val cityUuid: String
+    val cafeUuid: String
 )

@@ -20,5 +20,5 @@ object UserTable : UUIDTable() {
     @Deprecated("Use cafe to connect tables")
     val city = reference("city", CityTable)
 
-    val cafe = reference("cafe", CafeTable).nullable()
+    val cafe = reference("cafe", CafeTable)
 }
