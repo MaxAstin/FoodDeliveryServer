@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.data.features.user
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
-import com.bunbeauty.fooddelivery.data.entity.CityEntity
 import com.bunbeauty.fooddelivery.data.entity.UserEntity
+import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.features.company.mapper.mapCompanyEntity
 import com.bunbeauty.fooddelivery.data.features.user.mapper.toUser
 import com.bunbeauty.fooddelivery.data.table.UserTable
@@ -15,16 +15,16 @@ import java.util.*
 class UserRepository {
 
     suspend fun getCompanyByUserUuid(uuid: UUID): Company? = query {
-        UserEntity.findById(uuid)?.city?.company?.mapCompanyEntity()
+        UserEntity.findById(uuid)?.cafe?.city?.company?.mapCompanyEntity()
     }
 
     suspend fun getUserByUuid(uuid: UUID): User? = query {
         UserEntity.findById(uuid)?.toUser()
     }
 
-    suspend fun getUserListByCityUuid(cityUuid: UUID): List<User> = query {
+    suspend fun getUserListByCafeUuid(cafeUuid: UUID): List<User> = query {
         UserEntity.find {
-            UserTable.city eq cityUuid
+            UserTable.cafe eq cafeUuid
         }.map(UserEntity::toUser)
     }
 
@@ -39,7 +39,7 @@ class UserRepository {
             username = insertUser.username
             passwordHash = insertUser.passwordHash
             role = insertUser.role
-            city = CityEntity[insertUser.cityUuid]
+            cafe = CafeEntity[insertUser.cafeUuid]
         }.toUser()
     }
 

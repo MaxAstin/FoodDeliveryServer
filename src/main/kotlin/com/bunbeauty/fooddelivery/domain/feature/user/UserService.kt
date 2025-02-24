@@ -37,8 +37,9 @@ class UserService(
             val token = jwtService.generateToken(user)
             UserAuthResponse(
                 token = token,
-                cityUuid = user.cityWithCafes.city.uuid,
-                companyUuid = user.companyUuid
+                cafeUuid = user.cafe.uuid,
+                companyUuid = user.companyUuid,
+                cityUuid = user.cityUuid
             )
         } else {
             incorrectPasswordError(postUserAuth.password)
@@ -51,7 +52,7 @@ class UserService(
             username = postUser.username.lowercase(),
             passwordHash = passwordHash,
             role = UserRole.findByRoleName(postUser.role),
-            cityUuid = postUser.cityUuid.toUuid()
+            cafeUuid = postUser.cafeUuid.toUuid()
         )
 
         return userRepository.insertUser(

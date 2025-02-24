@@ -41,10 +41,8 @@ class NotificationService(
 
     suspend fun sendNotification(cafeUuid: String, orderCode: String) {
         try {
-            val cafe = cafeRepository.getCafeByUuid(uuid = cafeUuid.toUuid())
-                .orThrowNotFoundByUuidError(uuid = cafeUuid)
-            userRepository.getUserListByCityUuid(
-                cityUuid = cafe.cityUuid.toUuid()
+            userRepository.getUserListByCafeUuid(
+                cafeUuid = cafeUuid.toUuid()
             ).forEach { user ->
                 buildMessage(
                     user = user,
