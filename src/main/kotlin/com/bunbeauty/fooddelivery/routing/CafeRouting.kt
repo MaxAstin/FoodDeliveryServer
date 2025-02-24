@@ -9,6 +9,7 @@ import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.PostCafe
 import com.bunbeauty.fooddelivery.routing.extension.adminWithBody
 import com.bunbeauty.fooddelivery.routing.extension.getListResult
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
+import com.bunbeauty.fooddelivery.routing.extension.getResult
 import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
@@ -24,6 +25,7 @@ import org.koin.ktor.ext.inject
 fun Application.configureCafeRouting() {
     routing {
         getCafesByCityUuid()
+        getCafesByUuid()
         authenticate {
             postCafe()
             patchCafe()
@@ -38,6 +40,17 @@ private fun Routing.getCafesByCityUuid() {
         getListResult {
             val cityUuid = call.getParameter(CITY_UUID_PARAMETER)
             cafeService.getCafeListByCityUuid(cityUuid = cityUuid)
+        }
+    }
+}
+
+private fun Routing.getCafesByUuid() {
+    val cafeService: CafeService by inject()
+
+    get("/v2/cafe") {
+        getResult {
+            val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
+            cafeService.getCafeByCafeUuid(cafeUuid = cafeUuid)
         }
     }
 }
