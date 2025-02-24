@@ -38,7 +38,8 @@ class UserService(
             UserAuthResponse(
                 token = token,
                 cafeUuid = user.cafe.uuid,
-                companyUuid = user.companyUuid
+                companyUuid = user.companyUuid,
+                cityUuid = user.cityUuid
             )
         } else {
             incorrectPasswordError(postUserAuth.password)

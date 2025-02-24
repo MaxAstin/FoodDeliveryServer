@@ -14,6 +14,7 @@ fun UserEntity.toUser(): User {
         notificationToken = notificationToken,
         unlimitedNotification = unlimitedNotification,
         cafe = cafe.mapCafeEntity(),
-        company = cafe.city.company.mapCompanyEntity()
+        company = cafe.city.company.mapCompanyEntity(),
+        cityUuid = city.uuid
     )
 }

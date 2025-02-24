@@ -17,7 +17,7 @@ object UserTable : UUIDTable() {
     val unlimitedNotification = bool("unlimitedNotification").default(true)
     val role = enumeration("role", UserRole::class)
 
-    @Deprecated("Use cafe to connect tables")
+    @Deprecated("Use cafe to connect tables, remove after 01.04.25")
     val city = reference("city", CityTable)
 
     val cafe = reference("cafe", CafeTable)
