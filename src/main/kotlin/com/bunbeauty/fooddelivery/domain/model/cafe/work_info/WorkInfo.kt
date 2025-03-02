@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  * @workLoad - workload for cafe
  */
 @Serializable
-class WorkInfo(
+data class WorkInfo(
     val workType: WorkType,
     val workload: Workload
 )
