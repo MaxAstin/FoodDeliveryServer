@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.domain.model.company
 
-import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkType
+import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.WorkType
 import java.util.*
 
 class UpdateCompany(

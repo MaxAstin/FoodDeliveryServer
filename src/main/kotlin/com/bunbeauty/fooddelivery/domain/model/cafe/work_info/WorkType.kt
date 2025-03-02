@@ -1,4 +1,4 @@
-package com.bunbeauty.fooddelivery.domain.model.company.work_info
+package com.bunbeauty.fooddelivery.domain.model.cafe.work_info
 
 /**
  * Class describes company work state

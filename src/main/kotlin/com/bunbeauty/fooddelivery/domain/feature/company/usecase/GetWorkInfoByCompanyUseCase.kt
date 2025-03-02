@@ -2,11 +2,13 @@ package com.bunbeauty.fooddelivery.domain.feature.company.usecase
 
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
-import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkInfo
-import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkType
+import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.WorkInfo
+import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.WorkType
+import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.Workload
 import com.bunbeauty.fooddelivery.domain.toUuid
 
-class GetWorkInfoUseCase(
+@Deprecated("Use GetWorkInfoByCafeUseCase, now workType belong to cafe")
+class GetWorkInfoByCompanyUseCase(
     private val companyRepository: CompanyRepository
 ) {
     /**
@@ -22,7 +24,8 @@ class GetWorkInfoUseCase(
                 company.workType
             } else {
                 WorkType.CLOSED
-            }
+            },
+            workload = Workload.LOW
         )
     }
 }

@@ -17,6 +17,8 @@ val mapCafeEntity: CafeEntity.() -> Cafe = {
         address = address,
         cityUuid = city.uuid,
         isVisible = isVisible,
+        workType = workType,
+        workload = workload,
         zones = zones.map(mapDeliveryZoneEntity)
     )
 }

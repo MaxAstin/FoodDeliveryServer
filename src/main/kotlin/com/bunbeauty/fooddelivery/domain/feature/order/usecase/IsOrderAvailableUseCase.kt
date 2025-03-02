@@ -2,7 +2,7 @@ package com.bunbeauty.fooddelivery.domain.feature.order.usecase
 
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
-import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkType
+import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.WorkType
 import com.bunbeauty.fooddelivery.domain.toUuid
 
 class IsOrderAvailableUseCase(

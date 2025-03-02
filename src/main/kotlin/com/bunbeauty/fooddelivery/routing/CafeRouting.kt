@@ -26,6 +26,8 @@ fun Application.configureCafeRouting() {
     routing {
         getCafesByCityUuid()
         getCafesByUuid()
+        getWorkInfoV2()
+
         authenticate {
             postCafe()
             patchCafe()
@@ -79,6 +81,20 @@ private fun Route.patchCafe() {
                 cafeUuid = cafeUuid,
                 patchCafe = bodyRequest.body
             )
+        }
+    }
+}
+
+/**
+ * endpoint which describe cafe work
+ * */
+private fun Route.getWorkInfoV2() {
+    val cafeService: CafeService by inject()
+
+    get("/v2/work_info") {
+        getResult {
+            val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
+            cafeService.getWorkInfo(cafeUuid = cafeUuid)
         }
     }
 }

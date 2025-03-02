@@ -1,12 +1,14 @@
-package com.bunbeauty.fooddelivery.domain.model.company.work_info
+package com.bunbeauty.fooddelivery.domain.model.cafe.work_info
 
 import kotlinx.serialization.Serializable
 
 /**
  * Class describes company work flow
  * @workType - work state for company
+ * @workLoad - workload for cafe
  */
 @Serializable
 class WorkInfo(
-    val workType: WorkType
+    val workType: WorkType,
+    val workload: Workload
 )

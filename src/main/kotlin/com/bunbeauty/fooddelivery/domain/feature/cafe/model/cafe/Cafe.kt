@@ -1,6 +1,8 @@
 package com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe
 
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.DeliveryZone
+import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.WorkType
+import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.Workload
 
 class Cafe(
     val uuid: String,
@@ -13,5 +15,7 @@ class Cafe(
     val address: String,
     val cityUuid: String,
     val isVisible: Boolean,
+    val workType: WorkType,
+    val workload: Workload,
     val zones: List<DeliveryZone>
 )

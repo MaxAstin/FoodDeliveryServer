@@ -6,6 +6,8 @@ import com.bunbeauty.fooddelivery.domain.feature.city.City
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUserLight
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderProduct
+import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.WorkType
+import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.Workload
 
 object FakeOrder {
 
@@ -46,6 +48,8 @@ object FakeOrder {
                     address = "",
                     cityUuid = "",
                     isVisible = true,
+                    workload = Workload.LOW,
+                    workType = WorkType.CLOSED,
                     zones = emptyList()
                 ),
                 city = City(
