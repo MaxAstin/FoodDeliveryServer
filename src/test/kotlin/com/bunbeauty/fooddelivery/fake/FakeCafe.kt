@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.fake
 
-import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.CafeWithZones
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.DeliveryZone
 import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.WorkType
 import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.Workload
@@ -20,7 +20,7 @@ object FakeCafe {
         workType: WorkType = WorkType.CLOSED,
         workload: Workload = Workload.LOW,
         zones: List<DeliveryZone> = emptyList()
-    ) = Cafe(
+    ) = CafeWithZones(
         uuid = uuid,
         fromTime = fromTime,
         toTime = toTime,

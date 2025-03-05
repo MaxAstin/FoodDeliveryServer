@@ -18,5 +18,12 @@ object AddressV2Table : UUIDTable() {
     val isVisible = bool("isVisible")
 
     val clientUser = reference("clientUser", ClientUserTable)
+
+    @Deprecated("Not need city because we have cafe uuid")
     val city = reference("city", CityTable)
+
+    val cafe = varchar("cafeUuid", 512).nullable()
+
+    // TODO uncomment after connetct
+    // val cafe = reference("cafe", CafeTable)
 }

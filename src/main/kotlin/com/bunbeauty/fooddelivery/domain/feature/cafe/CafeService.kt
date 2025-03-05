@@ -3,6 +3,7 @@ package com.bunbeauty.fooddelivery.domain.feature.cafe
 import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.mapper.cafe.mapCafe
+import com.bunbeauty.fooddelivery.domain.feature.cafe.mapper.cafe.mapCafeWithZones
 import com.bunbeauty.fooddelivery.domain.feature.cafe.mapper.cafe.mapPatchCafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.mapper.cafe.mapPostCafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.GetCafe
@@ -15,7 +16,8 @@ import com.bunbeauty.fooddelivery.domain.toUuid
 class CafeService(
     private val cafeRepository: CafeRepository,
     private val privacyCheckService: PrivacyCheckService,
-    private val getWorkInfoByCafeUseCase: GetWorkInfoByCafeUseCase
+    private val getWorkInfoByCafeUseCase: GetWorkInfoByCafeUseCase,
+    private val getCafeByUserAddressUseCase: GetCafeByUserAddressUseCase
 ) {
 
     suspend fun createCafe(userUuid: String, postCafe: PostCafe): GetCafe {
@@ -26,17 +28,17 @@ class CafeService(
 
         return cafeRepository.insertCafe(
             insertCafe = postCafe.mapPostCafe()
-        ).mapCafe()
+        ).mapCafeWithZones()
     }
 
     suspend fun getCafeListByCityUuid(cityUuid: String): List<GetCafe> {
         return cafeRepository.getCafeListByCityUuid(cityUuid = cityUuid)
-            .map(mapCafe)
+            .map(mapCafeWithZones)
     }
 
     suspend fun getCafeByCafeUuid(cafeUuid: String): GetCafe {
         return cafeRepository.getCafeByUuid(uuid = cafeUuid.toUuid())
-            .orThrowNotFoundByUuidError(uuid = cafeUuid).mapCafe()
+            .orThrowNotFoundByUuidError(uuid = cafeUuid).mapCafeWithZones()
     }
 
     suspend fun updateCafe(userUuid: String, cafeUuid: String, patchCafe: PatchCafe): GetCafe {
@@ -49,10 +51,14 @@ class CafeService(
             cafeUuid = cafeUuid,
             updateCafe = patchCafe.mapPatchCafe()
         ).orThrowNotFoundByUuidError(uuid = cafeUuid)
-            .mapCafe()
+            .mapCafeWithZones()
     }
 
     suspend fun getWorkInfo(cafeUuid: String): WorkInfo {
         return getWorkInfoByCafeUseCase(cafeUuid = cafeUuid)
+    }
+
+    suspend fun getCafeByUserAddressUuid(userAddressUuid: String): GetCafe {
+        return getCafeByUserAddressUseCase(userAddressUuid = userAddressUuid).mapCafe()
     }
 }

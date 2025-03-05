@@ -9,7 +9,8 @@ class InsertAddressV2(
     val comment: String?,
     val isVisible: Boolean,
     val clientUserUuid: String,
-    val cityUuid: String
+    val cityUuid: String,
+    val cafeUuid: String
 )
 
 class InsertStreetV2(

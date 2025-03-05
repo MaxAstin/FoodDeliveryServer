@@ -37,7 +37,7 @@ class UserService(
             val token = jwtService.generateToken(user)
             UserAuthResponse(
                 token = token,
-                cafeUuid = user.cafe.uuid,
+                cafeUuid = user.cafeWithZones.uuid,
                 companyUuid = user.companyUuid,
                 cityUuid = user.cityUuid
             )

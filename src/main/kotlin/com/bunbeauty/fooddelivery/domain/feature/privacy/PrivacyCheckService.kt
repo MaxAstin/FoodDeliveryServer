@@ -28,7 +28,7 @@ class PrivacyCheckService(
     suspend fun checkIsCafeAvailable(userUuid: String, cafeUuid: String) {
         val user = userRepository.getUserByUuid(userUuid.toUuid()).orThrowNotFoundByUuidError(userUuid)
         val isAvailable = user.company.citiesWithCafes.flatMap { city ->
-            city.cafes
+            city.cafeWithZones
         }.any { cafe ->
             cafe.uuid == cafeUuid
         }

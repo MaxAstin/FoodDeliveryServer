@@ -23,7 +23,7 @@ class FindDeliveryZoneByCityUuidAndCoordinatesUseCase(
                     deliveryZone.isVisible
                 }.map { deliveryZone ->
                     DeliveryZoneWithCafe(
-                        cafe = cafe,
+                        cafeWithZones = cafe,
                         deliveryZone = deliveryZone
                     )
                 }

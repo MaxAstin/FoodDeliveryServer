@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.fake
 
-import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.CafeWithCity
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.CafeWithZones
 import com.bunbeauty.fooddelivery.domain.feature.city.City
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUserLight
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
@@ -37,7 +37,7 @@ object FakeOrder {
             paymentMethod = "",
             percentDiscount = percentDiscount,
             cafeWithCity = CafeWithCity(
-                cafe = Cafe(
+                cafeWithZones = CafeWithZones(
                     uuid = "",
                     fromTime = 0,
                     toTime = 0,

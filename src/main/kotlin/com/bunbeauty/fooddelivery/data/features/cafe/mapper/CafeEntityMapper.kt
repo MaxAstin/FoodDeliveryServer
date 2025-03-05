@@ -2,11 +2,11 @@ package com.bunbeauty.fooddelivery.data.features.cafe.mapper
 
 import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
 import com.bunbeauty.fooddelivery.data.features.city.mapper.mapCityEntity
-import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.CafeWithCity
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.CafeWithZones
 
-val mapCafeEntity: CafeEntity.() -> Cafe = {
-    Cafe(
+val mapCafeWithZonesEntity: CafeEntity.() -> CafeWithZones = {
+    CafeWithZones(
         uuid = uuid,
         fromTime = fromTime,
         toTime = toTime,
@@ -25,7 +25,7 @@ val mapCafeEntity: CafeEntity.() -> Cafe = {
 
 val mapCafeEntityToCafeWithCity: CafeEntity.() -> CafeWithCity = {
     CafeWithCity(
-        cafe = mapCafeEntity(),
+        cafeWithZones = mapCafeWithZonesEntity(),
         city = city.mapCityEntity()
     )
 }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class GetWorkInfoByCafeUseCaseTest {
+class GetWorkInfoByCafeWithZonesUseCaseTest {
     private val companyRepository: CompanyRepository = mockk()
     private val getWorkInfoByCompanyUseCase: GetWorkInfoByCompanyUseCase = GetWorkInfoByCompanyUseCase(companyRepository)
 
