@@ -68,7 +68,7 @@ val mapOrderToCafeOrder: Order.() -> GetCafeOrder = {
         time = time,
         timeZone = cafeWithCity.city.timeZone,
         deferredTime = deferredTime,
-        cafeUuid = cafeWithCity.cafe.uuid
+        cafeUuid = cafeWithCity.cafeWithZones.uuid
     )
 }
 
@@ -87,7 +87,7 @@ val mapOrderToCafeOrderDetails: Order.(OrderTotal) -> GetCafeOrderDetails = { or
         oldTotalCost = orderTotal.oldTotalCost,
         newTotalCost = orderTotal.newTotalCost,
         clientUser = clientUser.mapClientUserLight(),
-        cafeUuid = cafeWithCity.cafe.uuid,
+        cafeUuid = cafeWithCity.cafeWithZones.uuid,
         oderProductList = orderProducts.mapNotNull { oderProduct ->
             orderTotal.productTotalMap[oderProduct.uuid]?.let { orderProductTotal ->
                 oderProduct.mapOrderProduct(uuid, orderProductTotal)
@@ -112,7 +112,7 @@ val mapOrderToCafeOrderDetailsV2: Order.(OrderTotal) -> GetCafeOrderDetailsV2 = 
         oldTotalCost = orderTotal.oldTotalCost,
         newTotalCost = orderTotal.newTotalCost,
         clientUser = clientUser.mapClientUserLight(),
-        cafeUuid = cafeWithCity.cafe.uuid,
+        cafeUuid = cafeWithCity.cafeWithZones.uuid,
         percentDiscount = percentDiscount,
         paymentMethod = paymentMethod,
         oderProductList = orderProducts.mapNotNull { oderProduct ->

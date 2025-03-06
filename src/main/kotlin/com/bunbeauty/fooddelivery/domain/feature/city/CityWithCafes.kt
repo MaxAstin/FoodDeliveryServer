@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.domain.feature.city
 
-import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.CafeWithZones
 
 class CityWithCafes(
     val city: City,
-    val cafes: List<Cafe>
+    val cafeWithZones: List<CafeWithZones>
 )

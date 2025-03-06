@@ -4,7 +4,7 @@ import com.bunbeauty.fooddelivery.data.table.address.AddressV2Table
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import java.util.*
+import java.util.UUID
 
 class AddressEntityV2(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
 
@@ -19,8 +19,11 @@ class AddressEntityV2(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var floor: String? by AddressV2Table.floor
     var comment: String? by AddressV2Table.comment
     var isVisible: Boolean by AddressV2Table.isVisible
+    var cafeUuid: String? by AddressV2Table.cafe
 
     var clientUser: ClientUserEntity by ClientUserEntity referencedOn AddressV2Table.clientUser
+
+    @Deprecated("Not need city because we have cafe uuid")
     var city: CityEntity by CityEntity referencedOn AddressV2Table.city
 
     companion object : UUIDEntityClass<AddressEntityV2>(AddressV2Table)

@@ -61,6 +61,7 @@ class AddressRepository(
                 isVisible = insertAddress.isVisible
                 clientUser = ClientUserEntity[insertAddress.clientUserUuid.toUuid()]
                 city = CityEntity[insertAddress.cityUuid.toUuid()]
+                cafeUuid = insertAddress.cafeUuid
             }.mapAddressEntityV2()
         }
     }

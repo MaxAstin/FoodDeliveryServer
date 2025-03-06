@@ -1,8 +1,8 @@
 package com.bunbeauty.fooddelivery.domain.feature.order.usecase
 
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
-import com.bunbeauty.fooddelivery.domain.feature.company.usecase.GetWorkInfoUseCase
-import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkType
+import com.bunbeauty.fooddelivery.domain.feature.company.usecase.GetWorkInfoByCompanyUseCase
+import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.WorkType
 import com.bunbeauty.fooddelivery.domain.toUuid
 import com.bunbeauty.fooddelivery.fake.FakeCompany
 import io.mockk.coEvery
@@ -11,9 +11,9 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class GetWorkInfoUseCaseTest {
+class GetWorkInfoByCafeWithZonesUseCaseTest {
     private val companyRepository: CompanyRepository = mockk()
-    private val getWorkInfoUseCase: GetWorkInfoUseCase = GetWorkInfoUseCase(companyRepository)
+    private val getWorkInfoByCompanyUseCase: GetWorkInfoByCompanyUseCase = GetWorkInfoByCompanyUseCase(companyRepository)
 
     @Test
     fun `invoke should return WorkInfo with CLOSED workType when company is not open`() = runTest {
@@ -28,7 +28,7 @@ class GetWorkInfoUseCaseTest {
         coEvery { companyRepository.getCompanyByUuid(companyUuid.toUuid()) } returns company
 
         // Act
-        val result = getWorkInfoUseCase(companyUuid)
+        val result = getWorkInfoByCompanyUseCase(companyUuid)
 
         // Assert
         assertEquals(WorkType.CLOSED, result.workType)
@@ -47,7 +47,7 @@ class GetWorkInfoUseCaseTest {
         coEvery { companyRepository.getCompanyByUuid(companyUuid.toUuid()) } returns company
 
         // Act
-        val result = getWorkInfoUseCase(companyUuid)
+        val result = getWorkInfoByCompanyUseCase(companyUuid)
 
         // Assert
         assertEquals(WorkType.DELIVERY_AND_PICKUP, result.workType)

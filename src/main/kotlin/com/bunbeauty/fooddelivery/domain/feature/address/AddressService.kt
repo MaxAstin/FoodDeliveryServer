@@ -59,7 +59,7 @@ class AddressService(
             latitude = suggestion.latitude,
             longitude = suggestion.longitude
         ) ?: deliveryNotAvailableAtThisAddress(suggestion.latitude, suggestion.longitude)
-        val insertAddress = postAddress.mapPostAddressV2(addressInfo)
+        val insertAddress = postAddress.mapPostAddressV2(addressInfo, deliveryZone.cafeUuid)
         return addressRepository.insertAddressV2(insertAddress = insertAddress)
             .mapAddressV2(deliveryZone)
     }

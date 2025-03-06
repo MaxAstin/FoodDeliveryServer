@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.domain.feature.company
 
 import com.bunbeauty.fooddelivery.domain.feature.city.CityWithCafes
-import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkType
+import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.WorkType
 
 class Company(
     val uuid: String,

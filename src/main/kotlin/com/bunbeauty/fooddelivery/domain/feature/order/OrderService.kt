@@ -79,7 +79,7 @@ class OrderService(
         val insertOrder = postOrder.mapPostOrder(orderInfo)
         val order = orderRepository.insertOrder(insertOrder)
         orderRepository.updateSession(
-            key = order.cafeWithCity.cafe.uuid,
+            key = order.cafeWithCity.cafeWithZones.uuid,
             order = order
         )
 
@@ -108,7 +108,7 @@ class OrderService(
         val insertOrder = postOrder.mapPostOrderV2(orderInfo)
         val order = orderRepository.insertOrderV2(insertOrder)
         orderRepository.updateSession(
-            key = order.cafeWithCity.cafe.uuid,
+            key = order.cafeWithCity.cafeWithZones.uuid,
             order = order
         )
 
@@ -137,7 +137,7 @@ class OrderService(
         val insertOrder = postOrder.mapPostOrderV3(orderInfo)
         val order = orderRepository.insertOrderV3(insertOrder)
         orderRepository.updateSession(
-            key = order.cafeWithCity.cafe.uuid,
+            key = order.cafeWithCity.cafeWithZones.uuid,
             order = order
         )
 
@@ -214,7 +214,7 @@ class OrderService(
         ).orThrowNotFoundByUuidError(orderUuid)
 
         orderRepository.updateSession(
-            key = order.cafeWithCity.cafe.uuid,
+            key = order.cafeWithCity.cafeWithZones.uuid,
             order = order
         )
         orderRepository.updateSession(
@@ -266,7 +266,7 @@ class OrderService(
         if (postOrder.isDelivery) {
             val addressUuid = postOrder.addressUuid ?: noAddressUuidForDeliveryError()
             deliveryZoneWithCafe = findDeliveryZone(addressUuid = addressUuid)
-            cafeUuid = deliveryZoneWithCafe.cafe.uuid
+            cafeUuid = deliveryZoneWithCafe.cafeWithZones.uuid
         } else {
             deliveryZoneWithCafe = null
             cafeUuid = postOrder.cafeUuid ?: noCafeUuidForPickupError()
@@ -304,7 +304,7 @@ class OrderService(
         val cafeUuid: String
         if (postOrder.isDelivery) {
             deliveryZoneWithCafe = findDeliveryZone(addressUuid = postOrder.address.uuid)
-            cafeUuid = deliveryZoneWithCafe.cafe.uuid
+            cafeUuid = deliveryZoneWithCafe.cafeWithZones.uuid
         } else {
             deliveryZoneWithCafe = null
             cafeUuid = postOrder.address.uuid
@@ -351,7 +351,7 @@ class OrderService(
         val cafeUuid: String
         if (postOrder.isDelivery) {
             deliveryZoneWithCafe = findDeliveryZone(addressUuid = postOrder.address.uuid)
-            cafeUuid = deliveryZoneWithCafe.cafe.uuid
+            cafeUuid = deliveryZoneWithCafe.cafeWithZones.uuid
         } else {
             deliveryZoneWithCafe = null
             cafeUuid = postOrder.address.uuid

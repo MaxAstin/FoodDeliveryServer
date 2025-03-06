@@ -7,7 +7,7 @@ import com.bunbeauty.fooddelivery.data.features.user.UserRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICafeStatisticRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
-import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
+import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.CafeWithZones
 import com.bunbeauty.fooddelivery.domain.feature.company.Company
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateCostWithDiscountUseCase
@@ -99,19 +99,19 @@ class StatisticService(
             cafeRepository.getCafeListByCompanyUuid(companyUuid = company.uuid)
                 .forEach { cafe ->
                     updateCafeStatistic(
-                        cafe = cafe,
+                        cafeWithZones = cafe,
                         periodType = PeriodType.DAY,
                         fromDateTime = dayPeriodFromDateTime,
                         toDateTime = toDateTime
                     )
                     updateCafeStatistic(
-                        cafe = cafe,
+                        cafeWithZones = cafe,
                         periodType = PeriodType.WEEK,
                         fromDateTime = weekPeriodFromDateTime,
                         toDateTime = toDateTime
                     )
                     updateCafeStatistic(
-                        cafe = cafe,
+                        cafeWithZones = cafe,
                         periodType = PeriodType.MONTH,
                         fromDateTime = monthPeriodFromDateTime,
                         toDateTime = toDateTime
@@ -162,13 +162,13 @@ class StatisticService(
     }
 
     private suspend inline fun updateCafeStatistic(
-        cafe: Cafe,
+        cafeWithZones: CafeWithZones,
         periodType: PeriodType,
         fromDateTime: DateTime,
         toDateTime: DateTime
     ) {
         val statisticOrderList = orderStatisticRepository.getOrderListByCafeUuid(
-            cafeUuid = cafe.uuid.toUuid(),
+            cafeUuid = cafeWithZones.uuid.toUuid(),
             fromTime = fromDateTime.millis,
             toTime = toDateTime.millis
         )
@@ -176,7 +176,7 @@ class StatisticService(
         val getStatistic = cafeStatisticRepository.getStatisticByTimePeriodTypeCafe(
             time = fromDateTime.millis,
             periodType = periodType,
-            cafeUuid = cafe.uuid.toUuid()
+            cafeUuid = cafeWithZones.uuid.toUuid()
         )
         if (getStatistic == null) {
             val insertCompanyStatisticDay = InsertCafeStatistic(
@@ -186,7 +186,7 @@ class StatisticService(
                 orderProceeds =
                 calculateOrderProceeds(statisticOrderList),
                 statisticProductList = calculateStatisticProductList(statisticOrderList),
-                cafeUuid = cafe.uuid.toUuid()
+                cafeUuid = cafeWithZones.uuid.toUuid()
             )
             cafeStatisticRepository.insetStatistic(insertCompanyStatisticDay)
         } else {

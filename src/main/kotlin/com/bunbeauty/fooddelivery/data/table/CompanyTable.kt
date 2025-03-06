@@ -1,6 +1,6 @@
 package com.bunbeauty.fooddelivery.data.table
 
-import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkType
+import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.WorkType
 import org.jetbrains.exposed.dao.id.UUIDTable
 
 object CompanyTable : UUIDTable() {

@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.fake
 import com.bunbeauty.fooddelivery.domain.feature.company.Company
 import com.bunbeauty.fooddelivery.domain.feature.company.Delivery
 import com.bunbeauty.fooddelivery.domain.feature.company.Payment
-import com.bunbeauty.fooddelivery.domain.model.company.work_info.WorkType
+import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.WorkType
 
 object FakeCompany {
 

@@ -57,6 +57,7 @@ private fun Route.patchCompany() {
 /**
  * endpoint which describe cafe work
  * */
+@Deprecated("Use v2 in CafeRouting, after 1.0.3 workInfo belong to cafe")
 private fun Route.getWorkInfo() {
     val companyService: CompanyService by inject()
 
