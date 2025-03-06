@@ -107,7 +107,7 @@ private fun Route.getWorkInfoV2() {
 private fun Route.getCafeByUserAddressUuid() {
     val cafeService: CafeService by inject()
 
-    get("cafe/user") {
+    get("cafe/user_address") {
         getResult {
             val userAddressUuid = call.getParameter(USER_ADDRESS_UUID_PARAMETER)
             cafeService.getCafeByUserAddressUuid(userAddressUuid = userAddressUuid)
