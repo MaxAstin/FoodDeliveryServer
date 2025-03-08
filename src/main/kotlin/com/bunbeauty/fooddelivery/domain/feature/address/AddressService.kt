@@ -59,7 +59,7 @@ class AddressService(
             latitude = suggestion.latitude,
             longitude = suggestion.longitude
         ) ?: deliveryNotAvailableAtThisAddress(suggestion.latitude, suggestion.longitude)
-        val insertAddress = postAddress.mapPostAddressV2(addressInfo, deliveryZone.cafeUuid)
+        val insertAddress = postAddress.mapPostAddressV2(addressInfo, deliveryZone.uuid)
         return addressRepository.insertAddressV2(insertAddress = insertAddress)
             .mapAddressV2(deliveryZone)
     }
@@ -137,12 +137,12 @@ class AddressService(
     }
 
     /*
-     * TODO(Remove in 1.0.5 release after add all cafeUuid to address)
+     * TODO(Remove in 1.0.6 release after add all cafeUuid to address)
      * */
-    suspend fun addToAddressCafeUuid(cityUuid: String, cafeUuid: String) {
+    suspend fun addToAddressDeliveryZoneUuid(cityUuid: String, newDeliveryZoneUuid: String) {
         val addressList = addressRepository.getAddressListByCityUuidV2(cityUuid)
         addressList.forEach { address ->
-            addressRepository.patchAddressCafeUuid(addressUuid = address.uuid, newCafeUuid = cafeUuid)
+            addressRepository.patchAddressDeliveryZoneUuid(addressUuid = address.uuid, newDeliveryZoneUuid = newDeliveryZoneUuid)
         }
     }
 
