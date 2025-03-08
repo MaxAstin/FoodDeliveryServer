@@ -19,6 +19,7 @@ object Constants {
     const val COMPANY_UUID_PARAMETER = "companyUuid"
     const val CITY_UUID_PARAMETER = "cityUuid"
     const val CAFE_UUID_PARAMETER = "cafeUuid"
+    const val DELIVERY_ZONE_UUID_PARAMETER = "deliveryZoneUuid"
     const val USER_ADDRESS_UUID_PARAMETER = "userAddressUuid"
     const val UUID_PARAMETER = "uuid"
     const val PERIOD_PARAMETER = "period"

@@ -21,6 +21,6 @@ val mapAddressEntityV2: AddressEntityV2.() -> AddressV2 = {
         userUuid = clientUser.uuid,
         cityUuid = city.uuid,
         isVisible = isVisible,
-        cafeUuid = cafeUuid.orEmpty()
+        deliveryZoneUuid = deliveryZoneUuid.orEmpty()
     )
 }

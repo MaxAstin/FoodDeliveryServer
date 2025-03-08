@@ -11,5 +11,5 @@ class AddressV2(
     val userUuid: String,
     val cityUuid: String,
     val isVisible: Boolean,
-    val cafeUuid: String
+    val deliveryZoneUuid: String
 )

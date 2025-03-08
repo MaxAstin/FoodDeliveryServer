@@ -61,7 +61,7 @@ class AddressRepository(
                 isVisible = insertAddress.isVisible
                 clientUser = ClientUserEntity[insertAddress.clientUserUuid.toUuid()]
                 city = CityEntity[insertAddress.cityUuid.toUuid()]
-                cafeUuid = insertAddress.cafeUuid
+                deliveryZoneUuid = insertAddress.deliveryZoneUuid
             }.mapAddressEntityV2()
         }
     }
@@ -130,12 +130,12 @@ class AddressRepository(
     }
 
     /*
-     * TODO(Remove in 1.0.5 release after add all cafeUuid to address)
+     * TODO(Remove in 1.0.6 release after add all cafeUuid to address)
      * */
-    suspend fun patchAddressCafeUuid(addressUuid: String, newCafeUuid: String) {
+    suspend fun patchAddressDeliveryZoneUuid(addressUuid: String, newDeliveryZoneUuid: String) {
         query {
             AddressEntityV2.findById(addressUuid.toUuid())?.apply {
-                cafeUuid = newCafeUuid
+                deliveryZoneUuid = newDeliveryZoneUuid
             }
         }
     }
