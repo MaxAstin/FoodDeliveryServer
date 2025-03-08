@@ -22,5 +22,6 @@ object AddressV2Table : UUIDTable() {
     @Deprecated("Not need city because we have cafe uuid")
     val city = reference("city", CityTable)
 
-    val deliveryZoneUuid = varchar("deliveryZoneUuid", 500).default("")
+    val deliveryZoneUuid = varchar("deliveryZoneUuid", 512).nullable()
+
 }
