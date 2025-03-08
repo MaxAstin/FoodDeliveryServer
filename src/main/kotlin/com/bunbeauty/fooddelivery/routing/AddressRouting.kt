@@ -11,6 +11,7 @@ import com.bunbeauty.fooddelivery.domain.feature.address.model.PostAddressV2
 import com.bunbeauty.fooddelivery.routing.extension.clientGetListResult
 import com.bunbeauty.fooddelivery.routing.extension.clientWithBody
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
+import com.bunbeauty.fooddelivery.routing.extension.getResult
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.auth.authenticate
@@ -110,7 +111,7 @@ private fun Route.patchAddressWithCafeUuid() {
     val addressService: AddressService by inject()
 
     get("/patch_address_with_cafe") {
-        clientGetListResult {
+        getResult {
             val cityUuid = call.getParameter(CITY_UUID_PARAMETER)
             val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
 
@@ -118,7 +119,6 @@ private fun Route.patchAddressWithCafeUuid() {
                 cityUuid = cityUuid,
                 cafeUuid = cafeUuid
             )
-            emptyList()
         }
     }
 }
