@@ -44,3 +44,4 @@ private fun Application.configureApp() {
     configureRouting()
     scheduleTasks()
 }
+

@@ -16,8 +16,6 @@ import com.bunbeauty.fooddelivery.domain.toUuid
 class CafeService(
     private val cafeRepository: CafeRepository,
     private val privacyCheckService: PrivacyCheckService,
-    private val getWorkInfoByCafeUseCase: GetWorkInfoByCafeUseCase,
-    private val getCafeByUserAddressUseCase: GetCafeByUserAddressUseCase
 ) {
 
     suspend fun createCafe(userUuid: String, postCafe: PostCafe): GetCafe {
@@ -38,7 +36,7 @@ class CafeService(
 
     suspend fun getCafeByCafeUuid(cafeUuid: String): GetCafe {
         return cafeRepository.getCafeByUuid(uuid = cafeUuid.toUuid())
-            .orThrowNotFoundByUuidError(uuid = cafeUuid).mapCafeWithZones()
+            .orThrowNotFoundByUuidError(uuid = cafeUuid).mapCafe()
     }
 
     suspend fun updateCafe(userUuid: String, cafeUuid: String, patchCafe: PatchCafe): GetCafe {
@@ -52,13 +50,5 @@ class CafeService(
             updateCafe = patchCafe.mapPatchCafe()
         ).orThrowNotFoundByUuidError(uuid = cafeUuid)
             .mapCafeWithZones()
-    }
-
-    suspend fun getWorkInfo(cafeUuid: String): WorkInfo {
-        return getWorkInfoByCafeUseCase(cafeUuid = cafeUuid)
-    }
-
-    suspend fun getCafeByUserAddressUuid(userAddressUuid: String): GetCafe {
-        return getCafeByUserAddressUseCase(userAddressUuid = userAddressUuid).mapCafe()
     }
 }

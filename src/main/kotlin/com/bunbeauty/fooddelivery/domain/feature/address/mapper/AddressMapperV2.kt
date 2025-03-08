@@ -19,6 +19,7 @@ val mapAddressV2: AddressV2.(DeliveryZone) -> GetAddressV2 = { deliveryZone ->
         lowDeliveryCost = deliveryZone.lowDeliveryCost,
         userUuid = userUuid,
         cityUuid = cityUuid,
-        isVisible = isVisible
+        isVisible = isVisible,
+        cafeUuid = cafeUuid
     )
 }
