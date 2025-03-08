@@ -22,10 +22,11 @@ import org.koin.ktor.ext.inject
 
 fun Application.configureAddressRouting() {
     routing {
+        patchAddressWithCafeUuid()
+
         authenticate {
             getAddresses()
             postAddress()
-            patchAddressWithCafeUuid()
             getSuggestions()
             getAddressesV2()
             postAddressV2()
