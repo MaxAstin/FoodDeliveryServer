@@ -33,7 +33,6 @@ val mapCafeEntityToCafeWithCity: CafeEntity.() -> CafeWithCity = {
     )
 }
 
-
 fun ResultRow.mapCafeEntityToCafe() = Cafe(
     uuid = this[CafeTable.id].value.toString(),
     fromTime = this[CafeTable.fromTime],

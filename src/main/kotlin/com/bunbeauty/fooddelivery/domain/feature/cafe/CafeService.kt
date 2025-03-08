@@ -10,12 +10,11 @@ import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.GetCafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.PatchCafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.PostCafe
 import com.bunbeauty.fooddelivery.domain.feature.privacy.PrivacyCheckService
-import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.WorkInfo
 import com.bunbeauty.fooddelivery.domain.toUuid
 
 class CafeService(
     private val cafeRepository: CafeRepository,
-    private val privacyCheckService: PrivacyCheckService,
+    private val privacyCheckService: PrivacyCheckService
 ) {
 
     suspend fun createCafe(userUuid: String, postCafe: PostCafe): GetCafe {

@@ -23,7 +23,6 @@ import com.bunbeauty.fooddelivery.domain.feature.address.model.Suggestion
 import com.bunbeauty.fooddelivery.domain.feature.city.City
 import com.bunbeauty.fooddelivery.domain.toUuid
 import com.bunbeauty.fooddelivery.network.getDataOrNull
-import java.util.UUID
 import org.jetbrains.exposed.sql.and
 
 private const val STREET_BOUND = "street"
@@ -82,7 +81,7 @@ class AddressRepository(
         return query {
             AddressEntityV2.find {
                 (AddressV2Table.clientUser eq userUuid.toUuid()) and
-                        (AddressV2Table.city eq cityUuid.toUuid())
+                    (AddressV2Table.city eq cityUuid.toUuid())
             }.toList()
                 .map(mapAddressEntityV2)
         }
@@ -131,8 +130,8 @@ class AddressRepository(
     }
 
     /*
-    * TODO(Remove in 1.0.5 release after add all cafeUuid to address)
-    * */
+     * TODO(Remove in 1.0.5 release after add all cafeUuid to address)
+     * */
     suspend fun patchAddressCafeUuid(addressUuid: String, newCafeUuid: String) {
         query {
             AddressEntityV2.findById(addressUuid.toUuid())?.apply {

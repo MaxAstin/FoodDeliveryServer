@@ -12,9 +12,8 @@ import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.CafeWithZones
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.InsertCafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.UpdateCafe
 import com.bunbeauty.fooddelivery.domain.toUuid
-import java.util.*
-import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.select
+import java.util.*
 
 class CafeRepository {
 
@@ -46,7 +45,7 @@ class CafeRepository {
                 CafeTable.codeCounter,
                 CafeTable.isVisible,
                 CafeTable.workType,
-                CafeTable.workload,
+                CafeTable.workload
             ).select {
                 CafeTable.id eq uuid
             }.singleOrNull()?.mapCafeEntityToCafe()

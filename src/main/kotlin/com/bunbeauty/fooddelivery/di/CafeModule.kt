@@ -8,7 +8,7 @@ val cafeModule = module(createdAtStart = true) {
     factory {
         CafeService(
             cafeRepository = get(),
-            privacyCheckService = get(),
+            privacyCheckService = get()
         )
     }
     single { CafeRepository() }

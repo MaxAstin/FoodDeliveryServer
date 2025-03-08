@@ -121,4 +121,3 @@ private fun Route.patchAddressWithCafeUuid() {
         }
     }
 }
-

@@ -137,8 +137,8 @@ class AddressService(
     }
 
     /*
-    * TODO(Remove in 1.0.5 release after add all cafeUuid to address)
-    * */
+     * TODO(Remove in 1.0.5 release after add all cafeUuid to address)
+     * */
     suspend fun addToAddressCafeUuid(cityUuid: String, cafeUuid: String) {
         val addressList = addressRepository.getAddressListByCityUuidV2(cityUuid)
         addressList.forEach { address ->
