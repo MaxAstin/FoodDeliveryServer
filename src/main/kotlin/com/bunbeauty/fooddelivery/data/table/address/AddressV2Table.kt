@@ -23,7 +23,4 @@ object AddressV2Table : UUIDTable() {
     val city = reference("city", CityTable)
 
     val deliveryZoneUuid = varchar("deliveryZoneUuid", 500).default("")
-
-    // TODO uncomment after connetct
-    // val cafe = reference("cafe", CafeTable)
 }
