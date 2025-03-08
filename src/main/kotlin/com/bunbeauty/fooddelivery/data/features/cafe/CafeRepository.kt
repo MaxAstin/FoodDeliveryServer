@@ -45,7 +45,8 @@ class CafeRepository {
                 CafeTable.codeCounter,
                 CafeTable.isVisible,
                 CafeTable.workType,
-                CafeTable.workload
+                CafeTable.workload,
+                CafeTable.city
             ).select {
                 CafeTable.id eq uuid
             }.singleOrNull()?.mapCafeEntityToCafe()
