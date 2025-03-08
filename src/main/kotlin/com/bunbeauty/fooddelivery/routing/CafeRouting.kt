@@ -2,7 +2,6 @@ package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.CAFE_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.CITY_UUID_PARAMETER
-import com.bunbeauty.fooddelivery.data.Constants.USER_ADDRESS_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.domain.feature.cafe.CafeService
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.GetCafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.PatchCafe
@@ -27,8 +26,6 @@ fun Application.configureCafeRouting() {
     routing {
         getCafesByCityUuid()
         getCafesByUuid()
-        getWorkInfoV2()
-        getCafeByUserAddressUuid()
 
         authenticate {
             postCafe()
@@ -83,34 +80,6 @@ private fun Route.patchCafe() {
                 cafeUuid = cafeUuid,
                 patchCafe = bodyRequest.body
             )
-        }
-    }
-}
-
-/**
- * endpoint which describe cafe work
- * */
-private fun Route.getWorkInfoV2() {
-    val cafeService: CafeService by inject()
-
-    get("/v2/work_info") {
-        getResult {
-            val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
-            cafeService.getWorkInfo(cafeUuid = cafeUuid)
-        }
-    }
-}
-
-/**
- * endpoint which get cafe by user address uuid
- * */
-private fun Route.getCafeByUserAddressUuid() {
-    val cafeService: CafeService by inject()
-
-    get("cafe/user_address") {
-        getResult {
-            val userAddressUuid = call.getParameter(USER_ADDRESS_UUID_PARAMETER)
-            cafeService.getCafeByUserAddressUuid(userAddressUuid = userAddressUuid)
         }
     }
 }

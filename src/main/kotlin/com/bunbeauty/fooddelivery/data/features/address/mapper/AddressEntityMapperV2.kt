@@ -20,6 +20,7 @@ val mapAddressEntityV2: AddressEntityV2.() -> AddressV2 = {
         comment = comment,
         userUuid = clientUser.uuid,
         cityUuid = city.uuid,
-        isVisible = isVisible
+        isVisible = isVisible,
+        cafeUuid = cafeUuid.orEmpty()
     )
 }

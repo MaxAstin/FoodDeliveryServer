@@ -3,9 +3,9 @@ package com.bunbeauty.fooddelivery.data.features.cafe
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.CityEntity
 import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
+import com.bunbeauty.fooddelivery.data.features.cafe.mapper.mapCafeEntityToCafe
 import com.bunbeauty.fooddelivery.data.features.cafe.mapper.mapCafeWithZonesEntity
 import com.bunbeauty.fooddelivery.data.table.CityTable
-import com.bunbeauty.fooddelivery.data.table.address.AddressV2Table
 import com.bunbeauty.fooddelivery.data.table.cafe.CafeTable
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.Cafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.CafeWithZones
@@ -13,7 +13,7 @@ import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.InsertCafe
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.UpdateCafe
 import com.bunbeauty.fooddelivery.domain.toUuid
 import org.jetbrains.exposed.sql.select
-import java.util.UUID
+import java.util.*
 
 class CafeRepository {
 
@@ -31,15 +31,9 @@ class CafeRepository {
         }.mapCafeWithZonesEntity()
     }
 
-    suspend fun getCafeByUuid(uuid: UUID): CafeWithZones? {
+    suspend fun getCafeByUuid(uuid: UUID): Cafe? {
         return query {
-            CafeEntity.findById(uuid)?.mapCafeWithZonesEntity()
-        }
-    }
-
-    suspend fun getCafeByUserAddressUuid(uuid: UUID): Cafe? {
-        return query {
-            (AddressV2Table innerJoin CafeTable).slice(
+            (CafeTable).slice(
                 CafeTable.id,
                 CafeTable.fromTime,
                 CafeTable.toTime,
@@ -51,26 +45,10 @@ class CafeRepository {
                 CafeTable.codeCounter,
                 CafeTable.isVisible,
                 CafeTable.workType,
-                CafeTable.workload,
-                CafeTable.city
+                CafeTable.workload
             ).select {
-                AddressV2Table.id eq uuid
-            }.singleOrNull()?.let { cafeTable ->
-                Cafe(
-                    uuid = cafeTable[CafeTable.id].value.toString(),
-                    fromTime = cafeTable[CafeTable.fromTime],
-                    toTime = cafeTable[CafeTable.toTime],
-                    offset = cafeTable[CafeTable.offset],
-                    phone = cafeTable[CafeTable.phoneNumber],
-                    latitude = cafeTable[CafeTable.latitude],
-                    longitude = cafeTable[CafeTable.longitude],
-                    address = cafeTable[CafeTable.address],
-                    isVisible = cafeTable[CafeTable.isVisible],
-                    workType = cafeTable[CafeTable.workType],
-                    workload = cafeTable[CafeTable.workload],
-                    cityUuid = cafeTable[CafeTable.city].value.toString()
-                )
-            }
+                CafeTable.id eq uuid
+            }.singleOrNull()?.mapCafeEntityToCafe()
         }
     }
 

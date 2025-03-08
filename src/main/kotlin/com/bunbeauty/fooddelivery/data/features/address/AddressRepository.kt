@@ -87,6 +87,15 @@ class AddressRepository(
         }
     }
 
+    suspend fun getAddressListByCityUuidV2(cityUuid: String): List<AddressV2> {
+        return query {
+            AddressEntityV2.find {
+                AddressV2Table.city eq cityUuid.toUuid()
+            }.toList()
+                .map(mapAddressEntityV2)
+        }
+    }
+
     suspend fun getAddressByUuid(uuid: String): Address? {
         return query {
             AddressEntity.findById(uuid.toUuid())?.mapAddressEntity()
@@ -118,5 +127,16 @@ class AddressRepository(
         ).getDataOrNull()
             ?.mapSuggestionsResponse()
             .orEmpty()
+    }
+
+    /*
+     * TODO(Remove in 1.0.5 release after add all cafeUuid to address)
+     * */
+    suspend fun patchAddressCafeUuid(addressUuid: String, newCafeUuid: String) {
+        query {
+            AddressEntityV2.findById(addressUuid.toUuid())?.apply {
+                cafeUuid = newCafeUuid
+            }
+        }
     }
 }
