@@ -10,7 +10,7 @@ class InsertAddressV2(
     val isVisible: Boolean,
     val clientUserUuid: String,
     val cityUuid: String,
-    val cafeUuid: String
+    val deliveryZoneUuid: String
 )
 
 class InsertStreetV2(

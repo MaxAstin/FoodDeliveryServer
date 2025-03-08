@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.routing
 
-import com.bunbeauty.fooddelivery.data.Constants.CAFE_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.CITY_UUID_PARAMETER
+import com.bunbeauty.fooddelivery.data.Constants.DELIVERY_ZONE_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.QUERY_PARAMETER
 import com.bunbeauty.fooddelivery.domain.feature.address.AddressService
 import com.bunbeauty.fooddelivery.domain.feature.address.model.GetAddress
@@ -105,19 +105,19 @@ private fun Route.postAddressV2() {
 }
 
 /*
-* TODO(Remove in 1.0.5 release after add all cafeUuid to address)
+* TODO(Remove in 1.0.6 release after add all cafeUuid to address)
 * */
 private fun Route.patchAddressWithCafeUuid() {
     val addressService: AddressService by inject()
 
-    get("/patch_address_with_cafe") {
+    get("/patch_address_with_delivery_zone") {
         getResult {
             val cityUuid = call.getParameter(CITY_UUID_PARAMETER)
-            val cafeUuid = call.getParameter(CAFE_UUID_PARAMETER)
+            val newDeliveryZoneUuid = call.getParameter(DELIVERY_ZONE_UUID_PARAMETER)
 
-            addressService.addToAddressCafeUuid(
+            addressService.addToAddressDeliveryZoneUuid(
                 cityUuid = cityUuid,
-                cafeUuid = cafeUuid
+                newDeliveryZoneUuid = newDeliveryZoneUuid
             )
         }
     }

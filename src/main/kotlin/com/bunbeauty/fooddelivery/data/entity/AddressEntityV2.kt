@@ -19,7 +19,7 @@ class AddressEntityV2(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var floor: String? by AddressV2Table.floor
     var comment: String? by AddressV2Table.comment
     var isVisible: Boolean by AddressV2Table.isVisible
-    var cafeUuid: String? by AddressV2Table.cafe
+    var deliveryZoneUuid: String? by AddressV2Table.deliveryZoneUuid
 
     var clientUser: ClientUserEntity by ClientUserEntity referencedOn AddressV2Table.clientUser
 

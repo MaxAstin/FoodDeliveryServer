@@ -5,7 +5,7 @@ import com.bunbeauty.fooddelivery.domain.feature.address.model.InsertAddressV2
 import com.bunbeauty.fooddelivery.domain.feature.address.model.InsertStreetV2
 import com.bunbeauty.fooddelivery.domain.feature.address.model.PostAddressV2
 
-val mapPostAddressV2: PostAddressV2.(AddressInfoV2, String) -> InsertAddressV2 = { addressInfo, cafeUuid ->
+val mapPostAddressV2: PostAddressV2.(AddressInfoV2, String) -> InsertAddressV2 = { addressInfo, deliveryZoneUuid ->
     InsertAddressV2(
         street = InsertStreetV2(
             fiasId = street.fiasId,
@@ -21,6 +21,6 @@ val mapPostAddressV2: PostAddressV2.(AddressInfoV2, String) -> InsertAddressV2 =
         isVisible = isVisible,
         clientUserUuid = addressInfo.userUuid,
         cityUuid = cityUuid,
-        cafeUuid = cafeUuid
+        deliveryZoneUuid = deliveryZoneUuid
     )
 }
