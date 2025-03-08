@@ -22,7 +22,7 @@ object AddressV2Table : UUIDTable() {
     @Deprecated("Not need city because we have cafe uuid")
     val city = reference("city", CityTable)
 
-    val deliveryZoneUuid = varchar("deliveryZoneUuid", 256).nullable()
+    val deliveryZoneUuid = varchar("deliveryZoneUuid", 500).default("")
 
     // TODO uncomment after connetct
     // val cafe = reference("cafe", CafeTable)
