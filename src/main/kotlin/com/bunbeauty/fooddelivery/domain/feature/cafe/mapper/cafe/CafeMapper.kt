@@ -15,7 +15,9 @@ val mapCafeWithZones: CafeWithZones.() -> GetCafe = {
         longitude = longitude,
         address = address,
         cityUuid = cityUuid,
-        isVisible = isVisible
+        isVisible = isVisible,
+        workType = workType,
+        workload = workload
     )
 }
 
@@ -30,6 +32,8 @@ val mapCafe: Cafe.() -> GetCafe = {
         longitude = longitude,
         address = address,
         cityUuid = cityUuid,
-        isVisible = isVisible
+        isVisible = isVisible,
+        workType = workType,
+        workload = workload
     )
 }

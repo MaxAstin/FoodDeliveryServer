@@ -23,5 +23,4 @@ object AddressV2Table : UUIDTable() {
     val city = reference("city", CityTable)
 
     val deliveryZoneUuid = varchar("deliveryZoneUuid", 512).nullable()
-
 }
