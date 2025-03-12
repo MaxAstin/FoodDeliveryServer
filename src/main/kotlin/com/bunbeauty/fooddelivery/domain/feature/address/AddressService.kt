@@ -4,7 +4,7 @@ import com.bunbeauty.fooddelivery.data.features.address.AddressRepository
 import com.bunbeauty.fooddelivery.data.features.address.StreetRepository
 import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
 import com.bunbeauty.fooddelivery.data.features.city.CityRepository
-import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
+import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.domain.error.noAccessToCompanyError
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.address.mapper.mapAddress
@@ -26,7 +26,7 @@ import com.bunbeauty.fooddelivery.domain.toUuid
 class AddressService(
     private val addressRepository: AddressRepository,
     private val streetRepository: StreetRepository,
-    private val clientUserRepository: ClientUserRepository,
+    private val companyRepository: CompanyRepository,
     private val cityRepository: CityRepository,
     private val cafeRepository: CafeRepository,
     private val checkIsPointInPolygonUseCase: CheckIsPointInPolygonUseCase
@@ -35,9 +35,9 @@ class AddressService(
     suspend fun createAddress(userUuid: String, postAddress: PostAddress): GetAddress {
         val street = streetRepository.getStreetByUuid(streetUuid = postAddress.streetUuid.toUuid())
             .orThrowNotFoundByUuidError(postAddress.streetUuid)
-        val clientUser = clientUserRepository.getClientUserByUuid(uuid = userUuid)
+        val company = companyRepository.getCompanyByUserUuid(userUuid = userUuid)
             .orThrowNotFoundByUuidError(userUuid)
-        if (street.companyUuid != clientUser.companyWithCafes.uuid) {
+        if (street.companyUuid != company.uuid) {
             noAccessToCompanyError(street.companyUuid)
         }
         val insertAddress = postAddress.mapPostAddress(userUuid)
@@ -142,7 +142,10 @@ class AddressService(
     suspend fun addToAddressDeliveryZoneUuid(cityUuid: String, newDeliveryZoneUuid: String) {
         val addressList = addressRepository.getAddressListByCityUuidV2(cityUuid)
         addressList.forEach { address ->
-            addressRepository.patchAddressDeliveryZoneUuid(addressUuid = address.uuid, newDeliveryZoneUuid = newDeliveryZoneUuid)
+            addressRepository.patchAddressDeliveryZoneUuid(
+                addressUuid = address.uuid,
+                newDeliveryZoneUuid = newDeliveryZoneUuid
+            )
         }
     }
 

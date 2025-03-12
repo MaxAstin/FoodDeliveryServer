@@ -1,38 +1,25 @@
 package com.bunbeauty.fooddelivery.domain.feature.order.usecase
 
-import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.domain.error.ExceptionWithCode
-import com.bunbeauty.fooddelivery.fake.FakeClientUser
-import com.bunbeauty.fooddelivery.fake.FakeCompanyWithCafes
+import com.bunbeauty.fooddelivery.fake.FakeCompany
 import com.bunbeauty.fooddelivery.fake.FakeDeliveryZone
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.test.runTest
-import org.junit.Test
 import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
 
 class GetDeliveryCostUseCaseTest {
 
-    private val clientUser = FakeClientUser.create(
-        companyWithCafes = FakeCompanyWithCafes.create(
-            forFreeDelivery = 500,
-            deliveryCost = 100
-        )
-    )
-    private val clientUserUuid = "userUuid"
-    private val clientUserRepository: ClientUserRepository = mockk {
-        coEvery { getClientUserByUuid(clientUserUuid) } returns clientUser
-    }
     private val calculateOrderProductsNewCostUseCase: CalculateOrderProductsNewCostUseCase = mockk()
     private lateinit var getDeliveryCostUseCase: GetDeliveryCostUseCase
 
     @BeforeTest
     fun setup() {
         getDeliveryCostUseCase = GetDeliveryCostUseCase(
-            clientUserRepository = clientUserRepository,
             calculateOrderProductsNewCostUseCase = calculateOrderProductsNewCostUseCase
         )
     }
@@ -42,9 +29,12 @@ class GetDeliveryCostUseCaseTest {
         val deliveryCost = getDeliveryCostUseCase(
             isDelivery = false,
             deliveryZone = null,
-            clientUserUuid = clientUserUuid,
             orderProducts = emptyList(),
-            percentDiscount = null
+            percentDiscount = null,
+            company = FakeCompany.create(
+            forFreeDelivery = 500,
+            deliveryCost = 100
+            )
         )
 
         assertNull(deliveryCost)
@@ -62,9 +52,12 @@ class GetDeliveryCostUseCaseTest {
             val deliveryCost = getDeliveryCostUseCase(
                 isDelivery = true,
                 deliveryZone = null,
-                clientUserUuid = clientUserUuid,
                 orderProducts = emptyList(),
-                percentDiscount = null
+                percentDiscount = null,
+                company = FakeCompany.create(
+                    forFreeDelivery = 500,
+                    deliveryCost = 100
+                )
             )
 
             assertEquals(expected, deliveryCost)
@@ -82,9 +75,12 @@ class GetDeliveryCostUseCaseTest {
             val deliveryCost = getDeliveryCostUseCase(
                 isDelivery = true,
                 deliveryZone = null,
-                clientUserUuid = clientUserUuid,
                 orderProducts = emptyList(),
-                percentDiscount = null
+                percentDiscount = null,
+                company = FakeCompany.create(
+                    forFreeDelivery = 500,
+                    deliveryCost = 100
+                )
             )
 
             assertEquals(expected, deliveryCost)
@@ -105,9 +101,12 @@ class GetDeliveryCostUseCaseTest {
                 getDeliveryCostUseCase(
                     isDelivery = true,
                     deliveryZone = deliveryZone,
-                    clientUserUuid = clientUserUuid,
                     orderProducts = emptyList(),
-                    percentDiscount = null
+                    percentDiscount = null,
+                    company = FakeCompany.create(
+                        forFreeDelivery = 500,
+                        deliveryCost = 100
+                    )
                 )
             }
         )
@@ -129,9 +128,12 @@ class GetDeliveryCostUseCaseTest {
         val deliveryCost = getDeliveryCostUseCase(
             isDelivery = true,
             deliveryZone = deliveryZone,
-            clientUserUuid = clientUserUuid,
             orderProducts = emptyList(),
-            percentDiscount = null
+            percentDiscount = null,
+            company = FakeCompany.create(
+                forFreeDelivery = 500,
+                deliveryCost = 100
+            )
         )
 
         assertEquals(expected, deliveryCost)
@@ -153,9 +155,12 @@ class GetDeliveryCostUseCaseTest {
         val deliveryCost = getDeliveryCostUseCase(
             isDelivery = true,
             deliveryZone = deliveryZone,
-            clientUserUuid = clientUserUuid,
             orderProducts = emptyList(),
-            percentDiscount = null
+            percentDiscount = null,
+            company = FakeCompany.create(
+                forFreeDelivery = 500,
+                deliveryCost = 100
+            )
         )
 
         assertEquals(expected, deliveryCost)
@@ -177,9 +182,12 @@ class GetDeliveryCostUseCaseTest {
         val deliveryCost = getDeliveryCostUseCase(
             isDelivery = true,
             deliveryZone = deliveryZone,
-            clientUserUuid = clientUserUuid,
             orderProducts = emptyList(),
-            percentDiscount = null
+            percentDiscount = null,
+            company = FakeCompany.create(
+                forFreeDelivery = 500,
+                deliveryCost = 100
+            )
         )
 
         assertEquals(expected, deliveryCost)

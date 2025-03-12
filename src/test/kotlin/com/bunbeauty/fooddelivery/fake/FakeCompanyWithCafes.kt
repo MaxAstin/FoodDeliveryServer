@@ -39,8 +39,8 @@ object FakeCompanyWithCafes {
 object FakeCompany {
 
     fun create(
-        forFreeDelivery: Int,
-        deliveryCost: Int,
+        forFreeDelivery: Int = 0,
+        deliveryCost: Int = 0,
         isOpen: Boolean = false,
         workType: WorkType = WorkType.DELIVERY_AND_PICKUP
     ): Company {

@@ -3,6 +3,7 @@ package com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper
 import com.bunbeauty.fooddelivery.domain.feature.address.mapper.mapAddress
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUser
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUserLight
+import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUserWithOrders
 import com.bunbeauty.fooddelivery.domain.feature.company.mapper.mapCompanyWithCafes
 import com.bunbeauty.fooddelivery.domain.feature.order.mapper.mapOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderTotal
@@ -18,7 +19,7 @@ val mapClientUserLight: ClientUserLight.() -> GetCafeClientUser = {
     )
 }
 
-val mapClientUser: ClientUser.() -> GetClientUser = {
+val mapClientUserWithOrders: ClientUserWithOrders.() -> GetClientUser = {
     GetClientUser(
         uuid = uuid,
         phoneNumber = phoneNumber,
@@ -37,7 +38,16 @@ val mapClientUser: ClientUser.() -> GetClientUser = {
     )
 }
 
-val mapClientUserToClientSettings: ClientUser.() -> GetClientSettings = {
+val mapClientUserWithCafesToClientSettingsWithOrders: ClientUserWithOrders.() -> GetClientSettings = {
+    GetClientSettings(
+        uuid = uuid,
+        phoneNumber = phoneNumber,
+        email = email,
+        isActive = isActive
+    )
+}
+
+val mapClientUserToClientSettingsWithOrders: ClientUser.() -> GetClientSettings = {
     GetClientSettings(
         uuid = uuid,
         phoneNumber = phoneNumber,

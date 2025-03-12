@@ -78,6 +78,7 @@ private fun Route.getSuggestions() {
     }
 }
 
+@Deprecated("Use postAddressV2")
 private fun Route.postAddress() {
     val addressService: AddressService by inject()
 

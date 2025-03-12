@@ -36,7 +36,6 @@ val orderModule = module(createdAtStart = true) {
     }
     factory {
         GetDeliveryCostUseCase(
-            clientUserRepository = get(),
             calculateOrderProductsNewCostUseCase = get()
         )
     }

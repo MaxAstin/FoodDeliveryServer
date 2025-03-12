@@ -1,24 +1,22 @@
 package com.bunbeauty.fooddelivery.domain.feature.order.usecase
 
-import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.domain.error.errorWithCode
-import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.DeliveryZone
+import com.bunbeauty.fooddelivery.domain.feature.company.Company
 import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderProduct
 
 private const val ORDER_COST_IS_LOWER_THEN_MINIMAL_CODE = 900
 
 class GetDeliveryCostUseCase(
-    private val clientUserRepository: ClientUserRepository,
     private val calculateOrderProductsNewCostUseCase: CalculateOrderProductsNewCostUseCase
 ) {
 
-    suspend operator fun invoke(
+    operator fun invoke(
         isDelivery: Boolean,
         deliveryZone: DeliveryZone?,
-        clientUserUuid: String,
         orderProducts: List<OrderProduct>,
-        percentDiscount: Int?
+        percentDiscount: Int?,
+        company: Company
     ): Int? {
         if (!isDelivery) {
             return null
@@ -30,9 +28,6 @@ class GetDeliveryCostUseCase(
         )
 
         return if (deliveryZone == null) {
-            val company = clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
-                .orThrowNotFoundByUuidError(clientUserUuid)
-                .companyWithCafes
             if (orderProductsNewCost >= company.delivery.forFree) {
                 0
             } else {

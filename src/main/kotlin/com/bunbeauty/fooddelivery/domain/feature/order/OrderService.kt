@@ -301,13 +301,12 @@ class OrderService(
             cafeUuid = postOrder.cafeUuid ?: noCafeUuidForPickupError()
         }
 
-        val company = clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
+        val company = companyRepository.getCompanyByUserUuid(userUuid = clientUserUuid)
             .orThrowNotFoundByUuidError(clientUserUuid)
-            .companyWithCafes
+
         val deliveryCost = getDeliveryCostUseCase(
             isDelivery = postOrder.isDelivery,
             deliveryZone = deliveryZoneWithCafe?.deliveryZone,
-            clientUserUuid = clientUserUuid,
             orderProducts = postOrder.orderProducts.map { postOrderProduct ->
                 val menuProduct = menuProductRepository.getMenuProductByUuid(
                     companyUuid = company.uuid,
@@ -315,7 +314,8 @@ class OrderService(
                 ).orThrowNotFoundByUuidError(postOrderProduct.menuProductUuid)
                 postOrderProduct.mapPostOrderProductToOrderProduct(menuProduct)
             },
-            percentDiscount = null
+            percentDiscount = null,
+            company = company
         )
 
         return OrderInfo(
@@ -339,9 +339,9 @@ class OrderService(
             cafeUuid = postOrder.address.uuid
         }
 
-        val company = clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
+        val company = companyRepository.getCompanyByUserUuid(userUuid = clientUserUuid)
             .orThrowNotFoundByUuidError(clientUserUuid)
-            .companyWithCafes
+
         val percentDiscount = company.percentDiscount?.takeIf {
             val orderCount = orderRepository.getOrderCountByUserUuid(userUuid = clientUserUuid)
             orderCount == 0L
@@ -350,7 +350,7 @@ class OrderService(
         val deliveryCost = getDeliveryCostUseCase(
             isDelivery = postOrder.isDelivery,
             deliveryZone = deliveryZoneWithCafe?.deliveryZone,
-            clientUserUuid = clientUserUuid,
+            company = company,
             orderProducts = postOrder.orderProducts.map { postOrderProduct ->
                 val menuProduct = menuProductRepository.getMenuProductByUuid(
                     companyUuid = company.uuid,
@@ -378,7 +378,6 @@ class OrderService(
     ): OrderInfoV2 {
         val deliveryZoneWithCafe: DeliveryZoneWithCafe?
         val cafeUuid: String
-        println("TAG:CREATE_ORDER before postOrder.isDelivery ${getTime(LocalTime.now())}")
 
         if (postOrder.isDelivery) {
             deliveryZoneWithCafe = findDeliveryZone(addressUuid = postOrder.address.uuid)
@@ -388,23 +387,19 @@ class OrderService(
             cafeUuid = postOrder.address.uuid
         }
 
-        println("TAG:CREATE_ORDER before getClientUserByUuid ${getTime(LocalTime.now())}")
         val company = companyRepository.getCompanyByUserUuid(userUuid = clientUserUuid)
             .orThrowNotFoundByUuidError(clientUserUuid)
 
-        println("TAG:CREATE_ORDER before getOrderCountByUserUuid ${getTime(LocalTime.now())}")
         val percentDiscount = company.percentDiscount?.takeIf {
             val orderCount = orderRepository.getOrderCountByUserUuid(userUuid = clientUserUuid)
             orderCount == 0L
         }
 
-        println("TAG:CREATE_ORDER before getDeliveryCostUseCase ${getTime(LocalTime.now())}")
         val deliveryCost = getDeliveryCostUseCase(
             isDelivery = postOrder.isDelivery,
             deliveryZone = deliveryZoneWithCafe?.deliveryZone,
-            clientUserUuid = clientUserUuid,
+            company = company,
             orderProducts = postOrder.orderProducts.map { postOrderProduct ->
-                println("TAG:CREATE_ORDER before getMenuProductWithAdditionListByUuid ${getTime(LocalTime.now())}")
                 val menuProduct = menuProductRepository.getMenuProductWithAdditionListByUuid(
                     companyUuid = company.uuid,
                     uuid = postOrderProduct.menuProductUuid
@@ -413,7 +408,6 @@ class OrderService(
             },
             percentDiscount = percentDiscount
         )
-        println("TAG:CREATE_ORDER before return OrderInfoV2 ${getTime(LocalTime.now())}")
 
         return OrderInfoV2(
             time = DateTime.now().millis,

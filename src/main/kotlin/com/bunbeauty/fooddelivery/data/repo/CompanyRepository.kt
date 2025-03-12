@@ -43,21 +43,10 @@ class CompanyRepository {
     }
 
     suspend fun getCompanyByUuid(uuid: UUID): Company? = query {
-        (CompanyTable).slice(
-            CompanyTable.id,
-            CompanyTable.name,
-            CompanyTable.forFreeDelivery,
-            CompanyTable.deliveryCost,
-            CompanyTable.forceUpdateVersion,
-            CompanyTable.paymentPhoneNumber,
-            CompanyTable.paymentCardNumber,
-            CompanyTable.percentDiscount,
-            CompanyTable.maxVisibleRecommendationCount,
-            CompanyTable.isOpen,
-            CompanyTable.workType
-        ).select {
-            CompanyTable.id eq uuid
-        }.singleOrNull()?.mapCompanyResultRow()
+        (CompanyTable).slice(CompanyTable.columns)
+            .select {
+                CompanyTable.id eq uuid
+            }.singleOrNull()?.mapCompanyResultRow()
     }
 
     suspend fun getCompanyByUserUuid(userUuid: String): Company? = query {
