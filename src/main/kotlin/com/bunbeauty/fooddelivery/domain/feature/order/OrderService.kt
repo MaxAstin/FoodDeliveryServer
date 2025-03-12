@@ -82,44 +82,35 @@ class OrderService(
     }
 
     suspend fun createOrder(clientUserUuid: String, postOrder: PostOrder): GetClientOrder {
-        println("TAG:CREATE_ORDER start createOrder before postOrder.orderProducts.isEmpty() ${getTime(LocalTime.now())}")
 
         if (postOrder.orderProducts.isEmpty()) {
             productListIsEmptyError()
         }
 
-        println("TAG:CREATE_ORDER before createOrderInfo ${getTime(LocalTime.now())}")
         val orderInfo = createOrderInfo(
             postOrder = postOrder,
             clientUserUuid = clientUserUuid
         )
-        println("TAG:CREATE_ORDER before isOrderAvailableUseCase ${getTime(LocalTime.now())}")
 
         if (!isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
             cafeIsClosedError()
         }
-        println("TAG:CREATE_ORDER before mapPostOrder ${getTime(LocalTime.now())}")
 
         val insertOrder = postOrder.mapPostOrder(orderInfo)
-        println("TAG:CREATE_ORDER before insertOrder ${getTime(LocalTime.now())}")
 
         val order = orderRepository.insertOrder(insertOrder)
-        println("TAG:CREATE_ORDER before updateSession ${getTime(LocalTime.now())}")
 
         orderRepository.updateSession(
             key = order.cafeWithCity.cafeWithZones.uuid,
             order = order
         )
-        println("TAG:CREATE_ORDER before sendNotification ${getTime(LocalTime.now())}")
 
         notificationService.sendNotification(
             cafeUuid = orderInfo.cafeUuid,
             orderCode = order.code
         )
-        println("TAG:CREATE_ORDER before calculateOrderTotalUseCase ${getTime(LocalTime.now())}")
 
         val orderTotal = calculateOrderTotalUseCase(order)
-        println("TAG:CREATE_ORDER return ${getTime(LocalTime.now())}")
 
         return order.mapOrder(orderTotal)
     }
@@ -155,31 +146,44 @@ class OrderService(
     }
 
     suspend fun createOrderV3(clientUserUuid: String, postOrder: PostOrderV3): GetClientOrderV2 {
+        println("TAG:CREATE_ORDER start createOrder before postOrder.orderProducts.isEmpty() ${getTime(LocalTime.now())}")
         if (postOrder.orderProducts.isEmpty()) {
             productListIsEmptyError()
         }
 
+        println("TAG:CREATE_ORDER before createOrderInfoV2 ${getTime(LocalTime.now())}")
         val orderInfo = createOrderInfoV2(
             postOrder = postOrder,
             clientUserUuid = clientUserUuid
         )
+
+        println("TAG:CREATE_ORDER before isOrderAvailableUseCase ${getTime(LocalTime.now())}")
         if (!isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
             cafeIsClosedError()
         }
 
+        println("TAG:CREATE_ORDER before mapPostOrderV3 ${getTime(LocalTime.now())}")
         val insertOrder = postOrder.mapPostOrderV3(orderInfo)
+
+        println("TAG:CREATE_ORDER before insertOrderV3 ${getTime(LocalTime.now())}")
         val order = orderRepository.insertOrderV3(insertOrder)
+
+        println("TAG:CREATE_ORDER before updateSession ${getTime(LocalTime.now())}")
         orderRepository.updateSession(
             key = order.cafeWithCity.cafeWithZones.uuid,
             order = order
         )
 
+        println("TAG:CREATE_ORDER before sendNotification ${getTime(LocalTime.now())}")
         notificationService.sendNotification(
             cafeUuid = orderInfo.cafeUuid,
             orderCode = order.code
         )
 
+        println("TAG:CREATE_ORDER before calculateOrderTotalUseCase ${getTime(LocalTime.now())}")
         val orderTotal = calculateOrderTotalUseCase(order)
+
+        println("TAG:CREATE_ORDER return ${getTime(LocalTime.now())}")
         return order.mapOrderToV2(orderTotal)
     }
 
