@@ -10,6 +10,7 @@ import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
 import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.features.order.OrderRepository
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
+import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.domain.error.errorWithCode
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.deliveryzone.DeliveryZoneWithCafe
@@ -42,13 +43,13 @@ import com.bunbeauty.fooddelivery.domain.feature.order.usecase.FindDeliveryZoneB
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.GetDeliveryCostUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.IsOrderAvailableUseCase
 import com.bunbeauty.fooddelivery.service.NotificationService
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.joda.time.DateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import kotlin.coroutines.CoroutineContext
 
 private const val CAFE_IS_CLOSED_CODE = 901
@@ -63,7 +64,8 @@ class OrderService(
     private val findDeliveryZoneByCityUuidAndCoordinatesUseCase: FindDeliveryZoneByCityUuidAndCoordinatesUseCase,
     private val calculateOrderTotalUseCase: CalculateOrderTotalUseCase,
     private val getDeliveryCostUseCase: GetDeliveryCostUseCase,
-    private val isOrderAvailableUseCase: IsOrderAvailableUseCase
+    private val isOrderAvailableUseCase: IsOrderAvailableUseCase,
+    private val companyRepository: CompanyRepository
 ) : CoroutineScope {
 
     private val codesCount = CODE_LETTERS.length * CODE_NUMBER_COUNT
@@ -82,7 +84,6 @@ class OrderService(
     }
 
     suspend fun createOrder(clientUserUuid: String, postOrder: PostOrder): GetClientOrder {
-
         if (postOrder.orderProducts.isEmpty()) {
             productListIsEmptyError()
         }
@@ -388,9 +389,8 @@ class OrderService(
         }
 
         println("TAG:CREATE_ORDER before getClientUserByUuid ${getTime(LocalTime.now())}")
-        val company = clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
+        val company = companyRepository.getCompanyByUserUuid(userUuid = clientUserUuid)
             .orThrowNotFoundByUuidError(clientUserUuid)
-            .companyWithCafes
 
         println("TAG:CREATE_ORDER before getOrderCountByUserUuid ${getTime(LocalTime.now())}")
         val percentDiscount = company.percentDiscount?.takeIf {

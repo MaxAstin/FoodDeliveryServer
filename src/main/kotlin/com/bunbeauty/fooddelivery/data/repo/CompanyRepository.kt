@@ -4,11 +4,13 @@ import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.features.company.mapper.mapCompanyResultRow
 import com.bunbeauty.fooddelivery.data.features.company.mapper.mapCompanyWithCafesEntity
+import com.bunbeauty.fooddelivery.data.table.ClientUserTable
 import com.bunbeauty.fooddelivery.data.table.CompanyTable
 import com.bunbeauty.fooddelivery.domain.feature.company.Company
 import com.bunbeauty.fooddelivery.domain.feature.company.CompanyWithCafes
 import com.bunbeauty.fooddelivery.domain.model.company.InsertCompany
 import com.bunbeauty.fooddelivery.domain.model.company.UpdateCompany
+import com.bunbeauty.fooddelivery.domain.toUuid
 import org.jetbrains.exposed.sql.select
 import java.util.*
 
@@ -56,6 +58,14 @@ class CompanyRepository {
         ).select {
             CompanyTable.id eq uuid
         }.singleOrNull()?.mapCompanyResultRow()
+    }
+
+    suspend fun getCompanyByUserUuid(userUuid: String): Company? = query {
+        (ClientUserTable innerJoin CompanyTable)
+            .slice(CompanyTable.columns)
+            .select { ClientUserTable.id eq userUuid.toUuid() }
+            .singleOrNull()
+            ?.mapCompanyResultRow()
     }
 
     suspend fun getCompanyList(): List<CompanyWithCafes> = query {

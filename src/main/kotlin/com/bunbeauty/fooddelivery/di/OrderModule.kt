@@ -65,7 +65,8 @@ val orderModule = module(createdAtStart = true) {
             findDeliveryZoneByCityUuidAndCoordinatesUseCase = get(),
             calculateOrderTotalUseCase = get(),
             getDeliveryCostUseCase = get(),
-            isOrderAvailableUseCase = get()
+            isOrderAvailableUseCase = get(),
+            companyRepository = get()
         )
     }
     single { OrderRepository() }
