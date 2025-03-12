@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.domain.feature.order.usecase
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.domain.error.ExceptionWithCode
 import com.bunbeauty.fooddelivery.fake.FakeClientUser
-import com.bunbeauty.fooddelivery.fake.FakeCompany
+import com.bunbeauty.fooddelivery.fake.FakeCompanyWithCafes
 import com.bunbeauty.fooddelivery.fake.FakeDeliveryZone
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -17,7 +17,7 @@ import kotlin.test.assertNull
 class GetDeliveryCostUseCaseTest {
 
     private val clientUser = FakeClientUser.create(
-        company = FakeCompany.create(
+        companyWithCafes = FakeCompanyWithCafes.create(
             forFreeDelivery = 500,
             deliveryCost = 100
         )

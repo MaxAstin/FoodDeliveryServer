@@ -2,7 +2,7 @@ package com.bunbeauty.fooddelivery.domain.feature.company
 
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUserUuidError
-import com.bunbeauty.fooddelivery.domain.feature.company.mapper.mapCompany
+import com.bunbeauty.fooddelivery.domain.feature.company.mapper.mapCompanyWithCafes
 import com.bunbeauty.fooddelivery.domain.feature.company.usecase.GetWorkInfoByCompanyUseCase
 import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.WorkInfo
 import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.WorkType
@@ -33,7 +33,7 @@ class CompanyService(
         )
         val company = companyRepository.insertCompany(insertCompany)
 
-        return company.mapCompany()
+        return company.mapCompanyWithCafes()
     }
 
     suspend fun changeCompanyByUuid(companyUuid: String, patchCompany: PatchCompany): GetCompany {
@@ -55,7 +55,7 @@ class CompanyService(
         val company = companyRepository.updateCompany(updateCompany)
             .orThrowNotFoundByUserUuidError(uuid = companyUuid)
 
-        return company.mapCompany()
+        return company.mapCompanyWithCafes()
     }
 
     suspend fun getWorkInfo(companyUuid: String): WorkInfo {

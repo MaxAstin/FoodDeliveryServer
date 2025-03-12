@@ -11,6 +11,8 @@ import com.google.firebase.messaging.FcmOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.Notification
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 
 private const val NEWS_NOTIFICATION_PREFIX = "NEWS_"
 private const val ORDER_CODE_KEY = "orderCode"
@@ -40,19 +42,23 @@ class NotificationService(
     }
 
     suspend fun sendNotification(cafeUuid: String, orderCode: String) {
-        try {
-            userRepository.getUserListByCafeUuid(
-                cafeUuid = cafeUuid.toUuid()
-            ).forEach { user ->
-                buildMessage(
-                    user = user,
-                    orderCode = orderCode
-                )?.let(firebaseMessaging::send)
+        supervisorScope {
+            launch {
+                try {
+                    userRepository.getUserListByCafeUuid(
+                        cafeUuid = cafeUuid.toUuid()
+                    ).forEach { user ->
+                        buildMessage(
+                            user = user,
+                            orderCode = orderCode
+                        )?.let(firebaseMessaging::send)
+                    }
+                    println("sendNotification success")
+                } catch (exception: Exception) {
+                    println("sendNotification exception:")
+                    exception.printStackTrace()
+                }
             }
-            println("sendNotification success")
-        } catch (exception: Exception) {
-            println("sendNotification exception:")
-            exception.printStackTrace()
         }
     }
 

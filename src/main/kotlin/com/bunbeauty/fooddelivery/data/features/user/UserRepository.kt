@@ -3,10 +3,10 @@ package com.bunbeauty.fooddelivery.data.features.user
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.UserEntity
 import com.bunbeauty.fooddelivery.data.entity.cafe.CafeEntity
-import com.bunbeauty.fooddelivery.data.features.company.mapper.mapCompanyEntity
+import com.bunbeauty.fooddelivery.data.features.company.mapper.mapCompanyWithCafesEntity
 import com.bunbeauty.fooddelivery.data.features.user.mapper.toUser
 import com.bunbeauty.fooddelivery.data.table.UserTable
-import com.bunbeauty.fooddelivery.domain.feature.company.Company
+import com.bunbeauty.fooddelivery.domain.feature.company.CompanyWithCafes
 import com.bunbeauty.fooddelivery.domain.feature.user.model.domain.NotificationData
 import com.bunbeauty.fooddelivery.domain.feature.user.model.domain.User
 import com.bunbeauty.fooddelivery.domain.model.user.InsertUser
@@ -14,8 +14,8 @@ import java.util.*
 
 class UserRepository {
 
-    suspend fun getCompanyByUserUuid(uuid: UUID): Company? = query {
-        UserEntity.findById(uuid)?.cafe?.city?.company?.mapCompanyEntity()
+    suspend fun getCompanyByUserUuid(uuid: UUID): CompanyWithCafes? = query {
+        UserEntity.findById(uuid)?.cafe?.city?.company?.mapCompanyWithCafesEntity()
     }
 
     suspend fun getUserByUuid(uuid: UUID): User? = query {

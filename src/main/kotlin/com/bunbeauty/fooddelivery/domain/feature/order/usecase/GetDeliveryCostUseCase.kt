@@ -32,7 +32,7 @@ class GetDeliveryCostUseCase(
         return if (deliveryZone == null) {
             val company = clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
                 .orThrowNotFoundByUuidError(clientUserUuid)
-                .company
+                .companyWithCafes
             if (orderProductsNewCost >= company.delivery.forFree) {
                 0
             } else {

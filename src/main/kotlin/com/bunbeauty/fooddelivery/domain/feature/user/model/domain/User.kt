@@ -1,7 +1,7 @@
 package com.bunbeauty.fooddelivery.domain.feature.user.model.domain
 
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.CafeWithZones
-import com.bunbeauty.fooddelivery.domain.feature.company.Company
+import com.bunbeauty.fooddelivery.domain.feature.company.CompanyWithCafes
 
 class User(
     val uuid: String,
@@ -12,8 +12,8 @@ class User(
     val unlimitedNotification: Boolean,
     val cafeWithZones: CafeWithZones,
     val cityUuid: String,
-    val company: Company
+    val companyWithCafes: CompanyWithCafes
 ) {
 
-    val companyUuid = company.uuid
+    val companyUuid = companyWithCafes.uuid
 }

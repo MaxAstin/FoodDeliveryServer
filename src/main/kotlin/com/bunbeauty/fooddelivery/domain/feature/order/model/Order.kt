@@ -2,7 +2,7 @@ package com.bunbeauty.fooddelivery.domain.feature.order.model
 
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.CafeWithCity
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUserLight
-import com.bunbeauty.fooddelivery.domain.feature.company.Company
+import com.bunbeauty.fooddelivery.domain.feature.company.CompanyWithCafes
 import com.bunbeauty.fooddelivery.domain.feature.menu.model.menuproduct.MenuProduct
 
 class Order(
@@ -24,7 +24,7 @@ class Order(
     val paymentMethod: String?,
     val percentDiscount: Int?,
     val cafeWithCity: CafeWithCity,
-    val company: Company,
+    val companyWithCafes: CompanyWithCafes,
     val clientUser: ClientUserLight,
     val orderProducts: List<OrderProduct>
 )
