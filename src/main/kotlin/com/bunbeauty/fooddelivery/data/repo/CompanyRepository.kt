@@ -46,6 +46,7 @@ class CompanyRepository {
 
     suspend fun getCompanyByUuid(uuid: UUID): Company? = query {
         (CompanyTable).slice(
+            CompanyTable.id,
             CompanyTable.name,
             CompanyTable.forFreeDelivery,
             CompanyTable.deliveryCost,
