@@ -40,10 +40,6 @@ class CompanyRepository {
         }?.mapCompanyWithCafesEntity()
     }
 
-    suspend fun getCompanyWithCafesByUuid(uuid: UUID): CompanyWithCafes? = query {
-        CompanyEntity.findById(uuid)?.mapCompanyWithCafesEntity()
-    }
-
     suspend fun getCompanyByUuid(uuid: UUID): Company? = query {
         (CompanyTable).slice(
             CompanyTable.id,
