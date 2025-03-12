@@ -5,12 +5,12 @@ import com.bunbeauty.fooddelivery.fake.FakeCompany
 import com.bunbeauty.fooddelivery.fake.FakeDeliveryZone
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
 import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
-import kotlinx.coroutines.test.runTest
-import org.junit.Test
 
 class GetDeliveryCostUseCaseTest {
 
@@ -32,8 +32,8 @@ class GetDeliveryCostUseCaseTest {
             orderProducts = emptyList(),
             percentDiscount = null,
             company = FakeCompany.create(
-            forFreeDelivery = 500,
-            deliveryCost = 100
+                forFreeDelivery = 500,
+                deliveryCost = 100
             )
         )
 
