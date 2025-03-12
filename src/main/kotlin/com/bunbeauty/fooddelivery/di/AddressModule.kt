@@ -62,7 +62,7 @@ val addressModule = module(createdAtStart = true) {
         AddressService(
             addressRepository = get(),
             streetRepository = get(),
-            clientUserRepository = get(),
+            companyRepository = get(),
             cityRepository = get(),
             cafeRepository = get(),
             checkIsPointInPolygonUseCase = get()

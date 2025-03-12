@@ -7,7 +7,7 @@ import org.koin.dsl.module
 val paymentModule = module(createdAtStart = true) {
     single<IPaymentService> {
         PaymentService(
-            clientUserRepository = get()
+            companyRepository = get()
         )
     }
 }

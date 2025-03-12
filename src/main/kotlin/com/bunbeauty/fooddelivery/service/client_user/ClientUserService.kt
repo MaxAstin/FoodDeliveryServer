@@ -4,8 +4,9 @@ import com.bunbeauty.fooddelivery.auth.IJwtService
 import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUserUuidError
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
-import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUser
-import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUserToClientSettings
+import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUserToClientSettingsWithOrders
+import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUserWithCafesToClientSettingsWithOrders
+import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUserWithOrders
 import com.bunbeauty.fooddelivery.domain.model.client_user.ClientAuthResponse
 import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientSettings
 import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientUser
@@ -48,15 +49,15 @@ class ClientUserService(
     }
 
     override suspend fun getClientUserByUuid(clientUserUuid: String): GetClientUser {
-        return clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
+        return clientUserRepository.getClientWithOrdersUserByUuid(uuid = clientUserUuid)
             .orThrowNotFoundByUuidError(uuid = clientUserUuid)
-            .mapClientUser()
+            .mapClientUserWithOrders()
     }
 
     override suspend fun getClientSettingsByUuid(clientUserUuid: String): GetClientSettings {
-        return clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
+        return clientUserRepository.getCompanyByUuid(uuid = clientUserUuid)
             .orThrowNotFoundByUserUuidError(uuid = clientUserUuid)
-            .mapClientUserToClientSettings()
+            .mapClientUserToClientSettingsWithOrders()
     }
 
     override suspend fun updateClientUserByUuid(
@@ -70,7 +71,7 @@ class ClientUserService(
                 isActive = patchClientUser.isActive
             )
         ).orThrowNotFoundByUuidError(uuid = clientUserUuid)
-            .mapClientUser()
+            .mapClientUserWithOrders()
     }
 
     override suspend fun updateClientUserSettingsByUuid(
@@ -84,7 +85,7 @@ class ClientUserService(
                 isActive = patchClientUser.isActive
             )
         ).orThrowNotFoundByUuidError(uuid = clientUserUuid)
-            .mapClientUserToClientSettings()
+            .mapClientUserWithCafesToClientSettingsWithOrders()
     }
 
     private fun credentialsError() {
