@@ -59,7 +59,7 @@ object FakeOrder {
                     isVisible = true
                 )
             ),
-            company = FakeCompany.create(
+            companyWithCafes = FakeCompanyWithCafes.create(
                 forFreeDelivery = 0,
                 deliveryCost = 0
             ),

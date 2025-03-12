@@ -13,6 +13,6 @@ class PaymentService(
         val clientUser = clientUserRepository.getClientUserByUuid(uuid = clientUuid)
             .orThrowNotFoundByUuidError(clientUuid)
 
-        return clientUser.company.payment.mapPayment()
+        return clientUser.companyWithCafes.payment.mapPayment()
     }
 }

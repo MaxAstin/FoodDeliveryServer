@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper
 import com.bunbeauty.fooddelivery.domain.feature.address.mapper.mapAddress
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUser
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUserLight
-import com.bunbeauty.fooddelivery.domain.feature.company.mapper.mapCompany
+import com.bunbeauty.fooddelivery.domain.feature.company.mapper.mapCompanyWithCafes
 import com.bunbeauty.fooddelivery.domain.feature.order.mapper.mapOrder
 import com.bunbeauty.fooddelivery.domain.feature.order.model.OrderTotal
 import com.bunbeauty.fooddelivery.domain.model.client_user.GetCafeClientUser
@@ -23,7 +23,7 @@ val mapClientUser: ClientUser.() -> GetClientUser = {
         uuid = uuid,
         phoneNumber = phoneNumber,
         email = email,
-        company = company.mapCompany(),
+        company = companyWithCafes.mapCompanyWithCafes(),
         addresses = addresses.map(mapAddress),
         orders = orders.map { order ->
             order.mapOrder(

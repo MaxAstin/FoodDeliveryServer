@@ -42,9 +42,12 @@ import com.bunbeauty.fooddelivery.domain.feature.order.usecase.FindDeliveryZoneB
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.GetDeliveryCostUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.IsOrderAvailableUseCase
 import com.bunbeauty.fooddelivery.service.NotificationService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.joda.time.DateTime
+import kotlin.coroutines.CoroutineContext
 
 private const val CAFE_IS_CLOSED_CODE = 901
 
@@ -59,9 +62,11 @@ class OrderService(
     private val calculateOrderTotalUseCase: CalculateOrderTotalUseCase,
     private val getDeliveryCostUseCase: GetDeliveryCostUseCase,
     private val isOrderAvailableUseCase: IsOrderAvailableUseCase
-) {
+) : CoroutineScope {
 
     private val codesCount = CODE_LETTERS.length * CODE_NUMBER_COUNT
+
+    override val coroutineContext: CoroutineContext = SupervisorJob()
 
     suspend fun createOrder(clientUserUuid: String, postOrder: PostOrder): GetClientOrder {
         if (postOrder.orderProducts.isEmpty()) {
@@ -101,6 +106,7 @@ class OrderService(
             postOrder = postOrder,
             clientUserUuid = clientUserUuid
         )
+
         if (!isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
             cafeIsClosedError()
         }
@@ -274,7 +280,7 @@ class OrderService(
 
         val company = clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
             .orThrowNotFoundByUuidError(clientUserUuid)
-            .company
+            .companyWithCafes
         val deliveryCost = getDeliveryCostUseCase(
             isDelivery = postOrder.isDelivery,
             deliveryZone = deliveryZoneWithCafe?.deliveryZone,
@@ -312,7 +318,7 @@ class OrderService(
 
         val company = clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
             .orThrowNotFoundByUuidError(clientUserUuid)
-            .company
+            .companyWithCafes
         val percentDiscount = company.percentDiscount?.takeIf {
             val orderCount = orderRepository.getOrderCountByUserUuid(userUuid = clientUserUuid)
             orderCount == 0L
@@ -359,7 +365,7 @@ class OrderService(
 
         val company = clientUserRepository.getClientUserByUuid(uuid = clientUserUuid)
             .orThrowNotFoundByUuidError(clientUserUuid)
-            .company
+            .companyWithCafes
         val percentDiscount = company.percentDiscount?.takeIf {
             val orderCount = orderRepository.getOrderCountByUserUuid(userUuid = clientUserUuid)
             orderCount == 0L

@@ -37,7 +37,7 @@ class AddressService(
             .orThrowNotFoundByUuidError(postAddress.streetUuid)
         val clientUser = clientUserRepository.getClientUserByUuid(uuid = userUuid)
             .orThrowNotFoundByUuidError(userUuid)
-        if (street.companyUuid != clientUser.company.uuid) {
+        if (street.companyUuid != clientUser.companyWithCafes.uuid) {
             noAccessToCompanyError(street.companyUuid)
         }
         val insertAddress = postAddress.mapPostAddress(userUuid)

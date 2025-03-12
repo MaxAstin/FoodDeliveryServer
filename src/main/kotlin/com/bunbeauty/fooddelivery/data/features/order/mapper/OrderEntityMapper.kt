@@ -3,7 +3,7 @@ package com.bunbeauty.fooddelivery.data.features.order.mapper
 import com.bunbeauty.fooddelivery.data.entity.order.OrderEntity
 import com.bunbeauty.fooddelivery.data.features.cafe.mapper.mapCafeEntityToCafeWithCity
 import com.bunbeauty.fooddelivery.data.features.clientuser.mapper.mapClientUserEntityToLight
-import com.bunbeauty.fooddelivery.data.features.company.mapper.mapCompanyEntity
+import com.bunbeauty.fooddelivery.data.features.company.mapper.mapCompanyWithCafesEntity
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 
 val mapOrderEntity: OrderEntity.() -> Order = {
@@ -26,7 +26,7 @@ val mapOrderEntity: OrderEntity.() -> Order = {
         paymentMethod = paymentMethod,
         percentDiscount = percentDiscount,
         cafeWithCity = cafe.mapCafeEntityToCafeWithCity(),
-        company = company.mapCompanyEntity(),
+        companyWithCafes = company.mapCompanyWithCafesEntity(),
         clientUser = clientUser.mapClientUserEntityToLight(),
         orderProducts = oderProducts.map(mapOrderProductEntity)
     )

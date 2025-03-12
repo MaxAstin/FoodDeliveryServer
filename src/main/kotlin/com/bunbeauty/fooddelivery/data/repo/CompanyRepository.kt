@@ -2,15 +2,19 @@ package com.bunbeauty.fooddelivery.data.repo
 
 import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
-import com.bunbeauty.fooddelivery.data.features.company.mapper.mapCompanyEntity
+import com.bunbeauty.fooddelivery.data.features.company.mapper.mapCompanyResultRow
+import com.bunbeauty.fooddelivery.data.features.company.mapper.mapCompanyWithCafesEntity
+import com.bunbeauty.fooddelivery.data.table.CompanyTable
 import com.bunbeauty.fooddelivery.domain.feature.company.Company
+import com.bunbeauty.fooddelivery.domain.feature.company.CompanyWithCafes
 import com.bunbeauty.fooddelivery.domain.model.company.InsertCompany
 import com.bunbeauty.fooddelivery.domain.model.company.UpdateCompany
+import org.jetbrains.exposed.sql.select
 import java.util.*
 
 class CompanyRepository {
 
-    suspend fun insertCompany(insertCompany: InsertCompany): Company = query {
+    suspend fun insertCompany(insertCompany: InsertCompany): CompanyWithCafes = query {
         CompanyEntity.new {
             name = insertCompany.name
             forFreeDelivery = insertCompany.forFreeDelivery
@@ -19,10 +23,10 @@ class CompanyRepository {
             percentDiscount = insertCompany.percentDiscount?.takeIf { percentDiscount ->
                 percentDiscount != 0
             }
-        }.mapCompanyEntity()
+        }.mapCompanyWithCafesEntity()
     }
 
-    suspend fun updateCompany(updateCompany: UpdateCompany): Company? = query {
+    suspend fun updateCompany(updateCompany: UpdateCompany): CompanyWithCafes? = query {
         CompanyEntity.findById(updateCompany.uuid)?.apply {
             name = updateCompany.name ?: name
             forFreeDelivery = updateCompany.forFreeDelivery ?: forFreeDelivery
@@ -33,14 +37,31 @@ class CompanyRepository {
             }
             isOpen = updateCompany.isOpen ?: isOpen
             workType = updateCompany.workType?.name ?: workType
-        }?.mapCompanyEntity()
+        }?.mapCompanyWithCafesEntity()
+    }
+
+    suspend fun getCompanyWithCafesByUuid(uuid: UUID): CompanyWithCafes? = query {
+        CompanyEntity.findById(uuid)?.mapCompanyWithCafesEntity()
     }
 
     suspend fun getCompanyByUuid(uuid: UUID): Company? = query {
-        CompanyEntity.findById(uuid)?.mapCompanyEntity()
+        (CompanyTable).slice(
+            CompanyTable.name,
+            CompanyTable.forFreeDelivery,
+            CompanyTable.deliveryCost,
+            CompanyTable.forceUpdateVersion,
+            CompanyTable.paymentPhoneNumber,
+            CompanyTable.paymentCardNumber,
+            CompanyTable.percentDiscount,
+            CompanyTable.maxVisibleRecommendationCount,
+            CompanyTable.isOpen,
+            CompanyTable.workType
+        ).select {
+            CompanyTable.id eq uuid
+        }.singleOrNull()?.mapCompanyResultRow()
     }
 
-    suspend fun getCompanyList(): List<Company> = query {
-        CompanyEntity.all().map(mapCompanyEntity)
+    suspend fun getCompanyList(): List<CompanyWithCafes> = query {
+        CompanyEntity.all().map(mapCompanyWithCafesEntity)
     }
 }

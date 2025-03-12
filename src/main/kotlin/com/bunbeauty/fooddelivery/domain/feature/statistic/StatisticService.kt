@@ -8,7 +8,7 @@ import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.data.repo.statistic.ICafeStatisticRepository
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.cafe.model.cafe.CafeWithZones
-import com.bunbeauty.fooddelivery.domain.feature.company.Company
+import com.bunbeauty.fooddelivery.domain.feature.company.CompanyWithCafes
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateCostWithDiscountUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderProductTotalUseCase
@@ -48,7 +48,7 @@ class StatisticService(
         val periodType = PeriodType.valueOf(period)
         val user = userRepository.getUserByUuid(userUuid.toUuid())
             .orThrowNotFoundByUuidError(userUuid)
-        val currentDateTime = getTodayDateTime(user.company.offset)
+        val currentDateTime = getTodayDateTime(user.companyWithCafes.offset)
         val startTimeMillis = currentDateTime.minusMonths(24)
             .minusDays(currentDateTime.dayOfMonth - 1)
             .withTimeAtStartOfDay()
@@ -79,19 +79,19 @@ class StatisticService(
             val monthPeriodFromDateTime = getMonthPeriodFromDateTime(toDateTime)
 
             updateCompanyStatistic(
-                company = company,
+                companyWithCafes = company,
                 periodType = PeriodType.DAY,
                 fromDateTime = dayPeriodFromDateTime,
                 toDateTime = toDateTime
             )
             updateCompanyStatistic(
-                company = company,
+                companyWithCafes = company,
                 periodType = PeriodType.WEEK,
                 fromDateTime = weekPeriodFromDateTime,
                 toDateTime = toDateTime
             )
             updateCompanyStatistic(
-                company = company,
+                companyWithCafes = company,
                 periodType = PeriodType.MONTH,
                 fromDateTime = monthPeriodFromDateTime,
                 toDateTime = toDateTime
@@ -125,13 +125,13 @@ class StatisticService(
     }
 
     private suspend inline fun updateCompanyStatistic(
-        company: Company,
+        companyWithCafes: CompanyWithCafes,
         periodType: PeriodType,
         fromDateTime: DateTime,
         toDateTime: DateTime
     ) {
         val orderList = orderStatisticRepository.getOrderListByCompanyUuid(
-            companyUuid = company.uuid.toUuid(),
+            companyUuid = companyWithCafes.uuid.toUuid(),
             fromTime = fromDateTime.millis,
             toTime = toDateTime.millis
         )
@@ -139,7 +139,7 @@ class StatisticService(
         val getStatistic = companyStatisticRepository.getStatisticByTimePeriodTypeCompany(
             time = fromDateTime.millis,
             periodType = periodType,
-            companyUuid = company.uuid.toUuid()
+            companyUuid = companyWithCafes.uuid.toUuid()
         )
         if (getStatistic == null) {
             val insertCompanyStatisticDay = InsertCompanyStatistic(
@@ -148,7 +148,7 @@ class StatisticService(
                 orderCount = orderList.size,
                 orderProceeds = calculateOrderProceeds(orderList),
                 statisticProductList = calculateStatisticProductList(orderList),
-                companyUuid = company.uuid.toUuid()
+                companyUuid = companyWithCafes.uuid.toUuid()
             )
             companyStatisticRepository.insetStatistic(insertCompanyStatisticDay)
         } else {
