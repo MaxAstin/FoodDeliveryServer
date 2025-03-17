@@ -57,7 +57,6 @@ val orderModule = module(createdAtStart = true) {
         OrderService(
             orderRepository = get(),
             addressRepository = get(),
-            clientUserRepository = get(),
             menuProductRepository = get(),
             cafeRepository = get(),
             notificationService = get(),

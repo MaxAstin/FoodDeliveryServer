@@ -4,6 +4,7 @@ import com.bunbeauty.fooddelivery.data.DatabaseFactory.query
 import com.bunbeauty.fooddelivery.data.entity.ClientUserEntity
 import com.bunbeauty.fooddelivery.data.entity.company.CompanyEntity
 import com.bunbeauty.fooddelivery.data.features.clientuser.mapper.mapClientUserEntity
+import com.bunbeauty.fooddelivery.data.features.clientuser.mapper.mapClientUserResultRow
 import com.bunbeauty.fooddelivery.data.features.clientuser.mapper.mapClientUserWithOrdersEntity
 import com.bunbeauty.fooddelivery.data.table.ClientUserTable
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUser
@@ -20,13 +21,13 @@ class ClientUserRepository {
     suspend fun getClientUserByPhoneNumberAndCompanyUuid(
         phoneNumber: String,
         companyUuid: UUID
-    ): ClientUserWithOrders? = query {
-        ClientUserEntity.find {
-            (ClientUserTable.phoneNumber eq phoneNumber) and
-                (ClientUserTable.company eq companyUuid) and
-                (ClientUserTable.isActive eq true)
-        }.singleOrNull()
-            ?.mapClientUserWithOrdersEntity()
+    ): ClientUser? = query {
+        (ClientUserTable).slice(ClientUserTable.columns)
+            .select {
+                (ClientUserTable.phoneNumber eq phoneNumber) and
+                    (ClientUserTable.company eq companyUuid) and
+                    (ClientUserTable.isActive eq true)
+            }.singleOrNull()?.mapClientUserResultRow()
     }
 
     suspend fun getClientWithOrdersUserByUuid(uuid: String): ClientUserWithOrders? = query {
@@ -39,19 +40,19 @@ class ClientUserRepository {
         }
     }
 
-    suspend fun getCompanyByUuid(uuid: String): ClientUser? = query {
+    suspend fun getClientByUuid(uuid: String): ClientUser? = query {
         (ClientUserTable).slice(ClientUserTable.columns)
             .select {
                 ClientUserTable.id eq uuid.toUuid()
-            }.singleOrNull()?.mapClientUserEntity()
+            }.singleOrNull()?.mapClientUserResultRow()
     }
 
-    suspend fun insertClientUser(insertClientUser: InsertClientUser): ClientUserWithOrders = query {
+    suspend fun insertClientUser(insertClientUser: InsertClientUser): ClientUser = query {
         ClientUserEntity.new {
             phoneNumber = insertClientUser.phoneNumber
             email = insertClientUser.email
             company = CompanyEntity[insertClientUser.companyUuid]
-        }.mapClientUserWithOrdersEntity()
+        }.mapClientUserEntity()
     }
 
     suspend fun updateClientUserByUuid(updateClientUser: UpdateClientUser): ClientUserWithOrders? = query {

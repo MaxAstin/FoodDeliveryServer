@@ -55,7 +55,7 @@ class ClientUserService(
     }
 
     override suspend fun getClientSettingsByUuid(clientUserUuid: String): GetClientSettings {
-        return clientUserRepository.getCompanyByUuid(uuid = clientUserUuid)
+        return clientUserRepository.getClientByUuid(uuid = clientUserUuid)
             .orThrowNotFoundByUserUuidError(uuid = clientUserUuid)
             .mapClientUserToClientSettingsWithOrders()
     }

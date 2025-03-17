@@ -157,9 +157,8 @@ private fun getAddressPart(data: String?, prefix: String = "", postfix: String =
 private val Order.availableStatusList: List<String>
     get() = buildList {
         add(OrderStatus.NOT_ACCEPTED.name)
-        if (deferredTime != null) {
-            add(OrderStatus.ACCEPTED.name)
-        }
+        add(OrderStatus.ACCEPTED.name)
+
         add(OrderStatus.PREPARING.name)
         if (isDelivery) {
             add(OrderStatus.SENT_OUT.name)
