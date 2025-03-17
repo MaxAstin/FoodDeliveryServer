@@ -8,7 +8,7 @@ import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.domain.error.errorWithCode
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.error.somethingWentWrongError
-import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUserWithOrders
+import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUser
 import com.bunbeauty.fooddelivery.domain.model.client_user.ClientAuthResponse
 import com.bunbeauty.fooddelivery.domain.model.client_user.InsertClientUser
 import com.bunbeauty.fooddelivery.domain.model.client_user.login.GetClientAuthSession
@@ -221,7 +221,7 @@ class AuthorizationService(
         return authorizationRepository.getTestClientUserPhoneList()
     }
 
-    private suspend fun registerClientUser(authSession: GetClientAuthSession): ClientUserWithOrders {
+    private suspend fun registerClientUser(authSession: GetClientAuthSession): ClientUser {
         val insertClientUser = InsertClientUser(
             phoneNumber = authSession.phoneNumber,
             email = null,

@@ -30,7 +30,16 @@ val mapClientUserWithOrdersEntity: ClientUserEntity.() -> ClientUserWithOrders =
     )
 }
 
-val mapClientUserEntity: ResultRow.() -> ClientUser = {
+val mapClientUserEntity: ClientUserEntity.() -> ClientUser = {
+    ClientUser(
+        uuid = uuid,
+        phoneNumber = phoneNumber,
+        email = email,
+        isActive = isActive
+    )
+}
+
+val mapClientUserResultRow: ResultRow.() -> ClientUser = {
     ClientUser(
         uuid = this[ClientUserTable.id].value.toString(),
         phoneNumber = this[ClientUserTable.phoneNumber],

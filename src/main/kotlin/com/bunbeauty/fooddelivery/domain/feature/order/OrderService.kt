@@ -9,7 +9,6 @@ import com.bunbeauty.fooddelivery.data.features.address.AddressRepository
 import com.bunbeauty.fooddelivery.data.features.cafe.CafeRepository
 import com.bunbeauty.fooddelivery.data.features.menu.MenuProductRepository
 import com.bunbeauty.fooddelivery.data.features.order.OrderRepository
-import com.bunbeauty.fooddelivery.data.repo.ClientUserRepository
 import com.bunbeauty.fooddelivery.data.repo.CompanyRepository
 import com.bunbeauty.fooddelivery.domain.error.errorWithCode
 import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
@@ -57,7 +56,6 @@ private const val CAFE_IS_CLOSED_CODE = 901
 class OrderService(
     private val orderRepository: OrderRepository,
     private val addressRepository: AddressRepository,
-    private val clientUserRepository: ClientUserRepository,
     private val menuProductRepository: MenuProductRepository,
     private val cafeRepository: CafeRepository,
     private val notificationService: NotificationService,
