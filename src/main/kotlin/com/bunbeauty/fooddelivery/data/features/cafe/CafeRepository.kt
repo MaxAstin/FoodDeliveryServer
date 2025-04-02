@@ -84,6 +84,8 @@ class CafeRepository {
             longitude = updateCafe.longitude ?: longitude
             address = updateCafe.address ?: address
             isVisible = updateCafe.isVisible ?: isVisible
+            workType = updateCafe.workType ?: workType
+            workload = updateCafe.workload ?: workload
         }?.mapCafeWithZonesEntity()
     }
 }
