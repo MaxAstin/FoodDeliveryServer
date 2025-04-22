@@ -41,6 +41,7 @@ import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CalculateOrderTot
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.FindDeliveryZoneByCityUuidAndCoordinatesUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.GetDeliveryCostUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.IsOrderAvailableUseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.IsOrderAvailableV2UseCase
 import com.bunbeauty.fooddelivery.service.NotificationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -62,6 +63,7 @@ class OrderService(
     private val findDeliveryZoneByCityUuidAndCoordinatesUseCase: FindDeliveryZoneByCityUuidAndCoordinatesUseCase,
     private val calculateOrderTotalUseCase: CalculateOrderTotalUseCase,
     private val getDeliveryCostUseCase: GetDeliveryCostUseCase,
+    private val isOrderAvailableV2UseCase: IsOrderAvailableV2UseCase,
     private val isOrderAvailableUseCase: IsOrderAvailableUseCase,
     private val companyRepository: CompanyRepository
 ) : CoroutineScope {
@@ -91,7 +93,7 @@ class OrderService(
             clientUserUuid = clientUserUuid
         )
 
-        if (!isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
+        if (!isOrderAvailableV2UseCase(companyUuid = orderInfo.companyUuid, cafeUuid = orderInfo.cafeUuid)) {
             cafeIsClosedError()
         }
 
@@ -124,7 +126,11 @@ class OrderService(
             clientUserUuid = clientUserUuid
         )
 
-        if (!isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
+        if (!isOrderAvailableV2UseCase(
+                companyUuid = orderInfo.companyUuid,
+                cafeUuid = orderInfo.cafeUuid
+            )
+        ) {
             cafeIsClosedError()
         }
 
@@ -154,7 +160,11 @@ class OrderService(
             clientUserUuid = clientUserUuid
         )
 
-        if (!isOrderAvailableUseCase(companyUuid = orderInfo.companyUuid)) {
+        if (!isOrderAvailableV2UseCase(
+                companyUuid = orderInfo.companyUuid,
+                cafeUuid = orderInfo.cafeUuid
+            )
+        ) {
             cafeIsClosedError()
         }
 

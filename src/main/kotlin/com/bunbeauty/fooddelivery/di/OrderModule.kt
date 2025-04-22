@@ -11,6 +11,7 @@ import com.bunbeauty.fooddelivery.domain.feature.order.usecase.CheckIsPointInPol
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.FindDeliveryZoneByCityUuidAndCoordinatesUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.GetDeliveryCostUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.IsOrderAvailableUseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.IsOrderAvailableV2UseCase
 import org.koin.dsl.module
 
 val orderModule = module(createdAtStart = true) {
@@ -49,6 +50,12 @@ val orderModule = module(createdAtStart = true) {
         CalculateCostWithDiscountUseCase()
     }
     factory {
+        IsOrderAvailableV2UseCase(
+            companyRepository = get(),
+            cafeRepository = get()
+        )
+    }
+    factory {
         IsOrderAvailableUseCase(
             companyRepository = get()
         )
@@ -63,8 +70,9 @@ val orderModule = module(createdAtStart = true) {
             findDeliveryZoneByCityUuidAndCoordinatesUseCase = get(),
             calculateOrderTotalUseCase = get(),
             getDeliveryCostUseCase = get(),
-            isOrderAvailableUseCase = get(),
-            companyRepository = get()
+            isOrderAvailableV2UseCase = get(),
+            companyRepository = get(),
+            isOrderAvailableUseCase = get()
         )
     }
     single { OrderRepository() }
