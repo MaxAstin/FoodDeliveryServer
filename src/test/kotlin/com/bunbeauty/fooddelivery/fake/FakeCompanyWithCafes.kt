@@ -39,13 +39,14 @@ object FakeCompanyWithCafes {
 object FakeCompany {
 
     fun create(
+        uuid: String = "uuid",
         forFreeDelivery: Int = 0,
         deliveryCost: Int = 0,
         isOpen: Boolean = false,
         workType: WorkType = WorkType.DELIVERY_AND_PICKUP
     ): Company {
         return Company(
-            uuid = "uuid",
+            uuid = uuid,
             name = "name",
             offset = 3,
             delivery = Delivery(
