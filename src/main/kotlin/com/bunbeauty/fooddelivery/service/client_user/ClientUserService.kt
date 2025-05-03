@@ -7,6 +7,9 @@ import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUserToClientSettingsWithOrders
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUserWithCafesToClientSettingsWithOrders
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.mapper.mapClientUserWithOrders
+import com.bunbeauty.fooddelivery.domain.feature.clientuser.usecase.UpdateNotificationTokenUseCase
+import com.bunbeauty.fooddelivery.domain.feature.user.mapper.toNotificationData
+import com.bunbeauty.fooddelivery.domain.feature.user.model.api.PutNotificationToken
 import com.bunbeauty.fooddelivery.domain.model.client_user.ClientAuthResponse
 import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientSettings
 import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientUser
@@ -16,11 +19,13 @@ import com.bunbeauty.fooddelivery.domain.model.client_user.PostClientUserAuth
 import com.bunbeauty.fooddelivery.domain.model.client_user.UpdateClientUser
 import com.bunbeauty.fooddelivery.domain.toUuid
 import com.google.firebase.auth.FirebaseAuth
+import org.joda.time.DateTime
 
 class ClientUserService(
     private val firebaseAuth: FirebaseAuth,
     private val clientUserRepository: ClientUserRepository,
-    private val jwtService: IJwtService
+    private val jwtService: IJwtService,
+    private val updateNotificationTokenUseCase: UpdateNotificationTokenUseCase
 ) : IClientUserService {
 
     override suspend fun login(clientUserAuth: PostClientUserAuth): ClientAuthResponse {
@@ -86,6 +91,22 @@ class ClientUserService(
             )
         ).orThrowNotFoundByUuidError(uuid = clientUserUuid)
             .mapClientUserWithCafesToClientSettingsWithOrders()
+    }
+
+    suspend fun updateNotificationToken(
+        userUuid: String,
+        putNotificationToken: PutNotificationToken
+    ) {
+        updateNotificationTokenUseCase(
+            uuid = userUuid.toUuid(),
+            notificationData = putNotificationToken.toNotificationData(
+                dateTime = getUpdateTokenDateTime()
+            )
+        ).orThrowNotFoundByUuidError(uuid = userUuid)
+    }
+
+    private fun getUpdateTokenDateTime(): String {
+        return DateTime.now().toString("dd.MM.yyyy HH:mm:ss")
     }
 
     private fun credentialsError() {

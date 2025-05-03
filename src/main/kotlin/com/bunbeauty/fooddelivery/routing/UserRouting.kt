@@ -32,7 +32,7 @@ fun Application.configureUserRouting() {
             createUser()
             getUser()
 
-            updateNotificationToken()
+            putNotificationToken()
             clearNotificationToken()
             updateUnlimitedNotification()
         }
@@ -71,7 +71,7 @@ private fun Route.getUser() {
     }
 }
 
-private fun Route.updateNotificationToken() {
+private fun Route.putNotificationToken() {
     val userService: UserService by inject()
 
     put("/user/notification_token") {
