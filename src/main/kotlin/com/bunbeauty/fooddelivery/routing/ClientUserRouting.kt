@@ -8,7 +8,6 @@ import com.bunbeauty.fooddelivery.domain.model.client_user.PatchClientUserSettin
 import com.bunbeauty.fooddelivery.domain.model.client_user.PostClientUserAuth
 import com.bunbeauty.fooddelivery.routing.extension.clientGetResult
 import com.bunbeauty.fooddelivery.routing.extension.clientWithBody
-import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import com.bunbeauty.fooddelivery.routing.extension.withBody
 import com.bunbeauty.fooddelivery.service.client_user.ClientUserService
 import com.bunbeauty.fooddelivery.service.client_user.IClientUserService
