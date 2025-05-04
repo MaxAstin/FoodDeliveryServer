@@ -16,7 +16,7 @@ val clientUserModule = module(createdAtStart = true) {
         )
     }
     single { ClientUserRepository() }
-    single {
+    factory {
         UpdateNotificationTokenUseCase(
             clientUserRepository = get()
         )

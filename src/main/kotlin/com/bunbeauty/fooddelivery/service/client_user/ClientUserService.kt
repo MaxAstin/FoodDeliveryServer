@@ -93,7 +93,7 @@ class ClientUserService(
             .mapClientUserWithCafesToClientSettingsWithOrders()
     }
 
-    suspend fun updateNotificationToken(
+    override suspend fun updateNotificationToken(
         userUuid: String,
         putNotificationToken: PutNotificationToken
     ) {
