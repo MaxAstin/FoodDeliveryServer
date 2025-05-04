@@ -105,7 +105,7 @@ private fun Route.putNotificationToken() {
     val clientUserService: ClientUserService by inject()
 
     put("/client/notification_token") {
-        managerWithBody<PutNotificationToken, Unit> { bodyRequest ->
+        clientWithBody<PutNotificationToken, Unit> { bodyRequest ->
             clientUserService.updateNotificationToken(
                 userUuid = bodyRequest.request.jwtUser.uuid,
                 putNotificationToken = bodyRequest.body
