@@ -20,6 +20,9 @@ class ClientUserEntity(uuid: EntityID<UUID>) : UUIDEntity(uuid) {
     var company: CompanyEntity by CompanyEntity referencedOn ClientUserTable.company
     val addresses: SizedIterable<AddressEntity> by AddressEntity referrersOn AddressTable.clientUser
     val orders: SizedIterable<OrderEntity> by OrderEntity referrersOn OrderTable.clientUser
+    var notificationToken: String? by ClientUserTable.notificationToken
+    var notificationDevice: String? by ClientUserTable.notificationDevice
+    var updateNotificationTokenDateTime: String? by ClientUserTable.updateNotificationTokenDateTime
 
     companion object : UUIDEntityClass<ClientUserEntity>(ClientUserTable)
 }

@@ -9,11 +9,13 @@ import com.bunbeauty.fooddelivery.data.features.clientuser.mapper.mapClientUserW
 import com.bunbeauty.fooddelivery.data.table.ClientUserTable
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUser
 import com.bunbeauty.fooddelivery.domain.feature.clientuser.model.ClientUserWithOrders
+import com.bunbeauty.fooddelivery.domain.feature.user.model.domain.NotificationData
 import com.bunbeauty.fooddelivery.domain.model.client_user.InsertClientUser
 import com.bunbeauty.fooddelivery.domain.model.client_user.UpdateClientUser
 import com.bunbeauty.fooddelivery.domain.toUuid
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.update
 import java.util.*
 
 class ClientUserRepository {
@@ -37,6 +39,17 @@ class ClientUserRepository {
             } else {
                 null
             }
+        }
+    }
+
+    suspend fun updateNotificationToken(
+        uuid: UUID,
+        notificationData: NotificationData
+    ) = query {
+        ClientUserTable.update({ ClientUserTable.id eq uuid }) { clientUser ->
+            clientUser[notificationToken] = notificationData.token
+            clientUser[notificationDevice] = notificationData.device
+            clientUser[updateNotificationTokenDateTime] = notificationData.updateTokenDateTime
         }
     }
 

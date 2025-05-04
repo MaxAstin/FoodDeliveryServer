@@ -1,5 +1,6 @@
 package com.bunbeauty.fooddelivery.routing
 
+import com.bunbeauty.fooddelivery.domain.feature.user.model.api.PutNotificationToken
 import com.bunbeauty.fooddelivery.domain.model.client_user.ClientAuthResponse
 import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientSettings
 import com.bunbeauty.fooddelivery.domain.model.client_user.GetClientUser
@@ -7,7 +8,9 @@ import com.bunbeauty.fooddelivery.domain.model.client_user.PatchClientUserSettin
 import com.bunbeauty.fooddelivery.domain.model.client_user.PostClientUserAuth
 import com.bunbeauty.fooddelivery.routing.extension.clientGetResult
 import com.bunbeauty.fooddelivery.routing.extension.clientWithBody
+import com.bunbeauty.fooddelivery.routing.extension.managerWithBody
 import com.bunbeauty.fooddelivery.routing.extension.withBody
+import com.bunbeauty.fooddelivery.service.client_user.ClientUserService
 import com.bunbeauty.fooddelivery.service.client_user.IClientUserService
 import io.ktor.server.application.Application
 import io.ktor.server.auth.authenticate
@@ -16,6 +19,7 @@ import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import io.ktor.server.routing.patch
 import io.ktor.server.routing.post
+import io.ktor.server.routing.put
 import io.ktor.server.routing.routing
 import org.koin.ktor.ext.inject
 
@@ -28,6 +32,7 @@ fun Application.configureClientUserRouting() {
             getClientSettings()
             patchClientUser()
             patchClientSettings()
+            putNotificationToken()
         }
     }
 }
@@ -92,6 +97,19 @@ private fun Route.patchClientSettings() {
                     patchClientUser = bodyRequest.body
                 )
             }
+        }
+    }
+}
+
+private fun Route.putNotificationToken() {
+    val clientUserService: ClientUserService by inject()
+
+    put("/client/notification_token") {
+        managerWithBody<PutNotificationToken, Unit> { bodyRequest ->
+            clientUserService.updateNotificationToken(
+                userUuid = bodyRequest.request.jwtUser.uuid,
+                putNotificationToken = bodyRequest.body
+            )
         }
     }
 }
