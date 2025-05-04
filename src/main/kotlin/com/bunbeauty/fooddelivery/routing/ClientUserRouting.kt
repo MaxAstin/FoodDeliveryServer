@@ -9,7 +9,6 @@ import com.bunbeauty.fooddelivery.domain.model.client_user.PostClientUserAuth
 import com.bunbeauty.fooddelivery.routing.extension.clientGetResult
 import com.bunbeauty.fooddelivery.routing.extension.clientWithBody
 import com.bunbeauty.fooddelivery.routing.extension.withBody
-import com.bunbeauty.fooddelivery.service.client_user.ClientUserService
 import com.bunbeauty.fooddelivery.service.client_user.IClientUserService
 import io.ktor.server.application.Application
 import io.ktor.server.auth.authenticate
@@ -101,7 +100,7 @@ private fun Route.patchClientSettings() {
 }
 
 private fun Route.putNotificationToken() {
-    val clientUserService: ClientUserService by inject()
+    val clientUserService: IClientUserService by inject()
 
     put("/client/notification_token") {
         clientWithBody<PutNotificationToken, Unit> { bodyRequest ->
