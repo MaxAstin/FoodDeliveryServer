@@ -12,6 +12,7 @@ import com.bunbeauty.fooddelivery.domain.feature.order.usecase.FindDeliveryZoneB
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.GetDeliveryCostUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.IsOrderAvailableUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.IsOrderAvailableV2UseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.UpdateOrderStatusUseCase
 import org.koin.dsl.module
 
 val orderModule = module(createdAtStart = true) {
@@ -56,6 +57,12 @@ val orderModule = module(createdAtStart = true) {
         )
     }
     factory {
+        UpdateOrderStatusUseCase(
+            orderRepository = get(),
+            sendPickupClientNotificationUseCase = get()
+        )
+    }
+    factory {
         IsOrderAvailableUseCase(
             companyRepository = get()
         )
@@ -72,7 +79,8 @@ val orderModule = module(createdAtStart = true) {
             getDeliveryCostUseCase = get(),
             isOrderAvailableV2UseCase = get(),
             companyRepository = get(),
-            isOrderAvailableUseCase = get()
+            isOrderAvailableUseCase = get(),
+            updateOrderStatusUseCase = get()
         )
     }
     single { OrderRepository() }

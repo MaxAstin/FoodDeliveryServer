@@ -13,6 +13,7 @@ val joda_time_version: String by project
 val mockk_version: String by project
 val junit_version: String by project
 val otp_version: String by project
+val kotlinx_html: String by project
 val coroutines_version: String by project
 
 plugins {
@@ -50,6 +51,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("io.ktor:ktor-server-auth:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
+    implementation("io.ktor:ktor-server-html-builder:$ktor_version")
 
     // Ktor client
     implementation("io.ktor:ktor-client-core:$ktor_version")
@@ -84,6 +86,9 @@ dependencies {
 
     // OTP
     implementation("dev.turingcomplete:kotlin-onetimepassword:$otp_version")
+
+    // html
+    implementation("org.jetbrains.kotlinx:kotlinx-html:$kotlinx_html")
 
     // Test
     testImplementation("io.mockk:mockk:$mockk_version")

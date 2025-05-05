@@ -42,14 +42,13 @@ import com.bunbeauty.fooddelivery.domain.feature.order.usecase.FindDeliveryZoneB
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.GetDeliveryCostUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.IsOrderAvailableUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.usecase.IsOrderAvailableV2UseCase
+import com.bunbeauty.fooddelivery.domain.feature.order.usecase.UpdateOrderStatusUseCase
 import com.bunbeauty.fooddelivery.service.NotificationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.joda.time.DateTime
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import kotlin.coroutines.CoroutineContext
 
 private const val CAFE_IS_CLOSED_CODE = 901
@@ -65,23 +64,13 @@ class OrderService(
     private val getDeliveryCostUseCase: GetDeliveryCostUseCase,
     private val isOrderAvailableV2UseCase: IsOrderAvailableV2UseCase,
     private val isOrderAvailableUseCase: IsOrderAvailableUseCase,
-    private val companyRepository: CompanyRepository
+    private val companyRepository: CompanyRepository,
+    private val updateOrderStatusUseCase: UpdateOrderStatusUseCase
 ) : CoroutineScope {
 
     private val codesCount = CODE_LETTERS.length * CODE_NUMBER_COUNT
 
     override val coroutineContext: CoroutineContext = SupervisorJob()
-
-    private fun getTime(time: LocalTime): String {
-        // Получаем текущее время
-
-        // Определяем формат вывода
-        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-
-        // Форматируем время и выводим его
-        val formattedTime = time.format(formatter)
-        return formattedTime
-    }
 
     suspend fun createOrder(clientUserUuid: String, postOrder: PostOrder): GetClientOrder {
         if (postOrder.orderProducts.isEmpty()) {
@@ -245,10 +234,10 @@ class OrderService(
     }
 
     suspend fun changeOrder(orderUuid: String, patchOrder: PatchOrder): GetCafeOrder {
-        val order = orderRepository.updateOrderStatusByUuid(
+        val order = updateOrderStatusUseCase(
             orderUuid = orderUuid,
             status = patchOrder.status
-        ).orThrowNotFoundByUuidError(orderUuid)
+        )
 
         orderRepository.updateSession(
             key = order.cafeWithCity.cafeWithZones.uuid,

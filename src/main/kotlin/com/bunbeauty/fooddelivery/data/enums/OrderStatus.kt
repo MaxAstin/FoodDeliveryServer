@@ -1,5 +1,8 @@
 package com.bunbeauty.fooddelivery.data.enums
 
+/**
+ * $DONE - Принят
+ * */
 enum class OrderStatus {
     NOT_ACCEPTED,
     ACCEPTED,
