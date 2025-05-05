@@ -20,6 +20,7 @@ import kotlinx.html.p
 import kotlinx.html.style
 import kotlinx.html.title
 import kotlinx.html.ul
+import kotlinx.html.unsafe
 import org.koin.ktor.ext.inject
 
 fun Application.configureLinkRouting() {
@@ -46,7 +47,8 @@ private fun Routing.getMainPage() {
             head {
                 title { +"BunBeauty - Лучшие рестораны" }
                 style {
-                    """
+                    unsafe {
+                        """
                         body {
                             font-family: 'Arial', sans-serif;
                             margin: 0;
@@ -114,7 +116,8 @@ private fun Routing.getMainPage() {
                             transform: translateY(-2px);
                             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                         }
-                    """.trimIndent()
+                        """.trimIndent()
+                    }
                 }
             }
             body {
