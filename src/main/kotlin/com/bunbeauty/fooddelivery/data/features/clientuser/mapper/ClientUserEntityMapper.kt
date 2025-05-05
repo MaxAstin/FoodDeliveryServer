@@ -35,7 +35,8 @@ val mapClientUserEntity: ClientUserEntity.() -> ClientUser = {
         uuid = uuid,
         phoneNumber = phoneNumber,
         email = email,
-        isActive = isActive
+        isActive = isActive,
+        notificationToken = notificationToken
     )
 }
 
@@ -44,6 +45,7 @@ val mapClientUserResultRow: ResultRow.() -> ClientUser = {
         uuid = this[ClientUserTable.id].value.toString(),
         phoneNumber = this[ClientUserTable.phoneNumber],
         email = this[ClientUserTable.email],
-        isActive = this[ClientUserTable.isActive]
+        isActive = this[ClientUserTable.isActive],
+        notificationToken = this[ClientUserTable.notificationToken]
     )
 }
