@@ -64,7 +64,7 @@ class NotificationService(
                 clientUuid = clientUuid,
                 postNotification = postNotification
             )?.let(firebaseMessaging::send)
-            println("sendClientNotification success clientUuid $clientUuid ")
+            println("sendClientNotification success clientUuid $clientUuid")
         } catch (exception: Exception) {
             println("sendPickupNotification exception:")
             exception.printStackTrace()
