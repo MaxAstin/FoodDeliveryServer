@@ -12,17 +12,24 @@ import com.bunbeauty.fooddelivery.domain.model.cafe.work_info.Workload
 object FakeOrder {
 
     fun create(
+        uuid: String = "",
         isDelivery: Boolean = false,
         status: String = "DELIVERED",
         deliveryCost: Int? = null,
         percentDiscount: Int? = null,
+        clientUser: ClientUserLight = FakeClientUserLight.create(
+            uuid = "",
+            phoneNumber = "",
+            email = ""
+        ),
+        code: String = "",
         orderProductList: List<OrderProduct> = emptyList()
     ): Order {
         return Order(
-            uuid = "",
+            uuid = uuid,
             time = 0,
             isDelivery = isDelivery,
-            code = "",
+            code = code,
             addressDescription = "",
             addressStreet = "",
             addressHouse = "",
@@ -63,11 +70,7 @@ object FakeOrder {
                 forFreeDelivery = 0,
                 deliveryCost = 0
             ),
-            clientUser = ClientUserLight(
-                uuid = "",
-                phoneNumber = "",
-                email = ""
-            ),
+            clientUser = clientUser,
             orderProducts = orderProductList
         )
     }

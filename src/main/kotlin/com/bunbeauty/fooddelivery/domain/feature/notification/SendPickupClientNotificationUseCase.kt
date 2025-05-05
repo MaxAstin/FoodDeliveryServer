@@ -9,6 +9,7 @@ import com.google.firebase.messaging.Notification
 
 private const val ANALYTICS_LABEL = "client_pickup"
 private const val TITLE = "Ваш заказ готов"
+private const val MESSAGE = "Вы можете забрать самовывоз %s"
 
 class SendPickupClientNotificationUseCase(
     private val userClientRepository: ClientUserRepository,
@@ -26,6 +27,7 @@ class SendPickupClientNotificationUseCase(
             exception.printStackTrace()
         }
     }
+
     private suspend fun sendMessage(
         clientUuid: String,
         orderCode: String
@@ -41,8 +43,8 @@ class SendPickupClientNotificationUseCase(
             )
             .setNotification(
                 Notification.builder()
-                    .setTitle(TITLE)
-                    .setBody("Ваш заказ №$orderCode готов к выдаче")
+                    .setTitle(getTitle())
+                    .setBody(getMessage(orderCode = orderCode))
                     .build()
             )
             .setToken(notificationToken)
@@ -51,4 +53,10 @@ class SendPickupClientNotificationUseCase(
             )
             .build()
     }
+
+    private fun getTitle() = TITLE
+
+    private fun getMessage(
+        orderCode: String
+    ) = String.format(MESSAGE, orderCode)
 }

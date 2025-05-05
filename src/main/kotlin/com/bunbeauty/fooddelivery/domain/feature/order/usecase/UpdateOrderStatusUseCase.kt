@@ -6,7 +6,6 @@ import com.bunbeauty.fooddelivery.domain.error.orThrowNotFoundByUuidError
 import com.bunbeauty.fooddelivery.domain.feature.notification.SendPickupClientNotificationUseCase
 import com.bunbeauty.fooddelivery.domain.feature.order.model.Order
 
-// todo tests
 class UpdateOrderStatusUseCase(
     private val orderRepository: OrderRepository,
     private val sendPickupClientNotificationUseCase: SendPickupClientNotificationUseCase
