@@ -48,7 +48,8 @@ private fun Routing.getMainPage() {
                 title { +"BunBeauty - Лучшие рестораны" }
                 style {
                     unsafe {
-                        """
+                        raw(
+                            """
                         body {
                             font-family: 'Arial', sans-serif;
                             margin: 0;
@@ -116,7 +117,8 @@ private fun Routing.getMainPage() {
                             transform: translateY(-2px);
                             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                         }
-                        """.trimIndent()
+                            """.trimIndent()
+                        )
                     }
                 }
             }
@@ -139,6 +141,7 @@ private fun Routing.getMainPage() {
         }
     }
 }
+
 // body {
 //    div("container") {
 //        h1 { +"BunBeauty" }
