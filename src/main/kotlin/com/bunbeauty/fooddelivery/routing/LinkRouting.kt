@@ -132,7 +132,7 @@ private fun Routing.getMainPage() {
                         li { a(href = "https://apps.apple.com/us/app/%D0%BF%D0%B0%D0%BF%D0%B0-%D0%BA%D0%B0%D1%80%D0%BB%D0%BE/id6443966083") { +"2. Папа карло" } }
                         li { a(href = "https://apps.apple.com/us/app/%D1%80%D0%BA-%D1%83%D1%81%D0%B0%D0%B4%D1%8C%D0%B1%D0%B0/id6737488265") { +"3. Усадьба" } }
                         li { a(href = "https://apps.apple.com/us/app/%D1%8D%D0%BC%D0%BE%D0%B4%D0%B7%D0%B8/id6737520690") { +"4. Эмодзи" } }
-                        li { a(href = "https://apps.apple.com/us/app/%D1%8E%D0%BB%D0%B8%D0%B0%D1%80/id6447322629") { +"4. Юлиар" } }
+                        li { a(href = "https://apps.apple.com/us/app/%D1%8E%D0%BB%D0%B8%D0%B0%D1%80/id6447322629") { +"5. Юлиар" } }
                         li { a(href = "https://apps.apple.com/us/developer/mark-shavlovskiy/id1651086345") { +"И другие..." } }
                     }
                     a(href = "https://vk.com/bunbeauty?from=groups", classes = "contact-button") { +"Связаться с нами" }
