@@ -9,7 +9,7 @@ import com.google.firebase.messaging.Notification
 
 private const val ANALYTICS_LABEL = "client_pickup"
 private const val TITLE = "Ваш заказ готов"
-private const val MESSAGE = "Вы можете забрать самовывоз %s"
+private const val MESSAGE = "Номер заказа %s"
 
 class SendPickupClientNotificationUseCase(
     private val userClientRepository: ClientUserRepository,
