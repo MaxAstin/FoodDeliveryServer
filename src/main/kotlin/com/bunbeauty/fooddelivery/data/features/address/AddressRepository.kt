@@ -26,6 +26,7 @@ import com.bunbeauty.fooddelivery.network.getDataOrNull
 import org.jetbrains.exposed.sql.and
 
 private const val STREET_BOUND = "street"
+private const val VILLAGE_BOUND = "settlement"
 
 class AddressRepository(
     private val addressNetworkDataSource: AddressNetworkDataSource
@@ -87,15 +88,6 @@ class AddressRepository(
         }
     }
 
-    suspend fun getAddressListByCityUuidV2(cityUuid: String): List<AddressV2> {
-        return query {
-            AddressEntityV2.find {
-                AddressV2Table.city eq cityUuid.toUuid()
-            }.toList()
-                .map(mapAddressEntityV2)
-        }
-    }
-
     suspend fun getAddressByUuid(uuid: String): Address? {
         return query {
             AddressEntity.findById(uuid.toUuid())?.mapAddressEntity()
@@ -121,22 +113,11 @@ class AddressRepository(
             AddressRequestBody(
                 query = query,
                 fromBound = Bound(value = STREET_BOUND),
-                toBound = Bound(value = STREET_BOUND),
+                toBound = Bound(value = VILLAGE_BOUND),
                 locations = listOf(Location(city = city.name))
             )
         ).getDataOrNull()
             ?.mapSuggestionsResponse()
             .orEmpty()
-    }
-
-    /*
-     * TODO(Remove in 1.0.6 release after add all cafeUuid to address)
-     * */
-    suspend fun patchAddressDeliveryZoneUuid(addressUuid: String, newDeliveryZoneUuid: String) {
-        query {
-            AddressEntityV2.findById(addressUuid.toUuid())?.apply {
-                deliveryZoneUuid = newDeliveryZoneUuid
-            }
-        }
     }
 }

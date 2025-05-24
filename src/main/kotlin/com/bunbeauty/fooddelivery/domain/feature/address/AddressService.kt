@@ -136,19 +136,6 @@ class AddressService(
             }
     }
 
-    /*
-     * TODO(Remove in 1.0.6 release after add all cafeUuid to address)
-     * */
-    suspend fun addToAddressDeliveryZoneUuid(cityUuid: String, newDeliveryZoneUuid: String) {
-        val addressList = addressRepository.getAddressListByCityUuidV2(cityUuid)
-        addressList.forEach { address ->
-            addressRepository.patchAddressDeliveryZoneUuid(
-                addressUuid = address.uuid,
-                newDeliveryZoneUuid = newDeliveryZoneUuid
-            )
-        }
-    }
-
     private fun deliveryNotAvailableAtThisAddress(latitude: Double, longitude: Double): Nothing {
         error("Delivery not available at this address: $latitude,$longitude")
     }

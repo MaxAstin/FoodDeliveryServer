@@ -1,7 +1,6 @@
 package com.bunbeauty.fooddelivery.routing
 
 import com.bunbeauty.fooddelivery.data.Constants.CITY_UUID_PARAMETER
-import com.bunbeauty.fooddelivery.data.Constants.DELIVERY_ZONE_UUID_PARAMETER
 import com.bunbeauty.fooddelivery.data.Constants.QUERY_PARAMETER
 import com.bunbeauty.fooddelivery.domain.feature.address.AddressService
 import com.bunbeauty.fooddelivery.domain.feature.address.model.GetAddress
@@ -11,7 +10,6 @@ import com.bunbeauty.fooddelivery.domain.feature.address.model.PostAddressV2
 import com.bunbeauty.fooddelivery.routing.extension.clientGetListResult
 import com.bunbeauty.fooddelivery.routing.extension.clientWithBody
 import com.bunbeauty.fooddelivery.routing.extension.getParameter
-import com.bunbeauty.fooddelivery.routing.extension.getResult
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.auth.authenticate
@@ -23,8 +21,6 @@ import org.koin.ktor.ext.inject
 
 fun Application.configureAddressRouting() {
     routing {
-        patchAddressWithCafeUuid()
-
         authenticate {
             getAddresses()
             postAddress()
@@ -100,25 +96,6 @@ private fun Route.postAddressV2() {
             addressService.createAddressV2(
                 userUuid = bodyRequest.request.jwtUser.uuid,
                 postAddress = bodyRequest.body
-            )
-        }
-    }
-}
-
-/*
-* TODO(Remove in 1.0.6 release after add all cafeUuid to address)
-* */
-private fun Route.patchAddressWithCafeUuid() {
-    val addressService: AddressService by inject()
-
-    get("/patch_address_with_delivery_zone") {
-        getResult {
-            val cityUuid = call.getParameter(CITY_UUID_PARAMETER)
-            val newDeliveryZoneUuid = call.getParameter(DELIVERY_ZONE_UUID_PARAMETER)
-
-            addressService.addToAddressDeliveryZoneUuid(
-                cityUuid = cityUuid,
-                newDeliveryZoneUuid = newDeliveryZoneUuid
             )
         }
     }
