@@ -113,7 +113,7 @@ class AddressRepository(
             AddressRequestBody(
                 query = query,
                 fromBound = Bound(value = STREET_BOUND),
-                toBound = Bound(value = VILLAGE_BOUND),
+                toBound = Bound(value = STREET_BOUND),
                 locations = listOf(Location(city = city.name))
             )
         ).getDataOrNull()
