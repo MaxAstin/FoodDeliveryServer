@@ -7,10 +7,10 @@ import com.bunbeauty.fooddelivery.domain.toUuid
 import com.bunbeauty.fooddelivery.fake.FakeCategory
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertThrows
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class UpdateCategoryUseCaseTest {
     private val categoryRepository: CategoryRepository = mockk()

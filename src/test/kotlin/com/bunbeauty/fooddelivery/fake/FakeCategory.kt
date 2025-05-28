@@ -6,10 +6,10 @@ object FakeCategory {
     fun create(
         uuid: String = "",
         name: String = "",
-        priority: Int = 0,
+        priority: Int = 0
     ) = Category(
         uuid = uuid,
         name = name,
-        priority = priority,
+        priority = priority
     )
 }
