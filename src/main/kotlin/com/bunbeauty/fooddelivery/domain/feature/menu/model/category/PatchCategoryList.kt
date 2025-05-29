@@ -9,6 +9,7 @@ class PatchCategoryList(
     @Serializable
     class PatchCategoryItem(
         val uuid: String,
-        val patchCategory: PatchCategory
+        val name: String? = null,
+        val priority: Int? = null
     )
 }
