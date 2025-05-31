@@ -57,8 +57,8 @@ class CategoryService(
             updateCategoryUseCase(
                 uuid = patchCategoryItem.uuid,
                 updateCategory = UpdateCategory(
-                    name = patchCategoryItem.patchCategory.name,
-                    priority = patchCategoryItem.patchCategory.priority
+                    name = patchCategoryItem.name,
+                    priority = patchCategoryItem.priority
                 )
             ).mapCategory()
         }
